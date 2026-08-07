@@ -129,10 +129,10 @@ export function getProviderOptions(
     if (mode === 'reasoning') {
       return {
         anthropic: {
-          thinking: {
-            type: 'enabled',
-            budgetTokens: 1024,
-          },
+          thinking: modelId?.endsWith('-5')
+            ? { type: 'adaptive', display: 'summarized' }
+            : { type: 'enabled', budgetTokens: 1024 },
+          ...(modelId?.endsWith('-5') ? { effort: 'high' } : {}),
           sendReasoning: true,
         },
       };
@@ -142,7 +142,6 @@ export function getProviderOptions(
       return {
         anthropic: {
           disableParallelToolUse: true,
-          toolStreaming: true,
         },
       };
     }

@@ -47,6 +47,7 @@ The package is still pre-1.0, and the thin-adapter contract intentionally remove
 - All providers normalize trailing slashes in `foundryUrl`.
 - OpenAI, Anthropic, and Google friendly aliases are resolved through the shared RID catalog.
 - Wrapped models expose the caller-facing alias as `model.modelId` when an alias was used.
+- Provider and middleware specification versions follow the installed AI SDK generation: v3 for AI SDK v6 and v4 for AI SDK v7.
 
 ### OpenAI-specific behavior
 
@@ -63,13 +64,14 @@ For uncatalogued OpenAI reasoning RIDs, the package cannot infer reasoning capab
 ### Anthropic-specific behavior
 
 - The adapter uses `authToken`, not `apiKey`, so requests go out as `Authorization: Bearer`.
-- The adapter does not rewrite Anthropic provider options.
+- The adapter disables Anthropic eager tool streaming because Foundry rejects the upstream `eager_input_streaming` request field.
+- Structured output uses the Anthropic JSON-tool fallback because Foundry does not enable the native `output_config.format` backend.
 - Capability differences that vary by Foundry stack or model stay documented in examples and README instead of being guessed at runtime.
 
 ### Google-specific behavior
 
 - The adapter targets Foundry's beta Google-compatible proxy under `/api/v2/llm/proxy/google/v1`.
-- Known Gemini aliases resolve to explicit Foundry RIDs gathered from the enrollment catalog.
+- Known Gemini aliases resolve to explicit Foundry RIDs gathered from enrollment metadata.
 - The underlying AI SDK provider expects `x-goog-api-key`, but Foundry requires bearer auth, so the adapter rewrites auth headers at fetch time to `Authorization: Bearer`.
 - The adapter intentionally exposes only language-model methods. Image, embedding, and video methods throw `NoSuchModelError` until Foundry exposes compatible proxy endpoints for them.
 
@@ -81,6 +83,9 @@ Current Google alias-to-RID mappings:
 - `gemini-3-flash` -> `ri.language-model-service..language-model.gemini-3-flash`
 - `gemini-3.1-pro` -> `ri.language-model-service..language-model.gemini-3-1-pro`
 - `gemini-3.1-flash-lite` -> `ri.language-model-service..language-model.gemini-3-1-flash-lite`
+- `gemini-3.5-flash` -> `ri.language-model-service..language-model.gemini-3-5-flash`
+- `gemini-3.5-flash-lite` -> `ri.language-model-service..language-model.gemini-3-5-flash-lite`
+- `gemini-3.6-flash` -> `ri.language-model-service..language-model.gemini-3-6-flash`
 
 ### xAI-specific behavior
 
@@ -112,7 +117,7 @@ Derived flags come from the normalized `inputTypes` list instead of hand-maintai
 
 Behavior-driving compatibility flags still stay out of the public metadata contract unless they can be represented accurately and maintained reliably across providers.
 
-Google is included in the shared catalog using verified enrollment RIDs. xAI remains intentionally excluded until the beta proxy contract is stable enough to document and verify consistently.
+Google is included in the shared catalog using enrollment-verified mappings. xAI remains intentionally excluded until the beta proxy contract is stable enough to document and verify consistently.
 Enrolled models are not added automatically. The public catalog should include only current aliases the adapter surface can actually serve. Sunset and deprecated models are excluded entirely from the public catalog to avoid publishing typed aliases we do not want callers to adopt. That is why the catalog can lag enrollment for cases such as `o1`, where the active Foundry enrollment does not currently expose the responses-capable shape this package depends on.
 
 ## Example Registry Composition
@@ -139,6 +144,7 @@ const registry = createProviderRegistry({
 - unit tests for OpenAI compatibility defaults and explicit `store=true` failure
 - unit tests for reverse RID lookup export
 - unit tests for application-level `createProviderRegistry` composition using the public provider factories
+- CI build and runtime specification checks against both supported AI SDK major generations
 - live verification for direct OpenAI, Anthropic, and Google calls, plus registry composition via AI SDK
 - targeted beta probing for xAI endpoint behavior and current failure modes on the active enrollment
 

@@ -1,8 +1,11 @@
 import { createOpenAI } from '@ai-sdk/openai';
-import type { wrapLanguageModel } from 'ai';
 import { NoSuchModelError } from 'ai';
 import { resolveFoundryConfig } from '../config.js';
-import { wrapFoundryLanguageModel } from '../middleware.js';
+import {
+  type FoundryCallOptions,
+  type FoundryLanguageModel,
+  wrapFoundryLanguageModel,
+} from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import {
   isKnownOpenAIReasoningTarget,
@@ -11,14 +14,12 @@ import {
 } from '../models/openai-models.js';
 import type { FoundryConfig } from '../types.js';
 
-type FoundryLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
 type FoundryEmbeddingModel = ReturnType<ReturnType<typeof createOpenAI>['embeddingModel']>;
-type FoundryCallOptions = Parameters<FoundryLanguageModel['doGenerate']>[0];
 type FoundryFunctionTool = NonNullable<FoundryCallOptions['tools']>[number];
 
 export interface FoundryOpenAIProvider {
   (modelId: OpenAIModelId): FoundryLanguageModel;
-  specificationVersion: 'v3';
+  specificationVersion: FoundryLanguageModel['specificationVersion'];
   languageModel(modelId: OpenAIModelId): FoundryLanguageModel;
   responses(modelId: OpenAIModelId): FoundryLanguageModel;
   embeddingModel(modelId: OpenAIEmbeddingModelId): FoundryEmbeddingModel;
@@ -67,7 +68,7 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
 
   const callableProvider = provider as FoundryOpenAIProvider;
 
-  callableProvider.specificationVersion = 'v3';
+  callableProvider.specificationVersion = baseProvider.specificationVersion;
   callableProvider.languageModel = createLanguageModel;
   callableProvider.responses = createLanguageModel;
   callableProvider.embeddingModel = createEmbeddingModel;

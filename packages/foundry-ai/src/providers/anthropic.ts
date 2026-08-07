@@ -1,17 +1,20 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
-import type { wrapLanguageModel } from 'ai';
 import { NoSuchModelError } from 'ai';
 import { resolveFoundryConfig } from '../config.js';
-import { wrapFoundryLanguageModel } from '../middleware.js';
+import {
+  type FoundryCallOptions,
+  type FoundryLanguageModel,
+  wrapFoundryLanguageModel,
+} from '../middleware.js';
 import type { AnthropicModelId } from '../models/anthropic-models.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import type { FoundryConfig } from '../types.js';
 
-type FoundryLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
+type FoundryFunctionTool = NonNullable<FoundryCallOptions['tools']>[number];
 
 export interface FoundryAnthropicProvider {
   (modelId: AnthropicModelId): FoundryLanguageModel;
-  specificationVersion: 'v3';
+  specificationVersion: FoundryLanguageModel['specificationVersion'];
   languageModel(modelId: AnthropicModelId): FoundryLanguageModel;
   chat(modelId: AnthropicModelId): FoundryLanguageModel;
   messages(modelId: AnthropicModelId): FoundryLanguageModel;
@@ -43,6 +46,7 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
     return wrapFoundryLanguageModel(baseProvider(resolvedModel.rid), {
       modelId,
       providerId,
+      transformParams: applyAnthropicCompat,
     });
   };
 
@@ -52,7 +56,7 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
 
   const callableProvider = provider as FoundryAnthropicProvider;
 
-  callableProvider.specificationVersion = 'v3';
+  callableProvider.specificationVersion = baseProvider.specificationVersion;
   callableProvider.languageModel = createLanguageModel;
   callableProvider.chat = createLanguageModel;
   callableProvider.messages = createLanguageModel;
@@ -64,4 +68,63 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
   };
 
   return callableProvider;
+}
+
+function applyAnthropicCompat(params: FoundryCallOptions): FoundryCallOptions {
+  const anthropicOptions = asRecord(params.providerOptions?.anthropic);
+  const foundryAnthropicOptions = asRecord(params.providerOptions?.['foundry-anthropic']);
+
+  if (anthropicOptions.toolStreaming === true || foundryAnthropicOptions.toolStreaming === true) {
+    throw new Error(
+      'Foundry Anthropic does not support toolStreaming=true in Anthropic provider options. Remove the option or set it to false.',
+    );
+  }
+
+  return {
+    ...params,
+    providerOptions: {
+      ...(params.providerOptions ?? {}),
+      anthropic: {
+        ...anthropicOptions,
+        structuredOutputMode: 'jsonTool',
+        toolStreaming: false,
+      },
+      ...(params.providerOptions?.['foundry-anthropic'] != null
+        ? {
+            'foundry-anthropic': {
+              ...foundryAnthropicOptions,
+              structuredOutputMode: 'jsonTool',
+              toolStreaming: false,
+            },
+          }
+        : {}),
+    },
+    ...(params.tools != null
+      ? { tools: params.tools.map(rejectAnthropicEagerInputStreaming) }
+      : {}),
+  };
+}
+
+function rejectAnthropicEagerInputStreaming(tool: FoundryFunctionTool): FoundryFunctionTool {
+  if (tool.type !== 'function') {
+    return tool;
+  }
+
+  const anthropicOptions = asRecord(tool.providerOptions?.anthropic);
+
+  if (anthropicOptions.eagerInputStreaming === true) {
+    throw new Error(
+      'Foundry Anthropic does not support tool providerOptions.anthropic.eagerInputStreaming=true. Remove the option or set it to false.',
+    );
+  }
+
+  return tool;
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
+    return {};
+  }
+
+  return value as Record<string, unknown>;
 }

@@ -29,6 +29,15 @@ describe('model catalog', () => {
       'ri.language-model-service..language-model.gpt-5-4-mini',
     );
     expect(resolveModelRid('gpt-5.5')).toBe('ri.language-model-service..language-model.gpt-5-5');
+    expect(resolveModelRid('gpt-5.6-sol')).toBe(
+      'ri.language-model-service..language-model.gpt-5-6-sol',
+    );
+    expect(resolveModelRid('gpt-5.6-terra')).toBe(
+      'ri.language-model-service..language-model.gpt-5-6-terra',
+    );
+    expect(resolveModelRid('gpt-5.6-luna')).toBe(
+      'ri.language-model-service..language-model.gpt-5-6-luna',
+    );
     expect(resolveModelProvider('gpt-5-mini')).toBe('openai');
     expect(getModelMetadata('gpt-5-mini')).toMatchObject({
       displayName: 'GPT-5 mini',
@@ -83,6 +92,21 @@ describe('model catalog', () => {
       supportsResponses: true,
       supportsVision: true,
     });
+    expect(getModelMetadata('gpt-5.6-sol')).toMatchObject({
+      displayName: 'GPT-5.6 Sol',
+      lifecycle: 'ga',
+      modelIdentifier: 'GPT_5_6_SOL',
+      provider: 'openai',
+      trainingCutoffDate: '2026-02-16T00:00:00Z',
+      inputTypes: expect.arrayContaining(['OPEN_AI_REASONING', 'OPEN_AI_RESPONSES']),
+      performance: {
+        cost: 'MEDIUM',
+        modelClass: 'HEAVYWEIGHT',
+        speed: 'MEDIUM',
+      },
+      supportsResponses: true,
+      supportsVision: true,
+    });
   });
 
   it('resolves metadata for known OpenAI embedding models', () => {
@@ -101,14 +125,48 @@ describe('model catalog', () => {
       'ri.language-model-service..language-model.anthropic-claude-4-6-sonnet',
     );
     expect(resolveModelProvider('claude-sonnet-4.6')).toBe('anthropic');
+    expect(resolveModelRid('claude-sonnet-5')).toBe(
+      'ri.language-model-service..language-model.anthropic-claude-5-sonnet',
+    );
     expect(resolveModelRid('claude-opus-4.7')).toBe(
       'ri.language-model-service..language-model.anthropic-claude-4-7-opus',
+    );
+    expect(resolveModelRid('claude-opus-5')).toBe(
+      'ri.language-model-service..language-model.anthropic-claude-5-opus',
     );
     expect(getModelMetadata('claude-opus-4.8')).toMatchObject({
       displayName: 'Claude Opus 4.8',
       modelIdentifier: 'ANTHROPIC_CLAUDE_48_OPUS',
       provider: 'anthropic',
       inputTypes: expect.arrayContaining(['CLAUDE_CHAT', 'GENERIC_VISION_COMPLETION']),
+      supportsResponses: false,
+      supportsVision: true,
+    });
+    expect(getModelMetadata('claude-sonnet-5')).toMatchObject({
+      displayName: 'Claude Sonnet 5',
+      lifecycle: 'ga',
+      modelIdentifier: 'ANTHROPIC_CLAUDE_5_SONNET',
+      provider: 'anthropic',
+      trainingCutoffDate: '2025-08-01T00:00:00Z',
+      performance: {
+        cost: 'MEDIUM',
+        modelClass: 'HEAVYWEIGHT',
+        speed: 'MEDIUM',
+      },
+      supportsResponses: false,
+      supportsVision: true,
+    });
+    expect(getModelMetadata('claude-opus-5')).toMatchObject({
+      displayName: 'Claude Opus 5',
+      lifecycle: 'ga',
+      modelIdentifier: 'ANTHROPIC_CLAUDE_5_OPUS',
+      provider: 'anthropic',
+      trainingCutoffDate: '2025-08-01T00:00:00Z',
+      performance: {
+        cost: 'HIGH',
+        modelClass: 'HEAVYWEIGHT',
+        speed: 'MEDIUM',
+      },
       supportsResponses: false,
       supportsVision: true,
     });
@@ -147,6 +205,35 @@ describe('model catalog', () => {
         modelClass: 'LIGHTWEIGHT',
         speed: 'HIGH',
       },
+      supportsResponses: false,
+      supportsVision: true,
+    });
+    expect(resolveModelRid('gemini-3.5-flash-lite')).toBe(
+      'ri.language-model-service..language-model.gemini-3-5-flash-lite',
+    );
+    expect(getModelMetadata('gemini-3.5-flash-lite')).toMatchObject({
+      lifecycle: 'ga',
+      trainingCutoffDate: '2026-01-01T00:00:00Z',
+      performance: {
+        cost: 'LOW',
+        modelClass: 'LIGHTWEIGHT',
+        speed: 'HIGH',
+      },
+    });
+    expect(resolveModelRid('gemini-3.6-flash')).toBe(
+      'ri.language-model-service..language-model.gemini-3-6-flash',
+    );
+    expect(getModelMetadata('gemini-3.6-flash')).toMatchObject({
+      displayName: 'Gemini 3.6 Flash',
+      lifecycle: 'ga',
+      modelIdentifier: 'GEMINI_3_6_FLASH',
+      provider: 'google',
+      performance: {
+        cost: 'MEDIUM',
+        modelClass: 'REASONING',
+        speed: 'HIGH',
+      },
+      trainingCutoffDate: '2026-03-01T00:00:00Z',
       supportsResponses: false,
       supportsVision: true,
     });

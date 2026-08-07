@@ -20,7 +20,10 @@ Use it when you want local development and deployed server workloads to call sec
 
 | Provider Version | AI SDK Version | Status |
 |---|---|---|
-| 0.x | v6 | Preview |
+| 0.x | v6 with provider packages v3 | Preview |
+| 0.x | v7 stable, or the v7.0 beta line from `7.0.0-beta.187`, with provider packages v4 from the declared beta floors | Preview |
+
+Use provider packages from the matching AI SDK generation. Applications remain free to pin exact versions inside the supported ranges.
 
 ## Setup
 
@@ -75,7 +78,7 @@ Other entrypoints:
 
 Model IDs can be either:
 
-- a known alias such as `gpt-5-mini`, `claude-sonnet-4.6`, or `gemini-3.1-flash-lite`
+- a known alias such as `gpt-5.6-terra`, `claude-opus-5`, or `gemini-3.6-flash`
 - a raw Foundry language model RID such as `ri.language-model-service..language-model.gpt-5-2`
 
 Known aliases resolve through the package catalog. Raw RIDs pass through unchanged when you call a provider factory directly.

@@ -442,10 +442,13 @@ describe('live Foundry capability matrix', () => {
         }
 
         await recorder.runCase(spec, async (telemetry) => {
+          const usesAdaptiveAnthropicThinking = provider === 'anthropic' && modelId.endsWith('-5');
           const result = streamText({
             model: getFoundryModel(provider, modelId),
-            prompt: 'Reply with READY and one short clause about reasoning visibility.',
-            maxOutputTokens: 220,
+            prompt: usesAdaptiveAnthropicThinking
+              ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
+              : 'Reply with READY and one short clause about reasoning visibility.',
+            maxOutputTokens: usesAdaptiveAnthropicThinking ? 1000 : 220,
             providerOptions: getProviderOptions(provider, 'reasoning', modelId),
             experimental_telemetry: telemetry,
           });
@@ -471,7 +474,7 @@ describe('live Foundry capability matrix', () => {
             ).toBe(true);
           }
 
-          expect(summary.text).toMatch(/ready/i);
+          expect(summary.text).toMatch(usesAdaptiveAnthropicThinking ? /301/ : /ready/i);
 
           return summary;
         });

@@ -1,10 +1,11 @@
 import { wrapLanguageModel } from 'ai';
 
-type FoundryLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
-type FoundryCallOptions = Parameters<FoundryLanguageModel['doGenerate']>[0];
+type WrappableLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
+export type FoundryLanguageModel = ReturnType<typeof wrapLanguageModel>;
+export type FoundryCallOptions = Parameters<FoundryLanguageModel['doGenerate']>[0];
 
 export function wrapFoundryLanguageModel(
-  model: FoundryLanguageModel,
+  model: WrappableLanguageModel,
   options: {
     modelId: string;
     providerId: string;
@@ -14,7 +15,7 @@ export function wrapFoundryLanguageModel(
   return wrapLanguageModel({
     model,
     middleware: {
-      specificationVersion: 'v3',
+      specificationVersion: model.specificationVersion,
       transformParams: async ({ params }) => {
         return options.transformParams?.(params) ?? params;
       },

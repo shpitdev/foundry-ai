@@ -2,7 +2,7 @@
 
 Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.
 
-[![AI%20SDK](https://img.shields.io/badge/AI%20SDK-6.0.140-000000?logo=vercel&logoColor=white)](https://ai-sdk.dev/)
+[![AI%20SDK](https://img.shields.io/badge/AI%20SDK-6%20%7C%207-000000?logo=vercel&logoColor=white)](https://ai-sdk.dev/)
 [![npm](https://img.shields.io/npm/v/%40nyrra%2Ffoundry-ai/latest?logo=npm&label=npm)](https://www.npmjs.com/package/@nyrra/foundry-ai)
 [![next](https://img.shields.io/npm/v/%40nyrra%2Ffoundry-ai/next?logo=npm&label=next)](https://www.npmjs.com/package/@nyrra/foundry-ai?activeTab=versions)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shpitdev/foundry-ai)
@@ -12,7 +12,7 @@ Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.
 ## What It Does
 
 - Routes AI SDK language-model calls and OpenAI embeddings through Foundry's provider-compatible proxy endpoints.
-- Maps friendly model aliases such as `gpt-5-mini`, `claude-sonnet-4.6`, and `gemini-3.1-flash-lite` to Foundry RIDs.
+- Maps friendly model aliases such as `gpt-5.6-terra`, `claude-opus-5`, and `gemini-3.6-flash` to Foundry RIDs.
 - Keeps installs lean by exposing provider-specific subpaths and optional peer dependencies.
 - Ships a TanStack Intent skill for provider-specific setup and troubleshooting.
 
@@ -33,6 +33,8 @@ pnpm add @nyrra/foundry-ai ai @ai-sdk/google
 ```
 
 If you use more than one provider, install both peers. For the rationale and bundle-size tradeoffs, see the [dependency strategy guide](https://github.com/shpitdev/foundry-ai/blob/main/packages/foundry-ai/docs/dependency-strategy.md).
+
+Supported combinations are AI SDK v6 with provider packages v3, and AI SDK v7 stable releases (or the supported late v7.0 beta line from `7.0.0-beta.187`) with provider packages v4.
 
 ## Package Identity
 
@@ -89,7 +91,7 @@ console.log(result.text);
 
 ## Model IDs
 
-- Use friendly aliases for catalogued models such as `gpt-5-mini`, `claude-sonnet-4.6`, and `gemini-3.1-flash-lite`.
+- Use friendly aliases for catalogued models such as `gpt-5.6-terra`, `claude-opus-5`, and `gemini-3.6-flash`.
 - Use raw Foundry RIDs when your stack exposes a model that is not yet in the package catalog.
 - Sunset and deprecated enrollment entries are intentionally excluded from the public alias catalog.
 - `getModelMetadata()` exposes normalized catalog data for current aliases, including `modelIdentifier`, `inputTypes`, `trainingCutoffDate`, `performance`, and derived `supportsVision` / `supportsResponses` flags.

@@ -136,6 +136,46 @@ const GOOGLE_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-5-flash',
   },
+  'gemini-3.5-flash-lite': {
+    rid: 'ri.language-model-service..language-model.gemini-3-5-flash-lite',
+    modelIdentifier: 'GEMINI_3_5_FLASH_LITE',
+    displayName: 'Gemini 3.5 Flash Lite',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GEMINI_CHAT',
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+    ],
+    trainingCutoffDate: '2026-01-01T00:00:00Z',
+    performance: {
+      cost: 'LOW',
+      modelClass: 'LIGHTWEIGHT',
+      speed: 'HIGH',
+    },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite',
+  },
+  'gemini-3.6-flash': {
+    rid: 'ri.language-model-service..language-model.gemini-3-6-flash',
+    modelIdentifier: 'GEMINI_3_6_FLASH',
+    displayName: 'Gemini 3.6 Flash',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GEMINI_CHAT',
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+    ],
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'REASONING',
+      speed: 'HIGH',
+    },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-6-flash',
+  },
 } as const satisfies Record<string, ModelDefinition>;
 
 export const GOOGLE_MODELS = createProviderModelCatalog('google', GOOGLE_MODEL_DEFINITIONS);

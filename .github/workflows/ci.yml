@@ -49,3 +49,18 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec nx run-many -t release-policy-check lint test typecheck build skills-validate package-audit --projects=foundry-ai --outputStyle=static
+      - name: Verify AI SDK 7 compatibility
+        run: |
+          compatibility_dir="$RUNNER_TEMP/foundry-ai-sdk-7"
+          mkdir -p "$compatibility_dir"
+          pnpm --dir packages/foundry-ai pack --pack-destination "$compatibility_dir"
+          cp scripts/check-ai-sdk-compatibility.ts "$compatibility_dir"
+          cd "$compatibility_dir"
+          npm init --yes
+          npm pkg set type=module
+          npm install ./nyrra-foundry-ai-*.tgz ai@^7.0.0 @ai-sdk/anthropic@^4.0.0 @ai-sdk/google@^4.0.0 @ai-sdk/openai@^4.0.0 @types/json-schema @types/node tsx typescript
+          npx tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node check-ai-sdk-compatibility.ts
+          npx tsx check-ai-sdk-compatibility.ts v4
+          npm install ai@7.0.0-beta.187 @ai-sdk/anthropic@4.0.0-beta.69 @ai-sdk/google@4.0.0-beta.85 @ai-sdk/openai@4.0.0-beta.77
+          npx tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node check-ai-sdk-compatibility.ts
+          npx tsx check-ai-sdk-compatibility.ts v4

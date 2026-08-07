@@ -9,7 +9,7 @@ Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/shpitdev/foundry-ai)
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0.2-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![AI%20SDK](https://img.shields.io/badge/AI%20SDK-6.0.140-000000?logo=vercel&logoColor=white)](https://ai-sdk.dev/)
+[![AI%20SDK](https://img.shields.io/badge/AI%20SDK-6%20%7C%207-000000?logo=vercel&logoColor=white)](https://ai-sdk.dev/)
 [![Nx](https://img.shields.io/badge/Nx-22.6.2-143055?logo=nx&logoColor=white)](https://nx.dev/)
 [![pnpm](https://img.shields.io/badge/pnpm-10.24.0-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 
@@ -22,7 +22,7 @@ Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.
 ## What It Does
 
 - Routes AI SDK language-model calls and OpenAI embeddings through Foundry's provider-compatible proxy endpoints.
-- Maps friendly model names such as `gpt-5-mini`, `claude-sonnet-4.6`, and `gemini-3.1-flash-lite` to Foundry RIDs.
+- Maps friendly model names such as `gpt-5.6-terra`, `claude-opus-5`, and `gemini-3.6-flash` to Foundry RIDs.
 - Keeps installs lean through provider-specific subpaths for OpenAI, Anthropic, and Google.
 - Ships a TanStack Intent skill plus a small set of provider-specific reference examples.
 - Verifies the public alias catalog with a live Foundry capability harness instead of hand-waving support claims.
@@ -41,6 +41,8 @@ Install the package, `ai`, and only the provider peer dependency you need:
 ```bash
 pnpm add @nyrra/foundry-ai ai @ai-sdk/openai
 ```
+
+Use AI SDK v6 with provider packages v3, or AI SDK v7 stable releases (and the supported late v7.0 beta line from `7.0.0-beta.187`) with provider packages v4.
 
 ```bash
 FOUNDRY_URL=https://your-stack.palantirfoundry.com

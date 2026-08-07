@@ -173,6 +173,25 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://www.anthropic.com/news/claude-opus-4-8',
   },
+  'claude-opus-5': {
+    rid: 'ri.language-model-service..language-model.anthropic-claude-5-opus',
+    modelIdentifier: 'ANTHROPIC_CLAUDE_5_OPUS',
+    displayName: 'Claude Opus 5',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'CLAUDE_CHAT',
+    ],
+    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    performance: {
+      cost: 'HIGH',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://www.anthropic.com/news/claude-opus-5',
+  },
   'claude-sonnet-4': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-4-sonnet',
     modelIdentifier: 'ANTHROPIC_CLAUDE_4_SONNET',
@@ -229,6 +248,25 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
       speed: 'MEDIUM',
     },
     externalUrl: 'https://www.anthropic.com/news/claude-sonnet-4-6',
+  },
+  'claude-sonnet-5': {
+    rid: 'ri.language-model-service..language-model.anthropic-claude-5-sonnet',
+    modelIdentifier: 'ANTHROPIC_CLAUDE_5_SONNET',
+    displayName: 'Claude Sonnet 5',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'CLAUDE_CHAT',
+    ],
+    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://www.anthropic.com/news/claude-sonnet-5',
   },
 } as const satisfies Record<string, ModelDefinition>;
 

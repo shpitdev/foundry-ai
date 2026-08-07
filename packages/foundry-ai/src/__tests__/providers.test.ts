@@ -10,11 +10,13 @@ const createOpenAIMock = vi.hoisted(() =>
       responses(modelId: string): ReturnType<typeof openaiResponsesMock>;
       embeddingModel(modelId: string): ReturnType<typeof openaiEmbeddingMock>;
       embedding(modelId: string): ReturnType<typeof openaiEmbeddingMock>;
+      specificationVersion: 'v3';
     };
 
     provider.responses = openaiResponsesMock;
     provider.embeddingModel = openaiEmbeddingMock;
     provider.embedding = openaiEmbeddingMock;
+    provider.specificationVersion = 'v3';
 
     return provider;
   }),
@@ -23,9 +25,13 @@ const createOpenAIMock = vi.hoisted(() =>
 const anthropicLanguageModelMock = vi.hoisted(() => vi.fn());
 const createAnthropicMock = vi.hoisted(() =>
   vi.fn(() => {
-    return ((modelId: string) => anthropicLanguageModelMock(modelId)) as (
-      modelId: string,
-    ) => ReturnType<typeof anthropicLanguageModelMock>;
+    const provider = ((modelId: string) => anthropicLanguageModelMock(modelId)) as {
+      (modelId: string): ReturnType<typeof anthropicLanguageModelMock>;
+      specificationVersion: 'v3';
+    };
+
+    provider.specificationVersion = 'v3';
+    return provider;
   }),
 );
 
@@ -36,10 +42,12 @@ const createGoogleMock = vi.hoisted(() =>
       (modelId: string): ReturnType<typeof googleLanguageModelMock>;
       chat(modelId: string): ReturnType<typeof googleLanguageModelMock>;
       generativeAI(modelId: string): ReturnType<typeof googleLanguageModelMock>;
+      specificationVersion: 'v3';
     };
 
     provider.chat = googleLanguageModelMock;
     provider.generativeAI = googleLanguageModelMock;
+    provider.specificationVersion = 'v3';
 
     return provider;
   }),
@@ -387,7 +395,7 @@ describe('provider adapters', () => {
     expect(anthropic.messages).toBeTypeOf('function');
   });
 
-  it('preserves Anthropic provider options without adding wrapper-specific behavior', async () => {
+  it('preserves supported Anthropic provider options', async () => {
     const anthropic = createFoundryAnthropic(config);
 
     await anthropic('claude-sonnet-4.6').doGenerate({
@@ -397,8 +405,9 @@ describe('provider adapters', () => {
           disableParallelToolUse: true,
           effort: 'low',
           sendReasoning: true,
+          structuredOutputMode: 'jsonTool',
           thinking: { type: 'enabled', budgetTokens: 512 },
-          toolStreaming: true,
+          toolStreaming: false,
         },
       },
     });
@@ -410,11 +419,152 @@ describe('provider adapters', () => {
           disableParallelToolUse: true,
           effort: 'low',
           sendReasoning: true,
+          structuredOutputMode: 'jsonTool',
           thinking: { type: 'enabled', budgetTokens: 512 },
-          toolStreaming: true,
+          toolStreaming: false,
         },
       },
     });
+  });
+
+  it('disables Anthropic eager input streaming for tool requests', async () => {
+    const anthropic = createFoundryAnthropic(config);
+
+    await anthropic('claude-sonnet-5').doGenerate({
+      prompt: [],
+      providerOptions: {
+        anthropic: {
+          disableParallelToolUse: true,
+        },
+      },
+      tools: [
+        {
+          type: 'function',
+          name: 'searchRegulations',
+          description: 'Search the regulation corpus.',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              query: { type: 'string' },
+            },
+            required: ['query'],
+          },
+        },
+      ],
+    });
+
+    expect(anthropicState?.lastGenerateParams).toEqual({
+      prompt: [],
+      providerOptions: {
+        anthropic: {
+          disableParallelToolUse: true,
+          structuredOutputMode: 'jsonTool',
+          toolStreaming: false,
+        },
+      },
+      tools: [
+        {
+          type: 'function',
+          name: 'searchRegulations',
+          description: 'Search the regulation corpus.',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              query: { type: 'string' },
+            },
+            required: ['query'],
+          },
+        },
+      ],
+    });
+  });
+
+  it('disables Anthropic eager input streaming for synthetic structured-output tools', async () => {
+    const anthropic = createFoundryAnthropic(config);
+
+    await anthropic('claude-sonnet-5').doStream({
+      prompt: [],
+      responseFormat: {
+        type: 'json',
+        schema: {
+          type: 'object',
+          properties: { answer: { type: 'string' } },
+          required: ['answer'],
+        },
+      },
+    });
+
+    expect(anthropicState?.lastStreamParams).toEqual({
+      prompt: [],
+      providerOptions: {
+        anthropic: {
+          structuredOutputMode: 'jsonTool',
+          toolStreaming: false,
+        },
+      },
+      responseFormat: {
+        type: 'json',
+        schema: {
+          type: 'object',
+          properties: { answer: { type: 'string' } },
+          required: ['answer'],
+        },
+      },
+    });
+  });
+
+  it('fails early when Anthropic eager tool streaming is explicitly enabled', async () => {
+    const anthropic = createFoundryAnthropic(config);
+    const params = {
+      prompt: [],
+      tools: [
+        {
+          type: 'function' as const,
+          name: 'searchRegulations',
+          description: 'Search the regulation corpus.',
+          inputSchema: { type: 'object', properties: {} },
+        },
+      ],
+    };
+
+    await expect(
+      anthropic('claude-sonnet-5').doGenerate({
+        ...params,
+        providerOptions: {
+          anthropic: {
+            toolStreaming: true,
+          },
+        },
+      }),
+    ).rejects.toThrow(/toolStreaming=true/);
+
+    await expect(
+      anthropic('claude-sonnet-5').doGenerate({
+        ...params,
+        providerOptions: {
+          'foundry-anthropic': {
+            toolStreaming: true,
+          },
+        },
+      }),
+    ).rejects.toThrow(/toolStreaming=true/);
+
+    await expect(
+      anthropic('claude-sonnet-5').doGenerate({
+        prompt: [],
+        tools: [
+          {
+            ...params.tools[0],
+            providerOptions: {
+              anthropic: {
+                eagerInputStreaming: true,
+              },
+            },
+          },
+        ],
+      }),
+    ).rejects.toThrow(/providerOptions\.anthropic\.eagerInputStreaming=true/);
+    expect(anthropicState?.lastGenerateParams).toBeUndefined();
   });
 
   it('validates Anthropic config inputs at runtime', () => {

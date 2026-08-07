@@ -1,17 +1,14 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import type { wrapLanguageModel } from 'ai';
 import { NoSuchModelError } from 'ai';
 import { resolveFoundryConfig } from '../config.js';
-import { wrapFoundryLanguageModel } from '../middleware.js';
+import { type FoundryLanguageModel, wrapFoundryLanguageModel } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import type { GoogleModelId } from '../models/google-models.js';
 import type { FoundryConfig } from '../types.js';
 
-type FoundryLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
-
 export interface FoundryGoogleProvider {
   (modelId: GoogleModelId): FoundryLanguageModel;
-  specificationVersion: 'v3';
+  specificationVersion: FoundryLanguageModel['specificationVersion'];
   languageModel(modelId: GoogleModelId): FoundryLanguageModel;
   chat(modelId: GoogleModelId): FoundryLanguageModel;
   generativeAI(modelId: GoogleModelId): FoundryLanguageModel;
@@ -53,7 +50,7 @@ export function createFoundryGoogle(config: FoundryConfig): FoundryGoogleProvide
 
   const callableProvider = provider as FoundryGoogleProvider;
 
-  callableProvider.specificationVersion = 'v3';
+  callableProvider.specificationVersion = baseProvider.specificationVersion;
   callableProvider.languageModel = createLanguageModel;
   callableProvider.chat = createLanguageModel;
   callableProvider.generativeAI = createLanguageModel;

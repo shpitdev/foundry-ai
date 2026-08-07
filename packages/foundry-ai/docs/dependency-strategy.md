@@ -35,6 +35,8 @@ It does not bundle the AI SDK runtime or every provider SDK. Keeping those packa
 
 ## Version expectations
 
-- Keep `ai` and the provider peers within the ranges declared by `@nyrra/foundry-ai`.
-- When upgrading AI SDK majors, re-run the package tests and the live capability suite before claiming support.
-- If a host app wants stricter version control, pin the peers directly in the application repo rather than expecting this package to carry them transitively.
+- Use matching SDK generations: AI SDK v6 with provider packages v3, or AI SDK v7 with provider packages v4.
+- The supported prerelease floor is AI SDK `7.0.0-beta.187`, with `@ai-sdk/openai` `4.0.0-beta.77`, `@ai-sdk/anthropic` `4.0.0-beta.69`, or `@ai-sdk/google` `4.0.0-beta.85`. Earlier betas used incompatible specification shapes.
+- The adapter derives its language-model specification version from the installed AI SDK and provider instead of hard-coding v3.
+- Keep `ai` and the provider peers within the declared major ranges. When adopting a new major, re-run package tests and the live capability suite before claiming support.
+- Applications that want stricter version control should pin exact peer versions in their own repository rather than expecting this package to carry them transitively.

@@ -7,7 +7,7 @@
 | Provider | Package import | Foundry proxy family | Default live model | Notes |
 |---|---|---|---|---|
 | OpenAI | `@nyrra/foundry-ai/openai` | `/api/v2/llm/proxy/openai/v1` | `gpt-5-nano` | Uses Responses-compatible language transport and the OpenAI embeddings proxy |
-| Anthropic | `@nyrra/foundry-ai/anthropic` | `/api/v2/llm/proxy/anthropic/v1` | `claude-haiku-4.5` | Preserves Anthropic provider options and uses bearer auth |
+| Anthropic | `@nyrra/foundry-ai/anthropic` | `/api/v2/llm/proxy/anthropic/v1` | `claude-haiku-4.5` | Uses bearer auth and disables unsupported eager tool streaming |
 | Google | `@nyrra/foundry-ai/google` | `/api/v2/llm/proxy/google/v1` | `gemini-3.1-flash-lite` | Beta Foundry proxy surface with bearer-auth rewrite |
 
 ## Known aliases
@@ -30,6 +30,9 @@
 - `gpt-5.3-codex`
 - `gpt-5.4`
 - `gpt-5.5`
+- `gpt-5.6-sol`
+- `gpt-5.6-terra`
+- `gpt-5.6-luna`
 - `gpt-5.4-mini`
 - `gpt-5.4-nano`
 - `o3`
@@ -51,9 +54,11 @@ OpenAI embedding aliases:
 - `claude-opus-4.6`
 - `claude-opus-4.7`
 - `claude-opus-4.8`
+- `claude-opus-5`
 - `claude-sonnet-4`
 - `claude-sonnet-4.5`
 - `claude-sonnet-4.6`
+- `claude-sonnet-5`
 
 ### Google
 
@@ -64,6 +69,8 @@ OpenAI embedding aliases:
 - `gemini-3.1-pro`
 - `gemini-3.1-flash-lite`
 - `gemini-3.5-flash`
+- `gemini-3.5-flash-lite`
+- `gemini-3.6-flash`
 
 ## Supported model ID patterns
 
@@ -94,12 +101,15 @@ OpenAI embedding aliases:
 - OpenAI embeddings use `openai.embeddingModel()` or `openai.embedding()` with AI SDK `embed` and `embedMany`.
 - Setting `providerOptions.openai.store = true` throws before the request is sent.
 - Known OpenAI reasoning aliases automatically get `forceReasoning = true` unless the caller already set it.
+- Anthropic requests set `toolStreaming = false` and use JSON-tool structured output because the Foundry proxy rejects eager tool streaming and does not enable Anthropic's native `output_config.format` backend.
 - Google support should be treated as beta until the Foundry proxy contract is more stable.
 - Multi-provider routing belongs in application code, not this package.
 
 ## Live verification
 
 The checked-in [harness capability results](./harness-capability-results.md) are the canonical model-by-capability record from the live verification harness.
+
+Catalog metadata comes from live Foundry enrollment records. The checked-in capability snapshot can lag newly enrolled aliases until the next full-catalog harness run.
 
 The current snapshot shows:
 
