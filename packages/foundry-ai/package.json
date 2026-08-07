@@ -1,6 +1,6 @@
 {
   "name": "@nyrra/foundry-ai",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.",
   "license": "Apache-2.0",
   "repository": {

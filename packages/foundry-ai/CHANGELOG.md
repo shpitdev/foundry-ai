@@ -1,3 +1,13 @@
+## 0.0.6 (2026-08-07)
+
+### 🚀 Features
+
+- refresh models and support AI SDK 7 ([#55](https://github.com/shpitdev/foundry-ai/pull/55))
+
+### ❤️ Thank You
+
+- anandpant @anandpant
+
 ## 0.0.5 (2026-07-11)
 
 ### 📦 Repository Transfer
