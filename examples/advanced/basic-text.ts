@@ -5,7 +5,7 @@ import { generateText } from 'ai';
 
 const config = loadFoundryConfig();
 const provider = 'openai';
-const modelId: OpenAIModelId = 'gpt-5.4-nano';
+const modelId: OpenAIModelId = 'gpt-5.6-terra';
 const model = createFoundryOpenAI(config)(modelId);
 
 const result = await generateText({

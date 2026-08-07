@@ -57,7 +57,7 @@ const config = loadFoundryConfig();
 const provider = 'anthropic';
 // Agentic multi-step tool use with unconstrained search requires mid-tier+ models.
 // Nano/lite models get stuck in tool-call loops without generating text.
-const modelId: AnthropicModelId = 'claude-sonnet-4.6';
+const modelId: AnthropicModelId = 'claude-sonnet-5';
 const model = wrapWithDevTools(createFoundryAnthropic(config)(modelId));
 const prompt = `
 Research these five companies and build a drug landscape snapshot:
@@ -94,11 +94,11 @@ const tools = {
 const providerOptions: ProviderOptions = {
   anthropic: {
     thinking: {
-      type: 'enabled',
-      budgetTokens: 1024,
+      type: 'adaptive',
+      display: 'summarized',
     },
+    effort: 'high',
     sendReasoning: true,
-    toolStreaming: true,
   } satisfies AnthropicLanguageModelOptions,
 };
 const stepSummaries: StepSummary[] = [];

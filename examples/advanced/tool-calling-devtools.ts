@@ -17,7 +17,7 @@ const config = loadFoundryConfig();
 const provider = 'anthropic';
 // Agentic multi-step tool use with unconstrained search requires mid-tier+ models.
 // Nano/lite models get stuck in tool-call loops without generating text.
-const modelId: AnthropicModelId = 'claude-sonnet-4.6';
+const modelId: AnthropicModelId = 'claude-sonnet-5';
 const model = wrapWithDevTools(createFoundryAnthropic(config)(modelId));
 const prompt =
   'Research https://www.palantir.com/platforms/foundry/ and the palantir GitHub organization. Use at most two webSearch calls, then call saveCompanyProfile exactly once with a concise structured profile. After the save tool succeeds, return a short final summary with cited sources.';
@@ -49,11 +49,11 @@ const tools = {
 const providerOptions: ProviderOptions = {
   anthropic: {
     thinking: {
-      type: 'enabled',
-      budgetTokens: 1024,
+      type: 'adaptive',
+      display: 'summarized',
     },
+    effort: 'high',
     sendReasoning: true,
-    toolStreaming: true,
     disableParallelToolUse: true,
   } satisfies AnthropicLanguageModelOptions,
 };

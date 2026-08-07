@@ -70,8 +70,8 @@ bun run example:devtools:parallel      # parallel multi-company DevTools instrum
 Pass a third argument to force a specific model:
 
 ```bash
-pnpm run example streaming anthropic claude-sonnet-4.6
-bun examples/advanced/structured-output.ts google gemini-3.1-flash-lite
+pnpm run example streaming anthropic claude-sonnet-5
+bun examples/advanced/structured-output.ts google gemini-3.6-flash
 ```
 
 ## DevTools
@@ -87,6 +87,6 @@ Then open `http://localhost:4983` (or set `AI_SDK_DEVTOOLS_PORT` to use a differ
 ## Notes
 
 - `base/tool-calling.ts` and `base/tool-calling-streaming.ts` ship inside the published skill.
-- The DevTools instrumentation examples use `claude-sonnet-4.6` — the model verified live with `thinking`, `sendReasoning`, `toolStreaming`, and `disableParallelToolUse`.
+- The DevTools instrumentation examples use `claude-sonnet-5` with adaptive summarized reasoning and Foundry-compatible tool options.
 - Google examples use friendly aliases because the package maps verified Gemini aliases to Foundry RIDs.
 - The safe runner resolves short names through `examples/base/` first, then `examples/advanced/`.
