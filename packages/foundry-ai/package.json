@@ -62,7 +62,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@tanstack/intent": "0.0.44"
+    "@tanstack/intent": "0.3.6"
   },
   "peerDependencies": {
     "ai": "^6.0.141 || ^7.0.0-beta.187",
