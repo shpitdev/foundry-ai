@@ -6,18 +6,21 @@ import type { KnownGoogleModelId } from './google-models.js';
 import { GOOGLE_MODELS } from './google-models.js';
 import type { KnownOpenAIEmbeddingModelId, KnownOpenAIModelId } from './openai-models.js';
 import { OPENAI_EMBEDDING_MODELS, OPENAI_MODELS } from './openai-models.js';
+import { type KnownThirdPartyModelId, THIRD_PARTY_MODELS } from './third-party-models.js';
 
 export type KnownModelId =
   | KnownOpenAIModelId
   | KnownOpenAIEmbeddingModelId
   | KnownAnthropicModelId
-  | KnownGoogleModelId;
+  | KnownGoogleModelId
+  | KnownThirdPartyModelId;
 
 export const MODEL_CATALOG = {
   ...OPENAI_MODELS,
   ...OPENAI_EMBEDDING_MODELS,
   ...ANTHROPIC_MODELS,
   ...GOOGLE_MODELS,
+  ...THIRD_PARTY_MODELS,
 } as const satisfies Record<KnownModelId, ModelMetadata>;
 export const MODEL_CATALOG_BY_RID = Object.fromEntries(
   Object.values(MODEL_CATALOG).map((metadata) => [metadata.rid, metadata]),

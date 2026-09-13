@@ -6,7 +6,7 @@ export interface FoundryConfig {
   traceState?: string;
 }
 
-export type ModelProvider = 'openai' | 'anthropic' | 'google';
+export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'third-party';
 export type ModelLifecycle = 'ga' | 'experimental';
 export type ModelInputType =
   | 'CLAUDE_CHAT'
@@ -18,7 +18,8 @@ export type ModelInputType =
   | 'GPT_WITH_VISION_COMPLETION'
   | 'OPEN_AI_REASONING'
   | 'OPEN_AI_RESPONSES'
-  | 'OPEN_AI_EMBEDDINGS';
+  | 'OPEN_AI_EMBEDDINGS'
+  | 'X_AI_RESPONSES';
 export type ModelCost = 'LOW' | 'MEDIUM' | 'HIGH';
 export type ModelClass = 'HEAVYWEIGHT' | 'LIGHTWEIGHT' | 'REASONING';
 export type ModelSpeed = 'LOW' | 'MEDIUM' | 'HIGH';
@@ -26,7 +27,7 @@ export type ModelSpeed = 'LOW' | 'MEDIUM' | 'HIGH';
 export interface ModelPerformance {
   cost: ModelCost;
   modelClass: ModelClass;
-  speed: ModelSpeed;
+  speed?: ModelSpeed;
 }
 
 export interface ModelDefinition {
@@ -35,9 +36,12 @@ export interface ModelDefinition {
   displayName: string;
   lifecycle: ModelLifecycle;
   inputTypes: readonly ModelInputType[];
-  trainingCutoffDate: string;
+  trainingCutoffDate?: string;
   performance: ModelPerformance;
-  externalUrl: string;
+  externalUrl?: string;
+  modelCreator?: string;
+  /** Verified proxy route; enrollment alone does not imply proxy support. */
+  transport?: 'openai-chat' | 'openai-responses' | 'xai-responses' | 'unavailable';
 }
 
 export interface ModelMetadata extends ModelDefinition {

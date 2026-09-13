@@ -27,6 +27,7 @@ describe('live capability model matrix', () => {
     expect(matrix.anthropic).toEqual(['claude-haiku-4.5']);
     expect(matrix.google).toEqual(['gemini-3.1-flash-lite']);
     expect(matrix.openai).toEqual(['gpt-5-nano']);
+    expect(matrix['third-party']).toEqual([]);
   });
 
   it('only surveys current public catalog aliases', () => {
@@ -40,6 +41,10 @@ describe('live capability model matrix', () => {
     expect(matrix.openai).toContain('gpt-5.4-nano');
     expect(matrix.openai).not.toContain('gpt-4o-mini');
     expect(matrix.google).not.toContain('gemini-3-pro');
+    expect(matrix.google).toContain('gemini-3.8-flash');
+    expect(matrix['third-party']).toHaveLength(17);
+    expect(matrix['third-party']).toContain('kimi-k3');
+    expect(matrix['third-party']).toContain('llama-3-3-nemotron-super-49b-v1-5');
   });
 
   it('keeps catalog coverage in descending model order after the preferred model', () => {

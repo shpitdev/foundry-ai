@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getProviderOptions } from './helpers/live-capability-helpers.js';
+import { collectStreamSummary, getProviderOptions } from './helpers/live-capability-helpers.js';
 
 describe('live capability provider options', () => {
   it('uses budgeted thinking for pre-Claude 5 reasoning probes', () => {
@@ -33,5 +33,15 @@ describe('live capability provider options', () => {
         disableParallelToolUse: true,
       },
     });
+  });
+});
+
+describe('stream failure evidence', () => {
+  it('preserves stream errors instead of reporting empty text', async () => {
+    const error = new Error('proxy rejected the model');
+    async function* fullStream() {
+      yield { type: 'error', error };
+    }
+    await expect(collectStreamSummary({ fullStream: fullStream() })).rejects.toBe(error);
   });
 });

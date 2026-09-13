@@ -12,6 +12,7 @@ import { afterAll, describe, expect, it, type TestContext } from 'vitest';
 import { createFoundryAnthropic } from '../providers/anthropic.js';
 import { createFoundryGoogle } from '../providers/google.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
+import { createFoundryThirdParty } from '../providers/third-party.js';
 import {
   assertModelClaimsVision,
   type CapabilityCaseSpec,
@@ -55,7 +56,9 @@ const modelMatrix = getLiveCapabilityModelMatrix();
 const openai = createFoundryOpenAI(config);
 const anthropic = createFoundryAnthropic(config);
 const google = createFoundryGoogle(config);
+const thirdParty = createFoundryThirdParty(config);
 const registry = createProviderRegistry({
+  'third-party': thirdParty,
   anthropic,
   google,
   openai,
@@ -95,9 +98,10 @@ afterAll(async () => {
 });
 
 describe('live Foundry capability matrix', () => {
-  for (const provider of ['openai', 'anthropic', 'google'] as const) {
+  for (const provider of ['openai', 'anthropic', 'google', 'third-party'] as const) {
     for (const modelId of modelMatrix[provider]) {
-      const expectation = modelId === models[provider] ? 'must-pass' : 'investigate';
+      const expectation =
+        provider !== 'third-party' && modelId === models[provider] ? 'must-pass' : 'investigate';
       const modelCase = expectation === 'must-pass' ? it : it.concurrent;
 
       modelCase(`${provider}:${modelId}: basic generateText`, async () => {
@@ -306,6 +310,14 @@ describe('live Foundry capability matrix', () => {
                 'Call the regulatorySignal tool exactly once with topic "oncology", then answer with AGENT and the returned status in one short sentence.',
             });
 
+            expect(result.steps.flatMap((step) => step.toolResults)).toEqual(
+              expect.arrayContaining([
+                expect.objectContaining({
+                  toolName: 'regulatorySignal',
+                  output: expect.objectContaining({ status: 'verified' }),
+                }),
+              ]),
+            );
             expect(result.text).toMatch(/agent/i);
             expect(result.text).toMatch(/verified/i);
 
@@ -347,6 +359,14 @@ describe('live Foundry capability matrix', () => {
               experimental_telemetry: telemetry,
             });
 
+            expect(result.steps.flatMap((step) => step.toolResults)).toEqual(
+              expect.arrayContaining([
+                expect.objectContaining({
+                  toolName: 'regulatorySignal',
+                  output: expect.objectContaining({ status: 'verified' }),
+                }),
+              ]),
+            );
             expect(result.output.status).toMatch(/verified/i);
             expect(result.output.summary.toLowerCase()).toContain('oncology');
 
@@ -384,7 +404,9 @@ describe('live Foundry capability matrix', () => {
             );
             const imageBytes = await visionProbeImageBytes;
 
-            assertModelClaimsVision(provider, visionModelId);
+            if (provider !== 'third-party') {
+              assertModelClaimsVision(provider, visionModelId);
+            }
 
             const result = await generateText({
               model: getFoundryModel(provider, visionModelId),
@@ -445,10 +467,12 @@ describe('live Foundry capability matrix', () => {
           const usesAdaptiveAnthropicThinking = provider === 'anthropic' && modelId.endsWith('-5');
           const result = streamText({
             model: getFoundryModel(provider, modelId),
-            prompt: usesAdaptiveAnthropicThinking
-              ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
-              : 'Reply with READY and one short clause about reasoning visibility.',
-            maxOutputTokens: usesAdaptiveAnthropicThinking ? 1000 : 220,
+            prompt:
+              usesAdaptiveAnthropicThinking || provider === 'third-party'
+                ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
+                : 'Reply with READY and one short clause about reasoning visibility.',
+            maxOutputTokens:
+              usesAdaptiveAnthropicThinking || provider === 'third-party' ? 2000 : 220,
             providerOptions: getProviderOptions(provider, 'reasoning', modelId),
             experimental_telemetry: telemetry,
           });
@@ -470,11 +494,15 @@ describe('live Foundry capability matrix', () => {
                 : 0;
 
             expect(
-              reasoningEventCount > 0 || reasoningTokenCount > 0 || /reasoning/i.test(summary.text),
+              reasoningEventCount > 0 ||
+                reasoningTokenCount > 0 ||
+                (provider !== 'third-party' && /reasoning/i.test(summary.text)),
             ).toBe(true);
           }
 
-          expect(summary.text).toMatch(usesAdaptiveAnthropicThinking ? /301/ : /ready/i);
+          expect(summary.text).toMatch(
+            usesAdaptiveAnthropicThinking || provider === 'third-party' ? /301/ : /ready/i,
+          );
 
           return summary;
         });
@@ -639,6 +667,13 @@ describe('live Foundry capability matrix', () => {
 });
 
 function getFoundryModel(provider: LiveProvider, modelId: string) {
+  if (provider === 'third-party') {
+    return wrapLiveModelWithDevTools({
+      model: thirdParty(modelId),
+      modelId,
+      providerId: 'foundry-third-party',
+    });
+  }
   if (provider === 'openai') {
     return wrapLiveModelWithDevTools({
       model: openai(modelId),

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loadFoundryConfig, resolveFoundryConfig } from '../config.js';
+import { loadFoundryConfig, normalizeFoundryUrl, resolveFoundryConfig } from '../config.js';
 import { FoundryModelNotFoundError } from '../errors.js';
 import type { AnthropicModelId, KnownAnthropicModelId } from '../models/anthropic-models.js';
 import {
@@ -398,5 +398,14 @@ describe('type surface', () => {
     expect(googleAlias).toBe('gemini-3.1-flash-lite');
     expect(googleRid).toBe('ri.language-model-service..language-model.gemini-3-1-flash-lite');
     expect(knownModel).toBe('gemini-3.1-flash-lite');
+  });
+});
+
+describe('Foundry URL normalization', () => {
+  it('strips trailing slashes while preserving long internal slash runs', () => {
+    const url = `https://example.test/${'/'.repeat(50_000)}path`;
+    expect(normalizeFoundryUrl(`  ${url}///  `)).toBe(url);
+    expect(normalizeFoundryUrl('/'.repeat(50_000))).toBe('');
+    expect(normalizeFoundryUrl('   ')).toBe('');
   });
 });

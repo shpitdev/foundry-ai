@@ -33,6 +33,12 @@ export {
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
 } from './models/openai-models.js';
+export {
+  type KnownThirdPartyModelId,
+  THIRD_PARTY_MODEL_IDS,
+  THIRD_PARTY_MODELS,
+  type ThirdPartyModelId,
+} from './models/third-party-models.js';
 export type {
   FoundryConfig,
   ModelClass,

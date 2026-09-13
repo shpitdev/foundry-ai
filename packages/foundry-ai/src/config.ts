@@ -18,7 +18,12 @@ export function loadFoundryConfig(env: NodeJS.ProcessEnv = process.env): Foundry
 }
 
 export function normalizeFoundryUrl(foundryUrl: string): string {
-  return foundryUrl.trim().replace(/\/+$/, '');
+  const trimmed = foundryUrl.trim();
+  let end = trimmed.length;
+  while (end > 0 && trimmed[end - 1] === '/') {
+    end -= 1;
+  }
+  return trimmed.slice(0, end);
 }
 
 export function resolveFoundryConfig(config: FoundryConfig, callerName: string): FoundryConfig {

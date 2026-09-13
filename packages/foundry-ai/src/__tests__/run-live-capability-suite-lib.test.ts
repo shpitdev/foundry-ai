@@ -16,11 +16,19 @@ const { parseArgs, parseModelSelection } = (await import(helperModuleUrl)) as {
   };
   parseModelSelection: (value: string) => {
     modelId: string;
-    provider?: 'openai' | 'anthropic' | 'google';
+    provider?: 'openai' | 'anthropic' | 'google' | 'third-party';
   };
 };
 
 describe('run-live-capability-suite args', () => {
+  it('selects the third-party model catalog from the CLI', () => {
+    expect(parseArgs(['--model', 'third-party:kimi-k3'], {}).extraEnv).toMatchObject({
+      LIVE_PROVIDER_FILTER: 'third-party',
+      LIVE_MODEL_FILTER: 'kimi-k3',
+      LIVE_MODEL_SCOPE: 'catalog',
+    });
+  });
+
   it('promotes model-only runs to catalog scope by default', () => {
     const parsed = parseArgs(['--model', 'gpt-5-mini'], {});
 

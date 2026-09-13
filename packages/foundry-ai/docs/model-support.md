@@ -1,6 +1,6 @@
 # Model Support
 
-`@nyrra/foundry-ai` exposes language-model entrypoints for OpenAI, Anthropic, and Google, plus OpenAI embeddings. Image generation, speech, transcription, video, and rerank methods remain out of scope.
+`@nyrra/foundry-ai` exposes language-model entrypoints for OpenAI, Anthropic, and Google, plus OpenAI embeddings and a third-party adapter with per-model proxy routing. Image generation, speech, transcription, video, and rerank methods remain out of scope.
 
 ## Provider summary
 
@@ -9,6 +9,8 @@
 | OpenAI | `@nyrra/foundry-ai/openai` | `/api/v2/llm/proxy/openai/v1` | `gpt-5-nano` | Uses Responses-compatible language transport and the OpenAI embeddings proxy |
 | Anthropic | `@nyrra/foundry-ai/anthropic` | `/api/v2/llm/proxy/anthropic/v1` | `claude-haiku-4.5` | Uses bearer auth and disables unsupported eager tool streaming |
 | Google | `@nyrra/foundry-ai/google` | `/api/v2/llm/proxy/google/v1` | `gemini-3.1-flash-lite` | Beta Foundry proxy surface with bearer-auth rewrite |
+
+The third-party entrypoint is `@nyrra/foundry-ai/third-party`. It selects OpenAI Chat Completions, OpenAI Responses, or xAI Responses per model; see the [verified capability matrix](./third-party-model-support.md).
 
 ## Known aliases
 
@@ -71,12 +73,18 @@ OpenAI embedding aliases:
 - `gemini-3.5-flash`
 - `gemini-3.5-flash-lite`
 - `gemini-3.6-flash`
+- `gemini-3.7-flash`
+- `gemini-3.8-flash`
+
+### Third-party models
+
+See [third-party model support](./third-party-model-support.md) for the selected Gemma, Kimi, Nemotron, Qwen, GLM, and Grok aliases, routing, and live capability results. Cataloged models can have unavailable proxy routes.
 
 ## Supported model ID patterns
 
 - Known aliases resolve to the package catalog and then to Foundry RIDs.
 - `gpt-5-pro` and `gpt-5.3-codex` are Responses-API-only, consistent with this package's OpenAI Responses transport.
-- Raw Foundry RIDs pass through unchanged when you call a provider factory directly.
+- Raw Foundry RIDs pass through unchanged for OpenAI, Anthropic, and Google. The third-party factory requires a known alias or cataloged RID so it can select the verified route.
 - OpenAI embeddings are distinct from language-model RID routing: the typed aliases `text-embedding-3-small` and `text-embedding-3-large` resolve to themselves, and any other plain model string passes through unchanged to the embeddings proxy.
 - Reverse RID lookup is available through `MODEL_CATALOG_BY_RID` and catalog helpers from the root entrypoint.
 - Sunset and deprecated enrollment entries are excluded from the public alias catalog.

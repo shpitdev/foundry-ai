@@ -1,6 +1,7 @@
 import { createFoundryAnthropic } from '@nyrra/foundry-ai/anthropic';
 import { createFoundryGoogle } from '@nyrra/foundry-ai/google';
 import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
+import { createFoundryThirdParty } from '@nyrra/foundry-ai/third-party';
 import { createProviderRegistry, type LanguageModel } from 'ai';
 
 const expectedVersion = process.argv[2];
@@ -16,7 +17,11 @@ const config = {
 const openai = createFoundryOpenAI(config);
 const anthropic = createFoundryAnthropic(config);
 const google = createFoundryGoogle(config);
+const thirdParty = createFoundryThirdParty(config);
 const providersAndModels = [
+  { provider: thirdParty, model: thirdParty('kimi-k2-5') },
+  { provider: thirdParty, model: thirdParty('gemma-4-31b') },
+  { provider: thirdParty, model: thirdParty('grok-4-6') },
   { provider: openai, model: openai('gpt-5.6-terra') },
   { provider: anthropic, model: anthropic('claude-opus-5') },
   { provider: google, model: google('gemini-3.6-flash') },

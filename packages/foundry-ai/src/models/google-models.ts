@@ -2,6 +2,34 @@ import type { ModelDefinition } from '../types.js';
 import { createProviderModelCatalog } from './metadata.js';
 
 const GOOGLE_MODEL_DEFINITIONS = {
+  'gemini-3.7-flash': {
+    rid: 'ri.language-model-service..language-model.gemini-3-7-flash',
+    modelIdentifier: 'GEMINI_3_7_FLASH',
+    displayName: 'Gemini 3.7 Flash',
+    lifecycle: 'ga',
+    inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'REASONING',
+      speed: 'HIGH',
+    },
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+  },
+  'gemini-3.8-flash': {
+    rid: 'ri.language-model-service..language-model.gemini-3-8-flash',
+    modelIdentifier: 'GEMINI_3_8_FLASH',
+    displayName: 'Gemini 3.8 Flash',
+    lifecycle: 'experimental',
+    inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'REASONING',
+      speed: 'HIGH',
+    },
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash',
+  },
   'gemini-2.5-pro': {
     rid: 'ri.language-model-service..language-model.gemini-2-5-pro',
     modelIdentifier: 'GEMINI_2_5_PRO',

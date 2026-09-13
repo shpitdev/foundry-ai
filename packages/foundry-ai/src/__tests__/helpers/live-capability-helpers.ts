@@ -157,7 +157,7 @@ export function getReasoningExpectation(
   modelId: string,
   defaultModelId: string,
 ) {
-  if (provider === 'google') {
+  if (provider === 'google' || provider === 'third-party') {
     return 'investigate' as const;
   }
 
@@ -199,6 +199,10 @@ export async function collectStreamSummary(result: {
   for await (const part of result.fullStream) {
     const type = typeof part.type === 'string' ? part.type : 'unknown';
     eventCounts[type] = (eventCounts[type] ?? 0) + 1;
+
+    if (type === 'error') {
+      throw part.error;
+    }
 
     if (type === 'text-delta' && typeof part.text === 'string') {
       text += part.text;

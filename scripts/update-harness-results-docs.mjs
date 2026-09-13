@@ -9,7 +9,7 @@ const workspaceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const artifactRoot = resolve(workspaceRoot, '.memory', 'capability-runs');
 const packageDocsDir = resolve(workspaceRoot, 'packages/foundry-ai/docs');
 const packageResultsDocPath = resolve(packageDocsDir, 'harness-capability-results.md');
-const providerOrder = ['openai', 'anthropic', 'google'];
+const providerOrder = ['openai', 'anthropic', 'google', 'third-party'];
 const modelCapabilityColumns = [
   ['text.generate', 'Text'],
   ['messages.generate', 'Messages'],

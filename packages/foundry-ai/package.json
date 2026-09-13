@@ -48,6 +48,11 @@
       "types": "./dist/providers/google.d.ts",
       "import": "./dist/providers/google.mjs",
       "require": "./dist/providers/google.cjs"
+    },
+    "./third-party": {
+      "types": "./dist/providers/third-party.d.ts",
+      "import": "./dist/providers/third-party.mjs",
+      "require": "./dist/providers/third-party.cjs"
     }
   },
   "files": [

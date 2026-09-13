@@ -30,7 +30,9 @@ function createModelMetadata(provider: ModelProvider, definition: ModelDefinitio
   return {
     ...definition,
     provider,
-    supportsResponses: definition.inputTypes.includes('OPEN_AI_RESPONSES'),
+    supportsResponses:
+      definition.inputTypes.includes('OPEN_AI_RESPONSES') ||
+      definition.inputTypes.includes('X_AI_RESPONSES'),
     supportsVision: definition.inputTypes.some((inputType) => VISION_INPUT_TYPES.has(inputType)),
   };
 }
