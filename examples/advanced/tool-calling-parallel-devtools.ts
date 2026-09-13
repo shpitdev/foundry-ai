@@ -223,10 +223,10 @@ function summarizeTool(toolName: string, input: unknown, output?: unknown): Tool
 
 function summarizeUsage(usage: LanguageModelUsage): UsageSummary {
   return {
-    cachedInputTokens: usage.inputTokenDetails.cacheReadTokens ?? usage.cachedInputTokens,
+    cachedInputTokens: usage.inputTokenDetails.cacheReadTokens,
     inputTokens: usage.inputTokens,
     outputTokens: usage.outputTokens,
-    reasoningTokens: usage.outputTokenDetails.reasoningTokens ?? usage.reasoningTokens,
+    reasoningTokens: usage.outputTokenDetails.reasoningTokens,
     totalTokens: usage.totalTokens,
   };
 }

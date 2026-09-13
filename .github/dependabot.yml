@@ -1,34 +1,29 @@
 version: 2
-updates:
-  - package-ecosystem: npm
-    directory: /
+multi-ecosystem-groups:
+  dependencies:
     schedule:
       interval: weekly
       day: monday
       time: "09:00"
       timezone: America/Chicago
-    open-pull-requests-limit: 10
     commit-message:
       prefix: chore
     labels:
       - dependencies
+updates:
+  - package-ecosystem: npm
+    directory: /
+    patterns: ["*"]
+    multi-ecosystem-group: dependencies
+    ignore:
+      # tsup's declaration bundler requires the TypeScript 6 compiler API.
+      - dependency-name: typescript
+        versions: [">=7"]
     groups:
-      npm-dependencies:
-        patterns:
-          - "*"
+      npm-security:
+        applies-to: security-updates
+        patterns: ["*"]
   - package-ecosystem: github-actions
     directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "09:15"
-      timezone: America/Chicago
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: chore
-    labels:
-      - dependencies
-    groups:
-      github-actions:
-        patterns:
-          - "*"
+    patterns: ["*"]
+    multi-ecosystem-group: dependencies

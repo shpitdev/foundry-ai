@@ -1,5 +1,5 @@
 import type { OpenAILanguageModelResponsesOptions } from '@ai-sdk/openai';
-import { tool } from 'ai';
+import { type Tool, tool } from 'ai';
 import { z } from 'zod';
 import { resolveModelRid } from '../../models/catalog.js';
 import { isKnownOpenAIReasoningTarget } from '../../models/openai-models.js';
@@ -24,16 +24,17 @@ export const structuredToolSchema = z.object({
   summary: z.string().min(1),
 });
 
-export const regulatorySignalTool = tool({
-  description: 'Returns a deterministic regulatory status for testing tool loops.',
-  inputSchema: z.object({
-    topic: z.string().min(1),
-  }),
-  execute: async ({ topic }) => ({
-    status: 'verified',
-    topic,
-  }),
-});
+export const regulatorySignalTool: Tool<{ topic: string }, { status: string; topic: string }> =
+  tool({
+    description: 'Returns a deterministic regulatory status for testing tool loops.',
+    inputSchema: z.object({
+      topic: z.string().min(1),
+    }),
+    execute: async ({ topic }) => ({
+      status: 'verified',
+      topic,
+    }),
+  });
 
 export function createMessageHistoryFixture() {
   return [

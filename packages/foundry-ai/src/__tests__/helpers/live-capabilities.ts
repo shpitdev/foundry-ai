@@ -3,7 +3,9 @@ import { readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
-import type { TelemetrySettings } from 'ai';
+import { OpenTelemetry } from '@ai-sdk/otel';
+import { type Context, trace } from '@opentelemetry/api';
+import type { Telemetry, TelemetryOptions } from 'ai';
 import { MODEL_CATALOG, resolveKnownModelMetadata, resolveModelRid } from '../../models/catalog.js';
 import { loadLiveFoundryConfig } from './live-foundry.js';
 
@@ -344,40 +346,46 @@ export class LiveCapabilityRecorder {
     capability: string,
     provider: LiveProvider,
     modelId: string,
-  ): TelemetrySettings {
+  ): TelemetryOptions {
     const integration = {
       onStart: (event: unknown) => this.recordEvent(caseKey, 'onStart', event),
       onStepStart: (event: unknown) => this.recordEvent(caseKey, 'onStepStart', event),
-      onToolCallStart: (event: unknown) => this.recordEvent(caseKey, 'onToolCallStart', event),
-      onToolCallFinish: (event: unknown) => this.recordEvent(caseKey, 'onToolCallFinish', event),
-      onStepFinish: (event: unknown) => this.recordEvent(caseKey, 'onStepFinish', event),
-      onFinish: (event: unknown) => this.recordEvent(caseKey, 'onFinish', event),
-    };
+      onToolExecutionStart: (event: unknown) => this.recordEvent(caseKey, 'onToolCallStart', event),
+      onToolExecutionEnd: (event: unknown) => this.recordEvent(caseKey, 'onToolCallFinish', event),
+      onStepEnd: (event: unknown) => this.recordEvent(caseKey, 'onStepFinish', event),
+      onEnd: (event: unknown) => this.recordEvent(caseKey, 'onFinish', event),
+    } satisfies Telemetry;
     const tracer = new LocalFileTracer(caseKey, this);
 
     return {
       isEnabled: true,
       functionId: `${provider}.${capability}`,
-      integrations: integration,
-      metadata: {
-        capability,
-        caseKey,
-        gitSha: this.record.gitSha,
-        modelId,
-        provider,
-        runId: this.record.runId,
-        testFile: 'packages/foundry-ai/src/__tests__/foundry.live.test.ts',
-        testName: caseKey,
-      },
+      integrations: [
+        integration,
+        new OpenTelemetry({
+          tracer: tracer as unknown as NonNullable<
+            ConstructorParameters<typeof OpenTelemetry>[0]
+          >['tracer'],
+          enrichSpan: () => ({
+            capability,
+            caseKey,
+            gitSha: this.record.gitSha,
+            modelId,
+            provider,
+            runId: this.record.runId,
+            testFile: 'packages/foundry-ai/src/__tests__/foundry.live.test.ts',
+            testName: caseKey,
+          }),
+        }),
+      ],
       recordInputs: true,
       recordOutputs: true,
-      tracer: tracer as unknown as TelemetrySettings['tracer'],
-    } satisfies TelemetrySettings;
+    } satisfies TelemetryOptions;
   }
 
   async runCase<T>(
     spec: CapabilityCaseSpec,
-    fn: (telemetry: TelemetrySettings, caseKey: string) => Promise<T>,
+    fn: (telemetry: TelemetryOptions, caseKey: string) => Promise<T>,
   ): Promise<T | undefined> {
     const startedAt = Date.now();
     const caseKey = createCaseKey(spec.provider, spec.modelId, spec.capability);
@@ -623,8 +631,8 @@ class LocalFileTracer {
     }
   }
 
-  startSpan(name: string, options?: { attributes?: Record<string, unknown> }) {
-    const parent = this.activeSpans.at(-1);
+  startSpan(name: string, options?: { attributes?: Record<string, unknown> }, context?: Context) {
+    const parent = context ? trace.getSpanContext(context) : this.activeSpans.at(-1)?.spanContext();
     const span = new LocalSpanRecord({
       attributes: options?.attributes,
       caseKey: this.caseKey,

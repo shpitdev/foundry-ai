@@ -1,6 +1,9 @@
 import type { wrapLanguageModel } from 'ai';
 
-export type TestLanguageModel = Parameters<typeof wrapLanguageModel>[0]['model'];
+export type TestLanguageModel = Extract<
+  Parameters<typeof wrapLanguageModel>[0]['model'],
+  { specificationVersion: 'v3' }
+>;
 export type TestCallOptions = Parameters<TestLanguageModel['doGenerate']>[0];
 
 interface TestLanguageModelState {
