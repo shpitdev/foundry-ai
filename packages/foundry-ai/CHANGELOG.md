@@ -1,3 +1,13 @@
+## 0.0.7 (2026-09-13)
+
+### 🚀 Features
+
+- add Gemini and third-party model routes ([#63](https://github.com/shpitdev/foundry-ai/pull/63))
+
+### ❤️ Thank You
+
+- anandpant @anandpant
+
 ## 0.0.6 (2026-08-07)
 
 ### 🚀 Features
