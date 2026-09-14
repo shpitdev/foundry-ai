@@ -19,6 +19,13 @@ export const signalSchema = z.object({
   rationale: z.string().min(1),
 });
 
+export const expectedSignal = {
+  indication: 'relapse prevention',
+  mechanismOfAction: 'not specified',
+  riskLevel: 'medium',
+  rationale: 'liver enzyme monitoring required',
+} as const;
+
 export const structuredToolSchema = z.object({
   status: z.string().min(1),
   summary: z.string().min(1),
@@ -83,10 +90,14 @@ export function getVisionMaxTokens(provider: LiveProvider, modelId: string) {
 }
 
 export function getStructuredOutputPrompt() {
-  return 'Extract a concise clinical signal from this statement: "The therapy reduced relapse rates, but liver enzyme elevations require monitoring."';
+  return `Return a JSON object by copying these supplied field values exactly, without inventing clinical details: ${JSON.stringify(expectedSignal)}`;
 }
 
 export function getStructuredOutputMaxTokens(provider: LiveProvider, modelId: string) {
+  // GLM Flash exhausted 900 tokens in reasoning before emitting its JSON.
+  if (provider === 'third-party' && modelId === 'glm-5-3-flash') {
+    return 4096;
+  }
   if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
     return 1400;
   }

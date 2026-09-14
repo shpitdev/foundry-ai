@@ -461,6 +461,24 @@
         "provider": "openai"
       },
       "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "gitSha": "60a757c",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T06:43:09.626Z",
+      "finishedAt": "2026-09-14T06:44:17.971Z",
+      "filters": {
+        "provider": "third-party"
+      },
+      "modelScope": "catalog",
+      "note": "Revised standalone JSON fixture supplies every value and asserts exact output; GLM Flash budget raised to 4096. Working-tree test changes based on the recorded gitSha. Strict schema enforcement tested separately."
     }
   ],
   "cases": [
@@ -3808,10 +3826,27 @@
       "modelId": "qwen3-32b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 24113,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 684,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -3909,10 +3944,27 @@
       "modelId": "grok-420-reasoning-latest",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 17727,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 4102,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4011,10 +4063,27 @@
       "modelId": "grok-420-non-reasoning-latest",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1028,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1129,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4116,17 +4185,32 @@
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "structured.output.object",
-      "status": "fail",
-      "durationMs": 5643,
-      "runId": "2026-09-14T02-20-43.642Z-249dbc",
-      "error": "No output generated.",
+      "status": "pass",
+      "durationMs": 2109,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
       "previousResults": [
         {
           "runId": "2026-09-14T02-08-46.140Z-c14b09",
           "status": "fail",
           "error": "expected 3 to be greater than 4"
+        },
+        {
+          "status": "fail",
+          "runId": "2026-09-14T02-20-43.642Z-249dbc",
+          "error": "No output generated."
         }
-      ]
+      ],
+      "details": {
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      }
     },
     {
       "provider": "third-party",
@@ -4230,10 +4314,27 @@
       "modelId": "glm-5-3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 10286,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 7495,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4337,10 +4438,27 @@
       "modelId": "glm-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 6812,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 16900,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4442,10 +4560,27 @@
       "modelId": "gemma-4-31b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 984,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 771,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4548,10 +4683,27 @@
       "modelId": "gemma-4-26b-a4b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 541,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 455,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4652,10 +4804,27 @@
       "modelId": "grok-4-6",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 19819,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 7811,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4756,10 +4925,27 @@
       "modelId": "grok-4-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 7288,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 2553,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4858,10 +5044,27 @@
       "modelId": "grok-4-3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 12331,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 3961,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -4963,10 +5166,27 @@
       "provider": "third-party",
       "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
       "capability": "structured.output.object",
-      "status": "fail",
-      "durationMs": 1899,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
-      "error": "No object generated: could not parse the response."
+      "status": "pass",
+      "durationMs": 1738,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "fail",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "error": "No object generated: could not parse the response."
+        }
+      ],
+      "details": {
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      }
     },
     {
       "provider": "third-party",
@@ -5070,10 +5290,27 @@
       "modelId": "qwen3-235b-a22b-2507",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 835,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 766,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -5167,8 +5404,15 @@
       "modelId": "llama-3-3-nemotron-super-49b-v1-5",
       "capability": "structured.output.object",
       "status": "fail",
-      "durationMs": 0,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 2,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "fail",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md."
+        }
+      ],
       "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md."
     },
     {
@@ -5265,10 +5509,27 @@
       "modelId": "kimi-k3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 7653,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 3396,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -5387,10 +5648,27 @@
       "modelId": "kimi-k2-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1044,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 994,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -5491,10 +5769,27 @@
       "modelId": "grok-build-0-1",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 33561,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 13446,
+      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ],
       "details": {
-        "finishReason": "stop"
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       }
     },
     {
@@ -7915,6 +8210,1376 @@
         ],
         "runId": "2026-09-14T05-27-44.341Z"
       }
+    ]
+  },
+  "structuredOutputInvestigation": {
+    "checkedAt": "2026-09-14",
+    "sdk": {
+      "ai": "7.0.97",
+      "@ai-sdk/openai": "4.0.65"
+    },
+    "scope": "Five-model controlled comparison through the actual third-party factory, plus raw HTTP controls. Synthetic inputs only. Single attempts per variant; not reliability estimates or a full model-quality evaluation.",
+    "settings": {
+      "maxOutputTokens": 4096,
+      "maxRetries": 0,
+      "timeoutMs": 90000
+    },
+    "probes": {
+      "explicit-json": "Prompt requests label=azure and count=7; schema requires a string and number; assert exact values.",
+      "enforced-schema": "Prompt requests PLAIN_TEXT. Strict schema requires label=schema_4829 and count=731, neither supplied in the prompt. Tests constraint handling, not semantic answer quality or the decoding implementation.",
+      "auto-json-tools": "Output.object and lookup tool in the same generateText call; automatic tool selection; maximum three steps. Assert exactly one execution and output from the tool.",
+      "forced-json-tools": "Same as auto-json-tools, but prepareStep forces named lookup on step zero and toolChoice none afterwards.",
+      "staged-tool-then-json": "First generateText forces lookup without Output.object. Second generateText receives the original prompt plus first.response.messages and requests Output.object without tools. Assert exactly one execution and matching output."
+    },
+    "results": [
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "explicit-json",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "azure",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+            "text": "{\n\"label\": \"azure\",\n\"count\": 7\n}",
+            "usage": {
+              "completion_tokens": 50,
+              "prompt_tokens": 35,
+              "total_tokens": 85,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 34,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "enforced-schema",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "schema_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+            "text": "{\"label\":\"schema_4829\",\"count\":731}",
+            "usage": {
+              "completion_tokens": 49,
+              "prompt_tokens": 22,
+              "total_tokens": 71,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 31,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "auto-json-tools",
+        "status": "fail",
+        "executions": 0,
+        "output": {
+          "label": "a",
+          "count": 1
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+            "text": "{\"label\":\"a\",\"count\":1}",
+            "usage": {
+              "completion_tokens": 51,
+              "prompt_tokens": 186,
+              "total_tokens": 237,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 40,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "forced-json-tools",
+        "status": "error",
+        "executions": 0,
+        "error": "Bad Request",
+        "responses": [
+          {
+            "status": 400,
+            "backendModel": null,
+            "text": "",
+            "error": {
+              "errorCode": "CUSTOM_CLIENT",
+              "errorName": "LanguageModelService:LlmHttpClientError",
+              "errorInstanceId": "1da0e05c-b5f0-49c0-a160-a4ffb3caf07a",
+              "parameters": {
+                "modelCreator": "Optional[Z_AI]",
+                "responseBody": "Optional[{\"error\":{\"object\":\"error\",\"type\":\"invalid_request_error\",\"code\":\"invalid_request_error\",\"message\":\"tool_choice (required or a specific function) cannot be combined with response_format\"}}]",
+                "modelBackendId": "Optional[FIREWORKS]",
+                "errorType": "Optional[invalid_request_error]",
+                "errorMessage": "Optional[tool_choice (required or a specific function) cannot be combined with response_format]",
+                "errorCode": "Optional[invalid_request_error]",
+                "statusCode": "400"
+              }
+            },
+            "usage": null
+          }
+        ]
+      },
+      {
+        "modelId": "kimi-k3",
+        "probe": "explicit-json",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "azure",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/kimi-k3",
+            "text": "{\"label\":\"azure\",\"count\":7}",
+            "usage": {
+              "completion_tokens": 49,
+              "prompt_tokens": 217,
+              "total_tokens": 266,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 27,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "kimi-k3",
+        "probe": "enforced-schema",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "schema_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/kimi-k3",
+            "text": "{\"label\":\"schema_4829\",\"count\":731}",
+            "usage": {
+              "completion_tokens": 37,
+              "prompt_tokens": 215,
+              "total_tokens": 252,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 12,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "kimi-k3",
+        "probe": "auto-json-tools",
+        "status": "fail",
+        "executions": 0,
+        "output": {
+          "label": "sunset",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/kimi-k3",
+            "text": "{\"label\":\"sunset\",\"count\":7}",
+            "usage": {
+              "completion_tokens": 83,
+              "prompt_tokens": 308,
+              "total_tokens": 391,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 60,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "kimi-k3",
+        "probe": "forced-json-tools",
+        "status": "error",
+        "executions": 0,
+        "error": "Bad Request",
+        "responses": [
+          {
+            "status": 400,
+            "backendModel": null,
+            "text": "",
+            "error": {
+              "errorCode": "CUSTOM_CLIENT",
+              "errorName": "LanguageModelService:LlmHttpClientError",
+              "errorInstanceId": "2bcf5697-fa75-4529-9ce5-d66bc59b0984",
+              "parameters": {
+                "modelCreator": "Optional[MOONSHOT_AI]",
+                "responseBody": "Optional[{\"error\":{\"object\":\"error\",\"type\":\"invalid_request_error\",\"code\":\"invalid_request_error\",\"message\":\"tool_choice (required or a specific function) cannot be combined with response_format\"}}]",
+                "modelBackendId": "Optional[FIREWORKS]",
+                "errorType": "Optional[invalid_request_error]",
+                "errorMessage": "Optional[tool_choice (required or a specific function) cannot be combined with response_format]",
+                "errorCode": "Optional[invalid_request_error]",
+                "statusCode": "400"
+              }
+            },
+            "usage": null
+          }
+        ]
+      },
+      {
+        "modelId": "gemma-4-31b",
+        "probe": "explicit-json",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "azure",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "{\"label\":\"azure\",\"count\":7}",
+            "usage": {
+              "input_tokens": 117,
+              "output_tokens": 10,
+              "total_tokens": 127,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "gemma-4-31b",
+        "probe": "enforced-schema",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "schema_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "{\"label\":\"schema_4829\",\"count\":731}",
+            "usage": {
+              "input_tokens": 119,
+              "output_tokens": 17,
+              "total_tokens": 136,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "gemma-4-31b",
+        "probe": "auto-json-tools",
+        "status": "error",
+        "executions": 1,
+        "error": "No object generated: could not parse the response.",
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "",
+            "usage": {
+              "input_tokens": 146,
+              "output_tokens": 7,
+              "total_tokens": 153,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "```json\n{\"label\": \"tool_4829\", \"count\": 731}\n```",
+            "usage": {
+              "input_tokens": 185,
+              "output_tokens": 25,
+              "total_tokens": 210,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "gemma-4-31b",
+        "probe": "forced-json-tools",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "",
+            "usage": {
+              "input_tokens": 146,
+              "output_tokens": 7,
+              "total_tokens": 153,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "{\"label\":\"tool_4829\",\"count\":731}",
+            "usage": {
+              "input_tokens": 159,
+              "output_tokens": 17,
+              "total_tokens": 176,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "explicit-json",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "azure",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "{\n  \"label\": \"azure\",\n  \"count\": 7\n}",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "enforced-schema",
+        "status": "error",
+        "executions": 0,
+        "error": "No object generated: could not parse the response.",
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "PLAIN_TEXT",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "auto-json-tools",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "\n",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "{\"label\": \"tool_4829\", \"count\": 731}",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "forced-json-tools",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "\n\n",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "{\"label\":\"tool_4829\",\"count\":731}",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "qwen3-32b",
+        "probe": "explicit-json",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "azure",
+          "count": 7
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": "{\n  \"label\": \"azure\",\n  \"count\": 7\n}",
+            "usage": {
+              "completion_tokens": 17,
+              "prompt_tokens": 35,
+              "total_tokens": 52,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "qwen3-32b",
+        "probe": "enforced-schema",
+        "status": "pass",
+        "executions": 0,
+        "output": {
+          "label": "schema_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": "{\"label\": \"schema_4829\", \"count\": 731}",
+            "usage": {
+              "completion_tokens": 26,
+              "prompt_tokens": 22,
+              "total_tokens": 48,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "qwen3-32b",
+        "probe": "auto-json-tools",
+        "status": "fail",
+        "executions": 0,
+        "output": {
+          "label": "Unknown Value",
+          "count": 0
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": "{\"label\": \"Unknown Value\", \"count\": 0}",
+            "usage": {
+              "completion_tokens": 14,
+              "prompt_tokens": 186,
+              "total_tokens": 200,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "qwen3-32b",
+        "probe": "forced-json-tools",
+        "status": "error",
+        "executions": 0,
+        "error": "Model response did not contain a call to the required tool 'lookup'.",
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": "{\n  \"label\": \"value_from_lookup\",\n  \"count\": 42\n}",
+            "usage": {
+              "completion_tokens": 20,
+              "prompt_tokens": 187,
+              "total_tokens": 207,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "staged-tool-then-json",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+            "text": "",
+            "usage": {
+              "completion_tokens": 38,
+              "prompt_tokens": 169,
+              "total_tokens": 207,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 33,
+                "rejected_prediction_tokens": null
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+            "text": "{\"label\": \"tool_4829\", \"count\": 731}",
+            "usage": {
+              "completion_tokens": 116,
+              "prompt_tokens": 65,
+              "total_tokens": 181,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 97,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "kimi-k3",
+        "probe": "staged-tool-then-json",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/kimi-k3",
+            "text": "",
+            "usage": {
+              "completion_tokens": 63,
+              "prompt_tokens": 220,
+              "total_tokens": 283,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 30,
+                "rejected_prediction_tokens": null
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "accounts/fireworks/models/kimi-k3",
+            "text": "{\"label\":\"tool_4829\",\"count\":731}",
+            "usage": {
+              "completion_tokens": 57,
+              "prompt_tokens": 308,
+              "total_tokens": 365,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": 0,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": 32,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "qwen3-32b",
+        "probe": "staged-tool-then-json",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": null,
+            "usage": {
+              "completion_tokens": 15,
+              "prompt_tokens": 170,
+              "total_tokens": 185,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "qwen.qwen3-32b-v1:0",
+            "text": "{\n  \"label\": \"tool_4829\",\n  \"count\": 731\n}",
+            "usage": {
+              "completion_tokens": 24,
+              "prompt_tokens": 89,
+              "total_tokens": 113,
+              "prompt_tokens_details": {
+                "audio_tokens": null,
+                "cached_tokens": null,
+                "cache_write_tokens": null
+              },
+              "completion_tokens_details": {
+                "accepted_prediction_tokens": null,
+                "audio_tokens": null,
+                "reasoning_tokens": null,
+                "rejected_prediction_tokens": null
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "gemma-4-31b",
+        "probe": "staged-tool-then-json",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "",
+            "usage": {
+              "input_tokens": 67,
+              "output_tokens": 7,
+              "total_tokens": 74,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "google.gemma-4-31b",
+            "text": "{\"label\":\"tool_4829\",\"count\":731}",
+            "usage": {
+              "input_tokens": 167,
+              "output_tokens": 18,
+              "total_tokens": 185,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "staged-tool-then-json",
+        "status": "pass",
+        "executions": 1,
+        "output": {
+          "label": "tool_4829",
+          "count": 731
+        },
+        "responses": [
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "\n",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          },
+          {
+            "status": 200,
+            "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+            "text": "{\"label\": \"tool_4829\", \"count\": 731}",
+            "usage": {
+              "input_tokens": 0,
+              "output_tokens": 0,
+              "total_tokens": 0,
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              },
+              "input_tokens_details": {
+                "cached_tokens": 0,
+                "cache_write_tokens": 0
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "wireControls": [
+      {
+        "probe": "nemotron-responses-enum",
+        "request": {
+          "model": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+          "input": [
+            {
+              "role": "user",
+              "content": "Return a JSON object with label=\"azure\" and count=7."
+            }
+          ],
+          "max_output_tokens": 4096,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "strict": true,
+              "name": "response",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": ["schema_5921"]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "enum": [913]
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "store": false
+        },
+        "response": {
+          "status": 200,
+          "backendModel": "nvidia-nemotron-3-ultra-550b-a55b-nvfp4-gmc",
+          "text": "{\n  \"label\": \"azure\",\n  \"count\": 7\n}",
+          "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0
+            }
+          }
+        }
+      },
+      {
+        "probe": "nemotron-chat-enum",
+        "request": {
+          "model": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+          "max_tokens": 4096,
+          "messages": [
+            {
+              "role": "user",
+              "content": "Return a JSON object with label=\"azure\" and count=7."
+            }
+          ],
+          "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+              "name": "response",
+              "strict": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": ["schema_5921"]
+                  },
+                  "count": {
+                    "type": "integer",
+                    "enum": [913]
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "response": {
+          "status": 404,
+          "backendModel": null,
+          "text": "",
+          "error": {
+            "errorCode": "NOT_FOUND",
+            "errorName": "LanguageModelService:LanguageModelNotAvailable",
+            "errorInstanceId": "c8486375-c820-4be6-8807-c2c3f52f7abe",
+            "parameters": {
+              "apiName": "Optional[Nemotron_3_Ultra_550b_A55b_Nvfp4]",
+              "unsafeParams": "{unsafeExplanations={AZURE_OPEN_AI=Explanation{message: , safeParams: {}, unsafeParams: {}}}}",
+              "safeParams": "{languageModelRid=ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4, safeExplanations={AZURE_OPEN_AI=Explanation{message: Unable to use model: backend does not support the requested functionality for this model, safeParams: {modelBackendId=AZURE_OPEN_AI, languageModelRid=ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4, functionality=GPT_CHAT_COMPLETION}, unsafeParams: {}}}}",
+              "message": "Unable to use model: model backends are not available"
+            }
+          },
+          "usage": null
+        }
+      },
+      {
+        "probe": "glm-low-effort",
+        "request": {
+          "model": "ri.language-model-service..language-model.glm-5-3-flash",
+          "max_tokens": 900,
+          "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "number"
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "name": "response"
+            }
+          },
+          "messages": [
+            {
+              "role": "user",
+              "content": "Return JSON with fields label (string) and count (number). Extract label=\"azure\" and count=7."
+            }
+          ],
+          "reasoning_effort": "low"
+        },
+        "response": {
+          "status": 200,
+          "backendModel": "accounts/fireworks/models/glm-5p3-flash",
+          "text": "{\"label\": \"azure\", \"count\": 7}",
+          "usage": {
+            "completion_tokens": 14,
+            "prompt_tokens": 35,
+            "total_tokens": 49,
+            "prompt_tokens_details": {
+              "audio_tokens": null,
+              "cached_tokens": 0,
+              "cache_write_tokens": null
+            },
+            "completion_tokens_details": {
+              "accepted_prediction_tokens": null,
+              "audio_tokens": null,
+              "reasoning_tokens": 0,
+              "rejected_prediction_tokens": null
+            }
+          }
+        }
+      },
+      {
+        "probe": "nemotron-reasoning-none",
+        "request": {
+          "model": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "Reply with exactly PLAIN_TEXT and nothing else."
+                }
+              ]
+            }
+          ],
+          "max_output_tokens": 4096,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "strict": true,
+              "name": "response",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": ["schema_4829"]
+                  },
+                  "count": {
+                    "type": "number",
+                    "const": 731
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "store": false,
+          "reasoning": {
+            "effort": "none"
+          }
+        },
+        "response": {
+          "status": 400,
+          "backendModel": null,
+          "text": "",
+          "error": {
+            "errorCode": "CUSTOM_CLIENT",
+            "errorName": "LanguageModelService:LlmHttpClientError",
+            "errorInstanceId": "222ee080-c0b6-471c-b6a3-3b82bb451572",
+            "parameters": {
+              "modelCreator": "Optional[NVIDIA]",
+              "responseBody": "Optional[{\n  \"error\": {\n    \"message\": \"Unsupported parameter: 'reasoning.effort' is not supported with this model.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": \"reasoning.effort\",\n    \"code\": \"unsupported_parameter\"\n  }\n}]",
+              "modelBackendId": "Optional[AZURE_OPEN_AI]",
+              "errorType": "Optional[invalid_request_error]",
+              "errorMessage": "Optional[Unsupported parameter: 'reasoning.effort' is not supported with this model.]",
+              "errorCode": "Optional[unsupported_parameter]",
+              "statusCode": "400"
+            }
+          },
+          "usage": null
+        }
+      },
+      {
+        "probe": "nemotron-reasoning-low",
+        "request": {
+          "model": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "Reply with exactly PLAIN_TEXT and nothing else."
+                }
+              ]
+            }
+          ],
+          "max_output_tokens": 4096,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "strict": true,
+              "name": "response",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": ["schema_4829"]
+                  },
+                  "count": {
+                    "type": "number",
+                    "const": 731
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "store": false,
+          "reasoning": {
+            "effort": "low"
+          }
+        },
+        "response": {
+          "status": 400,
+          "backendModel": null,
+          "text": "",
+          "error": {
+            "errorCode": "CUSTOM_CLIENT",
+            "errorName": "LanguageModelService:LlmHttpClientError",
+            "errorInstanceId": "450f750f-802b-4009-ba1c-f09bfe45a9d1",
+            "parameters": {
+              "modelCreator": "Optional[NVIDIA]",
+              "responseBody": "Optional[{\n  \"error\": {\n    \"message\": \"Unsupported parameter: 'reasoning.effort' is not supported with this model.\",\n    \"type\": \"invalid_request_error\",\n    \"param\": \"reasoning.effort\",\n    \"code\": \"unsupported_parameter\"\n  }\n}]",
+              "modelBackendId": "Optional[AZURE_OPEN_AI]",
+              "errorType": "Optional[invalid_request_error]",
+              "errorMessage": "Optional[Unsupported parameter: 'reasoning.effort' is not supported with this model.]",
+              "errorCode": "Optional[unsupported_parameter]",
+              "statusCode": "400"
+            }
+          },
+          "usage": null
+        }
+      }
+    ],
+    "representativeRequests": [
+      {
+        "modelId": "glm-5-3-flash",
+        "probe": "forced-json-tools",
+        "request": {
+          "model": "ri.language-model-service..language-model.glm-5-3-flash",
+          "max_tokens": 4096,
+          "response_format": {
+            "type": "json_schema",
+            "json_schema": {
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "number"
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "name": "response"
+            }
+          },
+          "messages": [
+            {
+              "role": "user",
+              "content": "Call lookup exactly once. Return its label and count as a JSON object. You do not know those values until the tool executes."
+            }
+          ],
+          "tools": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup",
+                "description": "Fetch the requested label and count.",
+                "parameters": {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "type": "object",
+                  "properties": {},
+                  "additionalProperties": false
+                }
+              }
+            }
+          ],
+          "tool_choice": {
+            "type": "function",
+            "function": {
+              "name": "lookup"
+            }
+          }
+        }
+      },
+      {
+        "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
+        "probe": "enforced-schema",
+        "request": {
+          "model": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+          "input": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "input_text",
+                  "text": "Reply with exactly PLAIN_TEXT and nothing else."
+                }
+              ]
+            }
+          ],
+          "max_output_tokens": 4096,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "strict": true,
+              "name": "response",
+              "schema": {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "type": "object",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "enum": ["schema_4829"]
+                  },
+                  "count": {
+                    "type": "number",
+                    "const": 731
+                  }
+                },
+                "required": ["label", "count"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "store": false
+        }
+      }
+    ],
+    "conclusions": [
+      "GLM Flash original 900-token JSON failure ended with finish_reason=length and no visible content. A repeat of the original request produced schema-valid but unsupported clinical details. Structured JSON is supported; the old fixture lacked some requested facts and checked shape only.",
+      "GLM Flash, Kimi K3, Gemma 4-31B and Qwen 3-32B passed the strict constraint probe. Nemotron Ultra returned PLAIN_TEXT, then also ignored a second enum-only schema in a raw Responses request while obeying the prompt. Successful prompted JSON does not establish strict enforcement.",
+      "Required tool selection plus response_format returned HTTP 400 for GLM Flash and Kimi K3, with backend FIREWORKS and upstream message: tool_choice (required or a specific function) cannot be combined with response_format. Automatic selection instead produced JSON without executing the tool. Constraint interference is the likely mechanism; direct upstream reproduction remains blocked.",
+      "Two-stage tool execution followed by structured output passed all five models. Gemma also passed simultaneous JSON plus tools with forced selection.",
+      "Nemotron identifies AZURE_OPEN_AI in route/parameter errors. Chat Completions is unavailable; reasoning.effort none and low are rejected. Responses emitted nonempty output but reported all-zero token usage. The request contains correct text.format; cannot distinguish Palantir translation from upstream Azure serving without direct backend access.",
+      "No missing package explains these observations. The installed OpenAI provider sends strict json_schema correctly. The Fireworks provider also uses OpenAI-compatible chat; its extra reasoning/history options do not remove the observed tool/format restriction. Raw GLM reasoning_effort=low was accepted with valid JSON and zero reported reasoning tokens."
+    ],
+    "directFireworks": {
+      "status": "blocked-authentication",
+      "httpStatuses": [401, 401],
+      "note": "Two distinct locally stored credentials were tried; both rejected. No authenticated direct result or proof of parity with the Foundry deployment."
+    },
+    "sources": [
+      "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "https://docs.fireworks.ai/structured-responses/structured-response-formatting",
+      "https://docs.fireworks.ai/guides/function-calling",
+      "https://raw.githubusercontent.com/vercel/ai/main/packages/fireworks/src/fireworks-provider.ts",
+      "https://ai.google.dev/gemma/docs/core/model_card_4",
+      "https://docs.nvidia.com/dynamo/dev/recipes/nemotron-3-ultra"
     ]
   }
 }

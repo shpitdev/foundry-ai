@@ -6,9 +6,9 @@
 
 ## Results
 
-✓ passed; × probe failed; T rate-limited after SDK retries; R proxy rejected; A disabled for this account; U no usable adapter route; — not tested. A catalog entry alone does not prove feature support.
+✓ passed; × probe failed; T rate-limited after SDK retries; R proxy rejected; A disabled for this account; U no usable adapter route; — not tested. These are probe outcomes, not a list of intrinsic model capabilities. A failure can reflect the fixture, budget, serving backend, or proxy.
 
-Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON + tools requires an executed tool result and matching final structured output with automatic tool selection and a three-step limit. The JSON also includes conversation-history and raw-RID routing probes. Image checks acceptance and a nonempty description, not visual accuracy. Reasoning checks stream events or token usage; it does not rate reasoning quality.
+JSON means schema-valid output was observed; it does not establish strict server-side schema enforcement. The focused audit below tests that separately. Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON + tools requires an executed tool result and matching final structured output with automatic tool selection and a three-step limit. The JSON also includes conversation-history and raw-RID routing probes. Image checks acceptance and a nonempty description, not visual accuracy. Reasoning checks stream events or token usage; it does not rate reasoning quality.
 
 ### OpenAI
 
@@ -73,13 +73,13 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 | `kimi-k2-5` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
 | `kimi-k3` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
 | `llama-3-3-nemotron-super-49b-v1-5` | U | U | U | U | U | U | U | U |
-| `nemotron-3-ultra-550b-a55b-nvfp4` | ✓ | ✓ | × | ✓ | ✓ | ✓ | R | × |
+| `nemotron-3-ultra-550b-a55b-nvfp4` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | R | × |
 | `gemma-4-26b-a4b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
 | `qwen3-235b-a22b-2507` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | × |
 | `qwen3-32b` | ✓ | ✓ | ✓ | × | ✓ | × | R | × |
 | `glm-5` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | × |
 | `glm-5-3` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | ✓ |
-| `glm-5-3-flash` | ✓ | ✓ | × | ✓ | ✓ | × | ✓ | ✓ |
+| `glm-5-3-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
 | `grok-4-3` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
 | `grok-4-5` | ✓ | × | ✓ | × | × | ✓ | ✓ | × |
 | `grok-4-6` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
@@ -100,11 +100,50 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 - **Enrollment versus proxy access:** Claude Opus 4.1 and Llama Nemotron Super are still listed as GA. The live proxy rejected Opus 4.1 as `DisabledForUser`, and Nemotron Super has no usable configured proxy route. Enrollment does not guarantee proxy compatibility.
 - **Streaming:** all six Grok models fail SDK stream parsing with missing text/reasoning-start events. Several OpenAI reasoning probes also fail because Foundry emits incomplete `response.reasoning_summary_part.added` events, even where ordinary text streaming passed.
 - **Anthropic settings:** set an explicit `maxOutputTokens`; the SDK default exceeds some Foundry backend limits. The blocking tool probes passed on available Claude models with a 420-token limit. Use adaptive thinking for Opus 4.7/4.8 and Claude 5.
-- **Structured output and tools:** Gemma, Kimi, Qwen, and GLM have failures in the combined automatic-tool-selection probe. Some runs omit the required tool execution. GLM 5.3 Flash standalone JSON and Grok 420 Reasoning combined output also failed in the latest probes. These outcomes do not establish that forced tool selection is unsupported.
+- **Structured output and tools:** the automatic combined probe still has failures. A separate tool-first, JSON-second workflow passed on all five audited models below. GLM Flash standalone JSON passed after correcting the fixture and budget.
 - **Blocking tool output:** Qwen 3-32B executed its tool but missed the requested response marker. Kimi K3 passed its blocking tool probe on an isolated retry after previously skipping execution; Grok 4.5 skipped execution in its recorded probe.
 - **Image and reasoning limits:** Qwen, GLM-5/5.3, and Nemotron Ultra reject image input. Several third-party models expose no reasoning signal in the tested stream; that does not mean they cannot reason. Google reasoning is not probed by this harness.
 - **Evidence corrections:** Codex Mini's tool/image probes passed after increasing their token budgets. The JSON probe now checks its declared schema, and reasoning requires events or token usage rather than matching prose. Embedding IDs are excluded from language-model probes. The JSON retains earlier outcomes alongside focused reruns.
 - **Focused retries:** reran all 15 previously rate-limited model/capability pairs individually, spacing successive probes for the same model by 65 seconds. Thirteen passed; GPT-5 and GPT-5 Nano reasoning probes reached the proxy but failed on incomplete `response.reasoning_summary_part.added` events. No rate-limited cases remain in the latest results. Earlier failures remain in the JSON history.
+
+## Structured-output audit
+
+The September 14 follow-up found both misleading negatives and overly broad interpretations of passes. See `structuredOutputInvestigation` in the [case-level evidence](./capability-results.json) for requests, responses, and controls. These are individual smoke tests, not reliability estimates.
+
+| Model | Prompted JSON | Strict schema constraint | Forced tool + JSON together | Tool first, then JSON |
+|---|---|---|---|---|
+| GLM 5.3 Flash | ✓ | ✓ | Fireworks HTTP 400 | ✓ |
+| Kimi K3 | ✓ | ✓ | Fireworks HTTP 400 | ✓ |
+| Gemma 4-31B | ✓ | ✓ | ✓ | ✓ |
+| Qwen 3-32B | ✓ | ✓ | Returned JSON without required tool | ✓ |
+| Nemotron Ultra | ✓ | Failed twice | ✓ | ✓ |
+
+**GLM Flash supports structured output through Foundry.** The old failure exhausted 900 output tokens without visible content. Its [model card](https://huggingface.co/zai-org/GLM-5.3-Flash) documents default maximum reasoning effort. The test now allows 4096 tokens. A raw `reasoning_effort: "low"` control also passed with no reported reasoning tokens. The old clinical prompt omitted facts requested by its schema; a retry produced invented details that still passed shape validation. The revised probe supplies all values and checks them exactly. Third-party JSON results use this revised probe; other providers retain their earlier format-only evidence.
+
+**Tools and JSON can conflict at the serving layer.** GLM Flash and Kimi K3 returned a Fireworks-attributed error: `tool_choice (required or a specific function) cannot be combined with response_format`. Automatic selection returned schema-shaped answers without running the tool. This is consistent with JSON constraints preventing tool generation; it does not imply the models lack tools. [Fireworks documents](https://docs.fireworks.ai/guides/function-calling) tool selection, while [Google documents](https://ai.google.dev/gemma/docs/core/model_card_4) Gemma's native function calling. Separating the two requests passed on every audited model:
+
+```ts
+// model, tools and prompt are your configured model, tool definitions and task.
+const first = await generateText({
+  model, tools, prompt,
+  toolChoice: { type: 'tool', toolName: 'lookup' },
+  maxOutputTokens: 4096,
+});
+const final = await generateText({
+  model,
+  messages: [
+    { role: 'user', content: prompt },
+    ...first.response.messages,
+    { role: 'user', content: 'Return the tool result as JSON.' },
+  ],
+  output: Output.object({ schema }),
+  maxOutputTokens: 4096,
+});
+```
+
+**Nemotron's JSON pass does not prove enforcement.** It obeyed the prompt instead of two strict schemas, including an enum-only raw HTTP control. It also reported zero token usage for nonempty output. Foundry identifies an Azure OpenAI backend; Chat Completions returns 404 and `reasoning.effort` settings return 400. The outgoing Responses request contains the correct `text.format`. This isolates the issue beyond SDK serialization, but cannot distinguish Palantir translation from Azure serving. [NVIDIA also documents serving-runtime limitations](https://docs.nvidia.com/dynamo/dev/recipes/nemotron-3-ultra) around constrained output; we have no evidence that Foundry uses that runtime.
+
+**No missing dependency was identified.** Our OpenAI provider already sends strict JSON Schema. The [Fireworks SDK provider](https://raw.githubusercontent.com/vercel/ai/main/packages/fireworks/src/fireworks-provider.ts) uses OpenAI-compatible chat with additional options, not a different structured-output protocol. Both local Fireworks credentials tested returned 401, so direct upstream parity remains unverified. The separate Kimi reasoning-history and malformed-stream gaps below remain genuine proxy-interface observations.
 
 ## Kimi K3 protocol check
 

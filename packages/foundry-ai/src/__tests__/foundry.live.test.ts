@@ -31,6 +31,7 @@ import {
   collectStreamSummary,
   createGoogleProxyFetch,
   createMessageHistoryFixture,
+  expectedSignal,
   getBaselineMaxTokens,
   getMessagesMaxTokens,
   getProviderOptions,
@@ -244,6 +245,7 @@ describe('live Foundry capability matrix', () => {
             });
 
             expect(signalSchema.safeParse(result.output).success).toBe(true);
+            expect(result.output).toEqual(expectedSignal);
 
             return {
               finishReason: result.finishReason,
