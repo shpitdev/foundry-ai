@@ -12,7 +12,6 @@ const { parseArgs, parseModelSelection } = (await import(helperModuleUrl)) as {
   ) => {
     extraEnv: Record<string, string>;
     extraVitestArgs: string[];
-    shouldUpdateDocs: boolean;
   };
   parseModelSelection: (value: string) => {
     modelId: string;
@@ -21,6 +20,10 @@ const { parseArgs, parseModelSelection } = (await import(helperModuleUrl)) as {
 };
 
 describe('run-live-capability-suite args', () => {
+  it('rejects removed documentation flags before a live run', () => {
+    expect(() => parseArgs(['--update-docs'], {})).toThrow('Live reports now stay local');
+    expect(() => parseArgs(['--no-update-docs'], {})).toThrow('Live reports now stay local');
+  });
   it('selects the third-party model catalog from the CLI', () => {
     expect(parseArgs(['--model', 'third-party:kimi-k3'], {}).extraEnv).toMatchObject({
       LIVE_PROVIDER_FILTER: 'third-party',

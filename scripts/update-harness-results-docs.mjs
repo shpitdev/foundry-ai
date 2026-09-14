@@ -8,26 +8,39 @@ import { fileURLToPath } from 'node:url';
 const workspaceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const artifactRoot = resolve(workspaceRoot, '.memory', 'capability-runs');
 const packageDocsDir = resolve(workspaceRoot, 'packages/foundry-ai/docs');
-const packageResultsDocPath = resolve(packageDocsDir, 'harness-capability-results.md');
+const packageResultsDocPath = resolve(packageDocsDir, 'README.md');
 const providerOrder = ['openai', 'anthropic', 'google', 'third-party'];
 const modelCapabilityColumns = [
   ['text.generate', 'Text'],
-  ['messages.generate', 'Messages'],
+  ['messages.generate', 'History'],
   ['rid.passthrough', 'RID'],
   ['text.stream', 'Stream'],
-  ['structured.output.object', 'Structured'],
-  ['tool.loop.deterministic', 'Tools'],
-  ['agent.tool_loop', 'Agent'],
-  ['structured.plus.tools', 'Structured+Tools'],
-  ['vision.image_input', 'Vision'],
-  ['reasoning.visibility', 'Reasoning'],
+  ['structured.output.object', 'JSON'],
+  ['tool.loop.deterministic', 'Stream tools'],
+  ['agent.tool_loop', 'Tools'],
+  ['structured.plus.tools', 'JSON + tools'],
+  ['vision.image_input', 'Image input'],
+  ['reasoning.visibility', 'Reasoning stream'],
 ];
 
 const rawArgs = process.argv.slice(2);
 const artifactDir = resolveArtifactDir(rawArgs);
-const outputTarget = resolveOutputTarget(rawArgs);
 const resultsPath = join(artifactDir, 'results.json');
 const record = JSON.parse(readFileSync(resultsPath, 'utf8'));
+if (!record.finishedAt) {
+  throw new Error('Cannot publish an incomplete live run. Inspect its local results.json instead.');
+}
+if (!/^[a-zA-Z0-9._-]+$/.test(record.runId)) {
+  throw new Error(
+    'Expected a run ID containing only letters, numbers, dots, underscores, or hyphens.',
+  );
+}
+const outputTarget = resolveOutputTarget(rawArgs);
+if (outputTarget === packageResultsDocPath) {
+  throw new Error(
+    'The live evidence index is curated. Keep raw reports in the local run directory.',
+  );
+}
 
 const providerSummaries = summarizeProviders(record.cases);
 const statusCounts = summarizeStatuses(record.cases);
@@ -39,7 +52,7 @@ if (outputTarget === 'stdout') {
   mkdirSync(dirname(outputTarget), { recursive: true });
   writeFileSync(outputTarget, resultsDoc, 'utf8');
   process.stdout.write(
-    `${outputTarget === packageResultsDocPath ? 'Updated' : 'Wrote'} ${relativeToWorkspace(outputTarget)} from ${relativeToWorkspace(artifactDir)}.\n`,
+    `Wrote ${relativeToWorkspace(outputTarget)} from ${relativeToWorkspace(artifactDir)}.\n`,
   );
 }
 
@@ -93,7 +106,7 @@ function resolveOutputTarget(args) {
     return resolve(workspaceRoot, outputPath);
   }
 
-  return packageResultsDocPath;
+  return join(artifactDir, 'harness-capability-results.md');
 }
 
 function summarizeStatuses(cases) {
@@ -130,22 +143,29 @@ function summarizeProviders(cases) {
 
 function createResultsDoc(record, artifactDir, providerSummaries, statusCounts) {
   const lines = [
-    '# Harness Capability Results',
+    `# Live run: ${record.startedAt.slice(0, 10)}`,
     '',
-    'Generated from the latest local live verification harness artifact.',
+    'This report covers one dated run and only the models and capabilities listed below. It is not a current catalog-wide support statement.',
     '',
     `- Run ID: \`${record.runId}\``,
     `- Git SHA: \`${record.gitSha}\``,
     `- Package Version: \`${record.packageVersion}\``,
+    `- Installed SDK versions: ${
+      record.sdk
+        ? Object.entries(record.sdk)
+            .map(([name, version]) => `${name}=\`${version}\``)
+            .join(', ')
+        : 'not recorded; do not infer them from current dependencies'
+    }`,
     `- Artifact: \`${relativeToWorkspace(artifactDir)}\``,
     `- Started: ${record.startedAt}`,
-    `- Finished: ${record.finishedAt ?? 'in-progress'}`,
+    `- Finished: ${record.finishedAt}`,
     `- Default Models: openai=\`${record.models.openai}\`, anthropic=\`${record.models.anthropic}\`, google=\`${record.models.google}\``,
     `- Filters: ${formatFilters(record.filters)}`,
     `- Model Scope: \`${record.modelScope ?? 'canonical'}\``,
     `- Status Counts: ${statusCounts.map(([status, count]) => `\`${status}\`: ${count}`).join(', ')}`,
     '',
-    'The live suite is the canonical verification surface for proxy-sensitive behavior. The default per-provider models are the hard gate; the rest of the catalog rows are investigation coverage and are allowed to surface non-pass results without failing the suite. Survey coverage runs the current public catalog only. Rows marked `skipped` are intentionally out of scope for the current stack or package surface. Rows marked `proxy-rejected` are real proxy or request-shape failures that need investigation.',
+    'The default per-provider models are the hard gate; survey cases can record failures without failing the suite. Read case statuses rather than the process exit code. Skipped cases were not tested. Proxy-rejected cases describe rejected requests, not universal model limitations. Missing models and capabilities are unverified by this run.',
     '',
     '## Provider Summary',
     '',

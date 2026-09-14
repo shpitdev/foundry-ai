@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
 import { OpenTelemetry } from '@ai-sdk/otel';
@@ -53,6 +54,7 @@ interface CapabilityRunRecord {
   runId: string;
   gitSha: string;
   packageVersion: string;
+  sdk: Record<string, string>;
   startedAt: string;
   finishedAt?: string;
   artifactDir: string;
@@ -325,6 +327,7 @@ export class LiveCapabilityRecorder {
       runId,
       gitSha: resolveGitSha(),
       packageVersion: resolvePackageVersion(),
+      sdk: resolveSdkVersions(),
       startedAt: new Date().toISOString(),
       artifactDir: this.artifactDir,
       models,
@@ -901,6 +904,16 @@ function resolveGitSha() {
   }
 }
 
+function resolveSdkVersions(): Record<string, string> {
+  const require = createRequire(import.meta.url);
+  return Object.fromEntries(
+    ['ai', '@ai-sdk/openai', '@ai-sdk/anthropic', '@ai-sdk/google'].map((name) => [
+      name,
+      (require(`${name}/package.json`) as { version: string }).version,
+    ]),
+  );
+}
+
 function resolvePackageVersion() {
   try {
     const packageJson = JSON.parse(
@@ -971,7 +984,11 @@ function isLiveProvider(value: string): value is LiveProvider {
 
 function getKnownProviderModelIds(provider: LiveProvider): readonly string[] {
   return Object.entries(MODEL_CATALOG)
-    .filter(([, metadata]) => metadata.provider === provider)
+    .filter(
+      ([, metadata]) =>
+        metadata.provider === provider &&
+        !metadata.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS'),
+    )
     .sort((left, right) => compareModelIds(right[0], left[0]))
     .map(([modelId]) => modelId);
 }

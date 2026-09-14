@@ -604,7 +604,7 @@ describe('provider adapters', () => {
       fetch?: typeof fetch;
     };
     await googleOptions?.fetch?.(
-      'https://example.test/v1/models/gemini-2.5-flash:generateContent',
+      'https://example.test/v1/models/gemini-3.6-flash:generateContent',
       {
         headers: {
           'x-goog-api-key': 'token-123',
@@ -644,16 +644,16 @@ describe('provider adapters', () => {
     const google = createFoundryGoogle(config);
     const rawRid = 'ri.language-model-service..language-model.gemini-3-1-flash-lite';
 
-    const aliasModel = google('gemini-2.5-flash');
+    const aliasModel = google('gemini-3.6-flash');
     const rawModel = google(rawRid);
 
     expect(googleLanguageModelMock).toHaveBeenNthCalledWith(
       1,
-      'ri.language-model-service..language-model.gemini-2-5-flash',
+      'ri.language-model-service..language-model.gemini-3-6-flash',
     );
     expect(googleLanguageModelMock).toHaveBeenNthCalledWith(2, rawRid);
     expect(aliasModel.provider).toBe('foundry-google');
-    expect(aliasModel.modelId).toBe('gemini-2.5-flash');
+    expect(aliasModel.modelId).toBe('gemini-3.6-flash');
     expect(rawModel.modelId).toBe(rawRid);
     expect(google.languageModel).toBeTypeOf('function');
     expect(google.chat).toBeTypeOf('function');

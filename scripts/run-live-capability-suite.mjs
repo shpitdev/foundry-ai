@@ -18,7 +18,7 @@ const runId = createRunId();
 const artifactPath = `.memory/capability-runs/${runId}`;
 const artifactSummaryPath = `${artifactPath}/harness-capability-results.md`;
 const artifactResultsPath = join(workspaceRoot, artifactPath, 'results.json');
-const { extraEnv, extraVitestArgs, shouldUpdateDocs } = parseArgs(process.argv.slice(2));
+const { extraEnv, extraVitestArgs } = parseArgs(process.argv.slice(2));
 
 const testExitCode = await runCommandWithProgress(
   'pnpm',
@@ -53,18 +53,6 @@ if (hasResultsArtifact) {
     `Expected a live capability artifact at ${artifactResultsPath}, but no results were written.\n`,
   );
   exitCode = 1;
-}
-
-if (shouldUpdateDocs && hasResultsArtifact) {
-  const docsExitCode = await runCommand('node', [
-    'scripts/update-harness-results-docs.mjs',
-    '--artifact',
-    artifactPath,
-  ]);
-
-  if (docsExitCode !== 0) {
-    process.exit(docsExitCode);
-  }
 }
 
 process.exit(exitCode);

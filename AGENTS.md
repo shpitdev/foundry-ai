@@ -21,4 +21,4 @@
 
 ## See Also
 
-- `SPEC.md` — Technical specification and architecture details
+- `README.md` — Development workflow; `packages/foundry-ai/docs/README.md` — Model routing and test status

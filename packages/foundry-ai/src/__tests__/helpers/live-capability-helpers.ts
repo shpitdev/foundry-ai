@@ -74,15 +74,20 @@ export function getBaselineMaxTokens(provider: LiveProvider, modelId: string) {
   return 420;
 }
 
+export function getVisionMaxTokens(provider: LiveProvider, modelId: string) {
+  // These models exhausted the short image budget before producing a description.
+  return (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') ||
+    (provider === 'google' && modelId === 'gemini-3.5-flash')
+    ? 1400
+    : 160;
+}
+
 export function getStructuredOutputPrompt() {
   return 'Extract a concise clinical signal from this statement: "The therapy reduced relapse rates, but liver enzyme elevations require monitoring."';
 }
 
 export function getStructuredOutputMaxTokens(provider: LiveProvider, modelId: string) {
-  if (
-    (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') ||
-    (provider === 'google' && modelId === 'gemini-2.5-pro')
-  ) {
+  if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
     return 1400;
   }
 
@@ -96,10 +101,6 @@ export function getStructuredToolsPrompt() {
 export function getStructuredToolsMaxTokens(provider: LiveProvider, modelId: string) {
   if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
     return 2400;
-  }
-
-  if (provider === 'google' && modelId === 'gemini-2.5-pro') {
-    return 900;
   }
 
   return 520;
@@ -130,10 +131,10 @@ export function getProviderOptions(
     if (mode === 'reasoning') {
       return {
         anthropic: {
-          thinking: modelId?.endsWith('-5')
+          thinking: usesAdaptiveThinking(modelId)
             ? { type: 'adaptive', display: 'summarized' }
             : { type: 'enabled', budgetTokens: 1024 },
-          ...(modelId?.endsWith('-5') ? { effort: 'high' } : {}),
+          ...(usesAdaptiveThinking(modelId) ? { effort: 'high' } : {}),
           sendReasoning: true,
         },
       };
@@ -291,4 +292,31 @@ function supportsMinimalReasoningEffort(modelId: string) {
 
 export function shouldAssertOpenAIReasoning(modelId: string) {
   return isKnownOpenAIReasoningTarget(modelId);
+}
+
+export function hasReasoningEvidence(summary: {
+  eventCounts: Record<string, number>;
+  usage?: unknown;
+}) {
+  if (
+    ['reasoning-start', 'reasoning-delta', 'reasoning-end'].some(
+      (type) => (summary.eventCounts[type] ?? 0) > 0,
+    )
+  )
+    return true;
+  const usage = summary.usage as
+    | {
+        outputTokenDetails?: { reasoningTokens?: number };
+        reasoningTokens?: number;
+      }
+    | undefined;
+  return (usage?.outputTokenDetails?.reasoningTokens ?? usage?.reasoningTokens ?? 0) > 0;
+}
+
+export function usesAdaptiveThinking(modelId?: string) {
+  return (
+    modelId?.endsWith('-5') === true ||
+    modelId === 'claude-opus-4.7' ||
+    modelId === 'claude-opus-4.8'
+  );
 }

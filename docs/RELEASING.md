@@ -1,57 +1,15 @@
 # Releasing
 
-## Release identity
+Releases publish `@nyrra/foundry-ai` through [release.yml](../.github/workflows/release.yml), using npm trusted publishing and provenance. Publishing requires the repository variable `NPM_PUBLISH_ENABLED=true` and npm trust for `shpitdev/foundry-ai` / `release.yml`.
 
-- Repository: `shpitdev/foundry-ai`
-- npm package: `@nyrra/foundry-ai`
-- Stable tag: `@nyrra/foundry-ai@{version}`
+## Stable release
 
-The repository moved organizations, but the existing npm package identity remains unchanged. Package metadata and provenance must point at `shpitdev/foundry-ai`.
+From a clean, updated `main`, run `pnpm run verify`, then `pnpm run release`. The release script checks repository and release state and prepares a `release/*` PR with the package version and changelog. Review and merge that PR after CI passes.
 
-## Publishing gate
+The release workflow builds and audits the package, publishes the stable version to `latest`, and pushes the annotated `@nyrra/foundry-ai@{version}` tag. Verify the workflow succeeded, the npm version and `latest` tag match, and npm reports provenance before calling the release complete.
 
-The `Publish Release` workflow is inert unless the repository Actions variable `NPM_PUBLISH_ENABLED` is exactly `true`. Keep it absent or `false` until npm trusted publishing targets this repository.
+## Prerelease
 
-## One-time cutover
+Merging a non-release PR publishes the next release candidate under npm's `next` tag. This does not advance `latest`. Package versions are immutable; a rerun succeeds only if the expected tag already points to the computed version.
 
-1. Verify the repository is public and its metadata is current:
-
-   ```bash
-   pnpm run verify:public-metadata
-   ```
-
-2. Replace any existing npm trusted publisher for `@nyrra/foundry-ai` with:
-   - Provider: GitHub Actions
-   - Repository: `shpitdev/foundry-ai`
-   - Workflow: `release.yml`
-   - Environment: none
-   - Permission: publish
-
-   With npm 11.10 or newer, an authenticated maintainer can configure it with:
-
-   ```bash
-   npm trust list @nyrra/foundry-ai
-   npm trust github @nyrra/foundry-ai \
-     --repo shpitdev/foundry-ai \
-     --file release.yml \
-     --allow-publish
-   ```
-
-3. Set `NPM_PUBLISH_ENABLED=true` as a repository Actions variable.
-
-## Stable releases
-
-Stable releases use a `release/*` pull request. The manifest and changelog must already contain the intended stable version. After the PR merges, `release.yml` builds and audits the package, publishes it with npm trusted publishing and provenance, and pushes the matching annotated tag.
-
-For the first post-transfer release, create `release/v0.0.5` from the verified `main` containing `@nyrra/foundry-ai@0.0.5`. After merge, verify:
-
-```bash
-test "$(npm view @nyrra/foundry-ai@0.0.5 version)" = "0.0.5"
-test "$(npm view @nyrra/foundry-ai dist-tags.latest)" = "0.0.5"
-test "$(npm view @nyrra/foundry-ai@0.0.5 dist.attestations.provenance.predicateType)" = "https://slsa.dev/provenance/v1"
-git fetch origin 'refs/tags/@nyrra/foundry-ai@0.0.5:refs/tags/@nyrra/foundry-ai@0.0.5'
-```
-
-## Prereleases
-
-After any merged non-release PR, the workflow publishes the next `0.0.x-rc.N` version with the `next` dist-tag. Existing package versions are immutable; reruns only succeed when the expected dist-tag already points at the computed version.
+Use `pnpm run verify:public-metadata` to check public repository/package identity when investigating publishing problems.

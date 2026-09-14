@@ -75,6 +75,8 @@ it('executes the Exa tool with SDK 7 and persists harness events and spans offli
   });
   expect(fetchMock).toHaveBeenCalledTimes(1);
   const record = JSON.parse(await readFile(join(artifactDir, 'results.json'), 'utf8'));
+  expect(record.sdk.ai).toMatch(/^7\./);
+  expect(record.sdk['@ai-sdk/openai']).toMatch(/^4\./);
   expect(record.cases[0].telemetry.eventCounts).toMatchObject({
     onStart: 1,
     onStepStart: 2,

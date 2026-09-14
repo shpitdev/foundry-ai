@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { loadFoundryConfig, normalizeFoundryUrl, resolveFoundryConfig } from '../config.js';
 import { FoundryModelNotFoundError } from '../errors.js';
@@ -6,6 +7,7 @@ import {
   getModelMetadata,
   hasKnownModel,
   type KnownModelId,
+  MODEL_CATALOG,
   MODEL_CATALOG_BY_RID,
   resolveKnownModelMetadata,
   resolveModelProvider,
@@ -21,6 +23,43 @@ import type {
 } from '../models/openai-models.js';
 
 describe('model catalog', () => {
+  it('only catalogs models present and active in the retained Foundry CLI listing', () => {
+    const { catalogVerification } = JSON.parse(
+      readFileSync(new URL('../../docs/capability-results.json', import.meta.url), 'utf8'),
+    ) as {
+      catalogVerification: {
+        models: Array<{ rid: string; modelIdentifier: string; lifecycle: string }>;
+      };
+    };
+    for (const [id, model] of Object.entries(MODEL_CATALOG)) {
+      const enrollment = catalogVerification.models.find((entry) =>
+        model.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS')
+          ? entry.modelIdentifier === model.modelIdentifier
+          : entry.rid === model.rid,
+      );
+      expect(enrollment, `${id} must exist in foundry-cli models list`).toBeDefined();
+      expect(['ga', 'experimental'], `${id} must not be deprecated`).toContain(
+        enrollment?.lifecycle,
+      );
+      expect(model.lifecycle, `${id} lifecycle must match Foundry`).toBe(enrollment?.lifecycle);
+    }
+  });
+
+  it.each([
+    'gpt-5-pro',
+    'gemini-2.5-pro',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
+    'claude-3.5-haiku',
+    'claude-3.7-sonnet',
+    'claude-sonnet-4',
+    'claude-opus-4',
+  ])('removes deprecated or delisted alias %s', (id) => {
+    expect(hasKnownModel(id)).toBe(false);
+    expect(getModelMetadata(id)).toBeUndefined();
+    expect(() => resolveKnownModelMetadata(id)).toThrow(FoundryModelNotFoundError);
+  });
+
   it('resolves metadata for known OpenAI models', () => {
     expect(resolveModelRid('gpt-5-mini')).toBe(
       'ri.language-model-service..language-model.gpt-5-mini',
@@ -57,25 +96,6 @@ describe('model catalog', () => {
     expect(getModelMetadata('gpt-5-codex')).toMatchObject({
       displayName: 'GPT-5 Codex',
       provider: 'openai',
-      supportsResponses: true,
-      supportsVision: true,
-    });
-    expect(getModelMetadata('gpt-5-pro')).toMatchObject({
-      displayName: 'GPT-5 Pro',
-      modelIdentifier: 'GPT_5_PRO',
-      provider: 'openai',
-      inputTypes: [
-        'GENERIC_COMPLETION',
-        'GENERIC_CHAT_COMPLETION',
-        'GENERIC_VISION_COMPLETION',
-        'OPEN_AI_REASONING',
-        'OPEN_AI_RESPONSES',
-      ],
-      performance: {
-        cost: 'HIGH',
-        modelClass: 'REASONING',
-        speed: 'LOW',
-      },
       supportsResponses: true,
       supportsVision: true,
     });
@@ -178,8 +198,8 @@ describe('model catalog', () => {
     );
     expect(resolveModelProvider('gemini-3.1-flash-lite')).toBe('google');
     expect(getModelMetadata('gemini-3.1-flash-lite')).toMatchObject({
-      displayName: 'Gemini 3.1 Flash Lite (Preview)',
-      lifecycle: 'experimental',
+      displayName: 'Gemini 3.1 Flash Lite',
+      lifecycle: 'ga',
       modelIdentifier: 'GEMINI_3_1_FLASH_LITE',
       provider: 'google',
       inputTypes: expect.arrayContaining(['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION']),
@@ -249,7 +269,7 @@ describe('model catalog', () => {
     expect(
       MODEL_CATALOG_BY_RID['ri.language-model-service..language-model.gemini-3-1-flash-lite'],
     ).toMatchObject({
-      displayName: 'Gemini 3.1 Flash Lite (Preview)',
+      displayName: 'Gemini 3.1 Flash Lite',
       provider: 'google',
     });
   });
@@ -273,7 +293,7 @@ describe('model catalog', () => {
         supportsResponses: true,
         supportsVision: true,
         trainingCutoffDate: '2025-08-31T00:00:00Z',
-        lifecycle: 'experimental',
+        lifecycle: 'ga',
       },
     });
   });

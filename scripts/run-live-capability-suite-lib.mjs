@@ -3,7 +3,6 @@ const LIVE_CAPABILITY_MAX_CONCURRENCY_ENV = 'LIVE_CAPABILITY_MAX_CONCURRENCY';
 export function parseArgs(args, env = process.env) {
   const passthroughArgs = [];
   const extraEnv = {};
-  let shouldUpdateDocs = args.length === 0;
   let modelWasSelected = false;
   let scopeWasExplicitlySelected = false;
 
@@ -27,14 +26,10 @@ export function parseArgs(args, env = process.env) {
       continue;
     }
 
-    if (arg === '--update-docs') {
-      shouldUpdateDocs = true;
-      continue;
-    }
-
-    if (arg === '--no-update-docs') {
-      shouldUpdateDocs = false;
-      continue;
+    if (arg === '--update-docs' || arg === '--no-update-docs') {
+      throw new Error(
+        'Live reports now stay local. Remove the docs flag and use pnpm run test:live:summary.',
+      );
     }
 
     if (arg === '--provider') {
@@ -79,7 +74,6 @@ export function parseArgs(args, env = process.env) {
   return {
     extraEnv,
     extraVitestArgs: passthroughArgs,
-    shouldUpdateDocs,
   };
 }
 

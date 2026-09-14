@@ -39,12 +39,15 @@ import {
   getStructuredOutputPrompt,
   getStructuredToolsMaxTokens,
   getStructuredToolsPrompt,
+  getVisionMaxTokens,
+  hasReasoningEvidence,
   regulatorySignalTool,
   resolveModelIdForRidCheck,
   resolveVisionModelId,
   shouldAssertOpenAIReasoning,
   signalSchema,
   structuredToolSchema,
+  usesAdaptiveThinking,
 } from './helpers/live-capability-helpers.js';
 import { wrapLiveModelWithDevTools } from './helpers/live-devtools.js';
 import { loadLiveFoundryConfig } from './helpers/live-foundry.js';
@@ -240,8 +243,7 @@ describe('live Foundry capability matrix', () => {
               experimental_telemetry: telemetry,
             });
 
-            expect(result.output.indication.length).toBeGreaterThan(4);
-            expect(result.output.rationale.length).toBeGreaterThan(20);
+            expect(signalSchema.safeParse(result.output).success).toBe(true);
 
             return {
               finishReason: result.finishReason,
@@ -267,7 +269,7 @@ describe('live Foundry capability matrix', () => {
               model: getFoundryModel(provider, modelId),
               prompt:
                 'Call the regulatorySignal tool exactly once with topic "oncology", then answer with SIGNAL and the returned status in one short sentence.',
-              maxOutputTokens: 420,
+              maxOutputTokens: getBaselineMaxTokens(provider, modelId),
               providerOptions: getProviderOptions(provider, 'tools', modelId),
               stopWhen: stepCountIs(3),
               tools: {
@@ -298,6 +300,7 @@ describe('live Foundry capability matrix', () => {
           async (telemetry) => {
             const agent = new ToolLoopAgent({
               model: getFoundryModel(provider, modelId),
+              ...(provider === 'anthropic' ? { maxOutputTokens: 420 } : {}),
               tools: {
                 regulatorySignal: regulatorySignalTool,
               },
@@ -414,7 +417,7 @@ describe('live Foundry capability matrix', () => {
                 'Describe what this image appears to show in one short sentence.',
                 imageBytes,
               ),
-              maxOutputTokens: 160,
+              maxOutputTokens: getVisionMaxTokens(provider, visionModelId),
               providerOptions: getProviderOptions(provider, 'baseline', visionModelId),
               experimental_telemetry: telemetry,
             });
@@ -464,15 +467,18 @@ describe('live Foundry capability matrix', () => {
         }
 
         await recorder.runCase(spec, async (telemetry) => {
-          const usesAdaptiveAnthropicThinking = provider === 'anthropic' && modelId.endsWith('-5');
+          const usesAdaptiveAnthropicThinking =
+            provider === 'anthropic' && usesAdaptiveThinking(modelId);
           const result = streamText({
             model: getFoundryModel(provider, modelId),
             prompt:
-              usesAdaptiveAnthropicThinking || provider === 'third-party'
+              usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
                 ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
                 : 'Reply with READY and one short clause about reasoning visibility.',
             maxOutputTokens:
-              usesAdaptiveAnthropicThinking || provider === 'third-party' ? 2000 : 220,
+              usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
+                ? 2000
+                : 220,
             providerOptions: getProviderOptions(provider, 'reasoning', modelId),
             experimental_telemetry: telemetry,
           });
@@ -481,27 +487,13 @@ describe('live Foundry capability matrix', () => {
           if (provider === 'anthropic') {
             expect(summary.reasoningText.trim().length).toBeGreaterThan(0);
           } else {
-            const reasoningEventCount =
-              (summary.eventCounts['reasoning-start'] ?? 0) +
-              (summary.eventCounts['reasoning-delta'] ?? 0) +
-              (summary.eventCounts['reasoning-end'] ?? 0);
-            const reasoningTokenCount =
-              typeof summary.usage === 'object' &&
-              summary.usage !== null &&
-              'reasoningTokens' in summary.usage &&
-              typeof summary.usage.reasoningTokens === 'number'
-                ? summary.usage.reasoningTokens
-                : 0;
-
-            expect(
-              reasoningEventCount > 0 ||
-                reasoningTokenCount > 0 ||
-                (provider !== 'third-party' && /reasoning/i.test(summary.text)),
-            ).toBe(true);
+            expect(hasReasoningEvidence(summary)).toBe(true);
           }
 
           expect(summary.text).toMatch(
-            usesAdaptiveAnthropicThinking || provider === 'third-party' ? /301/ : /ready/i,
+            usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
+              ? /301/
+              : /ready/i,
           );
 
           return summary;

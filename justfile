@@ -22,20 +22,20 @@ typecheck:
   pnpm run typecheck
 
 # Live capability workflows default to the fast canonical model set with devtools enabled.
-# Use `live` for the common local loop and `live-full` for the broader catalog sweep with docs refresh.
+# Use `live` for the common local loop and `live-full` for the broader catalog sweep; reports stay local.
 
 live:
-  pnpm run test:live:devtools -- --no-update-docs
+  pnpm run test:live:devtools
 
 live-full:
-  pnpm run test:live:devtools:full -- --update-docs
+  pnpm run test:live:devtools:full
 
 # `live-model` widens to catalog scope automatically unless you pass `--canonical`.
 live-model model:
-  pnpm run test:live:devtools -- --no-update-docs --model {{model}}
+  pnpm run test:live:devtools -- --model {{model}}
 
 live-provider provider:
-  pnpm run test:live:devtools -- --no-update-docs --provider {{provider}}
+  pnpm run test:live:devtools -- --provider {{provider}}
 
 # Prints the latest generated live summary artifact, including runs started via devtools.
 live-summary:

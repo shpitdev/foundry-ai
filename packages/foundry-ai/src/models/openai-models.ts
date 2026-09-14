@@ -108,26 +108,6 @@ const OPENAI_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://platform.openai.com/docs/models/gpt-5',
   },
-  'gpt-5-pro': {
-    rid: 'ri.language-model-service..language-model.gpt-5-pro',
-    modelIdentifier: 'GPT_5_PRO',
-    displayName: 'GPT-5 Pro',
-    lifecycle: 'ga',
-    inputTypes: [
-      'GENERIC_COMPLETION',
-      'GENERIC_CHAT_COMPLETION',
-      'GENERIC_VISION_COMPLETION',
-      'OPEN_AI_REASONING',
-      'OPEN_AI_RESPONSES',
-    ],
-    trainingCutoffDate: '2024-09-30T00:00:00Z',
-    performance: {
-      cost: 'HIGH',
-      modelClass: 'REASONING',
-      speed: 'LOW',
-    },
-    externalUrl: 'https://platform.openai.com/docs/models/gpt-5-pro',
-  },
   'gpt-5-codex': {
     rid: 'ri.language-model-service..language-model.gpt-5-codex',
     modelIdentifier: 'GPT_5_CODEX',
@@ -254,7 +234,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gpt-5-2',
     modelIdentifier: 'GPT_5_2',
     displayName: 'GPT-5.2',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: [
       'GENERIC_COMPLETION',
       'GENERIC_CHAT_COMPLETION',
@@ -295,7 +275,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gpt-5-4',
     modelIdentifier: 'GPT_5_4',
     displayName: 'GPT-5.4',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: [
       'GENERIC_COMPLETION',
       'GENERIC_CHAT_COMPLETION',
@@ -317,7 +297,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gpt-5-5',
     modelIdentifier: 'GPT_5_5',
     displayName: 'GPT-5.5',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: [
       'GENERIC_COMPLETION',
       'GENERIC_CHAT_COMPLETION',
@@ -405,7 +385,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gpt-5-4-mini',
     modelIdentifier: 'GPT_5_4_MINI',
     displayName: 'GPT-5.4 mini',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: [
       'GENERIC_COMPLETION',
       'GENERIC_CHAT_COMPLETION',
@@ -427,7 +407,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gpt-5-4-nano',
     modelIdentifier: 'GPT_5_4_NANO',
     displayName: 'GPT-5.4 nano',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: [
       'GENERIC_COMPLETION',
       'GENERIC_CHAT_COMPLETION',
@@ -490,7 +470,7 @@ const OPENAI_MODEL_DEFINITIONS = {
 const OPENAI_EMBEDDING_MODEL_DEFINITIONS = {
   'text-embedding-3-small': {
     rid: 'text-embedding-3-small',
-    modelIdentifier: 'TEXT_EMBEDDING_3_SMALL',
+    modelIdentifier: 'OPENAI_TEXT_EMBEDDING_3_SMALL',
     displayName: 'Text Embedding 3 Small',
     lifecycle: 'ga',
     inputTypes: ['OPEN_AI_EMBEDDINGS'],
@@ -504,7 +484,7 @@ const OPENAI_EMBEDDING_MODEL_DEFINITIONS = {
   },
   'text-embedding-3-large': {
     rid: 'text-embedding-3-large',
-    modelIdentifier: 'TEXT_EMBEDDING_3_LARGE',
+    modelIdentifier: 'OPENAI_TEXT_EMBEDDING_3_LARGE',
     displayName: 'Text Embedding 3 Large',
     lifecycle: 'ga',
     inputTypes: ['OPEN_AI_EMBEDDINGS'],

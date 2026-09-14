@@ -43,7 +43,7 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
       throw new NoSuchModelError({
         modelId,
         modelType: 'languageModel',
-        message: `${modelId} is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/third-party-model-support.md.`,
+        message: `${modelId} is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md.`,
       });
     }
     const model =

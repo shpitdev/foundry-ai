@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { getLiveCapabilityModelMatrix } from './helpers/live-capabilities.js';
+import {
+  getEmbeddingProbeModelIds,
+  getLiveCapabilityModelMatrix,
+} from './helpers/live-capabilities.js';
 
 const originalEnv = {
   FOUNDRY_TOKEN: process.env.FOUNDRY_TOKEN,
@@ -37,6 +40,12 @@ describe('live capability model matrix', () => {
 
     const matrix = getLiveCapabilityModelMatrix();
 
+    expect(matrix.openai).not.toContain('text-embedding-3-small');
+    expect(matrix.openai).not.toContain('text-embedding-3-large');
+    expect(getEmbeddingProbeModelIds().openai).toEqual([
+      'text-embedding-3-small',
+      'text-embedding-3-large',
+    ]);
     expect(matrix.openai).toContain('gpt-5.4-mini');
     expect(matrix.openai).toContain('gpt-5.4-nano');
     expect(matrix.openai).not.toContain('gpt-4o-mini');
@@ -57,11 +66,11 @@ describe('live capability model matrix', () => {
     expect(matrix.openai[0]).toBe('gpt-5-nano');
     expect(matrix.anthropic[0]).toBe('claude-haiku-4.5');
     expect(matrix.openai.indexOf('gpt-5.4')).toBeLessThan(matrix.openai.indexOf('gpt-4.1'));
-    expect(matrix.anthropic.indexOf('claude-sonnet-4.6')).toBeLessThan(
-      matrix.anthropic.indexOf('claude-3.5-haiku'),
+    expect(matrix.anthropic.indexOf('claude-opus-4.8')).toBeLessThan(
+      matrix.anthropic.indexOf('claude-opus-4.5'),
     );
     expect(matrix.google.indexOf('gemini-3.1-pro')).toBeLessThan(
-      matrix.google.indexOf('gemini-2.5-pro'),
+      matrix.google.indexOf('gemini-3-flash'),
     );
   });
 
