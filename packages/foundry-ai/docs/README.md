@@ -87,6 +87,20 @@ JSON means schema-valid output was observed; it does not establish strict server
 | `grok-420-reasoning-latest` | ✓ | × | ✓ | ✓ | × | × | ✓ | × |
 | `grok-build-0-1` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
 
+### Realtime
+
+Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. All three entries are enabled, usable, and Experimental in `foundry-cli models list --json` (September 14, 2026).
+
+| Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
+|---|---|---|---|---|---|
+| `gpt-realtime` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-1.5` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-2` | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+Live probes use SDK 7.0.97 / OpenAI 4.0.65 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Realtime 1.5 initially refused the phrase used to generate the fixture; replacing it with a neutral sentence produced valid audio and all checks passed. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested. Results and earlier attempts are under `realtimeVerification` in the existing JSON.
+
+See [realtime setup](#realtime-setup) for authentication, examples, and the manual test command.
+
 ### Embeddings
 
 | Model | Probe | Dimensions |
@@ -178,17 +192,9 @@ OpenAI and third-party adapters reject `providerOptions.openai.store: true`. Res
 
 Only OpenAI exposes `embeddingModel()` and `embedding()`. Embedding strings pass through without language-model RID routing. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
 
-## Realtime
+## Realtime setup
 
-Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. All three entries are enabled, usable, and Experimental in `foundry-cli models list --json` (September 14, 2026).
-
-| Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
-|---|---|---|---|---|---|
-| `gpt-realtime` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-1.5` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-2` | ✓ | ✓ | ✓ | ✓ | ✓ |
-
-Live probes use SDK 7.0.97 / OpenAI 4.0.65 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Realtime 1.5 initially refused the phrase used to generate the fixture; replacing it with a neutral sentence produced valid audio and all checks passed. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested. Results and earlier attempts are under `realtimeVerification` in the existing JSON.
+Requires `ai@7` and `@ai-sdk/openai@4`. See [realtime results](#realtime) for tested capabilities and limits.
 
 Foundry uses `wss://<foundry-host>/language-model-service/ws/v1/open-ai/realtime?model=<api-name>` and a `Bearer-<user-token>` subprotocol. Use the current user's Foundry OAuth token with `language-model-service:use-model`; see [Palantir's authentication instructions](https://www.palantir.com/docs/foundry/realtime-audio/build-a-voice-enabled-osdk-application). `createFoundryRealtimeSetup` packages an existing token; it does **not** mint a short-lived or restricted OpenAI client secret. Never return a shared server token to a browser.
 
