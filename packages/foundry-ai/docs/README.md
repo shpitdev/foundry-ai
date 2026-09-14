@@ -2,7 +2,7 @@
 
 **Tested September 14, 2026 (UTC), on stable AI SDK 7.0.97:** OpenAI provider 4.0.65, Anthropic 4.0.52, and Google 4.0.67. The survey covers all 57 language-model aliases and both OpenAI embedding models in this catalog. Three realtime models were verified separately below. Basic text passed on 55 language models; two had proxy access/route failures. Both embeddings passed. Other capabilities have failures or skips as shown below.
 
-[Install and configure](../README.md). [Case-level results and rerun history](./capability-results.json). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Tests run manually; CI does not call Foundry.
+[Install and configure](../README.md). [Case-level results and rerun history](./capability-results.json). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Tests run manually; CI does not call Foundry. All language-model probes now use one 8,192-token output ceiling, including tools, image descriptions, and reasoning; model-specific budget exceptions have been removed. Historical cases retain the settings used in their recorded runs.
 
 ## Results
 
@@ -96,10 +96,12 @@ JSON means schema-valid output was observed; it does not establish strict server
 
 ## Findings
 
+- **Shared output ceiling:** all 57 standalone JSON cases were rerun at 8192 tokens: 55 passed, with the existing Opus 4.1 access and Nemotron Super route failures. GLM Flash also passed eight other probes at this ceiling; automatic JSON + tools still skipped execution. Anthropic tool/reasoning and Google streaming/tool checks also passed. Three throttled OpenAI/Google probes passed on isolated retries; space repeated requests when testing the same model. Other historical results retain their original budgets.
+
 - **Catalog freshness:** checked against `foundry-cli models list --json` on September 14, 2026. All retained entries are listed as GA or Experimental; Sunset and delisted entries are excluded. The JSON includes the CLI lifecycle snapshot. Embeddings match by model identifier because their proxy names differ from enrollment RIDs.
 - **Enrollment versus proxy access:** Claude Opus 4.1 and Llama Nemotron Super are still listed as GA. The live proxy rejected Opus 4.1 as `DisabledForUser`, and Nemotron Super has no usable configured proxy route. Enrollment does not guarantee proxy compatibility.
 - **Streaming:** all six Grok models fail SDK stream parsing with missing text/reasoning-start events. Several OpenAI reasoning probes also fail because Foundry emits incomplete `response.reasoning_summary_part.added` events, even where ordinary text streaming passed.
-- **Anthropic settings:** set an explicit `maxOutputTokens`; the SDK default exceeds some Foundry backend limits. The blocking tool probes passed on available Claude models with a 420-token limit. Use adaptive thinking for Opus 4.7/4.8 and Claude 5.
+- **Anthropic settings:** set an explicit `maxOutputTokens`; the SDK default exceeds some Foundry backend limits. The harness uses the shared 8,192-token ceiling for Claude as well. Use adaptive thinking for Opus 4.7/4.8 and Claude 5.
 - **Structured output and tools:** the automatic combined probe still has failures. A separate tool-first, JSON-second workflow passed on all five audited models below. GLM Flash standalone JSON passed after correcting the fixture and budget.
 - **Blocking tool output:** Qwen 3-32B executed its tool but missed the requested response marker. Kimi K3 passed its blocking tool probe on an isolated retry after previously skipping execution; Grok 4.5 skipped execution in its recorded probe.
 - **Image and reasoning limits:** Qwen, GLM-5/5.3, and Nemotron Ultra reject image input. Several third-party models expose no reasoning signal in the tested stream; that does not mean they cannot reason. Google reasoning is not probed by this harness.
@@ -118,7 +120,7 @@ The September 14 follow-up found both misleading negatives and overly broad inte
 | Qwen 3-32B | ✓ | ✓ | Returned JSON without required tool | ✓ |
 | Nemotron Ultra | ✓ | Failed twice | ✓ | ✓ |
 
-**GLM Flash supports structured output through Foundry.** The old failure exhausted 900 output tokens without visible content. Its [model card](https://huggingface.co/zai-org/GLM-5.3-Flash) documents default maximum reasoning effort. The test now allows 4096 tokens. A raw `reasoning_effort: "low"` control also passed with no reported reasoning tokens. The old clinical prompt omitted facts requested by its schema; a retry produced invented details that still passed shape validation. The revised probe supplies all values and checks them exactly. Third-party JSON results use this revised probe; other providers retain their earlier format-only evidence.
+**GLM Flash supports structured output through Foundry.** The old failure exhausted 900 output tokens without visible content. Its [model card](https://huggingface.co/zai-org/GLM-5.3-Flash) documents default maximum reasoning effort. The audit used 4096 tokens; the harness now gives every model 8192. A raw `reasoning_effort: "low"` control also passed with no reported reasoning tokens. The old clinical prompt omitted facts requested by its schema; a retry produced invented details that still passed shape validation. The revised probe supplies all values and checks them exactly. Standalone JSON results now use this revised probe across all providers, with the shared 8192-token ceiling.
 
 **Tools and JSON can conflict at the serving layer.** GLM Flash and Kimi K3 returned a Fireworks-attributed error: `tool_choice (required or a specific function) cannot be combined with response_format`. Automatic selection returned schema-shaped answers without running the tool. This is consistent with JSON constraints preventing tool generation; it does not imply the models lack tools. [Fireworks documents](https://docs.fireworks.ai/guides/function-calling) tool selection, while [Google documents](https://ai.google.dev/gemma/docs/core/model_card_4) Gemma's native function calling. Separating the two requests passed on every audited model:
 

@@ -12,6 +12,9 @@ export type ProviderOptionMode =
   | 'tools'
   | 'structured-tools';
 
+// A capability survey should leave room for reasoning and final output.
+export const LIVE_MAX_OUTPUT_TOKENS = 8192;
+
 export const signalSchema = z.object({
   indication: z.string().min(1),
   mechanismOfAction: z.string().min(1),
@@ -65,56 +68,12 @@ export function createMessageHistoryFixture() {
   ];
 }
 
-export function getMessagesMaxTokens(provider: LiveProvider, modelId: string) {
-  if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
-    return 1400;
-  }
-
-  return 420;
-}
-
-export function getBaselineMaxTokens(provider: LiveProvider, modelId: string) {
-  if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
-    return 1400;
-  }
-
-  return 420;
-}
-
-export function getVisionMaxTokens(provider: LiveProvider, modelId: string) {
-  // These models exhausted the short image budget before producing a description.
-  return (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') ||
-    (provider === 'google' && modelId === 'gemini-3.5-flash')
-    ? 1400
-    : 160;
-}
-
 export function getStructuredOutputPrompt() {
   return `Return a JSON object by copying these supplied field values exactly, without inventing clinical details: ${JSON.stringify(expectedSignal)}`;
 }
 
-export function getStructuredOutputMaxTokens(provider: LiveProvider, modelId: string) {
-  // GLM Flash exhausted 900 tokens in reasoning before emitting its JSON.
-  if (provider === 'third-party' && modelId === 'glm-5-3-flash') {
-    return 4096;
-  }
-  if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
-    return 1400;
-  }
-
-  return 900;
-}
-
 export function getStructuredToolsPrompt() {
   return 'Call the regulatorySignal tool exactly once with topic "oncology". Do not infer the status from the topic. Use the returned tool status value verbatim. Return only a JSON object with "status" equal to that exact tool status and "summary" equal to one short sentence mentioning oncology and that exact status.';
-}
-
-export function getStructuredToolsMaxTokens(provider: LiveProvider, modelId: string) {
-  if (provider === 'openai' && modelId === 'gpt-5.1-codex-mini') {
-    return 2400;
-  }
-
-  return 520;
 }
 
 export function createGoogleProxyFetch(token: string): typeof fetch {

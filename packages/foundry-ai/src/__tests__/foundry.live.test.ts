@@ -32,16 +32,12 @@ import {
   createGoogleProxyFetch,
   createMessageHistoryFixture,
   expectedSignal,
-  getBaselineMaxTokens,
-  getMessagesMaxTokens,
   getProviderOptions,
   getReasoningExpectation,
-  getStructuredOutputMaxTokens,
   getStructuredOutputPrompt,
-  getStructuredToolsMaxTokens,
   getStructuredToolsPrompt,
-  getVisionMaxTokens,
   hasReasoningEvidence,
+  LIVE_MAX_OUTPUT_TOKENS,
   regulatorySignalTool,
   resolveModelIdForRidCheck,
   resolveVisionModelId,
@@ -120,7 +116,7 @@ describe('live Foundry capability matrix', () => {
             const result = await generateText({
               model: getFoundryModel(provider, modelId),
               prompt: `Reply with exactly "${provider.toUpperCase()}: Foundry capability checks are running."`,
-              maxOutputTokens: getBaselineMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'baseline', modelId),
               experimental_telemetry: telemetry,
             });
@@ -149,7 +145,7 @@ describe('live Foundry capability matrix', () => {
             const result = await generateText({
               model: getFoundryModel(provider, modelId),
               messages: createMessageHistoryFixture(),
-              maxOutputTokens: getMessagesMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'baseline', modelId),
               experimental_telemetry: telemetry,
             });
@@ -180,7 +176,7 @@ describe('live Foundry capability matrix', () => {
             const result = await generateText({
               model: getFoundryModel(provider, ridTarget),
               prompt: 'Reply with exactly "READY: Foundry RID routing is active."',
-              maxOutputTokens: 420,
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'baseline', modelId),
               experimental_telemetry: telemetry,
             });
@@ -209,7 +205,7 @@ describe('live Foundry capability matrix', () => {
             const result = streamText({
               model: getFoundryModel(provider, modelId),
               prompt: `Write exactly one short sentence that mentions ${provider} and Foundry proxy routing.`,
-              maxOutputTokens: getBaselineMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'baseline', modelId),
               experimental_telemetry: telemetry,
             });
@@ -239,7 +235,7 @@ describe('live Foundry capability matrix', () => {
                 description: 'A concise clinical signal summary for regulated AI review workflows.',
               }),
               prompt: getStructuredOutputPrompt(),
-              maxOutputTokens: getStructuredOutputMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'structured', modelId),
               experimental_telemetry: telemetry,
             });
@@ -271,7 +267,7 @@ describe('live Foundry capability matrix', () => {
               model: getFoundryModel(provider, modelId),
               prompt:
                 'Call the regulatorySignal tool exactly once with topic "oncology", then answer with SIGNAL and the returned status in one short sentence.',
-              maxOutputTokens: getBaselineMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'tools', modelId),
               stopWhen: stepCountIs(3),
               tools: {
@@ -302,7 +298,7 @@ describe('live Foundry capability matrix', () => {
           async (telemetry) => {
             const agent = new ToolLoopAgent({
               model: getFoundryModel(provider, modelId),
-              ...(provider === 'anthropic' ? { maxOutputTokens: 420 } : {}),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               tools: {
                 regulatorySignal: regulatorySignalTool,
               },
@@ -355,7 +351,7 @@ describe('live Foundry capability matrix', () => {
                 description: 'A structured regulatory signal summary after tool execution.',
               }),
               prompt: getStructuredToolsPrompt(),
-              maxOutputTokens: getStructuredToolsMaxTokens(provider, modelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'structured-tools', modelId),
               stopWhen: stepCountIs(3),
               tools: {
@@ -419,7 +415,7 @@ describe('live Foundry capability matrix', () => {
                 'Describe what this image appears to show in one short sentence.',
                 imageBytes,
               ),
-              maxOutputTokens: getVisionMaxTokens(provider, visionModelId),
+              maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
               providerOptions: getProviderOptions(provider, 'baseline', visionModelId),
               experimental_telemetry: telemetry,
             });
@@ -477,10 +473,7 @@ describe('live Foundry capability matrix', () => {
               usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
                 ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
                 : 'Reply with READY and one short clause about reasoning visibility.',
-            maxOutputTokens:
-              usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
-                ? 2000
-                : 220,
+            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
             providerOptions: getProviderOptions(provider, 'reasoning', modelId),
             experimental_telemetry: telemetry,
           });
@@ -542,20 +535,20 @@ describe('live Foundry capability matrix', () => {
           const openAiResult = await generateText({
             model: getRegistryModel('openai', models.openai),
             prompt: 'Reply with exactly "OPENAI: registry routing is active."',
-            maxOutputTokens: 420,
+            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
             providerOptions: getProviderOptions('openai', 'baseline'),
             experimental_telemetry: telemetry,
           });
           const anthropicResult = await generateText({
             model: getRegistryModel('anthropic', models.anthropic),
             prompt: 'Reply with ANTHROPIC and one short clause.',
-            maxOutputTokens: 120,
+            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
             experimental_telemetry: telemetry,
           });
           const googleResult = await generateText({
             model: getRegistryModel('google', models.google),
             prompt: 'Reply with GOOGLE and one short clause.',
-            maxOutputTokens: 120,
+            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
             experimental_telemetry: telemetry,
           });
 

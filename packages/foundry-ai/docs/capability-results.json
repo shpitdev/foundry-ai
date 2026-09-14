@@ -479,6 +479,157 @@
       },
       "modelScope": "catalog",
       "note": "Revised standalone JSON fixture supplies every value and asserts exact output; GLM Flash budget raised to 4096. Working-tree test changes based on the recorded gitSha. Strict schema enforcement tested separately."
+    },
+    {
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:26:35.640Z",
+      "finishedAt": "2026-09-14T08:28:59.314Z",
+      "filters": {},
+      "modelScope": "catalog",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:28:37.586Z",
+      "finishedAt": "2026-09-14T08:28:46.055Z",
+      "filters": {
+        "modelId": "glm-5-3-flash",
+        "provider": "third-party"
+      },
+      "modelScope": "catalog",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-28-25.419Z-8204a1",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:28:25.946Z",
+      "filters": {},
+      "modelScope": "canonical",
+      "finishedAt": null,
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions. Interrupted after rate limiting; only completed cases retained.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-30-40.198Z-775e95",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:30:40.690Z",
+      "filters": {
+        "provider": "anthropic"
+      },
+      "modelScope": "canonical",
+      "finishedAt": "2026-09-14T08:30:43.894Z",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-30-41.354Z-fa0180",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:30:41.844Z",
+      "filters": {
+        "provider": "google"
+      },
+      "modelScope": "canonical",
+      "finishedAt": "2026-09-14T08:31:35.147Z",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-31-51.736Z-e4e011",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:31:52.231Z",
+      "filters": {
+        "modelId": "gpt-5-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog",
+      "finishedAt": "2026-09-14T08:31:53.223Z",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-32-50.800Z-0ad189",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:32:51.282Z",
+      "filters": {
+        "provider": "google"
+      },
+      "modelScope": "canonical",
+      "finishedAt": "2026-09-14T08:32:53.398Z",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
+    },
+    {
+      "runId": "2026-09-14T08-33-25.458Z-12f0cd",
+      "gitSha": "6e4eb9e",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T08:33:25.953Z",
+      "filters": {
+        "modelId": "gpt-5-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog",
+      "finishedAt": "2026-09-14T08:33:27.980Z",
+      "note": "Shared 8192-token ceiling for all language-model probes. Working-tree changes based on recorded gitSha. Standalone JSON uses explicit-field-copy-v2 with exact value assertions.",
+      "maxOutputTokens": 8192
     }
   ],
   "cases": [
@@ -487,37 +638,73 @@
       "modelId": "gpt-5-nano",
       "capability": "text.generate",
       "status": "pass",
-      "durationMs": 1544,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1059,
+      "runId": "2026-09-14T08-28-25.419Z-8204a1",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "messages.generate",
       "status": "pass",
-      "durationMs": 1784,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 859,
+      "runId": "2026-09-14T08-28-25.419Z-8204a1",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "rid.passthrough",
       "status": "pass",
-      "durationMs": 835,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
+      "durationMs": 968,
+      "runId": "2026-09-14T08-31-51.736Z-e4e011",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
       },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
           "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "proxy-rejected",
+          "runId": "2026-09-14T08-28-25.419Z-8204a1",
+          "details": {
+            "maxOutputTokens": 8192
+          },
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
       ]
@@ -527,32 +714,63 @@
       "modelId": "gpt-5-nano",
       "capability": "text.stream",
       "status": "pass",
-      "durationMs": 25145,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 25953,
+      "runId": "2026-09-14T08-28-25.419Z-8204a1",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "OpenAI has documented Foundry proxy routing for secure traffic management."
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 950,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1446,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "tool.loop.deterministic",
       "status": "pass",
-      "durationMs": 1949,
-      "runId": "2026-09-14T03-59-18.451Z-df8280",
+      "durationMs": 2000,
+      "runId": "2026-09-14T08-33-25.458Z-12f0cd",
       "details": {
-        "finishReason": "stop"
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "SIGNAL verified"
       },
       "previousResults": [
         {
@@ -563,6 +781,21 @@
         {
           "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T03-59-18.451Z-df8280",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "proxy-rejected",
+          "runId": "2026-09-14T08-28-25.419Z-8204a1",
+          "details": {
+            "maxOutputTokens": 8192
+          },
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
       ]
@@ -677,11 +910,29 @@
       "modelId": "gpt-5.6-terra",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1383,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1412,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -793,11 +1044,29 @@
       "modelId": "gpt-5.6-sol",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3174,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1558,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -909,11 +1178,29 @@
       "modelId": "gpt-5.6-luna",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1745,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1586,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1025,11 +1312,29 @@
       "modelId": "gpt-5.5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3160,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1967,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1141,11 +1446,29 @@
       "modelId": "gpt-5.4-nano",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1959,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1733,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1256,11 +1579,29 @@
       "modelId": "gpt-5.4-mini",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1020,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1592,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1371,11 +1712,29 @@
       "modelId": "gpt-5.4",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1529,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1258,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1486,11 +1845,29 @@
       "modelId": "gpt-5.3-codex",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 8354,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1142,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1601,11 +1978,29 @@
       "modelId": "gpt-5.2",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1416,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1082,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1716,11 +2111,29 @@
       "modelId": "gpt-5.1-codex-mini",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3602,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 4144,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1845,11 +2258,29 @@
       "modelId": "gpt-5.1-codex",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2100,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1347,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -1960,11 +2391,29 @@
       "modelId": "gpt-5.1",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1457,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1650,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -2082,11 +2531,29 @@
       "modelId": "gpt-5-mini",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1478,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1446,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -2216,11 +2683,29 @@
       "modelId": "gpt-5-codex",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 4090,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1918,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -2338,11 +2823,29 @@
       "modelId": "gpt-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1587,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 1158,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -2484,11 +2987,29 @@
       "modelId": "gpt-4.1-nano",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1280,
-      "runId": "2026-09-14T01-47-49.934Z-746361",
+      "durationMs": 3432,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T01-47-49.934Z-746361",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -2652,11 +3173,29 @@
       "modelId": "claude-haiku-4.5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1522,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 1203,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -2674,9 +3213,10 @@
       "modelId": "claude-haiku-4.5",
       "capability": "agent.tool_loop",
       "status": "pass",
-      "durationMs": 1633,
-      "runId": "2026-09-14T02-18-24.349Z-759d98",
+      "durationMs": 1463,
+      "runId": "2026-09-14T08-30-40.198Z-775e95",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
       },
       "previousResults": [
@@ -2685,6 +3225,13 @@
           "status": "proxy-rejected",
           "error": "Bad Request",
           "proxyError": "LanguageModelService:LlmHttpClientError"
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-18-24.349Z-759d98",
+          "details": {
+            "finishReason": "stop"
+          }
         }
       ]
     },
@@ -2715,11 +3262,22 @@
       "modelId": "claude-haiku-4.5",
       "capability": "reasoning.visibility",
       "status": "pass",
-      "durationMs": 1500,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 1715,
+      "runId": "2026-09-14T08-30-40.198Z-775e95",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "READY, and I'll aim to make my reasoning process visible by explaining my thinking steps clearly."
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -2770,11 +3328,29 @@
       "modelId": "claude-sonnet-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2910,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 3752,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -2886,11 +3462,29 @@
       "modelId": "claude-opus-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 5093,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 2093,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3002,11 +3596,29 @@
       "modelId": "claude-opus-4.8",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3844,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 2257,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3126,11 +3738,29 @@
       "modelId": "claude-opus-4.7",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3169,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 1910,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3250,11 +3880,29 @@
       "modelId": "claude-sonnet-4.6",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3616,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 4634,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3366,11 +4014,29 @@
       "modelId": "claude-opus-4.6",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 6298,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 2964,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3482,11 +4148,29 @@
       "modelId": "claude-sonnet-4.5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3608,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 1961,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3600,11 +4284,29 @@
       "modelId": "claude-opus-4.5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2799,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+      "durationMs": 1551,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3714,10 +4416,21 @@
       "modelId": "claude-opus-4.1",
       "capability": "structured.output.object",
       "status": "proxy-rejected",
-      "durationMs": 125,
-      "runId": "2026-09-14T02-08-46.127Z-0a39c1",
-      "proxyError": "LanguageModelService:DisabledForUser",
-      "error": "Bad Request"
+      "durationMs": 129,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
+      "details": {
+        "maxOutputTokens": 8192,
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "error": "Bad Request",
+      "previousResults": [
+        {
+          "status": "proxy-rejected",
+          "runId": "2026-09-14T02-08-46.127Z-0a39c1",
+          "error": "Bad Request"
+        }
+      ]
     },
     {
       "provider": "anthropic",
@@ -3826,18 +4539,10 @@
       "modelId": "qwen3-32b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 684,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 404,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -3847,7 +4552,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -3944,18 +4673,10 @@
       "modelId": "grok-420-reasoning-latest",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 4102,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 4064,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -3965,7 +4686,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4063,18 +4808,10 @@
       "modelId": "grok-420-non-reasoning-latest",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1129,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 1170,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4084,7 +4821,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4142,52 +4903,105 @@
       "modelId": "glm-5-3-flash",
       "capability": "text.generate",
       "status": "pass",
-      "durationMs": 920,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1134,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "messages.generate",
       "status": "pass",
-      "durationMs": 785,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1055,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "rid.passthrough",
       "status": "pass",
-      "durationMs": 1569,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 730,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "text.stream",
       "status": "pass",
-      "durationMs": 1977,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1829,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "Third-party RPC providers can be integrated with Foundry proxy routing to balance requests across multiple endpoints."
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2109,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "durationMs": 1724,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
+      "details": {
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T02-08-46.140Z-c14b09",
@@ -4198,72 +5012,128 @@
           "status": "fail",
           "runId": "2026-09-14T02-20-43.642Z-249dbc",
           "error": "No output generated."
-        }
-      ],
-      "details": {
-        "finishReason": "stop",
-        "output": {
-          "indication": "relapse prevention",
-          "mechanismOfAction": "not specified",
-          "riskLevel": "medium",
-          "rationale": "liver enzyme monitoring required"
         },
-        "fixture": "explicit-field-copy-v2",
-        "schemaEnforcement": "not tested by this probe"
-      }
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "tool.loop.deterministic",
       "status": "pass",
-      "durationMs": 1284,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1114,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "SIGNAL: The regulatory status returned for oncology is verified."
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "agent.tool_loop",
       "status": "pass",
-      "durationMs": 1096,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1213,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "structured.plus.tools",
       "status": "fail",
-      "durationMs": 762,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
-      "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+      "durationMs": 787,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
+      "details": {
+        "maxOutputTokens": 8192
+      },
+      "error": "expected [] to deeply equal ArrayContaining{\u2026}",
+      "previousResults": [
+        {
+          "status": "fail",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "vision.image_input",
       "status": "pass",
-      "durationMs": 760,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 1571,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "glm-5-3-flash",
       "capability": "reasoning.visibility",
       "status": "pass",
-      "durationMs": 5204,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
+      "durationMs": 3522,
+      "runId": "2026-09-14T08-28-37.082Z-4a1f3e",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "## Setting Up\n\nIf n leaves remainder 1 when divided by 2, 3, 4, 5, and 6, then n \u2212 1 is divisible by all of them, i.e., by their least common multiple:\n\n$$\\text{lcm}(2,3,4,5,6) = 60$$\n\nSo **n = 60k + 1** for some integer k \u2265 0.\n\n## Applying the Divisibility by 7\n\nWe need 60k + 1 \u2261 0 (mod 7). Since 60 \u2261 4 (mod 7):\n\n$$4k \\equiv -1 \\equiv 6 \\pmod{7}$$\n\nThe inverse of 4 mod 7 is 2 (since 4\u00b72 = 8 \u2261 1), so:\n\n$$k \\equiv 12 \\equiv 5 \\pmod{7}$$\n\nThe smallest such k is **k = 5**, giving:\n\n$$n = 60(5) + 1 = 301$$\n\n## Verification\n\n- 301 = 7 \u00d7 43 \u2713 (divisible by 7)\n- 301 = 300 + 1, and 300 is divisible by 2, 3, 4, 5, 6 \u2713 (remainder 1 in each case)\n\nNo smaller k works: k = 0,\u2026,4 give n = 1, 61, 121, 181, 241, none divisible by 7.\n\n$$\\boxed{n = 301}$$"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4314,18 +5184,10 @@
       "modelId": "glm-5-3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 7495,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 4916,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4335,7 +5197,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4438,18 +5324,10 @@
       "modelId": "glm-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 16900,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 1845,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4459,7 +5337,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4560,18 +5462,10 @@
       "modelId": "gemma-4-31b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 771,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 776,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4581,7 +5475,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4683,18 +5601,10 @@
       "modelId": "gemma-4-26b-a4b",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 455,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 544,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4704,7 +5614,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4804,18 +5738,10 @@
       "modelId": "grok-4-6",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 7811,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 6186,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4825,7 +5751,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -4925,18 +5875,10 @@
       "modelId": "grok-4-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2553,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 4347,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -4946,7 +5888,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5044,18 +6010,10 @@
       "modelId": "grok-4-3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3961,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 3369,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5065,7 +6023,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5167,16 +6149,10 @@
       "modelId": "nemotron-3-ultra-550b-a55b-nvfp4",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1738,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "fail",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "error": "No object generated: could not parse the response."
-        }
-      ],
+      "durationMs": 1387,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5186,7 +6162,29 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "fail",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "error": "No object generated: could not parse the response."
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5290,18 +6288,10 @@
       "modelId": "qwen3-235b-a22b-2507",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 766,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 803,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5311,7 +6301,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5404,16 +6418,26 @@
       "modelId": "llama-3-3-nemotron-super-49b-v1-5",
       "capability": "structured.output.object",
       "status": "fail",
-      "durationMs": 2,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+      "durationMs": 3,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
+      "details": {
+        "maxOutputTokens": 8192,
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md.",
       "previousResults": [
         {
           "status": "fail",
           "runId": "2026-09-14T02-08-46.140Z-c14b09",
           "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md."
+        },
+        {
+          "status": "fail",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md."
         }
-      ],
-      "error": "llama-3-3-nemotron-super-49b-v1-5 is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md."
+      ]
     },
     {
       "provider": "third-party",
@@ -5509,18 +6533,10 @@
       "modelId": "kimi-k3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3396,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 2452,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5530,7 +6546,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5648,18 +6688,10 @@
       "modelId": "kimi-k2-5",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 994,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 1012,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5669,7 +6701,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5769,18 +6825,10 @@
       "modelId": "grok-build-0-1",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 13446,
-      "runId": "2026-09-14T06-43-09.125Z-3d26e0",
-      "previousResults": [
-        {
-          "status": "pass",
-          "runId": "2026-09-14T02-08-46.140Z-c14b09",
-          "details": {
-            "finishReason": "stop"
-          }
-        }
-      ],
+      "durationMs": 28772,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop",
         "output": {
           "indication": "relapse prevention",
@@ -5790,7 +6838,31 @@
         },
         "fixture": "explicit-field-copy-v2",
         "schemaEnforcement": "not tested by this probe"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T06-43-09.125Z-3d26e0",
+          "details": {
+            "finishReason": "stop",
+            "output": {
+              "indication": "relapse prevention",
+              "mechanismOfAction": "not specified",
+              "riskLevel": "medium",
+              "rationale": "liver enzyme monitoring required"
+            },
+            "fixture": "explicit-field-copy-v2",
+            "schemaEnforcement": "not tested by this probe"
+          }
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5888,22 +6960,51 @@
       "modelId": "gemini-3.1-flash-lite",
       "capability": "text.stream",
       "status": "pass",
-      "durationMs": 27247,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 883,
+      "runId": "2026-09-14T08-30-41.354Z-fa0180",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": "Google's cloud infrastructure can be leveraged to effectively manage complex Foundry proxy routing configurations."
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
       "modelId": "gemini-3.1-flash-lite",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1175,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 988,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -5933,11 +7034,29 @@
       "modelId": "gemini-3.1-flash-lite",
       "capability": "agent.tool_loop",
       "status": "pass",
-      "durationMs": 3982,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 2091,
+      "runId": "2026-09-14T08-32-50.800Z-0ad189",
       "details": {
+        "maxOutputTokens": 8192,
         "finishReason": "stop"
-      }
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        },
+        {
+          "status": "proxy-rejected",
+          "runId": "2026-09-14T08-30-41.354Z-fa0180",
+          "details": {
+            "maxOutputTokens": 8192
+          },
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6026,11 +7145,29 @@
       "modelId": "gemini-3.8-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3151,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 2947,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6134,11 +7271,29 @@
       "modelId": "gemini-3.7-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 5057,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 1893,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6242,11 +7397,29 @@
       "modelId": "gemini-3.6-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 4842,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 2443,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6350,11 +7523,29 @@
       "modelId": "gemini-3.5-flash-lite",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1109,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 992,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6465,11 +7656,29 @@
       "modelId": "gemini-3.5-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 6600,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 2765,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6592,11 +7801,29 @@
       "modelId": "gemini-3.1-pro",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 5819,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 4129,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6707,11 +7934,29 @@
       "modelId": "gemini-3-flash",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 3866,
-      "runId": "2026-09-14T02-08-46.147Z-6c1318",
+      "durationMs": 3190,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "google",
@@ -6805,16 +8050,32 @@
       "modelId": "gpt-4.1-mini",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1380,
-      "runId": "2026-09-14T04-00-34.127Z-34c654",
+      "durationMs": 1296,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
       },
       "previousResults": [
         {
           "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "status": "pass",
+          "runId": "2026-09-14T04-00-34.127Z-34c654",
+          "details": {
+            "finishReason": "stop"
+          }
         }
       ]
     },
@@ -6934,11 +8195,29 @@
       "modelId": "gpt-4.1",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1036,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
+      "durationMs": 746,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -7056,11 +8335,29 @@
       "modelId": "o4-mini",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 5321,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
+      "durationMs": 1909,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -7165,11 +8462,29 @@
       "modelId": "gpt-4o",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 1017,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
+      "durationMs": 1260,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -7273,11 +8588,29 @@
       "modelId": "o3",
       "capability": "structured.output.object",
       "status": "pass",
-      "durationMs": 2276,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
+      "durationMs": 2969,
+      "runId": "2026-09-14T08-26-35.136Z-441c5f",
       "details": {
-        "finishReason": "stop"
-      }
+        "maxOutputTokens": 8192,
+        "finishReason": "stop",
+        "output": {
+          "indication": "relapse prevention",
+          "mechanismOfAction": "not specified",
+          "riskLevel": "medium",
+          "rationale": "liver enzyme monitoring required"
+        },
+        "fixture": "explicit-field-copy-v2",
+        "schemaEnforcement": "not tested by this probe"
+      },
+      "previousResults": [
+        {
+          "status": "pass",
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "details": {
+            "finishReason": "stop"
+          }
+        }
+      ]
     },
     {
       "provider": "openai",
