@@ -173,6 +173,294 @@
         "provider": "google"
       },
       "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T03-59-18.404Z-070cf9",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T03:59:18.922Z",
+      "finishedAt": "2026-09-14T03:59:21.369Z",
+      "filters": {
+        "modelId": "gpt-5-mini",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T03-59-18.424Z-11a8a7",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T03:59:18.935Z",
+      "finishedAt": "2026-09-14T03:59:21.315Z",
+      "filters": {
+        "modelId": "gpt-5",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T03-59-18.451Z-df8280",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T03:59:18.949Z",
+      "finishedAt": "2026-09-14T03:59:20.923Z",
+      "filters": {
+        "modelId": "gpt-5-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T03-59-22.041Z-2bef08",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T03:59:22.527Z",
+      "finishedAt": "2026-09-14T03:59:24.785Z",
+      "filters": {
+        "modelId": "gpt-4.1-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-26.604Z-45a614",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:27.093Z",
+      "finishedAt": "2026-09-14T04:00:30.656Z",
+      "filters": {
+        "modelId": "gpt-5-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-27.232Z-ea0fa9",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:27.724Z",
+      "finishedAt": "2026-09-14T04:00:31.788Z",
+      "filters": {
+        "modelId": "gpt-5",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-30.449Z-2e7a55",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:30.955Z",
+      "finishedAt": "2026-09-14T04:00:32.065Z",
+      "filters": {
+        "modelId": "gpt-4.1-nano",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-31.332Z-6829a9",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:31.823Z",
+      "finishedAt": "2026-09-14T04:01:12.671Z",
+      "filters": {
+        "modelId": "kimi-k3",
+        "provider": "third-party"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-31.451Z-0ff465",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:31.948Z",
+      "finishedAt": "2026-09-14T04:00:33.470Z",
+      "filters": {
+        "modelId": "gemini-3.1-flash-lite",
+        "provider": "google"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-32.486Z-d64b3f",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:32.993Z",
+      "finishedAt": "2026-09-14T04:00:36.388Z",
+      "filters": {
+        "modelId": "gemini-3.5-flash",
+        "provider": "google"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-32.947Z-9846af",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:33.438Z",
+      "finishedAt": "2026-09-14T04:00:37.188Z",
+      "filters": {
+        "modelId": "gemini-3-flash",
+        "provider": "google"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-34.127Z-34c654",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:34.622Z",
+      "finishedAt": "2026-09-14T04:00:36.026Z",
+      "filters": {
+        "modelId": "gpt-4.1-mini",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-00-37.036Z-958610",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:00:37.540Z",
+      "finishedAt": "2026-09-14T04:00:38.418Z",
+      "filters": {
+        "modelId": "gpt-4.1",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-01-41.681Z-999fac",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:01:42.181Z",
+      "finishedAt": "2026-09-14T04:01:44.411Z",
+      "filters": {
+        "modelId": "gpt-4.1-mini",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-01-44.072Z-03db4e",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:01:44.563Z",
+      "finishedAt": "2026-09-14T04:01:46.183Z",
+      "filters": {
+        "modelId": "gpt-4.1",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
+    },
+    {
+      "runId": "2026-09-14T04-02-51.857Z-57eddf",
+      "gitSha": "aec9f4f",
+      "packageVersion": "0.0.7",
+      "sdk": {
+        "ai": "7.0.97",
+        "@ai-sdk/openai": "4.0.65",
+        "@ai-sdk/anthropic": "4.0.52",
+        "@ai-sdk/google": "4.0.67"
+      },
+      "startedAt": "2026-09-14T04:02:52.345Z",
+      "finishedAt": "2026-09-14T04:02:54.153Z",
+      "filters": {
+        "modelId": "gpt-4.1",
+        "provider": "openai"
+      },
+      "modelScope": "catalog"
     }
   ],
   "cases": [
@@ -242,13 +530,20 @@
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "tool.loop.deterministic",
-      "status": "proxy-rejected",
-      "durationMs": 52266,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 1949,
+      "runId": "2026-09-14T03-59-18.451Z-df8280",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -298,14 +593,20 @@
       "provider": "openai",
       "modelId": "gpt-5-nano",
       "capability": "reasoning.visibility",
-      "status": "proxy-rejected",
-      "durationMs": 52968,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "fail",
+      "durationMs": 3539,
+      "runId": "2026-09-14T04-00-26.604Z-45a614",
+      "error": "Type validation failed: Value: {\"type\":\"response.reasoning_summary_part.added\"}.\nError message: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"response.output_text.delta\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"response.output_text.delta\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"item_id\"\n          ],\n          \"message\": \"Invalid input: expected string [truncated; full error in local run artifact]",
+      "errorTruncated": true,
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
           "status": "pass"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
       ]
     },
@@ -1784,13 +2085,20 @@
       "provider": "openai",
       "modelId": "gpt-5-mini",
       "capability": "agent.tool_loop",
-      "status": "proxy-rejected",
-      "durationMs": 56135,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 2423,
+      "runId": "2026-09-14T03-59-18.404Z-070cf9",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -2022,13 +2330,20 @@
       "provider": "openai",
       "modelId": "gpt-5",
       "capability": "tool.loop.deterministic",
-      "status": "proxy-rejected",
-      "durationMs": 56524,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 2351,
+      "runId": "2026-09-14T03-59-18.424Z-11a8a7",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -2078,14 +2393,20 @@
       "provider": "openai",
       "modelId": "gpt-5",
       "capability": "reasoning.visibility",
-      "status": "proxy-rejected",
-      "durationMs": 53730,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "fail",
+      "durationMs": 4040,
+      "runId": "2026-09-14T04-00-27.232Z-ea0fa9",
+      "error": "Type validation failed: Value: {\"type\":\"response.reasoning_summary_part.added\"}.\nError message: [\n  {\n    \"code\": \"invalid_union\",\n    \"errors\": [\n      [\n        {\n          \"code\": \"invalid_value\",\n          \"values\": [\n            \"response.output_text.delta\"\n          ],\n          \"path\": [\n            \"type\"\n          ],\n          \"message\": \"Invalid input: expected \\\"response.output_text.delta\\\"\"\n        },\n        {\n          \"expected\": \"string\",\n          \"code\": \"invalid_type\",\n          \"path\": [\n            \"item_id\"\n          ],\n          \"message\": \"Invalid input: expected string [truncated; full error in local run artifact]",
+      "errorTruncated": true,
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
           "status": "pass"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
       ]
     },
@@ -2155,13 +2476,20 @@
       "provider": "openai",
       "modelId": "gpt-4.1-nano",
       "capability": "tool.loop.deterministic",
-      "status": "proxy-rejected",
-      "durationMs": 56836,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 2233,
+      "runId": "2026-09-14T03-59-22.041Z-2bef08",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -2200,13 +2528,20 @@
       "provider": "openai",
       "modelId": "gpt-4.1-nano",
       "capability": "vision.image_input",
-      "status": "proxy-rejected",
-      "durationMs": 53889,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 1086,
+      "runId": "2026-09-14T04-00-30.449Z-2e7a55",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T01-47-49.934Z-746361",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -4951,19 +5286,35 @@
       "provider": "third-party",
       "modelId": "kimi-k3",
       "capability": "agent.tool_loop",
-      "status": "fail",
-      "durationMs": 2431,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
-      "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+      "status": "pass",
+      "durationMs": 37245,
+      "runId": "2026-09-14T04-00-31.332Z-6829a9",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "status": "fail",
+          "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+        }
+      ]
     },
     {
       "provider": "third-party",
       "modelId": "kimi-k3",
       "capability": "structured.plus.tools",
       "status": "fail",
-      "durationMs": 3139,
-      "runId": "2026-09-14T02-08-46.140Z-c14b09",
-      "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+      "durationMs": 3578,
+      "runId": "2026-09-14T04-00-31.332Z-6829a9",
+      "error": "expected [] to deeply equal ArrayContaining{\u2026}",
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-08-46.140Z-c14b09",
+          "status": "fail",
+          "error": "expected [] to deeply equal ArrayContaining{\u2026}"
+        }
+      ]
     },
     {
       "provider": "third-party",
@@ -5263,13 +5614,20 @@
       "provider": "google",
       "modelId": "gemini-3.1-flash-lite",
       "capability": "tool.loop.deterministic",
-      "status": "proxy-rejected",
-      "durationMs": 55056,
-      "runId": "2026-09-14T02-39-02.746Z-2d9632",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 1498,
+      "runId": "2026-09-14T04-00-31.451Z-0ff465",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-39-02.746Z-2d9632",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -5833,13 +6191,20 @@
       "provider": "google",
       "modelId": "gemini-3.5-flash",
       "capability": "agent.tool_loop",
-      "status": "proxy-rejected",
-      "durationMs": 55066,
-      "runId": "2026-09-14T02-39-02.716Z-b07dc4",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 3369,
+      "runId": "2026-09-14T04-00-32.486Z-d64b3f",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-39-02.716Z-b07dc4",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -6068,13 +6433,20 @@
       "provider": "google",
       "modelId": "gemini-3-flash",
       "capability": "agent.tool_loop",
-      "status": "proxy-rejected",
-      "durationMs": 53890,
-      "runId": "2026-09-14T02-39-02.737Z-8c374b",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests",
+      "status": "pass",
+      "durationMs": 3726,
+      "runId": "2026-09-14T04-00-32.947Z-9846af",
+      "details": {
+        "finishReason": "stop"
+      },
       "previousResults": [
         {
           "runId": "2026-09-14T02-08-46.147Z-6c1318",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        },
+        {
+          "runId": "2026-09-14T02-39-02.737Z-8c374b",
           "status": "proxy-rejected",
           "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
         }
@@ -6137,10 +6509,19 @@
       "provider": "openai",
       "modelId": "gpt-4.1-mini",
       "capability": "structured.output.object",
-      "status": "proxy-rejected",
-      "durationMs": 54567,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+      "status": "pass",
+      "durationMs": 1380,
+      "runId": "2026-09-14T04-00-34.127Z-34c654",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -6168,10 +6549,19 @@
       "provider": "openai",
       "modelId": "gpt-4.1-mini",
       "capability": "structured.plus.tools",
-      "status": "proxy-rejected",
-      "durationMs": 55825,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+      "status": "pass",
+      "durationMs": 2206,
+      "runId": "2026-09-14T04-01-41.681Z-999fac",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -6219,10 +6609,19 @@
       "provider": "openai",
       "modelId": "gpt-4.1",
       "capability": "rid.passthrough",
-      "status": "proxy-rejected",
-      "durationMs": 54437,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+      "status": "pass",
+      "durationMs": 854,
+      "runId": "2026-09-14T04-00-37.036Z-958610",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -6250,10 +6649,19 @@
       "provider": "openai",
       "modelId": "gpt-4.1",
       "capability": "tool.loop.deterministic",
-      "status": "proxy-rejected",
-      "durationMs": 51181,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+      "status": "pass",
+      "durationMs": 1592,
+      "runId": "2026-09-14T04-01-44.072Z-03db4e",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -6270,10 +6678,19 @@
       "provider": "openai",
       "modelId": "gpt-4.1",
       "capability": "structured.plus.tools",
-      "status": "proxy-rejected",
-      "durationMs": 55513,
-      "runId": "2026-09-14T02-09-16.230Z-fb911a",
-      "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+      "status": "pass",
+      "durationMs": 1782,
+      "runId": "2026-09-14T04-02-51.857Z-57eddf",
+      "details": {
+        "finishReason": "stop"
+      },
+      "previousResults": [
+        {
+          "runId": "2026-09-14T02-09-16.230Z-fb911a",
+          "status": "proxy-rejected",
+          "error": "Failed after 3 attempts. Last error: AI_APICallError: Too Many Requests"
+        }
+      ]
     },
     {
       "provider": "openai",
@@ -7063,6 +7480,82 @@
         "rid": "ri.language-model-service..language-model.gpt-realtime-2",
         "modelIdentifier": "GPT_REALTIME_2",
         "lifecycle": "experimental"
+      }
+    ]
+  },
+  "kimiProtocolInvestigation": {
+    "checkedAt": "2026-09-14",
+    "modelId": "kimi-k3",
+    "gitSha": "aec9f4f78d6fbe9035adfdffe504605fa1ef7a3d",
+    "sdk": {
+      "ai": "7.0.97",
+      "@ai-sdk/openai": "4.0.65",
+      "@ai-sdk/anthropic": "4.0.52",
+      "@ai-sdk/google": "4.0.67"
+    },
+    "scope": "Manual Foundry enrollment probes, separate from the catalog harness. No production routing changes. Alternative-route SDK tests: maxOutputTokens 4096, maxRetries 0, 60-second abort signal. Raw route tests used 90-second or 45-second abort signals.",
+    "sources": [
+      "https://platform.kimi.ai/docs/api/responses",
+      "https://github.com/MoonshotAI/Kimi-K3/blob/main/README.md",
+      "https://www.palantir.com/docs/foundry/aip/llm-provider-compatible-apis"
+    ],
+    "observations": [
+      {
+        "route": "openai-chat",
+        "case": "preserve assistant reasoning_content in tool continuation",
+        "status": "proxy-rejected",
+        "httpStatus": 400,
+        "error": "LanguageModelService:InvalidRequest; unrecognizedProperty=reasoning_content"
+      },
+      {
+        "route": "openai-chat",
+        "case": "same tool continuation without reasoning_content",
+        "status": "pass",
+        "text": "AGENT: The regulatory status for oncology is verified."
+      },
+      {
+        "route": "openai-responses",
+        "case": "initial raw automatic tool request",
+        "status": "timeout",
+        "timeoutMs": 90000
+      },
+      {
+        "route": "openai-responses",
+        "case": "minimal text",
+        "status": "pass",
+        "httpStatus": 200
+      },
+      {
+        "route": "openai-responses",
+        "case": "SDK blocking tool loop",
+        "status": "pass",
+        "toolExecuted": true
+      },
+      {
+        "route": "openai-responses",
+        "case": "SDK JSON plus tools",
+        "status": "fail",
+        "toolExecuted": false,
+        "outputStatus": "PENDING_REVIEW"
+      },
+      {
+        "route": "openai-responses",
+        "case": "SDK streaming tool loop",
+        "status": "fail",
+        "error": "Incomplete response.reasoning_summary_part.added event failed SDK schema validation."
+      },
+      {
+        "route": "openai-responses",
+        "case": "reasoning history",
+        "status": "warning",
+        "message": "SDK omitted reasoning without encrypted content with store=false."
+      },
+      {
+        "route": "anthropic-messages",
+        "case": "automatic tool request",
+        "status": "proxy-rejected",
+        "httpStatus": 404,
+        "error": "LanguageModelService:LanguageModelNotAvailable; Fireworks backend does not support CLAUDE_CHAT for this model."
       }
     ]
   }

@@ -26,13 +26,13 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 | `gpt-5.1-codex-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gpt-5.1-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gpt-5.1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5-nano` | ✓ | ✓ | ✓ | ✓ | T | ✓ | ✓ | T |
-| `gpt-5-mini` | ✓ | ✓ | ✓ | T | ✓ | ✓ | ✓ | × |
+| `gpt-5-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
+| `gpt-5-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
 | `gpt-5-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5` | ✓ | ✓ | ✓ | ✓ | T | ✓ | ✓ | T |
-| `gpt-4.1-nano` | ✓ | ✓ | ✓ | ✓ | T | ✓ | T | — |
-| `gpt-4.1-mini` | ✓ | ✓ | T | ✓ | ✓ | T | ✓ | — |
-| `gpt-4.1` | ✓ | ✓ | ✓ | ✓ | T | T | ✓ | — |
+| `gpt-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
+| `gpt-4.1-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gpt-4.1-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gpt-4.1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `o4-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
 | `gpt-4o` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `o3` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
@@ -60,10 +60,10 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 | `gemini-3.7-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3.6-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3.5-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.5-flash` | ✓ | ✓ | ✓ | T | ✓ | ✓ | ✓ | — |
+| `gemini-3.5-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3.1-pro` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.1-flash-lite` | ✓ | ✓ | ✓ | ✓ | T | ✓ | ✓ | — |
-| `gemini-3-flash` | ✓ | ✓ | ✓ | T | ✓ | ✓ | ✓ | — |
+| `gemini-3.1-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gemini-3-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 
 ### Third-party
 
@@ -71,7 +71,7 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 |---|---|---|---|---|---|---|---|---|
 | `gemma-4-31b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
 | `kimi-k2-5` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
-| `kimi-k3` | ✓ | ✓ | ✓ | × | ✓ | × | ✓ | ✓ |
+| `kimi-k3` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
 | `llama-3-3-nemotron-super-49b-v1-5` | U | U | U | U | U | U | U | U |
 | `nemotron-3-ultra-550b-a55b-nvfp4` | ✓ | ✓ | × | ✓ | ✓ | ✓ | R | × |
 | `gemma-4-26b-a4b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
@@ -101,10 +101,24 @@ Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON +
 - **Streaming:** all six Grok models fail SDK stream parsing with missing text/reasoning-start events. Several OpenAI reasoning probes also fail because Foundry emits incomplete `response.reasoning_summary_part.added` events, even where ordinary text streaming passed.
 - **Anthropic settings:** set an explicit `maxOutputTokens`; the SDK default exceeds some Foundry backend limits. The blocking tool probes passed on available Claude models with a 420-token limit. Use adaptive thinking for Opus 4.7/4.8 and Claude 5.
 - **Structured output and tools:** Gemma, Kimi, Qwen, and GLM have failures in the combined automatic-tool-selection probe. Some runs omit the required tool execution. GLM 5.3 Flash standalone JSON and Grok 420 Reasoning combined output also failed in the latest probes. These outcomes do not establish that forced tool selection is unsupported.
-- **Blocking tool output:** Qwen 3-32B executed its tool but missed the requested response marker. Kimi K3 and Grok 4.5 did not execute the required tool in their blocking probes.
+- **Blocking tool output:** Qwen 3-32B executed its tool but missed the requested response marker. Kimi K3 passed its blocking tool probe on an isolated retry after previously skipping execution; Grok 4.5 skipped execution in its recorded probe.
 - **Image and reasoning limits:** Qwen, GLM-5/5.3, and Nemotron Ultra reject image input. Several third-party models expose no reasoning signal in the tested stream; that does not mean they cannot reason. Google reasoning is not probed by this harness.
 - **Evidence corrections:** Codex Mini's tool/image probes passed after increasing their token budgets. The JSON probe now checks its declared schema, and reasoning requires events or token usage rather than matching prose. Embedding IDs are excluded from language-model probes. The JSON retains earlier outcomes alongside focused reruns.
-- **Rate limits:** T means the probe remained throttled after SDK retries, including focused reruns where recorded. It is not evidence that the model lacks the capability.
+- **Focused retries:** reran all 15 previously rate-limited model/capability pairs individually, spacing successive probes for the same model by 65 seconds. Thirteen passed; GPT-5 and GPT-5 Nano reasoning probes reached the proxy but failed on incomplete `response.reasoning_summary_part.added` events. No rate-limited cases remain in the latest results. Earlier failures remain in the JSON history.
+
+## Kimi K3 protocol check
+
+Moonshot supports [native Responses](https://platform.kimi.ai/docs/api/responses) and [OpenAI/Anthropic-compatible APIs](https://github.com/MoonshotAI/Kimi-K3/blob/main/README.md). Its Chat Completions guidance requires returning `reasoning_content` with assistant history. API format support depends on the serving backend; our Foundry responses identify Fireworks.
+
+| Foundry route | Focused result |
+|---|---|
+| Chat Completions (current default) | Blocking tool loop passed on retry; JSON + tools still returned a made-up status without executing the tool. |
+| OpenAI Responses | Basic text and blocking tool loop worked. JSON + tools still skipped execution; streaming failed on an incomplete reasoning event. An initial raw tool request timed out at 90 seconds. |
+| Anthropic Messages | HTTP 404: the Fireworks backend does not support `CLAUDE_CHAT` for this model. |
+
+Preserving reasoning is a separate proxy gap: Foundry rejects Chat Completions assistant `reasoning_content` with HTTP 400. Removing that field allowed the same tool-result continuation to finish. Responses also supplied reasoning without encrypted content, which SDK 7 warned it would omit with `store: false`. This does not explain the earlier first-turn tool omission, where no assistant history existed yet.
+
+Keep Chat Completions as the default. These probes do not show that Responses or Anthropic works better through this enrollment. The alternative-route SDK probes used a 4096-token budget and no retries; they supplement the catalog survey rather than replacing its results. See `kimiProtocolInvestigation` in the case-level JSON for scope and outcomes.
 
 ## Model routing
 
@@ -132,4 +146,4 @@ pnpm run test:live -- --catalog
 pnpm run test:live:summary
 ```
 
-Use `--provider anthropic` or `--model openai:gpt-5-nano` for a focused run. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.
+Use `--provider anthropic` or `--model openai:gpt-5-nano` for a focused run. To rerun a single case, add `--testNamePattern 'openai:gpt-5-nano: deterministic tool loop$'`. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.
