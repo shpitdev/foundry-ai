@@ -6,9 +6,11 @@ import type { KnownGoogleModelId } from './google-models.js';
 import { GOOGLE_MODELS } from './google-models.js';
 import type { KnownOpenAIEmbeddingModelId, KnownOpenAIModelId } from './openai-models.js';
 import { OPENAI_EMBEDDING_MODELS, OPENAI_MODELS } from './openai-models.js';
+import { REALTIME_MODELS, type RealtimeModelId } from './realtime-models.js';
 import { type KnownThirdPartyModelId, THIRD_PARTY_MODELS } from './third-party-models.js';
 
 export type KnownModelId =
+  | RealtimeModelId
   | KnownOpenAIModelId
   | KnownOpenAIEmbeddingModelId
   | KnownAnthropicModelId
@@ -17,6 +19,7 @@ export type KnownModelId =
 
 export const MODEL_CATALOG = {
   ...OPENAI_MODELS,
+  ...REALTIME_MODELS,
   ...OPENAI_EMBEDDING_MODELS,
   ...ANTHROPIC_MODELS,
   ...GOOGLE_MODELS,

@@ -19,6 +19,7 @@ export type ModelInputType =
   | 'OPEN_AI_REASONING'
   | 'OPEN_AI_RESPONSES'
   | 'OPEN_AI_EMBEDDINGS'
+  | 'OPEN_AI_REALTIME'
   | 'X_AI_RESPONSES';
 export type ModelCost = 'LOW' | 'MEDIUM' | 'HIGH';
 export type ModelClass = 'HEAVYWEIGHT' | 'LIGHTWEIGHT' | 'REASONING';

@@ -34,6 +34,11 @@ export {
   type OpenAIModelId,
 } from './models/openai-models.js';
 export {
+  REALTIME_MODEL_IDS,
+  REALTIME_MODELS,
+  type RealtimeModelId,
+} from './models/realtime-models.js';
+export {
   type KnownThirdPartyModelId,
   THIRD_PARTY_MODEL_IDS,
   THIRD_PARTY_MODELS,

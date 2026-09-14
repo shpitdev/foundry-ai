@@ -1,6 +1,6 @@
 # Models and live test status
 
-**Tested September 14, 2026 (UTC), on stable AI SDK 7.0.97:** OpenAI provider 4.0.65, Anthropic 4.0.52, and Google 4.0.67. The survey covers all 57 language-model aliases and both OpenAI embedding models in this catalog. Basic text passed on 55 language models; two had proxy access/route failures. Both embeddings passed. Other capabilities have failures or skips as shown below.
+**Tested September 14, 2026 (UTC), on stable AI SDK 7.0.97:** OpenAI provider 4.0.65, Anthropic 4.0.52, and Google 4.0.67. The survey covers all 57 language-model aliases and both OpenAI embedding models in this catalog. Three realtime models were verified separately below. Basic text passed on 55 language models; two had proxy access/route failures. Both embeddings passed. Other capabilities have failures or skips as shown below.
 
 [Install and configure](../README.md). [Case-level results and rerun history](./capability-results.json). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Tests run manually; CI does not call Foundry.
 
@@ -135,7 +135,55 @@ Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for ID
 
 OpenAI and third-party adapters reject `providerOptions.openai.store: true`. Responses sends `store: false`; third-party Chat Completions omits it. Third-party options use the `openai` namespace. Anthropic disables eager tool streaming and uses JSON-tool structured output; Google rewrites API-key authentication into Foundry bearer authentication.
 
-Only OpenAI exposes `embeddingModel()` and `embedding()`. Embedding strings pass through without language-model RID routing. Image generation, speech, transcription, video, and reranking are not exposed.
+Only OpenAI exposes `embeddingModel()` and `embedding()`. Embedding strings pass through without language-model RID routing. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
+
+## Realtime
+
+Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. All three entries are enabled, usable, and Experimental in `foundry-cli models list --json` (September 14, 2026).
+
+| Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
+|---|---|---|---|---|---|
+| `gpt-realtime` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-1.5` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-2` | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+Live probes use SDK 7.0.97 / OpenAI 4.0.65 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Realtime 1.5 initially refused the phrase used to generate the fixture; replacing it with a neutral sentence produced valid audio and all checks passed. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested. Results and earlier attempts are under `realtimeVerification` in the existing JSON.
+
+Foundry uses `wss://<foundry-host>/language-model-service/ws/v1/open-ai/realtime?model=<api-name>` and a `Bearer-<user-token>` subprotocol. Use the current user's Foundry OAuth token with `language-model-service:use-model`; see [Palantir's authentication instructions](https://www.palantir.com/docs/foundry/realtime-audio/build-a-voice-enabled-osdk-application). `createFoundryRealtimeSetup` packages an existing token; it does **not** mint a short-lived or restricted OpenAI client secret. Never return a shared server token to a browser.
+
+In your authenticated, app-local setup endpoint, return:
+
+```ts
+import { createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
+
+// foundryUserToken must belong to the authenticated caller.
+return Response.json(createFoundryRealtimeSetup({
+  foundryUrl,
+  model: 'gpt-realtime-2',
+  token: foundryUserToken,
+  tools: [], // Or experimental_getRealtimeToolDefinitions({ tools }) from ai.
+}), { headers: { 'Cache-Control': 'no-store' } });
+```
+
+Pass the matching model to [AI SDK's realtime client](https://ai-sdk.dev/docs/ai-sdk-core/realtime):
+
+```ts
+import { createFoundryRealtime } from '@nyrra/foundry-ai/realtime';
+
+const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2');
+// experimental_useRealtime({ model, api: { token: '/api/realtime/setup' } })
+```
+
+For server-side use, [the realtime example](https://github.com/shpitdev/foundry-ai/blob/main/examples/advanced/realtime.ts) shows a direct WebSocket connection. Realtime IDs are excluded from the HTTP language-model survey and rejected by `createFoundryOpenAI`; use the realtime factory instead. API names are used on this endpoint, including the dot in `gpt-realtime-1.5`, rather than model RIDs.
+
+```sh
+pnpm run example realtime gpt-realtime-2
+pnpm run test:realtime
+# Optional isolated model rerun:
+pnpm run test:realtime -- --testNamePattern 'gpt-realtime-1.5:'
+```
+
+These tests are manual and write generated audio and results under `.memory/realtime-runs/`. They are excluded from CI and the HTTP live suite.
 
 ## Run manually
 

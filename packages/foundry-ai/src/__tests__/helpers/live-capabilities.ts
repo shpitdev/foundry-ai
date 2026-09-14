@@ -987,7 +987,9 @@ function getKnownProviderModelIds(provider: LiveProvider): readonly string[] {
     .filter(
       ([, metadata]) =>
         metadata.provider === provider &&
-        !metadata.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS'),
+        !metadata.inputTypes.some(
+          (type) => type === 'OPEN_AI_EMBEDDINGS' || type === 'OPEN_AI_REALTIME',
+        ),
     )
     .sort((left, right) => compareModelIds(right[0], left[0]))
     .map(([modelId]) => modelId);

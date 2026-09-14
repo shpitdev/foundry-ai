@@ -21,7 +21,8 @@
     "test:live:summary": "node scripts/update-harness-results-docs.mjs --stdout",
     "typecheck": "pnpm exec nx run foundry-ai:typecheck --outputStyle=static",
     "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build skills-validate package-audit --projects=foundry-ai --outputStyle=static",
-    "verify:public-metadata": "node scripts/verify-public-metadata.mjs"
+    "verify:public-metadata": "node scripts/verify-public-metadata.mjs",
+    "test:realtime": "pnpm exec nx run foundry-ai:test-realtime --outputStyle=stream-without-prefixes"
   },
   "pnpm": {
     "overrides": {

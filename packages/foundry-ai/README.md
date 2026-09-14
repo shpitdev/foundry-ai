@@ -1,6 +1,6 @@
 # @nyrra/foundry-ai
 
-Use Vercel AI SDK language models and OpenAI embeddings through Palantir Foundry's proxy endpoints.
+Use Vercel AI SDK language models, OpenAI embeddings, and realtime audio through Palantir Foundry's proxy endpoints.
 
 ## Install
 
@@ -14,7 +14,7 @@ Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Third-party 
 
 ## Configure and call a model
 
-Set `FOUNDRY_URL` and `FOUNDRY_TOKEN` in your server environment. Optional variables are `FOUNDRY_ATTRIBUTION_RID`, `FOUNDRY_TRACE_PARENT`, and `FOUNDRY_TRACE_STATE`. Keep tokens out of browser code.
+Set `FOUNDRY_URL` and `FOUNDRY_TOKEN` in your server environment. Optional variables are `FOUNDRY_ATTRIBUTION_RID`, `FOUNDRY_TRACE_PARENT`, and `FOUNDRY_TRACE_STATE`. Keep server tokens out of browser code.
 
 ```ts
 import { loadFoundryConfig } from '@nyrra/foundry-ai';
@@ -47,6 +47,12 @@ const { embedding } = await embed({
 Compose multiple providers with AI SDK `createProviderRegistry`; this package exports no registry wrapper. See the [runnable examples](https://github.com/shpitdev/foundry-ai/blob/main/examples/README.md) for registry and tool workflows.
 
 Server environment configuration is the validated runtime path. Palantir TSv1/TSv2 functions and `PlatformClient` fetch integration have not been verified end to end.
+
+## Realtime (AI SDK 7 only)
+
+Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@nyrra/foundry-ai/realtime` with `gpt-realtime`, `gpt-realtime-1.5`, or `gpt-realtime-2`. Install `ai@7` and `@ai-sdk/openai@4`; this subpath uses the SDK's experimental realtime interface and does not support SDK 6.
+
+Foundry authenticates WebSockets with the current user's access token. It does not use OpenAI's client-secret endpoint. See [realtime setup and live results](./docs/README.md#realtime) for the browser flow and the manual test command.
 
 ## Agent skill
 

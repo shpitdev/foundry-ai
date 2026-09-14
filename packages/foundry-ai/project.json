@@ -92,6 +92,14 @@
         "parallel": false,
         "cwd": "{workspaceRoot}"
       }
+    },
+    "test-realtime": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec vitest run --config packages/foundry-ai/vitest.realtime.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
     }
   },
   "tags": [],

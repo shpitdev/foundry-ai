@@ -53,6 +53,11 @@
       "types": "./dist/providers/third-party.d.ts",
       "import": "./dist/providers/third-party.mjs",
       "require": "./dist/providers/third-party.cjs"
+    },
+    "./realtime": {
+      "types": "./dist/providers/realtime.d.ts",
+      "import": "./dist/providers/realtime.mjs",
+      "require": "./dist/providers/realtime.cjs"
     }
   },
   "files": [

@@ -47,6 +47,14 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
 
   const createLanguageModel = (modelId: OpenAIModelId): FoundryLanguageModel => {
     const resolvedModel = resolveModelTarget(modelId);
+    if (resolvedModel.metadata?.inputTypes.includes('OPEN_AI_REALTIME')) {
+      throw new NoSuchModelError({
+        modelId,
+        modelType: 'languageModel',
+        message:
+          'Use createFoundryRealtime from @nyrra/foundry-ai/realtime for realtime models (AI SDK 7).',
+      });
+    }
     const shouldForceReasoning =
       isKnownOpenAIReasoningTarget(modelId) || isKnownOpenAIReasoningTarget(resolvedModel.rid);
 

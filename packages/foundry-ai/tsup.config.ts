@@ -5,6 +5,7 @@ export default defineConfig({
   dts: true,
   entry: {
     index: 'src/index.ts',
+    'providers/realtime': 'src/providers/realtime.ts',
     'providers/openai': 'src/providers/openai.ts',
     'providers/anthropic': 'src/providers/anthropic.ts',
     'providers/google': 'src/providers/google.ts',
