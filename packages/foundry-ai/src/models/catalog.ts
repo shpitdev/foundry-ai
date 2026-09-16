@@ -9,13 +9,16 @@ import { OPENAI_EMBEDDING_MODELS, OPENAI_MODELS } from './openai-models.js';
 import { REALTIME_MODELS, type RealtimeModelId } from './realtime-models.js';
 import { type KnownThirdPartyModelId, THIRD_PARTY_MODELS } from './third-party-models.js';
 
+import { type KnownXaiModelId, XAI_MODELS } from './xai-models.js';
+
 export type KnownModelId =
   | RealtimeModelId
   | KnownOpenAIModelId
   | KnownOpenAIEmbeddingModelId
   | KnownAnthropicModelId
   | KnownGoogleModelId
-  | KnownThirdPartyModelId;
+  | KnownThirdPartyModelId
+  | KnownXaiModelId;
 
 export const MODEL_CATALOG = {
   ...OPENAI_MODELS,
@@ -24,6 +27,7 @@ export const MODEL_CATALOG = {
   ...ANTHROPIC_MODELS,
   ...GOOGLE_MODELS,
   ...THIRD_PARTY_MODELS,
+  ...XAI_MODELS,
 } as const satisfies Record<KnownModelId, ModelMetadata>;
 export const MODEL_CATALOG_BY_RID = Object.fromEntries(
   Object.values(MODEL_CATALOG).map((metadata) => [metadata.rid, metadata]),

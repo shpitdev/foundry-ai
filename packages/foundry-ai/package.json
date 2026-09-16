@@ -49,6 +49,11 @@
       "import": "./dist/providers/google.mjs",
       "require": "./dist/providers/google.cjs"
     },
+    "./xai": {
+      "types": "./dist/providers/xai.d.ts",
+      "import": "./dist/providers/xai.mjs",
+      "require": "./dist/providers/xai.cjs"
+    },
     "./third-party": {
       "types": "./dist/providers/third-party.d.ts",
       "import": "./dist/providers/third-party.mjs",
@@ -76,13 +81,15 @@
     "@ai-sdk/google": "4.0.67",
     "@ai-sdk/openai": "4.0.65",
     "@tanstack/intent": "0.4.0",
-    "ai": "7.0.97"
+    "ai": "7.0.97",
+    "@ai-sdk/xai": "4.0.58"
   },
   "peerDependencies": {
     "ai": "^6.0.141 || ^7.0.0-beta.187",
     "@ai-sdk/anthropic": "^3.0.64 || ^4.0.0-beta.69",
     "@ai-sdk/google": "^3.0.54 || ^4.0.0-beta.85",
-    "@ai-sdk/openai": "^3.0.49 || ^4.0.0-beta.77"
+    "@ai-sdk/openai": "^3.0.49 || ^4.0.0-beta.77",
+    "@ai-sdk/xai": "^3.0.132 || ^4.0.0-beta.76"
   },
   "peerDependenciesMeta": {
     "@ai-sdk/anthropic": {
@@ -92,6 +99,9 @@
       "optional": true
     },
     "@ai-sdk/openai": {
+      "optional": true
+    },
+    "@ai-sdk/xai": {
       "optional": true
     }
   }

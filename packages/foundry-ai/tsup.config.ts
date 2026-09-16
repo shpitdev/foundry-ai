@@ -9,9 +9,10 @@ export default defineConfig({
     'providers/openai': 'src/providers/openai.ts',
     'providers/anthropic': 'src/providers/anthropic.ts',
     'providers/google': 'src/providers/google.ts',
+    'providers/xai': 'src/providers/xai.ts',
     'providers/third-party': 'src/providers/third-party.ts',
   },
-  external: ['ai', '@ai-sdk/anthropic', '@ai-sdk/google', '@ai-sdk/openai'],
+  external: ['ai', '@ai-sdk/anthropic', '@ai-sdk/google', '@ai-sdk/openai', '@ai-sdk/xai'],
   format: ['esm', 'cjs'],
   outExtension({ format }) {
     return {

@@ -15,7 +15,7 @@ const { parseArgs, parseModelSelection } = (await import(helperModuleUrl)) as {
   };
   parseModelSelection: (value: string) => {
     modelId: string;
-    provider?: 'openai' | 'anthropic' | 'google' | 'third-party';
+    provider?: 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
   };
 };
 
@@ -24,6 +24,17 @@ describe('run-live-capability-suite args', () => {
     expect(() => parseArgs(['--update-docs'], {})).toThrow('Live reports now stay local');
     expect(() => parseArgs(['--no-update-docs'], {})).toThrow('Live reports now stay local');
   });
+  it('selects xAI by provider or qualified model', () => {
+    expect(parseArgs(['--provider', 'xai'], {}).extraEnv).toMatchObject({
+      LIVE_PROVIDER_FILTER: 'xai',
+    });
+    expect(parseArgs(['--model', 'xai:grok-4-6'], {}).extraEnv).toMatchObject({
+      LIVE_PROVIDER_FILTER: 'xai',
+      LIVE_MODEL_FILTER: 'grok-4-6',
+      LIVE_MODEL_SCOPE: 'catalog',
+    });
+  });
+
   it('selects the third-party model catalog from the CLI', () => {
     expect(parseArgs(['--model', 'third-party:kimi-k3'], {}).extraEnv).toMatchObject({
       LIVE_PROVIDER_FILTER: 'third-party',

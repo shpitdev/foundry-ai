@@ -9,9 +9,10 @@ const workspaceRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const artifactRoot = resolve(workspaceRoot, '.memory', 'capability-runs');
 const packageDocsDir = resolve(workspaceRoot, 'packages/foundry-ai/docs');
 const packageResultsDocPath = resolve(packageDocsDir, 'README.md');
-const providerOrder = ['openai', 'anthropic', 'google', 'third-party'];
+const providerOrder = ['openai', 'anthropic', 'google', 'xai', 'third-party'];
 const modelCapabilityColumns = [
   ['text.generate', 'Text'],
+  ['chat.text.generate', 'Explicit chat'],
   ['messages.generate', 'History'],
   ['rid.passthrough', 'RID'],
   ['text.stream', 'Stream'],
@@ -160,7 +161,9 @@ function createResultsDoc(record, artifactDir, providerSummaries, statusCounts) 
     `- Artifact: \`${relativeToWorkspace(artifactDir)}\``,
     `- Started: ${record.startedAt}`,
     `- Finished: ${record.finishedAt}`,
-    `- Default Models: openai=\`${record.models.openai}\`, anthropic=\`${record.models.anthropic}\`, google=\`${record.models.google}\``,
+    `- Default Models: ${Object.entries(record.models)
+      .map(([provider, model]) => `${provider}=\`${model}\``)
+      .join(', ')}`,
     `- Filters: ${formatFilters(record.filters)}`,
     `- Model Scope: \`${record.modelScope ?? 'canonical'}\``,
     `- Status Counts: ${statusCounts.map(([status, count]) => `\`${status}\`: ${count}`).join(', ')}`,

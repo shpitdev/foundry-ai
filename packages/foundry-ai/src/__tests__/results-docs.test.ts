@@ -82,3 +82,39 @@ it('labels missing historical SDK versions instead of using current dependencies
   });
   expect(output).toContain('Installed SDK versions: not recorded');
 });
+
+it('reports fresh xAI cases without relabeling historical third-party cases', () => {
+  writeFileSync(
+    join(artifact, 'results.json'),
+    JSON.stringify({
+      ...record,
+      models: { ...record.models, xai: 'grok-4-6' },
+      filters: { provider: 'xai' },
+      cases: [
+        {
+          provider: 'xai',
+          modelId: 'grok-4-6',
+          capability: 'chat.text.generate',
+          status: 'proxy-rejected',
+          durationMs: 12,
+        },
+        {
+          provider: 'third-party',
+          modelId: 'grok-4-6',
+          capability: 'text.generate',
+          status: 'pass',
+          durationMs: 12,
+        },
+      ],
+    }),
+  );
+  const output = execFileSync(process.execPath, [script, '--artifact', artifact, '--stdout'], {
+    encoding: 'utf8',
+  });
+  expect(output).toContain('xai=`grok-4-6`');
+  expect(output).toContain('| xai |');
+  expect(output).toContain('| third-party |');
+  expect(output).toContain('Explicit chat');
+  expect(output).toContain('chat.text.generate');
+  expect(readFileSync(index, 'utf8')).toBe('Curated coverage across runs');
+});

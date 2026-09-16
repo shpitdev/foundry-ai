@@ -1,6 +1,7 @@
 import type { OpenAILanguageModelResponsesOptions } from '@ai-sdk/openai';
 import { type Tool, tool } from 'ai';
 import { z } from 'zod';
+import type { FoundryCallOptions } from '../../middleware.js';
 import { resolveModelRid } from '../../models/catalog.js';
 import { isKnownOpenAIReasoningTarget } from '../../models/openai-models.js';
 import type { LiveProvider } from './live-capabilities.js';
@@ -92,7 +93,11 @@ export function getProviderOptions(
   provider: LiveProvider,
   mode: ProviderOptionMode,
   modelId?: string,
-) {
+): FoundryCallOptions['providerOptions'] {
+  if (provider === 'xai') {
+    return { xai: { store: false } };
+  }
+
   if (provider === 'openai') {
     return getOpenAIProviderOptions(mode, modelId);
   }
@@ -129,7 +134,7 @@ export function getReasoningExpectation(
   modelId: string,
   defaultModelId: string,
 ) {
-  if (provider === 'google' || provider === 'third-party') {
+  if (provider === 'google' || provider === 'third-party' || provider === 'xai') {
     return 'investigate' as const;
   }
 

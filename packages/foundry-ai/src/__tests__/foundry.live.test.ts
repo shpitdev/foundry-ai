@@ -13,6 +13,7 @@ import { createFoundryAnthropic } from '../providers/anthropic.js';
 import { createFoundryGoogle } from '../providers/google.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { createFoundryThirdParty } from '../providers/third-party.js';
+import { createFoundryXai } from '../providers/xai.js';
 import {
   assertModelClaimsVision,
   type CapabilityCaseSpec,
@@ -56,9 +57,11 @@ const modelMatrix = getLiveCapabilityModelMatrix();
 const openai = createFoundryOpenAI(config);
 const anthropic = createFoundryAnthropic(config);
 const google = createFoundryGoogle(config);
+const xai = createFoundryXai(config);
 const thirdParty = createFoundryThirdParty(config);
 const registry = createProviderRegistry({
   'third-party': thirdParty,
+  xai,
   anthropic,
   google,
   openai,
@@ -98,11 +101,31 @@ afterAll(async () => {
 });
 
 describe('live Foundry capability matrix', () => {
-  for (const provider of ['openai', 'anthropic', 'google', 'third-party'] as const) {
+  for (const provider of ['openai', 'anthropic', 'google', 'xai', 'third-party'] as const) {
     for (const modelId of modelMatrix[provider]) {
       const expectation =
-        provider !== 'third-party' && modelId === models[provider] ? 'must-pass' : 'investigate';
+        provider !== 'third-party' && provider !== 'xai' && modelId === models[provider]
+          ? 'must-pass'
+          : 'investigate';
       const modelCase = expectation === 'must-pass' ? it : it.concurrent;
+
+      if (provider === 'xai') {
+        modelCase(`${provider}:${modelId}: explicit chat generateText`, async () => {
+          await recorder.runCase(
+            { capability: 'chat.text.generate', expectation, modelId, provider },
+            async (telemetry) => {
+              const result = await generateText({
+                model: xai.chat(modelId),
+                prompt: 'Reply with exactly "XAI: chat route works."',
+                maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+                experimental_telemetry: telemetry,
+              });
+              expect(result.text.toLowerCase()).toContain('xai');
+              return { text: result.text, usage: result.usage, warnings: result.warnings };
+            },
+          );
+        });
+      }
 
       modelCase(`${provider}:${modelId}: basic generateText`, async () => {
         await recorder.runCase(
@@ -470,7 +493,10 @@ describe('live Foundry capability matrix', () => {
           const result = streamText({
             model: getFoundryModel(provider, modelId),
             prompt:
-              usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
+              usesAdaptiveAnthropicThinking ||
+              provider === 'third-party' ||
+              provider === 'xai' ||
+              provider === 'openai'
                 ? 'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.'
                 : 'Reply with READY and one short clause about reasoning visibility.',
             maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
@@ -486,7 +512,10 @@ describe('live Foundry capability matrix', () => {
           }
 
           expect(summary.text).toMatch(
-            usesAdaptiveAnthropicThinking || provider === 'third-party' || provider === 'openai'
+            usesAdaptiveAnthropicThinking ||
+              provider === 'third-party' ||
+              provider === 'xai' ||
+              provider === 'openai'
               ? /301/
               : /ready/i,
           );
@@ -654,6 +683,13 @@ describe('live Foundry capability matrix', () => {
 });
 
 function getFoundryModel(provider: LiveProvider, modelId: string) {
+  if (provider === 'xai') {
+    return wrapLiveModelWithDevTools({
+      model: xai(modelId),
+      modelId,
+      providerId: 'foundry-xai',
+    });
+  }
   if (provider === 'third-party') {
     return wrapLiveModelWithDevTools({
       model: thirdParty(modelId),

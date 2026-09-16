@@ -24,15 +24,11 @@ import type {
 
 describe('model catalog', () => {
   it('only catalogs models present and active in the retained Foundry CLI listing', () => {
-    const { catalogVerification } = JSON.parse(
-      readFileSync(new URL('../../docs/capability-results.json', import.meta.url), 'utf8'),
-    ) as {
-      catalogVerification: {
-        models: Array<{ rid: string; modelIdentifier: string; lifecycle: string }>;
-      };
-    };
+    const enrollments = JSON.parse(
+      readFileSync(new URL('./fixtures/foundry-model-catalog.json', import.meta.url), 'utf8'),
+    ) as Array<{ rid: string; modelIdentifier: string; lifecycle: string }>;
     for (const [id, model] of Object.entries(MODEL_CATALOG)) {
-      const enrollment = catalogVerification.models.find((entry) =>
+      const enrollment = enrollments.find((entry) =>
         model.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS')
           ? entry.modelIdentifier === model.modelIdentifier
           : entry.rid === model.rid,

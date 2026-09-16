@@ -1,0 +1,45 @@
+{
+  "id": "fd53b575-036b-9c83-8de8-9140af7035d7",
+  "model": "grok-4.6",
+  "created_at": 1789513052,
+  "status": "completed",
+  "usage": {
+    "input_tokens": 209,
+    "output_tokens": 86,
+    "total_tokens": 295,
+    "output_tokens_details": {
+      "reasoning_tokens": 85
+    },
+    "input_tokens_details": {
+      "cached_tokens": 128
+    }
+  },
+  "output": [
+    {
+      "type": "reasoning",
+      "id": "rs_fd53b575-036b-9c83-8de8-9140af7035d7",
+      "summary": [
+        {
+          "type": "summary_text",
+          "text": "The user said: \"Reply OK.\"\n"
+        }
+      ],
+      "status": "completed"
+    },
+    {
+      "type": "message",
+      "id": "msg_fd53b575-036b-9c83-8de8-9140af7035d7",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "text": "OK",
+          "annotations": [],
+          "type": "output_text"
+        }
+      ]
+    }
+  ],
+  "error": null,
+  "incomplete_details": null
+}

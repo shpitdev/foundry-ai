@@ -1,0 +1,412 @@
+[
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-1-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_41_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_45_HAIKU",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_45_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-sonnet",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_45_SONNET",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_46_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-sonnet",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_46_SONNET",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-7-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_47_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-8-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_48_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-5-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_5_OPUS",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-5-sonnet",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_5_SONNET",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemma-4-31b",
+    "modelIdentifier": "GEMMA_4_31B",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-2-5-flash",
+    "modelIdentifier": "GEMINI_2_5_FLASH",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-2-5-flash-lite",
+    "modelIdentifier": "GEMINI_2_5_FLASH_LITE",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-2-5-pro",
+    "modelIdentifier": "GEMINI_2_5_PRO",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-1-flash-lite",
+    "modelIdentifier": "GEMINI_3_1_FLASH_LITE",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-1-pro",
+    "modelIdentifier": "GEMINI_3_1_PRO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-5-flash",
+    "modelIdentifier": "GEMINI_3_5_FLASH",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-5-flash-lite",
+    "modelIdentifier": "GEMINI_3_5_FLASH_LITE",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-6-flash",
+    "modelIdentifier": "GEMINI_3_6_FLASH",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-7-flash",
+    "modelIdentifier": "GEMINI_3_7_FLASH",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-8-flash",
+    "modelIdentifier": "GEMINI_3_8_FLASH",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-3-flash",
+    "modelIdentifier": "GEMINI_3_FLASH",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.kimi-k2-5",
+    "modelIdentifier": "KIMI_K2_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.kimi-k3",
+    "modelIdentifier": "KIMI_K3",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.llama-3-3-nemotron-super-49b-v1-5",
+    "modelIdentifier": "LLAMA_3_3_NEMOTRON_SUPER_49B_V1_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+    "modelIdentifier": "NEMOTRON_3_ULTRA_550B_A55B_NVFP4",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemma-4-26b-a4b",
+    "modelIdentifier": "GEMMA_4_26B_A4B",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.schematic-7B",
+    "modelIdentifier": "SCHEMATIC_7B",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.codex-auto-review",
+    "modelIdentifier": "CODEX_AUTO_REVIEW",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-1",
+    "modelIdentifier": "GPT_4_1",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-1-mini",
+    "modelIdentifier": "GPT_4_1_MINI",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-1-nano",
+    "modelIdentifier": "GPT_4_1_NANO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-o",
+    "modelIdentifier": "GPT_4_O",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5",
+    "modelIdentifier": "GPT_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-1",
+    "modelIdentifier": "GPT_5_1",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-1-codex",
+    "modelIdentifier": "GPT_5_1_CODEX",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-1-codex-mini",
+    "modelIdentifier": "GPT_5_1_CODEX_MINI",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-2",
+    "modelIdentifier": "GPT_5_2",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-2-pro",
+    "modelIdentifier": "GPT_5_2_PRO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-3-codex",
+    "modelIdentifier": "GPT_5_3_CODEX",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-4",
+    "modelIdentifier": "GPT_5_4",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-4-mini",
+    "modelIdentifier": "GPT_5_4_MINI",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-4-nano",
+    "modelIdentifier": "GPT_5_4_NANO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-4-pro",
+    "modelIdentifier": "GPT_5_4_PRO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-5",
+    "modelIdentifier": "GPT_5_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-6-luna",
+    "modelIdentifier": "GPT_5_6_LUNA",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-6-sol",
+    "modelIdentifier": "GPT_5_6_SOL",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-6-terra",
+    "modelIdentifier": "GPT_5_6_TERRA",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-codex",
+    "modelIdentifier": "GPT_5_CODEX",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-mini",
+    "modelIdentifier": "GPT_5_MINI",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-nano",
+    "modelIdentifier": "GPT_5_NANO",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-5-pro",
+    "modelIdentifier": "GPT_5_PRO",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.o-1",
+    "modelIdentifier": "O_1",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.o-3",
+    "modelIdentifier": "O_3",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.o-3-pro",
+    "modelIdentifier": "O_3_PRO",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.o-4-mini",
+    "modelIdentifier": "O_4_MINI",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.qwen3-235b-a22b-2507",
+    "modelIdentifier": "QWEN3_235B_A22B_2507",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.qwen3-32b",
+    "modelIdentifier": "QWEN3_32B",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.glm-5",
+    "modelIdentifier": "GLM_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.glm-5-3",
+    "modelIdentifier": "GLM_5_3",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.glm-5-3-flash",
+    "modelIdentifier": "GLM_5_3_FLASH",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-4-3",
+    "modelIdentifier": "GROK_4_3",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-4-5",
+    "modelIdentifier": "GROK_4_5",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-4-6",
+    "modelIdentifier": "GROK_4_6",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-420-non-reasoning-latest",
+    "modelIdentifier": "GROK_420_NON_REASONING_LATEST",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-420-reasoning-latest",
+    "modelIdentifier": "GROK_420_REASONING_LATEST",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-build-0-1",
+    "modelIdentifier": "GROK_BUILD_0_1",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.llama-3-2-nv-embedqa-1b-v2",
+    "modelIdentifier": "LLAMA_3_2_NV_EMBEDQA_1B_V2",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.text-embedding-3-large_azure",
+    "modelIdentifier": "OPENAI_TEXT_EMBEDDING_3_LARGE",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.text-embedding-3-small_azure",
+    "modelIdentifier": "OPENAI_TEXT_EMBEDDING_3_SMALL",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.text-embedding-ada-002_azure",
+    "modelIdentifier": "OPENAI_TEXT_EMBEDDING_ADA_002",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.snowflake-arctic-embed-medium",
+    "modelIdentifier": "SNOWFLAKE_ARCTIC_EMBED_M",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.tbd-document-information-extraction",
+    "modelIdentifier": "TBD_DOCUMENT_INFORMATION_EXTRACTION",
+    "lifecycle": "sunset"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.whisper-large-v3",
+    "modelIdentifier": "WHISPER_LARGE_V3",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-o-mini-transcribe",
+    "modelIdentifier": "GPT_4_O_MINI_TRANSCRIBE",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe",
+    "modelIdentifier": "GPT_4_O_TRANSCRIBE",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe-diarize",
+    "modelIdentifier": "GPT_4_O_TRANSCRIBE_DIARIZE",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime-whisper",
+    "modelIdentifier": "GPT_REALTIME_WHISPER",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.whisper-1",
+    "modelIdentifier": "OPENAI_WHISPER_1",
+    "lifecycle": "ga"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime",
+    "modelIdentifier": "GPT_REALTIME",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime-1-5",
+    "modelIdentifier": "GPT_REALTIME_1_5",
+    "lifecycle": "experimental"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime-2",
+    "modelIdentifier": "GPT_REALTIME_2",
+    "lifecycle": "experimental"
+  }
+]

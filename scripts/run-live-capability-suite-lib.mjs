@@ -36,7 +36,9 @@ export function parseArgs(args, env = process.env) {
       const provider = args[index + 1];
 
       if (!isLiveProvider(provider)) {
-        throw new Error('Expected --provider to be one of openai, anthropic, google, third-party.');
+        throw new Error(
+          'Expected --provider to be one of openai, anthropic, google, xai, third-party.',
+        );
       }
 
       extraEnv.LIVE_PROVIDER_FILTER = provider;
@@ -108,7 +110,11 @@ export function parseModelSelection(value) {
 
 export function isLiveProvider(value) {
   return (
-    value === 'openai' || value === 'anthropic' || value === 'google' || value === 'third-party'
+    value === 'openai' ||
+    value === 'anthropic' ||
+    value === 'google' ||
+    value === 'xai' ||
+    value === 'third-party'
   );
 }
 

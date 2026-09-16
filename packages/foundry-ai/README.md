@@ -10,7 +10,7 @@ Install only the provider peers you use:
 pnpm add @nyrra/foundry-ai ai@7 @ai-sdk/openai@4
 ```
 
-Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Third-party models also use `@ai-sdk/openai`. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
+Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk/xai@4` for Grok; third-party models use `@ai-sdk/openai`. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
 
 ## Configure and call a model
 
@@ -29,9 +29,23 @@ const { text } = await generateText({
 console.log(text);
 ```
 
-For explicit configuration, pass `{ foundryUrl, token }` to the factory. Other factories are `createFoundryAnthropic`, `createFoundryGoogle`, and `createFoundryThirdParty`, imported from their respective `anthropic`, `google`, and `third-party` subpaths.
+For explicit configuration, pass `{ foundryUrl, token }` to the factory. Other factories are `createFoundryAnthropic`, `createFoundryGoogle`, `createFoundryXai`, and `createFoundryThirdParty`, imported from their respective `anthropic`, `google`, `xai`, and `third-party` subpaths.
 
 [Models and test status](./docs/README.md) covers model IDs, routing, known failures, and dated live results. Catalog membership alone does not establish feature support. CI verifies SDK compatibility offline; live Foundry probes are manual.
+
+## xAI / Grok
+
+Install `@ai-sdk/xai@4` with AI SDK 7 (or `@ai-sdk/xai@3` with SDK 6). The xAI subpath does not require the OpenAI peer.
+
+```ts
+import { createFoundryXai } from '@nyrra/foundry-ai/xai';
+
+const xai = createFoundryXai(loadFoundryConfig());
+const model = xai('grok-4-6'); // Defaults to the xAI Responses route.
+// Explicit routes: xai.responses('grok-4-6') or xai.chat('grok-4-6').
+```
+
+Grok uses model identity `foundry-xai`, catalog provider `xai`, registry prefix `xai:`, and `providerOptions.xai`. Both endpoints are beta. See [xAI setup and migration](./docs/xai.md) and the [current Grok results](./docs/README.md#xai) for verified capabilities and remaining gaps.
 
 ## Embeddings and multiple providers
 

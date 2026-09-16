@@ -10,7 +10,7 @@ import type { Telemetry, TelemetryOptions } from 'ai';
 import { MODEL_CATALOG, resolveKnownModelMetadata, resolveModelRid } from '../../models/catalog.js';
 import { loadLiveFoundryConfig } from './live-foundry.js';
 
-export type LiveProvider = 'openai' | 'anthropic' | 'google' | 'third-party';
+export type LiveProvider = 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
 export type CapabilityExpectation = 'must-pass' | 'investigate' | 'expect-unsupported';
 export type CapabilityStatus = 'pass' | 'fail' | 'unsupported' | 'proxy-rejected' | 'skipped';
 
@@ -109,6 +109,7 @@ const DEFAULT_MODELS = {
   google: 'gemini-3.1-flash-lite',
   openai: 'gpt-5-nano',
   'third-party': 'qwen3-32b',
+  xai: 'grok-4-6',
 } as const satisfies Record<LiveProvider, string>;
 
 const LIVE_ARTIFACT_ROOT_ENV = 'LIVE_CAPABILITY_ARTIFACT_DIR';
@@ -121,6 +122,7 @@ const LIVE_MODELS_ENV = {
   google: 'LIVE_GOOGLE_MODEL',
   openai: 'LIVE_OPENAI_MODEL',
   'third-party': 'LIVE_THIRD_PARTY_MODEL',
+  xai: 'LIVE_XAI_MODEL',
 } as const satisfies Record<LiveProvider, string>;
 
 export const TINY_PNG_BYTES = Uint8Array.from(
@@ -157,6 +159,7 @@ export function getLiveCapabilityModels(): Record<LiveProvider, string> {
     anthropic: process.env[LIVE_MODELS_ENV.anthropic]?.trim() || DEFAULT_MODELS.anthropic,
     google: process.env[LIVE_MODELS_ENV.google]?.trim() || DEFAULT_MODELS.google,
     openai: process.env[LIVE_MODELS_ENV.openai]?.trim() || DEFAULT_MODELS.openai,
+    xai: process.env[LIVE_MODELS_ENV.xai]?.trim() || DEFAULT_MODELS.xai,
     'third-party':
       process.env[LIVE_MODELS_ENV['third-party']]?.trim() || DEFAULT_MODELS['third-party'],
   };
@@ -172,7 +175,7 @@ export function getLiveCapabilityFilters(): LiveCapabilityFilters {
 
   if (!isLiveProvider(providerValue)) {
     throw new Error(
-      `Expected ${LIVE_PROVIDER_FILTER_ENV} to be one of openai, anthropic, google, third-party. Received "${providerValue}".`,
+      `Expected ${LIVE_PROVIDER_FILTER_ENV} to be one of openai, anthropic, google, xai, third-party. Received "${providerValue}".`,
     );
   }
 
@@ -212,6 +215,7 @@ export function getLiveCapabilityModelMatrix(): Record<LiveProvider, string[]> {
       google: [models.google],
       openai: [models.openai],
       'third-party': [],
+      xai: [models.xai],
     });
   }
 
@@ -219,6 +223,7 @@ export function getLiveCapabilityModelMatrix(): Record<LiveProvider, string[]> {
     anthropic: mergePreferredModelId(models.anthropic, getKnownProviderModelIds('anthropic')),
     google: mergePreferredModelId(models.google, getKnownProviderModelIds('google')),
     openai: mergePreferredModelId(models.openai, getKnownProviderModelIds('openai')),
+    xai: mergePreferredModelId(models.xai, getKnownProviderModelIds('xai')),
     'third-party': mergePreferredModelId(
       models['third-party'],
       getKnownProviderModelIds('third-party'),
@@ -813,7 +818,7 @@ function createMarkdownSummary(record: CapabilityRunRecord) {
     `- Package Version: \`${record.packageVersion}\``,
     `- Started: ${record.startedAt}`,
     `- Finished: ${record.finishedAt ?? 'in-progress'}`,
-    `- Models: openai=\`${record.models.openai}\`, anthropic=\`${record.models.anthropic}\`, google=\`${record.models.google}\``,
+    `- Models: ${formatOverrides(record.models)}`,
     `- Model Overrides: ${formatOverrides(record.modelOverrides)}`,
     `- Filters: ${formatFilters(record.filters)}`,
     `- Status Counts: ${statusCounts.length > 0 ? statusCounts.join(', ') : 'none'}`,
@@ -907,7 +912,7 @@ function resolveGitSha() {
 function resolveSdkVersions(): Record<string, string> {
   const require = createRequire(import.meta.url);
   return Object.fromEntries(
-    ['ai', '@ai-sdk/openai', '@ai-sdk/anthropic', '@ai-sdk/google'].map((name) => [
+    ['ai', '@ai-sdk/openai', '@ai-sdk/anthropic', '@ai-sdk/google', '@ai-sdk/xai'].map((name) => [
       name,
       (require(`${name}/package.json`) as { version: string }).version,
     ]),
@@ -970,6 +975,7 @@ function filterLiveCapabilityModelMatrix(
     ),
     google: matrix.google.filter((modelId) => shouldIncludeLiveCapabilityCase('google', modelId)),
     openai: matrix.openai.filter((modelId) => shouldIncludeLiveCapabilityCase('openai', modelId)),
+    xai: matrix.xai.filter((modelId) => shouldIncludeLiveCapabilityCase('xai', modelId)),
     'third-party': matrix['third-party'].filter((modelId) =>
       shouldIncludeLiveCapabilityCase('third-party', modelId),
     ),
@@ -978,7 +984,11 @@ function filterLiveCapabilityModelMatrix(
 
 function isLiveProvider(value: string): value is LiveProvider {
   return (
-    value === 'openai' || value === 'anthropic' || value === 'google' || value === 'third-party'
+    value === 'openai' ||
+    value === 'anthropic' ||
+    value === 'google' ||
+    value === 'xai' ||
+    value === 'third-party'
   );
 }
 

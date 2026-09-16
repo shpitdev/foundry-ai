@@ -8,10 +8,12 @@ const requiredFiles = [
   'LICENSE',
   'NOTICE',
   'docs/README.md',
-  'docs/capability-results.json',
   'dist/providers/realtime.mjs',
   'dist/providers/realtime.cjs',
   'dist/providers/realtime.d.ts',
+  'dist/providers/xai.mjs',
+  'dist/providers/xai.cjs',
+  'dist/providers/xai.d.ts',
   'dist/providers/third-party.mjs',
   'dist/providers/third-party.cjs',
   'dist/providers/third-party.d.ts',
@@ -27,6 +29,7 @@ const requiredFiles = [
   'skills/foundry-ai-provider/references/examples/tool-calling.ts',
 ];
 const forbiddenPatterns = [
+  /^docs\/(?!.*\.md$)/,
   /^\.memory\//,
   /^project\.json$/,
   /^scripts\//,

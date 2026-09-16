@@ -44,6 +44,12 @@ export {
   THIRD_PARTY_MODELS,
   type ThirdPartyModelId,
 } from './models/third-party-models.js';
+export {
+  type KnownXaiModelId,
+  XAI_MODEL_IDS,
+  XAI_MODELS,
+  type XaiModelId,
+} from './models/xai-models.js';
 export type {
   FoundryConfig,
   ModelClass,

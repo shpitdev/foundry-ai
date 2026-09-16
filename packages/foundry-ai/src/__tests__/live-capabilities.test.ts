@@ -31,6 +31,7 @@ describe('live capability model matrix', () => {
     expect(matrix.google).toEqual(['gemini-3.1-flash-lite']);
     expect(matrix.openai).toEqual(['gpt-5-nano']);
     expect(matrix['third-party']).toEqual([]);
+    expect(matrix.xai).toEqual(['grok-4-6']);
   });
 
   it('only surveys current public catalog aliases', () => {
@@ -51,7 +52,10 @@ describe('live capability model matrix', () => {
     expect(matrix.openai).not.toContain('gpt-4o-mini');
     expect(matrix.google).not.toContain('gemini-3-pro');
     expect(matrix.google).toContain('gemini-3.8-flash');
-    expect(matrix['third-party']).toHaveLength(17);
+    expect(matrix['third-party']).toHaveLength(11);
+    expect(matrix['third-party']).not.toContain('grok-4-6');
+    expect(matrix.xai).toHaveLength(6);
+    expect(matrix.xai).toContain('grok-4-6');
     expect(matrix['third-party']).toContain('kimi-k3');
     expect(matrix['third-party']).toContain('llama-3-3-nemotron-super-49b-v1-5');
   });
@@ -72,6 +76,17 @@ describe('live capability model matrix', () => {
     expect(matrix.google.indexOf('gemini-3.1-pro')).toBeLessThan(
       matrix.google.indexOf('gemini-3-flash'),
     );
+  });
+
+  it('selects the xAI catalog without any third-party models', () => {
+    process.env.FOUNDRY_URL = 'https://example.palantirfoundry.com';
+    process.env.FOUNDRY_TOKEN = 'token-123';
+    process.env.LIVE_MODEL_SCOPE = 'catalog';
+    process.env.LIVE_PROVIDER_FILTER = 'xai';
+    const matrix = getLiveCapabilityModelMatrix();
+    expect(matrix.xai).toHaveLength(6);
+    expect(matrix['third-party']).toEqual([]);
+    expect(matrix.openai).toEqual([]);
   });
 
   it('filters the matrix to a selected provider and model', () => {

@@ -19,7 +19,6 @@ describe('third-party routing through the real SDK', () => {
     ['glm-5', 'openai/v1/chat/completions'],
     ['gemma-4-31b', 'openai/v1/responses'],
     ['nemotron-3-ultra-550b-a55b-nvfp4', 'openai/v1/responses'],
-    ['grok-4-6', 'xai/v1/responses'],
   ])('routes alias and RID for %s to %s', async (alias, path) => {
     const rid = resolveModelTarget(alias).rid;
     const requests: Request[] = [];
@@ -84,46 +83,12 @@ describe('third-party routing through the real SDK', () => {
     }
   });
 
-  it('sends assistant history as text on the xAI proxy', async () => {
-    let body: Record<string, unknown> | undefined;
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (input: string | Request | URL, init?: RequestInit) => {
-        body = (await new Request(input, init).json()) as Record<string, unknown>;
-        return Response.json({ id: 'resp-1', created_at: 1, status: 'completed', output: [] });
-      }),
-    );
-    await createFoundryThirdParty(config)('grok-4-6').doGenerate({
-      prompt: [
-        { role: 'user', content: [{ type: 'text', text: 'Remember blue.' }] },
-        {
-          role: 'assistant',
-          content: [
-            {
-              type: 'text',
-              text: 'I remember ',
-              providerOptions: { openai: { itemId: 'msg-previous' } },
-            },
-            { type: 'text', text: 'blue.' },
-          ],
-        },
-        { role: 'user', content: [{ type: 'text', text: 'Which color?' }] },
-      ],
-    });
-    expect(body?.input).toEqual([
-      { role: 'user', content: [{ type: 'input_text', text: 'Remember blue.' }] },
-      { role: 'assistant', content: 'I remember ' },
-      { role: 'assistant', content: 'blue.' },
-      { role: 'user', content: [{ type: 'input_text', text: 'Which color?' }] },
-    ]);
-  });
-
   it('rejects retention before sending a request', async () => {
     const fetch = vi.fn();
     vi.stubGlobal('fetch', fetch);
     await expect(
       generateText({
-        model: createFoundryThirdParty(config)('grok-4-6'),
+        model: createFoundryThirdParty(config)('gemma-4-31b'),
         prompt: 'test',
         providerOptions: { openai: { store: true } },
         maxRetries: 0,
@@ -138,7 +103,8 @@ describe('third-party routing through the real SDK', () => {
     expect(() => provider('unknown-model')).toThrow();
     expect(() => provider('gpt-5')).toThrow();
     expect(getModelMetadata('llama-3-3-nemotron-super-49b-v1-5')?.transport).toBe('unavailable');
-    expect(getModelMetadata('grok-4-6')?.supportsResponses).toBe(true);
+    expect(() => provider('grok-4-6')).toThrow();
+    expect(() => provider(resolveModelTarget('grok-4-6').rid)).toThrow();
     expect(getModelMetadata('kimi-k2-5')?.supportsResponses).toBe(false);
   });
 });

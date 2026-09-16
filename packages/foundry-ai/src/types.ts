@@ -6,7 +6,7 @@ export interface FoundryConfig {
   traceState?: string;
 }
 
-export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'third-party';
+export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
 export type ModelLifecycle = 'ga' | 'experimental';
 export type ModelInputType =
   | 'CLAUDE_CHAT'

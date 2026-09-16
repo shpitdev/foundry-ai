@@ -24,6 +24,7 @@
       "@nyrra/foundry-ai/anthropic": ["./packages/foundry-ai/src/providers/anthropic.ts"],
       "@nyrra/foundry-ai/google": ["./packages/foundry-ai/src/providers/google.ts"],
       "@nyrra/foundry-ai/openai": ["./packages/foundry-ai/src/providers/openai.ts"],
+      "@nyrra/foundry-ai/xai": ["./packages/foundry-ai/src/providers/xai.ts"],
       "@nyrra/foundry-ai/realtime": ["./packages/foundry-ai/src/providers/realtime.ts"]
     }
   }

@@ -23,16 +23,12 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
     ...(resolved.traceParent ? { traceParent: resolved.traceParent } : {}),
     ...(resolved.traceState ? { traceState: resolved.traceState } : {}),
   };
-  const createProxy = (family: 'openai' | 'xai') =>
-    createOpenAI({
-      apiKey: resolved.token,
-      baseURL: `${resolved.foundryUrl}/api/v2/llm/proxy/${family}/v1`,
-      headers,
-      name: providerId,
-      ...(family === 'xai' ? { fetch: createXaiProxyFetch() } : {}),
-    });
-  const openai = createProxy('openai');
-  const xai = createProxy('xai');
+  const openai = createOpenAI({
+    apiKey: resolved.token,
+    baseURL: `${resolved.foundryUrl}/api/v2/llm/proxy/openai/v1`,
+    headers,
+    name: providerId,
+  });
 
   const createLanguageModel = (modelId: ThirdPartyModelId): FoundryLanguageModel => {
     const { rid, metadata } = resolveModelTarget(modelId);
@@ -46,12 +42,7 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
         message: `${modelId} is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md.`,
       });
     }
-    const model =
-      metadata.transport === 'openai-chat'
-        ? openai.chat(rid)
-        : metadata.transport === 'xai-responses'
-          ? xai.responses(rid)
-          : openai.responses(rid);
+    const model = metadata.transport === 'openai-chat' ? openai.chat(rid) : openai.responses(rid);
     return wrapFoundryLanguageModel(model, {
       modelId,
       providerId,
@@ -83,27 +74,4 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
     throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
   };
   return provider;
-}
-
-// Foundry's beta xAI proxy accepts assistant text as a string, but rejects
-// the output_text content parts emitted by the OpenAI Responses serializer.
-function createXaiProxyFetch(): typeof fetch {
-  return async (input, init) => {
-    const request = new Request(input, init);
-    const body = (await request.json()) as Record<string, unknown>;
-    if (Array.isArray(body.input)) {
-      body.input = body.input.map((item: { role?: string; content?: unknown; id?: string }) => {
-        if (item.role !== 'assistant' || !Array.isArray(item.content)) return item;
-        if (
-          !item.content.every(
-            (part) => part.type === 'output_text' && typeof part.text === 'string',
-          )
-        )
-          return item;
-        const { id: _id, ...message } = item;
-        return { ...message, content: item.content.map((part) => part.text).join('') };
-      });
-    }
-    return fetch(new Request(request, { body: JSON.stringify(body) }));
-  };
 }

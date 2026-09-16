@@ -1,0 +1,48 @@
+event: response.created
+data: {"sequence_number":0,"response":{"created_at":1789512239,"id":"49b4018b-e276-9898-921b-537597076351","model":"grok-4.6"},"type":"response.created"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":"The","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":4,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" user","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":5,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" says","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":6,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":":","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":7,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" \"","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":8,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":"Reply","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":9,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" with","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":10,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" exactly","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":11,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":" OK","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":12,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":".\"","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":13,"type":"response.reasoning_summary_text.delta"}
+
+event: response.reasoning_summary_text.delta
+data: {"delta":"\n","output_index":0,"summary_index":0,"item_id":"rs_49b4018b-e276-9898-921b-537597076351","sequence_number":14,"type":"response.reasoning_summary_text.delta"}
+
+event: response.output_item.done
+data: {"item":{"type":"reasoning","id":"rs_49b4018b-e276-9898-921b-537597076351","summary":[{"type":"summary_text","text":"The user says: \"Reply with exactly OK.\"\n"}],"status":"completed"},"output_index":0,"sequence_number":17,"type":"response.output_item.done"}
+
+event: response.output_text.delta
+data: {"delta":"OK","content_index":0,"output_index":1,"item_id":"msg_49b4018b-e276-9898-921b-537597076351","sequence_number":20,"type":"response.output_text.delta"}
+
+event: response.output_item.done
+data: {"item":{"type":"message","id":"msg_49b4018b-e276-9898-921b-537597076351","role":"assistant","status":"completed","content":[{"text":"OK","annotations":[],"type":"output_text"}]},"output_index":1,"sequence_number":23,"type":"response.output_item.done"}
+
+event: response.completed
+data: {"sequence_number":24,"response":{"id":"49b4018b-e276-9898-921b-537597076351","model":"grok-4.6","created_at":1789512239,"status":"completed","usage":{"input_tokens":211,"output_tokens":82,"total_tokens":293,"output_tokens_details":{"reasoning_tokens":81},"input_tokens_details":{"cached_tokens":128}},"output":[{"type":"reasoning","id":"rs_49b4018b-e276-9898-921b-537597076351","summary":[{"type":"summary_text","text":"The user says: \"Reply with exactly OK.\"\n"}],"status":"completed"},{"type":"message","id":"msg_49b4018b-e276-9898-921b-537597076351","role":"assistant","status":"completed","content":[{"text":"OK","annotations":[],"type":"output_text"}]}],"error":null,"incomplete_details":null},"type":"response.completed"}
+

@@ -1,0 +1,12 @@
+event: response.created
+data: {"sequence_number":0,"response":{"created_at":1789513259,"id":"243e1b80-b312-9e12-8ef5-a14fdf3056a0","model":"grok-4.20-0309-non-reasoning"},"type":"response.created"}
+
+event: response.function_call_arguments.delta
+data: {"delta":"{\"topic\":\"oncology\"}","output_index":0,"item_id":"fc_243e1b80-b312-9e12-8ef5-a14fdf3056a0_0","sequence_number":3,"type":"response.function_call_arguments.delta"}
+
+event: response.output_item.done
+data: {"item":{"type":"function_call","arguments":"{\"topic\":\"oncology\"}","call_id":"call-02760d9f-d2a9-4960-bc30-51b4c9900f0a-0","name":"lookup","id":"fc_243e1b80-b312-9e12-8ef5-a14fdf3056a0_0","status":"completed"},"output_index":0,"sequence_number":5,"type":"response.output_item.done"}
+
+event: response.completed
+data: {"sequence_number":6,"response":{"id":"243e1b80-b312-9e12-8ef5-a14fdf3056a0","model":"grok-4.20-0309-non-reasoning","created_at":1789513259,"status":"completed","usage":{"input_tokens":275,"output_tokens":11,"total_tokens":286,"output_tokens_details":{"reasoning_tokens":0},"input_tokens_details":{"cached_tokens":192}},"output":[{"type":"function_call","arguments":"{\"topic\":\"oncology\"}","call_id":"call-02760d9f-d2a9-4960-bc30-51b4c9900f0a-0","name":"lookup","id":"fc_243e1b80-b312-9e12-8ef5-a14fdf3056a0_0","status":"completed"}],"error":null,"incomplete_details":null},"type":"response.completed"}
+
