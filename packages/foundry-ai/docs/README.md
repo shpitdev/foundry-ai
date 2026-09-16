@@ -213,7 +213,7 @@ Model creator, serving backend, proxy protocol, and client SDK are separate choi
 
 **Reasoning diagnostics, September 15:** one SDK-free Chat stream each for Kimi K2.5, GLM 5, and Qwen 3-32B returned text but no reasoning content or reasoning-token count. Another parser cannot recover data absent from those responses. These bounded checks do not replace the capability survey.
 
-Kimi K3 is a possible future SDK comparison: a raw response contained reasoning text that the reviewed OpenAI chat implementation does not parse. Moonshot's implementation parses it but also replays it in history, which Foundry rejects as described above. Kimi K3 already passed reasoning visibility through token usage. A native Moonshot adapter has not been live-tested; no SDK replacement is established.
+**Native Moonshot trial, September 16:** `@ai-sdk/moonshotai` 3.0.50 with `ai` 7.0.97 exposed Kimi K3 reasoning text in blocking and streamed responses that the `@ai-sdk/openai` 4.0.65 baseline did not parse. Matched probes used the same Foundry Chat route and 8192-token budget. Native tool execution succeeded, but continuation failed with HTTP 400 on assistant `reasoning_content`, even with `reasoningHistory: 'disabled'`. Experimentally omitting only that history field restored blocking and streamed tool continuation while retaining returned reasoning. Native SDK aliases mapped to catalog RIDs preserved `json_schema`; raw RIDs selected `json_object`. Neither variant fixed combined forced tools + JSON: K3 rejected the combination, and K2.5 omitted the tool. K2.5 returned no reasoning content. Native Moonshot alone is not a drop-in fix; production adapters and dependencies remain unchanged.
 
 ## Realtime setup
 
