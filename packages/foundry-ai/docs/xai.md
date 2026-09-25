@@ -29,11 +29,11 @@ const { text } = await generateText({
 | `xai(id)`, `xai.languageModel(id)`, `xai.responses(id)` | `/api/v2/llm/proxy/xai/v1/responses` |
 | `xai.chat(id)` | `/api/v2/llm/proxy/xai/v1/chat/completions` |
 
-[Palantir documents both endpoints as beta](https://www.palantir.com/docs/foundry/aip/llm-provider-compatible-apis). Endpoint availability does not prove that a particular model or feature is supported. There is no automatic route fallback. Responses is the default and the route verified for generation on all six Grok models.
+[Palantir documents both endpoints as beta](https://www.palantir.com/docs/foundry/aip/llm-provider-compatible-apis). Endpoint availability does not prove that a particular model or feature is supported. There is no automatic route fallback. Responses is the default and the route verified for generation on all seven Grok models.
 
 Model instances expose `provider: 'foundry-xai'`. Catalog metadata exposes `provider: 'xai'`. The root exports `XAI_MODELS`, `XAI_MODEL_IDS`, `KnownXaiModelId`, and `XaiModelId`. The `xai` subpath exports `createFoundryXai` and `FoundryXaiProvider`; root imports stay free of provider SDK dependencies.
 
-All six existing Grok entries retain their aliases, RIDs, and enrollment metadata. Both methods resolve catalog aliases to RIDs, accept exact RIDs, and pass unknown enrollment-specific IDs unchanged. Known models from other providers are rejected. Embedding and image models are not exposed.
+All seven Grok entries retain their aliases, RIDs, and enrollment metadata. Both methods resolve catalog aliases to RIDs, accept exact RIDs, and pass unknown enrollment-specific IDs unchanged. Known models from other providers are rejected. Embedding and image models are not exposed.
 
 Use `providerOptions.xai` and native `xai` provider metadata. There is no OpenAI option alias. Provider-specific options remain subject to Foundry's beta API support; the adapter exposes only language routes, not native xAI's files, search helpers, image, video, speech, batch, or realtime APIs.
 
@@ -72,10 +72,10 @@ The standard capability cases use Responses. `chat.text.generate` separately pro
 
 **September 15, 2026:** AI SDK 7.0.97 / `@ai-sdk/xai` 4.0.58 with the compatibility adapter above recorded **44 passes, 16 failed probes, 6 chat proxy rejections, and 30 skipped modalities**. See the [current six-model table](./README.md#xai).
 
-All six models passed text, conversation history, raw-RID routing, JSON, blocking tools, JSON with executed tools, and image input. Grok 420 non-reasoning also passed streaming text and an executed streaming tool loop. Successful JSON output does not prove strict server-side schema enforcement; image checks cover acceptance and a description.
+On the September 24 sweep all seven models passed text, conversation history, raw-RID routing, JSON, blocking tools, and image input. Grok 420 non-reasoning also passed streaming text and an executed streaming tool loop; Grok 4.5 passed the streaming tool loop but not streaming text. Grok 4.5 and Grok 420 reasoning failed JSON with executed tools. Successful JSON output does not prove strict server-side schema enforcement; image checks cover acceptance and a description.
 
 Remaining gaps:
 
 - Fourteen cases fail when Foundry sends reasoning-summary deltas without start events: native 4.0.58 emits a reasoning delta before opening its SDK reasoning part. This is an interaction between the proxy shape and that parser. The adapter does not invent reasoning-start events.
 - One streaming-tool case for `grok-420-reasoning-latest` returned empty final text. The non-reasoning model's reasoning probe found no reasoning evidence. These are separate outcomes.
-- All six native chat requests returned HTTP 400 deserialization errors. This does not prove all possible chat requests are unsupported.
+- All seven native chat requests returned HTTP 400 deserialization errors. This does not prove all possible chat requests are unsupported.
