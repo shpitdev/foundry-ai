@@ -194,7 +194,7 @@ OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allo
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
-OpenAI and third-party reject `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI and third-party Chat Completions omit it. xAI options use the native `xai` namespace; third-party uses `openai`. Anthropic disables eager tool streaming and uses JSON-tool structured output; Google rewrites API-key authentication into Foundry bearer authentication.
+OpenAI and third-party reject `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI and third-party Chat Completions omit it. xAI options use the native `xai` namespace; third-party uses `openai`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5, which rejects forced tool use and therefore keeps the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
 
 Only OpenAI exposes `embeddingModel()` and `embedding()`. Embedding strings pass through without language-model RID routing. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
 

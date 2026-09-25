@@ -6,7 +6,10 @@ import {
   type FoundryLanguageModel,
   wrapFoundryLanguageModel,
 } from '../middleware.js';
-import type { AnthropicModelId } from '../models/anthropic-models.js';
+import {
+  type AnthropicModelId,
+  requiresAnthropicNativeStructuredOutput,
+} from '../models/anthropic-models.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import type { FoundryConfig } from '../types.js';
 
@@ -42,11 +45,14 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
 
   const createLanguageModel = (modelId: AnthropicModelId): FoundryLanguageModel => {
     const resolvedModel = resolveModelTarget(modelId);
+    const usesNativeStructuredOutput =
+      requiresAnthropicNativeStructuredOutput(modelId) ||
+      requiresAnthropicNativeStructuredOutput(resolvedModel.rid);
 
     return wrapFoundryLanguageModel(baseProvider(resolvedModel.rid), {
       modelId,
       providerId,
-      transformParams: applyAnthropicCompat,
+      transformParams: (params) => applyAnthropicCompat(params, usesNativeStructuredOutput),
     });
   };
 
@@ -70,7 +76,10 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
   return callableProvider;
 }
 
-function applyAnthropicCompat(params: FoundryCallOptions): FoundryCallOptions {
+function applyAnthropicCompat(
+  params: FoundryCallOptions,
+  usesNativeStructuredOutput: boolean,
+): FoundryCallOptions {
   const anthropicOptions = asRecord(params.providerOptions?.anthropic);
   const foundryAnthropicOptions = asRecord(params.providerOptions?.['foundry-anthropic']);
 
@@ -80,20 +89,30 @@ function applyAnthropicCompat(params: FoundryCallOptions): FoundryCallOptions {
     );
   }
 
+  // Models that reject forced tool use must use the provider's native structured output.
+  // Request it explicitly rather than leaving the default 'auto': the SDK resolves 'auto'
+  // from the model ID, and these models are addressed by Foundry RID, so 'auto' takes the
+  // unknown-model path and still sends the forced JSON tool on supported peer versions.
+  const structuredOutputMode = {
+    structuredOutputMode: usesNativeStructuredOutput
+      ? ('outputFormat' as const)
+      : ('jsonTool' as const),
+  };
+
   return {
     ...params,
     providerOptions: {
       ...(params.providerOptions ?? {}),
       anthropic: {
         ...anthropicOptions,
-        structuredOutputMode: 'jsonTool',
+        ...structuredOutputMode,
         toolStreaming: false,
       },
       ...(params.providerOptions?.['foundry-anthropic'] != null
         ? {
             'foundry-anthropic': {
               ...foundryAnthropicOptions,
-              structuredOutputMode: 'jsonTool',
+              ...structuredOutputMode,
               toolStreaming: false,
             },
           }

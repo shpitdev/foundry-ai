@@ -206,3 +206,16 @@ export type AnthropicModelId = KnownAnthropicModelId | (string & {});
 export const ANTHROPIC_MODEL_IDS = Object.freeze(
   Object.keys(ANTHROPIC_MODELS),
 ) as readonly KnownAnthropicModelId[];
+
+// Anthropic rejects forced tool use for these models, so the jsonTool structured-output
+// mode the adapter otherwise requests fails with HTTP 400 through the Foundry proxy.
+const ANTHROPIC_NATIVE_STRUCTURED_OUTPUT_TARGETS = new Set(
+  (['claude-opus-5.5'] as const satisfies readonly KnownAnthropicModelId[]).flatMap((modelId) => [
+    modelId as string,
+    ANTHROPIC_MODELS[modelId].rid,
+  ]),
+);
+
+export function requiresAnthropicNativeStructuredOutput(modelId: string): boolean {
+  return ANTHROPIC_NATIVE_STRUCTURED_OUTPUT_TARGETS.has(modelId);
+}
