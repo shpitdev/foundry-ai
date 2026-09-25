@@ -1,3 +1,21 @@
+## 0.0.8 (2026-09-25)
+
+### 🚀 Features
+
+- refresh Foundry model catalog ([#77](https://github.com/shpitdev/foundry-ai/pull/77))
+- add native Foundry xAI provider ([#74](https://github.com/shpitdev/foundry-ai/pull/74))
+- add verified SDK 7 realtime models ([#70](https://github.com/shpitdev/foundry-ai/pull/70))
+
+### 🩹 Fixes
+
+- keep native structured output for Claude Opus 5.5 ([#78](https://github.com/shpitdev/foundry-ai/pull/78))
+- distinguish structured output failures from model support ([#71](https://github.com/shpitdev/foundry-ai/pull/71))
+- retire deprecated models and publish current SDK 7 support ([#68](https://github.com/shpitdev/foundry-ai/pull/68))
+
+### ❤️ Thank You
+
+- anandpant @anandpant
+
 ## 0.0.7 (2026-09-13)
 
 ### 🚀 Features
