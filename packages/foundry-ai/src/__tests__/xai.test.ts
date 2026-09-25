@@ -9,12 +9,33 @@ import { createFoundryXai } from '../providers/xai.js';
 describe('xAI catalog identity', () => {
   it('classifies every Grok alias and RID as xai, separate from third-party', () => {
     const grok = Object.entries(MODEL_CATALOG).filter(([id]) => id.startsWith('grok-'));
-    expect(grok).toHaveLength(6);
+    expect(grok).toHaveLength(XAI_MODEL_IDS.length);
+    expect(grok.map(([id]) => id)).toEqual([...XAI_MODEL_IDS]);
     for (const [alias, metadata] of grok) {
       expect(metadata.provider).toBe('xai');
       expect(resolveModelTarget(metadata.rid).metadata?.provider).toBe('xai');
       expect(THIRD_PARTY_MODELS).not.toHaveProperty(alias);
     }
+  });
+
+  it('resolves Grok 4.7 metadata from the Foundry listing', () => {
+    expect(XAI_MODELS['grok-4-7']).toMatchObject({
+      rid: 'ri.language-model-service..language-model.grok-4-7',
+      displayName: 'Grok 4.7',
+      lifecycle: 'ga',
+      modelIdentifier: 'GROK_4_7',
+      modelCreator: 'X_AI',
+      provider: 'xai',
+      trainingCutoffDate: '2026-05-01T00:00:00Z',
+      transport: 'xai-responses',
+      performance: { modelClass: 'REASONING' },
+      supportsResponses: true,
+      supportsVision: true,
+    });
+    // The listing publishes no cost or speed for this model, so neither is invented.
+    expect(XAI_MODELS['grok-4-7'].performance.cost).toBeUndefined();
+    expect(XAI_MODELS['grok-4-7'].performance.speed).toBeUndefined();
+    expect(XAI_MODELS['grok-4-7'].externalUrl).toBeUndefined();
   });
 });
 
@@ -109,7 +130,7 @@ describe('xAI routing through the real SDK', () => {
           else expect(body.store).toBe(false);
         }
       }
-      expect(requests).toHaveLength(12);
+      expect(requests).toHaveLength(XAI_MODEL_IDS.length * 2);
     },
   );
 

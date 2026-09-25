@@ -292,6 +292,8 @@ export function usesAdaptiveThinking(modelId?: string) {
   return (
     modelId?.endsWith('-5') === true ||
     modelId === 'claude-opus-4.7' ||
-    modelId === 'claude-opus-4.8'
+    modelId === 'claude-opus-4.8' ||
+    // The proxy rejects budget-based thinking for Opus 5.5 with HTTP 400.
+    modelId === 'claude-opus-5.5'
   );
 }

@@ -22,11 +22,12 @@ export type ModelInputType =
   | 'OPEN_AI_REALTIME'
   | 'X_AI_RESPONSES';
 export type ModelCost = 'LOW' | 'MEDIUM' | 'HIGH';
-export type ModelClass = 'HEAVYWEIGHT' | 'LIGHTWEIGHT' | 'REASONING';
+export type ModelClass = 'HEAVYWEIGHT' | 'LIGHTWEIGHT' | 'REASONING' | 'SPECIALIZED_EMBEDDING';
 export type ModelSpeed = 'LOW' | 'MEDIUM' | 'HIGH';
 
+/** Mirrors the Foundry listing, which omits attributes it does not publish for a model. */
 export interface ModelPerformance {
-  cost: ModelCost;
+  cost?: ModelCost;
   modelClass: ModelClass;
   speed?: ModelSpeed;
 }

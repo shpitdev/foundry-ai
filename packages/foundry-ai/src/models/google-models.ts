@@ -19,7 +19,7 @@ const GOOGLE_MODEL_DEFINITIONS = {
     rid: 'ri.language-model-service..language-model.gemini-3-8-flash',
     modelIdentifier: 'GEMINI_3_8_FLASH',
     displayName: 'Gemini 3.8 Flash',
-    lifecycle: 'experimental',
+    lifecycle: 'ga',
     inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
     performance: {
       cost: 'MEDIUM',
@@ -100,16 +100,17 @@ const GOOGLE_MODEL_DEFINITIONS = {
     ],
     trainingCutoffDate: '2025-01-01T00:00:00Z',
     performance: {
-      cost: 'LOW',
-      modelClass: 'LIGHTWEIGHT',
+      cost: 'MEDIUM',
+      modelClass: 'REASONING',
       speed: 'HIGH',
     },
-    externalUrl: 'https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-5-flash',
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash',
   },
   'gemini-3.5-flash-lite': {
     rid: 'ri.language-model-service..language-model.gemini-3-5-flash-lite',
     modelIdentifier: 'GEMINI_3_5_FLASH_LITE',
-    displayName: 'Gemini 3.5 Flash Lite',
+    displayName: 'Gemini 3.5 Flash-Lite',
     lifecycle: 'ga',
     inputTypes: [
       'GEMINI_CHAT',

@@ -2,411 +2,1080 @@
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-1-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_41_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 4.1",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2025-08-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
     "modelIdentifier": "ANTHROPIC_CLAUDE_45_HAIKU",
-    "lifecycle": "ga"
+    "displayName": "Claude Haiku 4.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-07-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_45_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 4.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-sonnet",
     "modelIdentifier": "ANTHROPIC_CLAUDE_45_SONNET",
-    "lifecycle": "ga"
+    "displayName": "Claude Sonnet 4.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-07-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_46_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 4.6",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-sonnet",
     "modelIdentifier": "ANTHROPIC_CLAUDE_46_SONNET",
-    "lifecycle": "ga"
+    "displayName": "Claude Sonnet 4.6",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-7-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_47_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 4.7",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-8-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_48_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 4.8",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-4-sonnet",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_4_SONNET",
+    "displayName": "Claude Sonnet 4",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2025-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-5-5-opus",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_55_OPUS",
+    "displayName": "Claude Opus 5.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-06-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-5-opus",
     "modelIdentifier": "ANTHROPIC_CLAUDE_5_OPUS",
-    "lifecycle": "ga"
+    "displayName": "Claude Opus 5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-05-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-5-sonnet",
     "modelIdentifier": "ANTHROPIC_CLAUDE_5_SONNET",
-    "lifecycle": "ga"
+    "displayName": "Claude Sonnet 5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.deepseek-v3-2",
+    "modelIdentifier": "DEEPSEEK_V3_2",
+    "displayName": "DeepSeek V3.2",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.deepseek-v4-1-flash",
+    "modelIdentifier": "DEEPSEEK_V4_1_FLASH",
+    "displayName": "DeepSeek V4.1 Flash",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.deepseek-v4-flash-0731",
+    "modelIdentifier": "DEEPSEEK_V4_FLASH_0731",
+    "displayName": "DeepSeek V4 Flash (0731)",
+    "lifecycle": "sunset",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemma-4-31b",
     "modelIdentifier": "GEMMA_4_31B",
-    "lifecycle": "experimental"
+    "displayName": "Gemma 4 31B",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-2-5-flash",
     "modelIdentifier": "GEMINI_2_5_FLASH",
-    "lifecycle": "sunset"
+    "displayName": "Gemini 2.5 Flash",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-2-5-flash-lite",
     "modelIdentifier": "GEMINI_2_5_FLASH_LITE",
-    "lifecycle": "sunset"
+    "displayName": "Gemini 2.5 Flash Lite",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-2-5-pro",
     "modelIdentifier": "GEMINI_2_5_PRO",
-    "lifecycle": "sunset"
+    "displayName": "Gemini 2.5 Pro",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-1-flash-lite",
     "modelIdentifier": "GEMINI_3_1_FLASH_LITE",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.1 Flash Lite",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-1-pro",
     "modelIdentifier": "GEMINI_3_1_PRO",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.1 Pro (Preview)",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-5-flash",
     "modelIdentifier": "GEMINI_3_5_FLASH",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.5 Flash",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-5-flash-lite",
     "modelIdentifier": "GEMINI_3_5_FLASH_LITE",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.5 Flash-Lite",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-6-flash",
     "modelIdentifier": "GEMINI_3_6_FLASH",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.6 Flash",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-7-flash",
     "modelIdentifier": "GEMINI_3_7_FLASH",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3.7 Flash",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-8-flash",
     "modelIdentifier": "GEMINI_3_8_FLASH",
-    "lifecycle": "experimental"
+    "displayName": "Gemini 3.8 Flash",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-flash",
     "modelIdentifier": "GEMINI_3_FLASH",
-    "lifecycle": "ga"
+    "displayName": "Gemini 3 Flash (Preview)",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.llama-3-1-8b-instruct",
+    "modelIdentifier": "LLAMA_3_1_8B_INSTRUCT",
+    "displayName": "Llama 3.1 8b Instruct",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2023-12-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.llama-3-3-70b-instruct",
+    "modelIdentifier": "LLAMA_3_3_70B_INSTRUCT",
+    "displayName": "Llama 3.3 70b Instruct",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2023-12-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.kimi-k2-5",
     "modelIdentifier": "KIMI_K2_5",
-    "lifecycle": "ga"
+    "displayName": "Kimi K2.5",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.kimi-k3",
     "modelIdentifier": "KIMI_K3",
-    "lifecycle": "experimental"
+    "displayName": "Kimi K3",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.llama-3-3-nemotron-super-49b-v1-5",
     "modelIdentifier": "LLAMA_3_3_NEMOTRON_SUPER_49B_V1_5",
-    "lifecycle": "ga"
+    "displayName": "Llama 3.3 Nemotron Super 49b v1.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2023-12-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
     "modelIdentifier": "NEMOTRON_3_ULTRA_550B_A55B_NVFP4",
-    "lifecycle": "experimental"
+    "displayName": "NVIDIA Nemotron 3 Ultra 550B A55B NVFP4",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-05-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gemma-4-26b-a4b",
     "modelIdentifier": "GEMMA_4_26B_A4B",
-    "lifecycle": "ga"
+    "displayName": "Gemma 4 26B A4B",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.schematic-7B",
     "modelIdentifier": "SCHEMATIC_7B",
-    "lifecycle": "ga"
+    "displayName": "Schematic 7B",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-10-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "SPECIALIZED_ONTOLOGY_QUERY_GEN",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.codex-auto-review",
     "modelIdentifier": "CODEX_AUTO_REVIEW",
-    "lifecycle": "experimental"
+    "displayName": "Codex Auto Review",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-1",
     "modelIdentifier": "GPT_4_1",
-    "lifecycle": "ga"
+    "displayName": "GPT-4.1",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-1-mini",
     "modelIdentifier": "GPT_4_1_MINI",
-    "lifecycle": "ga"
+    "displayName": "GPT-4.1 mini",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-31T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-1-nano",
     "modelIdentifier": "GPT_4_1_NANO",
-    "lifecycle": "ga"
+    "displayName": "GPT-4.1 nano",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-31T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o",
     "modelIdentifier": "GPT_4_O",
-    "lifecycle": "ga"
+    "displayName": "GPT-4o",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2023-10-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5",
     "modelIdentifier": "GPT_5",
-    "lifecycle": "ga"
+    "displayName": "GPT-5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1",
     "modelIdentifier": "GPT_5_1",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.1",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1-codex",
     "modelIdentifier": "GPT_5_1_CODEX",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.1 Codex",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1-codex-mini",
     "modelIdentifier": "GPT_5_1_CODEX_MINI",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.1 Codex mini",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-2",
     "modelIdentifier": "GPT_5_2",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.2",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-2-pro",
     "modelIdentifier": "GPT_5_2_PRO",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.2 Pro",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "LOW"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-3-codex",
     "modelIdentifier": "GPT_5_3_CODEX",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.3 Codex",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4",
     "modelIdentifier": "GPT_5_4",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.4",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4-mini",
     "modelIdentifier": "GPT_5_4_MINI",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.4 mini",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4-nano",
     "modelIdentifier": "GPT_5_4_NANO",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.4 nano",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4-pro",
     "modelIdentifier": "GPT_5_4_PRO",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.4 Pro",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-08-31T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "LOW"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-5",
     "modelIdentifier": "GPT_5_5",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-12-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-luna",
     "modelIdentifier": "GPT_5_6_LUNA",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.6 Luna",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-02-16T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-sol",
     "modelIdentifier": "GPT_5_6_SOL",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.6 Sol",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-02-16T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-terra",
     "modelIdentifier": "GPT_5_6_TERRA",
-    "lifecycle": "ga"
+    "displayName": "GPT-5.6 Terra",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-02-16T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-codex",
     "modelIdentifier": "GPT_5_CODEX",
-    "lifecycle": "ga"
+    "displayName": "GPT-5 Codex",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-09-29T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-mini",
     "modelIdentifier": "GPT_5_MINI",
-    "lifecycle": "ga"
+    "displayName": "GPT-5 mini",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-30T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-nano",
     "modelIdentifier": "GPT_5_NANO",
-    "lifecycle": "ga"
+    "displayName": "GPT-5 nano",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-30T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-pro",
     "modelIdentifier": "GPT_5_PRO",
-    "lifecycle": "sunset"
+    "displayName": "GPT-5 Pro",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "LOW"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-astra",
+    "modelIdentifier": "GPT_6_ASTRA",
+    "displayName": "GPT-6 Astra",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-04-30T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-luna",
+    "modelIdentifier": "GPT_6_LUNA",
+    "displayName": "GPT-6 Luna",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-05-18T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-sol",
+    "modelIdentifier": "GPT_6_SOL",
+    "displayName": "GPT-6 Sol",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-04-20T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.o-1",
     "modelIdentifier": "O_1",
-    "lifecycle": "ga"
+    "displayName": "o1",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2023-12-30T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "LOW"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.o-3",
     "modelIdentifier": "O_3",
-    "lifecycle": "ga"
+    "displayName": "o3",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "LOW"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.o-3-pro",
     "modelIdentifier": "O_3_PRO",
-    "lifecycle": "sunset"
+    "displayName": "o3-pro",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2024-06-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "LOW"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.o-4-mini",
     "modelIdentifier": "O_4_MINI",
-    "lifecycle": "ga"
+    "displayName": "o4-mini",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-05-31T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.qwen3-235b-a22b-2507",
     "modelIdentifier": "QWEN3_235B_A22B_2507",
-    "lifecycle": "experimental"
+    "displayName": "Qwen3 235B A22B 2507",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.qwen3-32b",
     "modelIdentifier": "QWEN3_32B",
-    "lifecycle": "experimental"
+    "displayName": "Qwen3 32B",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.glm-5",
     "modelIdentifier": "GLM_5",
-    "lifecycle": "ga"
+    "displayName": "Z.ai GLM-5",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.glm-5-3",
     "modelIdentifier": "GLM_5_3",
-    "lifecycle": "experimental"
+    "displayName": "Z.ai GLM-5.3",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.glm-5-3-flash",
     "modelIdentifier": "GLM_5_3_FLASH",
-    "lifecycle": "experimental"
+    "displayName": "Z.ai GLM-5.3 Flash",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-3",
     "modelIdentifier": "GROK_4_3",
-    "lifecycle": "ga"
+    "displayName": "Grok 4.3",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-12-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-5",
     "modelIdentifier": "GROK_4_5",
-    "lifecycle": "ga"
+    "displayName": "Grok 4.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-02-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-6",
     "modelIdentifier": "GROK_4_6",
-    "lifecycle": "ga"
+    "displayName": "Grok 4.6",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-02-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING"
+    }
+  },
+  {
+    "rid": "ri.language-model-service..language-model.grok-4-7",
+    "modelIdentifier": "GROK_4_7",
+    "displayName": "Grok 4.7",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-05-01T00:00:00Z",
+    "performance": {
+      "modelClass": "REASONING"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-420-non-reasoning-latest",
     "modelIdentifier": "GROK_420_NON_REASONING_LATEST",
-    "lifecycle": "ga"
+    "displayName": "Grok 420 Non-Reasoning Latest",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "LIGHTWEIGHT"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-420-reasoning-latest",
     "modelIdentifier": "GROK_420_REASONING_LATEST",
-    "lifecycle": "ga"
+    "displayName": "Grok 420 Reasoning Latest",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-01-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.grok-build-0-1",
     "modelIdentifier": "GROK_BUILD_0_1",
-    "lifecycle": "ga"
+    "displayName": "Grok Build 0.1",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-03-17T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "LIGHTWEIGHT"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.llama-3-2-nv-embedqa-1b-v2",
     "modelIdentifier": "LLAMA_3_2_NV_EMBEDQA_1B_V2",
-    "lifecycle": "ga"
+    "displayName": "Llama 3.2 NV EmbedQA 1B v2",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "SPECIALIZED_EMBEDDING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.text-embedding-3-large_azure",
     "modelIdentifier": "OPENAI_TEXT_EMBEDDING_3_LARGE",
-    "lifecycle": "ga"
+    "displayName": "Text Embedding 3 Large",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2021-09-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "SPECIALIZED_EMBEDDING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.text-embedding-3-small_azure",
     "modelIdentifier": "OPENAI_TEXT_EMBEDDING_3_SMALL",
-    "lifecycle": "ga"
+    "displayName": "Text Embedding 3 Small",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2021-09-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "SPECIALIZED_EMBEDDING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.text-embedding-ada-002_azure",
     "modelIdentifier": "OPENAI_TEXT_EMBEDDING_ADA_002",
-    "lifecycle": "ga"
+    "displayName": "text-embedding-ada-002",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2021-09-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "SPECIALIZED_EMBEDDING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.snowflake-arctic-embed-medium",
     "modelIdentifier": "SNOWFLAKE_ARCTIC_EMBED_M",
-    "lifecycle": "ga"
+    "displayName": "Snowflake Arctic Embed Medium",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2024-04-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "SPECIALIZED_EMBEDDING",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.tbd-document-information-extraction",
     "modelIdentifier": "TBD_DOCUMENT_INFORMATION_EXTRACTION",
-    "lifecycle": "sunset"
+    "displayName": "Document Information Extraction",
+    "lifecycle": "sunset",
+    "trainingCutoffDate": "2024-10-01T00:00:00Z",
+    "performance": {
+      "modelClass": "SPECIALIZED_EXTRACTION"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.whisper-large-v3",
     "modelIdentifier": "WHISPER_LARGE_V3",
-    "lifecycle": "experimental"
+    "displayName": "Whisper Large V3",
+    "lifecycle": "experimental",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-mini-transcribe",
     "modelIdentifier": "GPT_4_O_MINI_TRANSCRIBE",
-    "lifecycle": "experimental"
+    "displayName": "GPT-4o mini Transcribe",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-06-01T00:00:00Z",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe",
     "modelIdentifier": "GPT_4_O_TRANSCRIBE",
-    "lifecycle": "experimental"
+    "displayName": "GPT-4o Transcribe",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-06-01T00:00:00Z",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe-diarize",
     "modelIdentifier": "GPT_4_O_TRANSCRIBE_DIARIZE",
-    "lifecycle": "experimental"
+    "displayName": "GPT-4o Transcribe Diarize",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-06-01T00:00:00Z",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime-whisper",
     "modelIdentifier": "GPT_REALTIME_WHISPER",
-    "lifecycle": "experimental"
+    "displayName": "GPT Realtime Whisper",
+    "lifecycle": "experimental",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.whisper-1",
     "modelIdentifier": "OPENAI_WHISPER_1",
-    "lifecycle": "ga"
+    "displayName": "Whisper 1",
+    "lifecycle": "ga",
+    "performance": {
+      "modelClass": "SPECIALIZED_AUDIO"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime",
     "modelIdentifier": "GPT_REALTIME",
-    "lifecycle": "experimental"
+    "displayName": "GPT Realtime",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2023-10-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime-1-5",
     "modelIdentifier": "GPT_REALTIME_1_5",
-    "lifecycle": "experimental"
+    "displayName": "GPT Realtime 1.5",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    }
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime-2",
     "modelIdentifier": "GPT_REALTIME_2",
-    "lifecycle": "experimental"
+    "displayName": "GPT Realtime 2",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    }
   }
 ]

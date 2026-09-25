@@ -21,25 +21,6 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://www.anthropic.com/news/claude-haiku-4-5',
   },
-  'claude-opus-4.1': {
-    rid: 'ri.language-model-service..language-model.anthropic-claude-4-1-opus',
-    modelIdentifier: 'ANTHROPIC_CLAUDE_41_OPUS',
-    displayName: 'Claude Opus 4.1',
-    lifecycle: 'ga',
-    inputTypes: [
-      'GENERIC_COMPLETION',
-      'GENERIC_CHAT_COMPLETION',
-      'GENERIC_VISION_COMPLETION',
-      'CLAUDE_CHAT',
-    ],
-    trainingCutoffDate: '2025-08-01T00:00:00Z',
-    performance: {
-      cost: 'HIGH',
-      modelClass: 'HEAVYWEIGHT',
-      speed: 'MEDIUM',
-    },
-    externalUrl: 'https://www.anthropic.com/news/claude-opus-4-1',
-  },
   'claude-opus-4.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-4-5-opus',
     modelIdentifier: 'ANTHROPIC_CLAUDE_45_OPUS',
@@ -53,7 +34,7 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     ],
     trainingCutoffDate: '2025-08-01T00:00:00Z',
     performance: {
-      cost: 'MEDIUM',
+      cost: 'HIGH',
       modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
@@ -72,7 +53,7 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     ],
     trainingCutoffDate: '2025-08-01T00:00:00Z',
     performance: {
-      cost: 'MEDIUM',
+      cost: 'HIGH',
       modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
@@ -89,9 +70,9 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
       'GENERIC_VISION_COMPLETION',
       'CLAUDE_CHAT',
     ],
-    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    trainingCutoffDate: '2026-01-01T00:00:00Z',
     performance: {
-      cost: 'MEDIUM',
+      cost: 'HIGH',
       modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
@@ -108,9 +89,9 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
       'GENERIC_VISION_COMPLETION',
       'CLAUDE_CHAT',
     ],
-    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    trainingCutoffDate: '2026-01-01T00:00:00Z',
     performance: {
-      cost: 'MEDIUM',
+      cost: 'HIGH',
       modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
@@ -127,13 +108,33 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
       'GENERIC_VISION_COMPLETION',
       'CLAUDE_CHAT',
     ],
-    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    trainingCutoffDate: '2026-05-01T00:00:00Z',
     performance: {
       cost: 'HIGH',
       modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
     externalUrl: 'https://www.anthropic.com/news/claude-opus-5',
+  },
+  // Always uses adaptive thinking; the proxy rejects budget-based thinking for this model.
+  'claude-opus-5.5': {
+    rid: 'ri.language-model-service..language-model.anthropic-claude-5-5-opus',
+    modelIdentifier: 'ANTHROPIC_CLAUDE_55_OPUS',
+    displayName: 'Claude Opus 5.5',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'CLAUDE_CHAT',
+    ],
+    trainingCutoffDate: '2026-06-01T00:00:00Z',
+    performance: {
+      cost: 'HIGH',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://www.anthropic.com/claude-opus-5-5',
   },
   'claude-sonnet-4.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-4-5-sonnet',
@@ -184,7 +185,7 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
       'GENERIC_VISION_COMPLETION',
       'CLAUDE_CHAT',
     ],
-    trainingCutoffDate: '2025-08-01T00:00:00Z',
+    trainingCutoffDate: '2026-01-01T00:00:00Z',
     performance: {
       cost: 'MEDIUM',
       modelClass: 'HEAVYWEIGHT',

@@ -48,6 +48,20 @@ const XAI_MODEL_DEFINITIONS = {
     modelCreator: 'X_AI',
     transport: 'xai-responses',
   },
+  'grok-4-7': {
+    rid: 'ri.language-model-service..language-model.grok-4-7',
+    modelIdentifier: 'GROK_4_7',
+    displayName: 'Grok 4.7',
+    lifecycle: 'ga',
+    inputTypes: ['X_AI_RESPONSES', 'GENERIC_VISION_COMPLETION'],
+    performance: {
+      // The listing publishes no cost for this model.
+      modelClass: 'REASONING',
+    },
+    trainingCutoffDate: '2026-05-01T00:00:00Z',
+    modelCreator: 'X_AI',
+    transport: 'xai-responses',
+  },
   'grok-420-non-reasoning-latest': {
     rid: 'ri.language-model-service..language-model.grok-420-non-reasoning-latest',
     modelIdentifier: 'GROK_420_NON_REASONING_LATEST',

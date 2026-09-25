@@ -8,6 +8,7 @@ import { OpenTelemetry } from '@ai-sdk/otel';
 import { type Context, trace } from '@opentelemetry/api';
 import type { Telemetry, TelemetryOptions } from 'ai';
 import { MODEL_CATALOG, resolveKnownModelMetadata, resolveModelRid } from '../../models/catalog.js';
+import { OPENAI_EMBEDDING_MODEL_IDS } from '../../models/openai-models.js';
 import { loadLiveFoundryConfig } from './live-foundry.js';
 
 export type LiveProvider = 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
@@ -241,7 +242,7 @@ export function getEmbeddingProbeModelIds(): Partial<Record<LiveProvider, readon
   return {
     openai: process.env.LIVE_OPENAI_EMBEDDING_MODEL?.trim()
       ? [process.env.LIVE_OPENAI_EMBEDDING_MODEL.trim()]
-      : ['text-embedding-3-small', 'text-embedding-3-large'],
+      : OPENAI_EMBEDDING_MODEL_IDS,
     ...(process.env.LIVE_GOOGLE_EMBEDDING_MODEL?.trim()
       ? { google: [process.env.LIVE_GOOGLE_EMBEDDING_MODEL.trim()] }
       : {}),

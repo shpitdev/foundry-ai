@@ -170,6 +170,21 @@ const THIRD_PARTY_MODEL_DEFINITIONS = {
     modelCreator: 'Z_AI',
     transport: 'openai-chat',
   },
+  'deepseek-v4-1-flash': {
+    rid: 'ri.language-model-service..language-model.deepseek-v4-1-flash',
+    modelIdentifier: 'DEEPSEEK_V4_1_FLASH',
+    displayName: 'DeepSeek V4.1 Flash',
+    lifecycle: 'experimental',
+    inputTypes: ['GPT_CHAT_COMPLETION', 'GENERIC_VISION_COMPLETION', 'OPEN_AI_RESPONSES'],
+    performance: {
+      cost: 'LOW',
+      modelClass: 'REASONING',
+      speed: 'HIGH',
+    },
+    externalUrl: 'https://fireworks.ai/models/deepseek-ai/deepseek-v4p1-flash',
+    modelCreator: 'DEEPSEEK',
+    transport: 'openai-chat',
+  },
 } as const satisfies Record<string, ModelDefinition>;
 
 export const THIRD_PARTY_MODELS = createProviderModelCatalog(

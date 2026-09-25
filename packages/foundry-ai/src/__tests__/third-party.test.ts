@@ -17,6 +17,7 @@ describe('third-party routing through the real SDK', () => {
     ['kimi-k2-5', 'openai/v1/chat/completions'],
     ['qwen3-32b', 'openai/v1/chat/completions'],
     ['glm-5', 'openai/v1/chat/completions'],
+    ['deepseek-v4-1-flash', 'openai/v1/chat/completions'],
     ['gemma-4-31b', 'openai/v1/responses'],
     ['nemotron-3-ultra-550b-a55b-nvfp4', 'openai/v1/responses'],
   ])('routes alias and RID for %s to %s', async (alias, path) => {
@@ -106,5 +107,18 @@ describe('third-party routing through the real SDK', () => {
     expect(() => provider('grok-4-6')).toThrow();
     expect(() => provider(resolveModelTarget('grok-4-6').rid)).toThrow();
     expect(getModelMetadata('kimi-k2-5')?.supportsResponses).toBe(false);
+  });
+
+  it('keeps DeepSeek V4.1 Flash on the verified Chat Completions transport', () => {
+    expect(getModelMetadata('deepseek-v4-1-flash')).toMatchObject({
+      displayName: 'DeepSeek V4.1 Flash',
+      lifecycle: 'experimental',
+      modelIdentifier: 'DEEPSEEK_V4_1_FLASH',
+      modelCreator: 'DEEPSEEK',
+      provider: 'third-party',
+      transport: 'openai-chat',
+      performance: { cost: 'LOW', modelClass: 'REASONING', speed: 'HIGH' },
+      supportsVision: true,
+    });
   });
 });

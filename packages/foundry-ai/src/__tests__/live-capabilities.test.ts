@@ -43,20 +43,28 @@ describe('live capability model matrix', () => {
 
     expect(matrix.openai).not.toContain('text-embedding-3-small');
     expect(matrix.openai).not.toContain('text-embedding-3-large');
+    expect(matrix.openai).not.toContain('text-embedding-ada-002');
     expect(getEmbeddingProbeModelIds().openai).toEqual([
+      'text-embedding-ada-002',
       'text-embedding-3-small',
       'text-embedding-3-large',
     ]);
     expect(matrix.openai).toContain('gpt-5.4-mini');
     expect(matrix.openai).toContain('gpt-5.4-nano');
+    expect(matrix.openai).toContain('gpt-6-astra');
+    expect(matrix.openai).toContain('codex-auto-review');
     expect(matrix.openai).not.toContain('gpt-4o-mini');
+    expect(matrix.anthropic).toContain('claude-opus-5.5');
+    expect(matrix.anthropic).not.toContain('claude-opus-4.1');
     expect(matrix.google).not.toContain('gemini-3-pro');
     expect(matrix.google).toContain('gemini-3.8-flash');
-    expect(matrix['third-party']).toHaveLength(11);
+    expect(matrix['third-party']).toHaveLength(12);
     expect(matrix['third-party']).not.toContain('grok-4-6');
-    expect(matrix.xai).toHaveLength(6);
+    expect(matrix.xai).toHaveLength(7);
     expect(matrix.xai).toContain('grok-4-6');
+    expect(matrix.xai).toContain('grok-4-7');
     expect(matrix['third-party']).toContain('kimi-k3');
+    expect(matrix['third-party']).toContain('deepseek-v4-1-flash');
     expect(matrix['third-party']).toContain('llama-3-3-nemotron-super-49b-v1-5');
   });
 
@@ -84,7 +92,7 @@ describe('live capability model matrix', () => {
     process.env.LIVE_MODEL_SCOPE = 'catalog';
     process.env.LIVE_PROVIDER_FILTER = 'xai';
     const matrix = getLiveCapabilityModelMatrix();
-    expect(matrix.xai).toHaveLength(6);
+    expect(matrix.xai).toHaveLength(7);
     expect(matrix['third-party']).toEqual([]);
     expect(matrix.openai).toEqual([]);
   });

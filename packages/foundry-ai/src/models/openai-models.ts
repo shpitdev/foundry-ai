@@ -266,7 +266,7 @@ const OPENAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2025-08-31T00:00:00Z',
     performance: {
       cost: 'MEDIUM',
-      modelClass: 'REASONING',
+      modelClass: 'HEAVYWEIGHT',
       speed: 'MEDIUM',
     },
     externalUrl: 'https://platform.openai.com/docs/models/gpt-5.3-codex',
@@ -307,7 +307,7 @@ const OPENAI_MODEL_DEFINITIONS = {
       'OPEN_AI_REASONING',
       'OPEN_AI_RESPONSES',
     ],
-    trainingCutoffDate: '2025-12-31T00:00:00Z',
+    trainingCutoffDate: '2025-12-01T00:00:00Z',
     performance: {
       cost: 'MEDIUM',
       modelClass: 'HEAVYWEIGHT',
@@ -380,6 +380,90 @@ const OPENAI_MODEL_DEFINITIONS = {
       speed: 'MEDIUM',
     },
     externalUrl: 'https://platform.openai.com/docs/models/gpt-5.6-luna',
+  },
+  'gpt-6-astra': {
+    rid: 'ri.language-model-service..language-model.gpt-6-astra',
+    modelIdentifier: 'GPT_6_ASTRA',
+    displayName: 'GPT-6 Astra',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GPT_CHAT_COMPLETION',
+      'GPT_WITH_VISION_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'OPEN_AI_REASONING',
+      'OPEN_AI_RESPONSES',
+    ],
+    trainingCutoffDate: '2026-04-30T00:00:00Z',
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-6-astra',
+  },
+  'gpt-6-luna': {
+    rid: 'ri.language-model-service..language-model.gpt-6-luna',
+    modelIdentifier: 'GPT_6_LUNA',
+    displayName: 'GPT-6 Luna',
+    lifecycle: 'experimental',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GPT_CHAT_COMPLETION',
+      'GPT_WITH_VISION_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'OPEN_AI_REASONING',
+      'OPEN_AI_RESPONSES',
+    ],
+    trainingCutoffDate: '2026-05-18T00:00:00Z',
+    performance: {
+      cost: 'LOW',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-6-luna',
+  },
+  'gpt-6-sol': {
+    rid: 'ri.language-model-service..language-model.gpt-6-sol',
+    modelIdentifier: 'GPT_6_SOL',
+    displayName: 'GPT-6 Sol',
+    lifecycle: 'experimental',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GPT_CHAT_COMPLETION',
+      'GPT_WITH_VISION_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'OPEN_AI_REASONING',
+      'OPEN_AI_RESPONSES',
+    ],
+    trainingCutoffDate: '2026-04-20T00:00:00Z',
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-6-sol',
+  },
+  // Responses-only: the enrollment's Chat Completions route rejects this model.
+  'codex-auto-review': {
+    rid: 'ri.language-model-service..language-model.codex-auto-review',
+    modelIdentifier: 'CODEX_AUTO_REVIEW',
+    displayName: 'Codex Auto Review',
+    lifecycle: 'experimental',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'OPEN_AI_RESPONSES',
+    ],
+    performance: {
+      cost: 'MEDIUM',
+      modelClass: 'HEAVYWEIGHT',
+      speed: 'MEDIUM',
+    },
   },
   'gpt-5.4-mini': {
     rid: 'ri.language-model-service..language-model.gpt-5-4-mini',
@@ -468,6 +552,20 @@ const OPENAI_MODEL_DEFINITIONS = {
 } as const satisfies Record<string, ModelDefinition>;
 
 const OPENAI_EMBEDDING_MODEL_DEFINITIONS = {
+  'text-embedding-ada-002': {
+    rid: 'text-embedding-ada-002',
+    modelIdentifier: 'OPENAI_TEXT_EMBEDDING_ADA_002',
+    displayName: 'text-embedding-ada-002',
+    lifecycle: 'ga',
+    inputTypes: ['OPEN_AI_EMBEDDINGS'],
+    trainingCutoffDate: '2021-09-01T00:00:00Z',
+    performance: {
+      cost: 'LOW',
+      modelClass: 'SPECIALIZED_EMBEDDING',
+      speed: 'HIGH',
+    },
+    externalUrl: 'https://platform.openai.com/docs/guides/embeddings/embedding-models',
+  },
   'text-embedding-3-small': {
     rid: 'text-embedding-3-small',
     modelIdentifier: 'OPENAI_TEXT_EMBEDDING_3_SMALL',
@@ -477,10 +575,10 @@ const OPENAI_EMBEDDING_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2021-09-01T00:00:00Z',
     performance: {
       cost: 'LOW',
-      modelClass: 'LIGHTWEIGHT',
+      modelClass: 'SPECIALIZED_EMBEDDING',
       speed: 'HIGH',
     },
-    externalUrl: 'https://platform.openai.com/docs/models/text-embedding-3-small',
+    externalUrl: 'https://platform.openai.com/docs/guides/embeddings/embedding-models',
   },
   'text-embedding-3-large': {
     rid: 'text-embedding-3-large',
@@ -490,11 +588,11 @@ const OPENAI_EMBEDDING_MODEL_DEFINITIONS = {
     inputTypes: ['OPEN_AI_EMBEDDINGS'],
     trainingCutoffDate: '2021-09-01T00:00:00Z',
     performance: {
-      cost: 'MEDIUM',
-      modelClass: 'HEAVYWEIGHT',
+      cost: 'LOW',
+      modelClass: 'SPECIALIZED_EMBEDDING',
       speed: 'HIGH',
     },
-    externalUrl: 'https://platform.openai.com/docs/models/text-embedding-3-large',
+    externalUrl: 'https://platform.openai.com/docs/guides/embeddings/embedding-models',
   },
 } as const satisfies Record<string, ModelDefinition>;
 

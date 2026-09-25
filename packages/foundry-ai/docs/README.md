@@ -188,9 +188,9 @@ Keep Chat Completions as the default. These probes do not show that Responses or
 | Claude | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic` |
 | Gemini | `createFoundryGoogle` / `google` | `@ai-sdk/google` |
 | Grok | `createFoundryXai` / `xai` | `@ai-sdk/xai` |
-| Gemma, Kimi, Nemotron, Qwen, GLM | `createFoundryThirdParty` / `third-party` | `@ai-sdk/openai` |
+| Gemma, Kimi, Nemotron, Qwen, GLM, DeepSeek | `createFoundryThirdParty` / `third-party` | `@ai-sdk/openai` |
 
-OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Kimi, Qwen, and GLM use Chat Completions; Gemma and Nemotron Ultra use OpenAI Responses; Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
+OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Kimi, Qwen, GLM, and DeepSeek use Chat Completions; Gemma and Nemotron Ultra use OpenAI Responses; Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
