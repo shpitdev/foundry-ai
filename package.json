@@ -43,12 +43,12 @@
     }
   },
   "devDependencies": {
-    "@ai-sdk/anthropic": "4.0.52",
-    "@ai-sdk/devtools": "1.0.18",
-    "@ai-sdk/google": "4.0.67",
-    "@ai-sdk/openai": "4.0.65",
-    "@ai-sdk/otel": "1.0.97",
-    "@biomejs/biome": "2.5.13",
+    "@ai-sdk/anthropic": "4.0.57",
+    "@ai-sdk/devtools": "1.0.22",
+    "@ai-sdk/google": "4.0.75",
+    "@ai-sdk/openai": "4.0.70",
+    "@ai-sdk/otel": "1.0.106",
+    "@biomejs/biome": "2.5.14",
     "@exalabs/ai-sdk": "2.1.0",
     "@nx/js": "23.2.1",
     "@opentelemetry/api": "1.9.1",
@@ -56,17 +56,17 @@
     "@swc/core": "~1.16.2",
     "@swc/helpers": "~0.5.23",
     "@tanstack/intent": "0.4.0",
-    "@types/node": "26.5.1",
-    "ai": "7.0.97",
+    "@types/node": "26.6.1",
+    "ai": "7.0.106",
     "nx": "23.2.1",
     "tslib": "2.8.1",
     "tsup": "8.5.1",
     "tsx": "4.23.13",
     "typescript": "6.0.3",
     "vite": "8.3.0",
-    "vitest": "5.0.0",
-    "yaml": "2.9.0",
-    "zod": "4.6.2",
-    "@ai-sdk/xai": "4.0.58"
+    "vitest": "5.0.1",
+    "yaml": "2.9.1",
+    "zod": "4.6.5",
+    "@ai-sdk/xai": "5.0.3"
   }
 }
