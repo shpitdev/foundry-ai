@@ -34,16 +34,24 @@ for (const entry of packages) {
 }
 
 check(workflow.permissions?.['id-token'] === 'write', 'release.yml needs id-token: write.');
-check(!workflowSource.includes('secrets.'), 'release.yml publishes through OIDC, without secrets.');
-for (const name of ['publish-prerelease', 'publish-stable']) {
+check(
+  !/\bsecrets\s*[.[]/u.test(workflowSource),
+  'release.yml publishes through OIDC, without secrets.',
+);
+for (const [name, channel] of [
+  ['publish-prerelease', 'next'],
+  ['publish-stable', 'latest'],
+]) {
   const steps = workflow.jobs?.[name]?.steps ?? [];
   check(
     steps[0]?.with?.ref === '${{ github.event.pull_request.merge_commit_sha }}',
     `${name} must check out the merge commit.`,
   );
   check(
-    steps.some((step) => /^\s*npm publish .*--provenance$/mu.test(step.run ?? '')),
-    `${name} must run npm publish with --provenance.`,
+    steps.some((step) =>
+      new RegExp(`^\\s*npm publish .*--tag ${channel} .*--provenance$`, 'mu').test(step.run ?? ''),
+    ),
+    `${name} must run npm publish --tag ${channel} with --provenance.`,
   );
 }
 
