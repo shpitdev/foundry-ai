@@ -5,6 +5,12 @@
 - refresh Foundry catalog, AI SDK peers, and live results ([#82](https://github.com/shpitdev/foundry-ai/pull/82))
 - add GPT-6 Luna decision models ([#81](https://github.com/shpitdev/foundry-ai/pull/81))
 
+### 🔥 Removed
+
+- the `./third-party` subpath, `createFoundryThirdParty`, and the `THIRD_PARTY_*` exports ([#83](https://github.com/shpitdev/foundry-ai/pull/83))
+- the published agent skill; examples now live in the repository's `examples/` directory ([#83](https://github.com/shpitdev/foundry-ai/pull/83))
+- 16 catalog aliases that Foundry no longer lists or serves, including o3, o4-mini, gpt-4o, gpt-realtime-2, and the Kimi, GLM, Qwen, and DeepSeek models ([#82](https://github.com/shpitdev/foundry-ai/pull/82))
+
 ### ❤️ Thank You
 
 - Anand Pant @anandpant
