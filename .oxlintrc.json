@@ -42,7 +42,7 @@
     "import/no-default-export": "error",
     "import/no-cycle": "error",
     "import/no-self-import": "error",
-    // Public modules are imported one by one (`@nyrra/foundry-effect-ai/OpenAiLanguageModel`);
+    // Public modules are imported one by one (`@shpitdev/foundry-effect-ai/OpenAiLanguageModel`);
     // a barrel would put every vendor in every bundle.
     "oxc/no-barrel-file": ["error", { "threshold": 0 }],
     "no-restricted-imports": [

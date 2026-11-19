@@ -1,4 +1,4 @@
-// Proves @nyrra/foundry-effect-ai tree-shakes per module. Installs the packed tarball beside
+// Proves @shpitdev/foundry-effect-ai tree-shakes per module. Installs the packed tarball beside
 // effect in a scratch project, bundles each public module through the exports map (effect
 // external), and fails when a bundle reaches code owned by another protocol or vendor, exceeds its
 // size budget, when internal modules resolve, or when a consumer cannot typecheck the module.
@@ -52,7 +52,7 @@ const scratch = mkdtempSync(join(tmpdir(), 'foundry-effect-ai-tree-shaking-'));
 const failures = [];
 try {
   // A real copy of the published files, so nothing resolves from the workspace behind a symlink.
-  const installed = join(scratch, 'node_modules/@nyrra/foundry-effect-ai');
+  const installed = join(scratch, 'node_modules/@shpitdev/foundry-effect-ai');
   mkdirSync(installed, { recursive: true });
   const [packed] = JSON.parse(
     execFileSync('npm', ['pack', '--json', '--pack-destination', scratch], {
@@ -74,7 +74,7 @@ try {
     // A namespace export keeps the module's whole public surface: the worst case for size.
     writeFileSync(
       join(scratch, `${name}.ts`),
-      `export * as M from '@nyrra/foundry-effect-ai/${name}';\n`,
+      `export * as M from '@shpitdev/foundry-effect-ai/${name}';\n`,
     );
     const result = await build({
       absWorkingDir: scratch,
@@ -115,7 +115,7 @@ try {
   const internalModules = readdirSync(join(distRoot, 'internal'), { recursive: true })
     .map(String)
     .filter((file) => file.endsWith('.js'))
-    .map((file) => `@nyrra/foundry-effect-ai/internal/${file.slice(0, -'.js'.length)}`);
+    .map((file) => `@shpitdev/foundry-effect-ai/internal/${file.slice(0, -'.js'.length)}`);
   for (const specifier of internalModules) {
     const resolved = await build({
       absWorkingDir: scratch,

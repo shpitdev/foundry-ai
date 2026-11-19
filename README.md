@@ -8,7 +8,7 @@ Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK, and (in 
 - [Install and use the package](./packages/foundry-ai/README.md)
 - [Models and test status](./packages/foundry-ai/docs/README.md)
 - [Runnable examples](./examples/README.md)
-- [Effect AI adapter plan](./packages/foundry-effect-ai/docs/PLAN.md) (`@nyrra/foundry-effect-ai`, unpublished)
+- [Effect AI adapter plan](./packages/foundry-effect-ai/docs/PLAN.md) (`@shpitdev/foundry-effect-ai`, unpublished)
 - [Release process](./docs/RELEASING.md)
 
 ## Development

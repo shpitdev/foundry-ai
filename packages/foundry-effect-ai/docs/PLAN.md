@@ -1,6 +1,6 @@
 # Effect AI adapters: plan
 
-`@nyrra/foundry-effect-ai` gives Effect AI programs the Foundry coverage `@nyrra/foundry-ai` gives the Vercel AI SDK: OpenAI, Anthropic, Google and xAI models through Foundry's LLM proxy, addressed by catalog alias or RID. It ships as one package whose only peer dependency is `effect`, and an application that uses one vendor bundles only that vendor's code.
+`@shpitdev/foundry-effect-ai` gives Effect AI programs the Foundry coverage `@nyrra/foundry-ai` gives the Vercel AI SDK: OpenAI, Anthropic, Google and xAI models through Foundry's LLM proxy, addressed by catalog alias or RID. It ships as one package whose only peer dependency is `effect`, and an application that uses one vendor bundles only that vendor's code.
 
 The package is private until phase 8. The scaffold, guardrails and protocol notes are in place; every public function is a stub that dies with a pointer to this file.
 
@@ -9,7 +9,7 @@ The package is private until phase 8. The scaffold, guardrails and protocol note
 | Topic | Decision | Why |
 |---|---|---|
 | Dependencies | `effect` ^4.1.4 only. No vendor SDKs, no `@effect/ai-openai` or `@effect/ai-anthropic`. | Effect 4 ships the AI core (`effect/ai`), HTTP client (`effect/http`) and SSE decoder (`effect/encoding/Sse`). The upstream providers add 22k–77k-line generated schema files, and there is no Effect 4 Google provider. |
-| Public surface | One module per vendor and model kind, imported by subpath: `@nyrra/foundry-effect-ai/AnthropicLanguageModel`. No root entry, no barrel. | A barrel would pull every vendor into every bundle. This mirrors upstream Effect's deep-import style. |
+| Public surface | One module per vendor and model kind, imported by subpath: `@shpitdev/foundry-effect-ai/AnthropicLanguageModel`. No root entry, no barrel. | A barrel would pull every vendor into every bundle. This mirrors upstream Effect's deep-import style. |
 | Module API | `model(id)` returning `AiModel.Model`, plus `make` and `layer`, matching upstream providers. Per-model `Config` and `withConfigOverride` arrive with each implementation. | Users can swap an upstream provider for ours without restructuring their program. |
 | Transport | One `FoundryClient` service with two operations, `json` and `sse`. It owns the URL, bearer token, attribution and trace headers, and maps failures to `AiError`. | Protocol-typed client methods would put every schema into the shared module. |
 | Wire schemas | Hand-written `effect/Schema` codecs under `src/internal/<protocol>/`, decoding only the fields we read; unknown stream events are ignored. Requests are plain interfaces. | Foundry deviates from vendor specs in small ways (omitted `object`, extra reasoning events), so strict generated schemas fail. Upstream also hand-writes its OpenAI client schemas. |

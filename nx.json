@@ -67,7 +67,7 @@
         "projects": ["foundry-effect-ai"],
         "projectsRelationship": "fixed",
         "releaseTag": {
-          "pattern": "@nyrra/foundry-effect-ai@{version}"
+          "pattern": "@shpitdev/foundry-effect-ai@{version}"
         }
       }
     },

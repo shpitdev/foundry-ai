@@ -1,6 +1,6 @@
 # Releasing
 
-Each package releases on its own: `@nyrra/foundry-ai` and `@nyrra/foundry-effect-ai` have separate Nx release groups, versions, changelogs and `<name>@<version>` tags. [release.yml](../.github/workflows/release.yml) publishes through npm trusted publishing with provenance, which requires the repository variable `NPM_PUBLISH_ENABLED=true` and npm trust for `shpitdev/foundry-ai` / `release.yml` on each package. [release-packages.mjs](../scripts/release-packages.mjs) decides what a merged PR publishes; packages marked `private` are never published.
+Each package releases on its own: `@nyrra/foundry-ai` and `@shpitdev/foundry-effect-ai` have separate Nx release groups, versions, changelogs and `<name>@<version>` tags. [release.yml](../.github/workflows/release.yml) publishes through npm trusted publishing with provenance, which requires the repository variable `NPM_PUBLISH_ENABLED=true` and npm trust for `shpitdev/foundry-ai` / `release.yml` on each package. [release-packages.mjs](../scripts/release-packages.mjs) decides what a merged PR publishes; packages marked `private` are never published.
 
 ## Stable release
 

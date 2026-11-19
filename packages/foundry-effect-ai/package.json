@@ -1,5 +1,5 @@
 {
-  "name": "@nyrra/foundry-effect-ai",
+  "name": "@shpitdev/foundry-effect-ai",
   "version": "0.0.0",
   "private": true,
   "description": "Palantir Foundry LLM proxy providers for Effect AI.",

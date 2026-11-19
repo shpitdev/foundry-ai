@@ -1,4 +1,4 @@
-# @nyrra/foundry-effect-ai
+# @shpitdev/foundry-effect-ai
 
 Palantir Foundry LLM proxy providers for [Effect AI](https://effect.website), with `effect` as the only peer dependency.
 

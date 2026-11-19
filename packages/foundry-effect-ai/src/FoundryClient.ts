@@ -47,7 +47,7 @@ export interface Service {
 }
 
 export class FoundryClient extends Context.Service<FoundryClient, Service>()(
-  '@nyrra/foundry-effect-ai/FoundryClient',
+  '@shpitdev/foundry-effect-ai/FoundryClient',
 ) {}
 
 export const make = (_options: Options): Effect.Effect<Service, never, HttpClient.HttpClient> =>

@@ -6,7 +6,7 @@ export const packages = [
   {
     project: 'foundry-effect-ai',
     dir: 'packages/foundry-effect-ai',
-    name: '@nyrra/foundry-effect-ai',
+    name: '@shpitdev/foundry-effect-ai',
   },
 ];
 

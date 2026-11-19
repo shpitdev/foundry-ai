@@ -15,7 +15,7 @@
 - Biome formats the whole repo and lints everything except `packages/foundry-effect-ai`, which oxlint (`.oxlintrc.json`) and Effect language-service diagnostics lint. Do not add ESLint or Prettier.
 - Vitest is the only test runner. Use `.test` files, not `.spec` files.
 - Keep route files app-local. Shared packages must stay router-agnostic.
-- `@nyrra/foundry-ai` (AI SDK) and `@nyrra/foundry-effect-ai` (Effect) never import each other; lint enforces it. The Effect package depends only on `effect`; follow `packages/foundry-effect-ai/docs/PLAN.md`.
+- `@nyrra/foundry-ai` (AI SDK) and `@shpitdev/foundry-effect-ai` (Effect) never import each other; lint enforces it. The Effect package depends only on `effect`; follow `packages/foundry-effect-ai/docs/PLAN.md`.
 - Each package releases independently: `pnpm run release <project>`. See `docs/RELEASING.md`.
 
 ## Reliability Rules

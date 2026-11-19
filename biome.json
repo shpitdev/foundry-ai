@@ -76,8 +76,8 @@
                   {
                     "group": [
                       "**/foundry-effect-ai/**",
-                      "@nyrra/foundry-effect-ai",
-                      "@nyrra/foundry-effect-ai/**"
+                      "@shpitdev/foundry-effect-ai",
+                      "@shpitdev/foundry-effect-ai/**"
                     ],
                     "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
                   }
