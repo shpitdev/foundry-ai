@@ -7,7 +7,8 @@
       "{workspaceRoot}/pnpm-workspace.yaml",
       "{workspaceRoot}/nx.json",
       "{workspaceRoot}/tsconfig.base.json",
-      "{workspaceRoot}/biome.json"
+      "{workspaceRoot}/biome.json",
+      "{workspaceRoot}/.oxlintrc.json"
     ],
     "workspaceLintFiles": [
       "{workspaceRoot}/.github/**",
@@ -27,7 +28,9 @@
       "!{projectRoot}/src/**/*.test.ts",
       "!{projectRoot}/src/**/*.spec.ts",
       "!{projectRoot}/src/**/__tests__/**",
+      "!{projectRoot}/test/**",
       "!{projectRoot}/vitest.config.ts",
+      "!{projectRoot}/vitest.live.config.ts",
       "!{projectRoot}/tsconfig.test.json",
       "!{projectRoot}/tsconfig.typecheck.json",
       "!{workspaceRoot}/examples/**"
@@ -53,11 +56,18 @@
   },
   "release": {
     "groups": {
-      "npm-packages": {
+      "foundry-ai": {
         "projects": ["foundry-ai"],
         "projectsRelationship": "fixed",
         "releaseTag": {
-          "pattern": "@nyrra/foundry-ai@{version}"
+          "pattern": "@shpitdev/foundry-ai@{version}"
+        }
+      },
+      "foundry-effect-ai": {
+        "projects": ["foundry-effect-ai"],
+        "projectsRelationship": "fixed",
+        "releaseTag": {
+          "pattern": "@shpitdev/foundry-effect-ai@{version}"
         }
       }
     },

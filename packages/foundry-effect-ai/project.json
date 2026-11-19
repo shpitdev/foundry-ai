@@ -1,0 +1,82 @@
+{
+  "name": "foundry-effect-ai",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/foundry-effect-ai/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "commands": [
+          "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+          "pnpm exec tsc -p tsconfig.lib.json"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}/packages/foundry-effect-ai"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "inputs": ["default", "{workspaceRoot}/.oxlintrc.json"],
+      "options": {
+        "commands": [
+          "pnpm exec oxlint --deny-warnings packages/foundry-effect-ai",
+          "pnpm exec biome check .oxlintrc.json packages/foundry-effect-ai scripts/check-tree-shaking.mjs"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm exec tsc -p packages/foundry-effect-ai/tsconfig.json",
+          "pnpm exec effect-language-service diagnostics --project packages/foundry-effect-ai/tsconfig.json --strict --format text"
+        ],
+        "parallel": false,
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec vitest run --config packages/foundry-effect-ai/vitest.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "test-live": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec vitest run --config packages/foundry-effect-ai/vitest.live.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "tree-shaking": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["production", "{workspaceRoot}/scripts/check-tree-shaking.mjs"],
+      "options": {
+        "command": "node scripts/check-tree-shaking.mjs",
+        "cwd": "{workspaceRoot}"
+      }
+    },
+    "package-audit": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node scripts/check-package-contents.mjs foundry-effect-ai",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  },
+  "tags": ["scope:effect"],
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["{projectRoot}"]
+    }
+  }
+}

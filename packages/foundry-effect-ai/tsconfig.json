@@ -1,0 +1,100 @@
+{
+  // Typecheck program (src and tests) with Effect language-service diagnostics.
+  // tsconfig.lib.json emits src only, without Node types.
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedParameters": true,
+    "importHelpers": false,
+    "incremental": true,
+    "tsBuildInfoFile": "../../out-tsc/packages/foundry-effect-ai/tsconfig.tsbuildinfo",
+    "plugins": [
+      {
+        "name": "@effect/language-service",
+        // effect/ai and effect/http are tagged unstable in Effect 4. List each module this
+        // package uses so stability diagnostics still catch anything new.
+        "allowedUnstableApis": [
+          "@effect/vitest#it",
+          "@effect/vitest#layer",
+          "effect/ai/AiError",
+          "effect/ai/AnthropicStructuredOutput",
+          "effect/ai/Decision",
+          "effect/ai/DecisionModel",
+          "effect/ai/EmbeddingModel",
+          "effect/ai/IdGenerator",
+          "effect/ai/LanguageModel",
+          "effect/ai/Model",
+          "effect/ai/OpenAiStructuredOutput",
+          "effect/ai/Prompt",
+          "effect/ai/Response",
+          "effect/ai/Telemetry",
+          "effect/ai/Tool",
+          "effect/ai/Toolkit",
+          "effect/encoding/Sse",
+          "effect/http/FetchHttpClient",
+          "effect/http/Headers",
+          "effect/http/HttpBody",
+          "effect/http/HttpClient",
+          "effect/http/HttpClientError",
+          "effect/http/HttpClientRequest",
+          "effect/http/HttpClientResponse"
+        ],
+        "diagnosticSeverity": {
+          "anyUnknownInErrorContext": "error",
+          "asyncFunction": "error",
+          "catchAllToMapError": "warning",
+          "catchUnfailableEffect": "warning",
+          "cryptoRandomUUID": "error",
+          "cryptoRandomUUIDInEffect": "error",
+          "deterministicKeys": "error",
+          "effectFnOpportunity": "warning",
+          "effectMapFlatten": "warning",
+          "effectMapVoid": "warning",
+          "effectSucceedWithVoid": "warning",
+          "extendsNativeError": "error",
+          "flatMapToMap": "warning",
+          "globalConsole": "error",
+          "globalConsoleInEffect": "error",
+          "globalDate": "error",
+          "globalDateInEffect": "error",
+          "globalFetch": "error",
+          "globalFetchInEffect": "error",
+          "globalJsonInEffect": "error",
+          "globalRandom": "error",
+          "globalRandomInEffect": "error",
+          "globalTimers": "error",
+          "globalTimersInEffect": "error",
+          "instanceOfSchema": "error",
+          "leakingRequirements": "warning",
+          "newPromise": "error",
+          "nodeBuiltinImport": "error",
+          "processEnv": "error",
+          "processEnvInEffect": "error",
+          "redundantSchemaTagIdentifier": "warning",
+          "returnEffectInGen": "warning",
+          "runEffectInsideEffect": "warning",
+          "schemaStructWithTag": "warning",
+          "tryCatchInEffectGen": "warning",
+          "unnecessaryEffectGen": "warning",
+          "unnecessaryFailYieldableError": "warning",
+          "unnecessaryPipe": "warning",
+          "unnecessaryPipeChain": "warning",
+          "unsafeEffectTypeAssertion": "error"
+        },
+        "keyPatterns": [
+          { "target": "service", "pattern": "default", "skipLeadingPath": ["src/"] },
+          { "target": "error", "pattern": "default", "skipLeadingPath": ["src/"] }
+        ]
+      }
+    ]
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

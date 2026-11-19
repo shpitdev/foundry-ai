@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-This project is pre-1.0. Security fixes land on the latest `main` branch. Only the latest release of `@nyrra/foundry-ai` and `main` are supported.
+This project is pre-1.0. Security fixes land on the latest `main` branch. Only the latest release of `@shpitdev/foundry-ai` and `main` are supported.
 
 ## Reporting a Vulnerability
 

@@ -1,8 +1,8 @@
-import type { AnthropicModelId, GoogleModelId, OpenAIModelId } from '@nyrra/foundry-ai';
-import { loadFoundryConfig } from '@nyrra/foundry-ai';
-import { createFoundryAnthropic } from '@nyrra/foundry-ai/anthropic';
-import { createFoundryGoogle } from '@nyrra/foundry-ai/google';
-import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
+import type { AnthropicModelId, GoogleModelId, OpenAIModelId } from '@shpitdev/foundry-ai';
+import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
+import { createFoundryGoogle } from '@shpitdev/foundry-ai/google';
+import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';
 import type { LanguageModel } from 'ai';
 import {
   DEFAULT_ANTHROPIC_MODEL,

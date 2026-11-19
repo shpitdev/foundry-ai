@@ -1,0 +1,221 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // Strict lint for the Effect package only; Biome lints and formats everything else.
+  // Rules follow the shpitdev/foundry-cli Effect projects. Effect-specific checks (fetch,
+  // process.env, Date, timers, console, unstable APIs) run as language-service diagnostics in
+  // the typecheck target. Cross-protocol imports are enforced on the built graph by
+  // scripts/check-tree-shaking.mjs.
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "import", "promise", "node", "vitest"],
+  "env": { "builtin": true, "es2024": true },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error",
+    "pedantic": "error",
+    "perf": "error"
+  },
+  "rules": {
+    // No escape hatches around the type checker.
+    "typescript/no-explicit-any": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-require-imports": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/consistent-type-definitions": ["error", "interface"],
+    "typescript/array-type": ["error", { "default": "generic" }],
+    "typescript/no-inferrable-types": "error",
+    "typescript/no-empty-object-type": ["error", { "allowInterfaces": "with-single-extends" }],
+    "eslint/no-console": "error",
+    "eslint/no-var": "error",
+    "eslint/prefer-const": "error",
+    "eslint/eqeqeq": "error",
+    "eslint/curly": "error",
+    "eslint/no-param-reassign": "error",
+    "eslint/no-nested-ternary": "error",
+    "eslint/no-implicit-coercion": "error",
+    "eslint/object-shorthand": "error",
+    "eslint/prefer-template": "error",
+    "eslint/no-duplicate-imports": "error",
+    "eslint/no-empty": "error",
+    "unicorn/no-abusive-eslint-disable": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "import/no-default-export": "error",
+    "import/no-cycle": "error",
+    "import/no-self-import": "error",
+    // Public modules are imported one by one (`@shpitdev/foundry-effect-ai/OpenAiLanguageModel`);
+    // a barrel would put every vendor in every bundle.
+    "oxc/no-barrel-file": ["error", { "threshold": 0 }],
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          { "name": "ai", "message": "The Effect package must not depend on the Vercel AI SDK." },
+          { "name": "effect", "message": "Import the module (effect/Effect), not the barrel." },
+          {
+            "name": "effect/ai",
+            "message": "Import the module (effect/ai/LanguageModel), not the barrel."
+          },
+          {
+            "name": "effect/http",
+            "message": "Import the module (effect/http/HttpClient), not the barrel."
+          }
+        ],
+        "patterns": [
+          {
+            "group": ["@ai-sdk/**", "@effect/ai-*", "@effect/ai-*/**"],
+            "message": "No vendor SDKs or upstream Effect providers: this package speaks the wire protocols itself."
+          },
+          {
+            "group": ["@shpitdev/foundry-ai", "@shpitdev/foundry-ai/**", "**/foundry-ai/src/**"],
+            "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+          }
+        ]
+      }
+    ],
+    // Effect generators are `function*` bodies; `yield*` is the only control flow.
+    "eslint/require-yield": "off",
+    // Schema records pair a value and a same-name interface by design.
+    "eslint/no-redeclare": "off",
+    "import/no-named-as-default-member": "off",
+    "eslint/max-lines-per-function": "off",
+    "eslint/max-lines": "off",
+    "eslint/max-depth": "off",
+    "eslint/max-classes-per-file": "off",
+    // Effect APIs take point-free callbacks (`Effect.map(f)`) by design.
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-method-this-argument": "off",
+    // `Schema.TaggedError` and `Context.Service` classes have no body.
+    "typescript/no-extraneous-class": "off",
+    "eslint/no-useless-constructor": "off",
+    // `_tag` is Effect's discriminant; `_name` marks deliberately unused stub parameters.
+    "eslint/no-underscore-dangle": ["error", { "allow": ["_tag"] }],
+    // Effect's `Array.sort` returns a new array; the rule cannot tell it from `Array#sort`.
+    "unicorn/no-array-sort": "off",
+    "oxc/no-map-spread": "off",
+    "import/max-dependencies": "off",
+    "vitest/no-standalone-expect": [
+      "error",
+      { "additionalTestBlockFunctions": ["it.effect", "it.live", "it.scoped", "it.layer"] }
+    ]
+  },
+  "overrides": [
+    {
+      // Library code: the caller chooses the HTTP client, and test tooling stays out.
+      "files": ["packages/foundry-effect-ai/src/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "ai",
+                "message": "The Effect package must not depend on the Vercel AI SDK."
+              },
+              { "name": "effect", "message": "Import the module (effect/Effect), not the barrel." },
+              {
+                "name": "effect/ai",
+                "message": "Import the module (effect/ai/LanguageModel), not the barrel."
+              },
+              {
+                "name": "effect/http",
+                "message": "Import the module (effect/http/HttpClient), not the barrel."
+              },
+              {
+                "name": "effect/http/FetchHttpClient",
+                "message": "Library code takes HttpClient from context; callers provide FetchHttpClient."
+              },
+              { "name": "vitest", "message": "Test tooling stays in test/." },
+              { "name": "@effect/vitest", "message": "Test tooling stays in test/." }
+            ],
+            "patterns": [
+              {
+                "group": ["@ai-sdk/**", "@effect/ai-*", "@effect/ai-*/**"],
+                "message": "No vendor SDKs or upstream Effect providers: this package speaks the wire protocols itself."
+              },
+              {
+                "group": [
+                  "@shpitdev/foundry-ai",
+                  "@shpitdev/foundry-ai/**",
+                  "**/foundry-ai/src/**"
+                ],
+                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+              },
+              { "group": ["node:*"], "message": "Library code runs on any JavaScript runtime." }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // Protocol internals sit below the public modules and never import them.
+      "files": ["packages/foundry-effect-ai/src/internal/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "ai",
+                "message": "The Effect package must not depend on the Vercel AI SDK."
+              },
+              { "name": "effect", "message": "Import the module (effect/Effect), not the barrel." },
+              {
+                "name": "effect/ai",
+                "message": "Import the module (effect/ai/LanguageModel), not the barrel."
+              },
+              {
+                "name": "effect/http",
+                "message": "Import the module (effect/http/HttpClient), not the barrel."
+              },
+              {
+                "name": "effect/http/FetchHttpClient",
+                "message": "Library code takes HttpClient from context; callers provide FetchHttpClient."
+              },
+              { "name": "vitest", "message": "Test tooling stays in test/." },
+              { "name": "@effect/vitest", "message": "Test tooling stays in test/." }
+            ],
+            "patterns": [
+              {
+                "group": ["@ai-sdk/**", "@effect/ai-*", "@effect/ai-*/**"],
+                "message": "No vendor SDKs or upstream Effect providers: this package speaks the wire protocols itself."
+              },
+              {
+                "group": [
+                  "@shpitdev/foundry-ai",
+                  "@shpitdev/foundry-ai/**",
+                  "**/foundry-ai/src/**"
+                ],
+                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+              },
+              { "group": ["node:*"], "message": "Library code runs on any JavaScript runtime." },
+              {
+                "group": ["**/*LanguageModel.ts", "**/*DecisionModel.ts", "**/*EmbeddingModel.ts"],
+                "message": "Internal protocol modules must not import public model modules."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      // The support matrix is tracked as todos until each phase replaces them with tests.
+      "files": [
+        "packages/foundry-effect-ai/test/contract.test.ts",
+        "packages/foundry-effect-ai/test/foundry.live.test.ts"
+      ],
+      "rules": { "vitest/warn-todo": "off" }
+    },
+    {
+      "files": ["**/vitest.config.ts", "**/vitest.live.config.ts"],
+      "rules": { "import/no-default-export": "off" }
+    }
+  ],
+  "ignorePatterns": [
+    "/*",
+    "!/packages/",
+    "/packages/*",
+    "!/packages/foundry-effect-ai/",
+    "/packages/foundry-effect-ai/dist/",
+    "node_modules"
+  ]
+}

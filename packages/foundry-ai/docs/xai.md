@@ -1,17 +1,17 @@
 # xAI / Grok
 
-Use `createFoundryXai` from `@nyrra/foundry-ai/xai`. It uses the native `@ai-sdk/xai` peer and requires no OpenAI SDK or direct xAI credentials. Foundry supplies upstream credentials.
+Use `createFoundryXai` from `@shpitdev/foundry-ai/xai`. It uses the native `@ai-sdk/xai` peer and requires no OpenAI SDK or direct xAI credentials. Foundry supplies upstream credentials.
 
 ```sh
-pnpm add @nyrra/foundry-ai ai@7 @ai-sdk/xai@4
+pnpm add @shpitdev/foundry-ai ai@7 @ai-sdk/xai@4
 # AI SDK 6: use ai@6 with @ai-sdk/xai@3.
 ```
 
 The tested native versions are `4.0.59` for SDK 7 and `3.0.132` for SDK 6; the supported late beta matrix uses `4.0.0-beta.76`. Native 5.0.0 removes Chat Completions and is outside this package's peer range.
 
 ```ts
-import { loadFoundryConfig } from '@nyrra/foundry-ai';
-import { createFoundryXai } from '@nyrra/foundry-ai/xai';
+import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { createFoundryXai } from '@shpitdev/foundry-ai/xai';
 import { createProviderRegistry, generateText } from 'ai';
 
 const xai = createFoundryXai(loadFoundryConfig());

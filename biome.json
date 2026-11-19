@@ -51,5 +51,58 @@
     "formatter": {
       "enabled": true
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["packages/foundry-ai/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "paths": {
+                  "ai": {
+                    "importNames": ["generateObject", "streamObject"],
+                    "message": "Use generateText/streamText with Output.* instead."
+                  },
+                  "effect": "The AI SDK package must not depend on Effect; Effect adapters live in packages/foundry-effect-ai."
+                },
+                "patterns": [
+                  {
+                    "group": ["effect/**", "@effect/**"],
+                    "message": "The AI SDK package must not depend on Effect; Effect adapters live in packages/foundry-effect-ai."
+                  },
+                  {
+                    "group": [
+                      "**/foundry-effect-ai/**",
+                      "@shpitdev/foundry-effect-ai",
+                      "@shpitdev/foundry-effect-ai/**"
+                    ],
+                    "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/foundry-effect-ai/**"],
+      "linter": {
+        "enabled": false
+      }
+    },
+    {
+      "includes": ["scripts/check-release-policy.mjs"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noTemplateCurlyInString": "off"
+          }
+        }
+      }
+    }
+  ]
 }

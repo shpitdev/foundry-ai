@@ -64,7 +64,7 @@ jobs:
             ./node_modules/.bin/tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node packed-library.ts
             ./node_modules/.bin/tsx packed-library.ts "$1"
           }
-          npm install ./nyrra-foundry-ai-*.tgz ai@^7.0.0 @ai-sdk/anthropic@^4.0.0 @ai-sdk/google@^4.0.0 @ai-sdk/openai@^4.0.0 @ai-sdk/xai@^4.0.58 @types/json-schema @types/node tsx typescript
+          npm install ./shpitdev-foundry-ai-*.tgz ai@^7.0.0 @ai-sdk/anthropic@^4.0.0 @ai-sdk/google@^4.0.0 @ai-sdk/openai@^4.0.0 @ai-sdk/xai@^4.0.58 @types/json-schema @types/node tsx typescript
           verify_sdk v4
           npm install ai@6.0.224 @ai-sdk/anthropic@3.0.96 @ai-sdk/google@3.0.91 @ai-sdk/openai@3.0.84 @ai-sdk/xai@3.0.132
           verify_sdk v3

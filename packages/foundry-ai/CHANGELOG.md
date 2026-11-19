@@ -1,3 +1,9 @@
+## 0.0.10 (2026-11-19)
+
+### ⚠️ Breaking Changes
+
+- the package moved from `@nyrra/foundry-ai` to `@shpitdev/foundry-ai`. Replace the name in dependencies and imports; the API is unchanged. `@nyrra/foundry-ai` is deprecated and keeps versions up to 0.0.9.
+
 ## 0.0.9 (2026-11-19)
 
 ### 🚀 Features

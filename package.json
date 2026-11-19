@@ -4,20 +4,21 @@
   "type": "module",
   "packageManager": "pnpm@10.24.0",
   "scripts": {
-    "build": "pnpm exec nx run foundry-ai:build --outputStyle=static",
+    "build": "pnpm exec nx run-many -t build --outputStyle=static",
     "clean": "pnpm exec nx run foundry-ai:clean --outputStyle=static",
     "example": "node scripts/run-example.mjs",
     "example:devtools": "node scripts/run-example.mjs tool-calling-devtools",
     "example:devtools:parallel": "node scripts/run-example.mjs tool-calling-parallel-devtools",
     "format": "pnpm exec biome check --write .",
-    "lint": "pnpm exec nx run foundry-ai:lint --outputStyle=static",
+    "lint": "pnpm exec nx run-many -t lint --outputStyle=static",
     "release-policy-check": "node scripts/check-release-policy.mjs",
     "release": "node scripts/create-stable-release-pr.mjs",
-    "test": "pnpm exec nx run foundry-ai:test --outputStyle=static",
+    "test": "pnpm exec nx run-many -t test --outputStyle=static",
     "test:live": "pnpm exec nx run foundry-ai:test-live --outputStyle=stream-without-prefixes",
-    "typecheck": "pnpm exec nx run foundry-ai:typecheck --outputStyle=static",
-    "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build package-audit --projects=foundry-ai --outputStyle=static",
-    "verify:public-metadata": "node scripts/verify-public-metadata.mjs"
+    "typecheck": "pnpm exec nx run-many -t typecheck --outputStyle=static",
+    "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build package-audit tree-shaking --outputStyle=static",
+    "verify:public-metadata": "node scripts/verify-public-metadata.mjs",
+    "test:live:effect": "pnpm exec nx run foundry-effect-ai:test-live --outputStyle=stream-without-prefixes"
   },
   "pnpm": {
     "overrides": {
@@ -42,7 +43,10 @@
     "@ai-sdk/devtools": "1.0.79",
     "@ai-sdk/google": "4.0.122",
     "@ai-sdk/openai": "4.0.121",
+    "@ai-sdk/xai": "4.0.59",
     "@biomejs/biome": "2.5.13",
+    "@effect/language-service": "0.87.5",
+    "@effect/vitest": "4.1.4",
     "@exalabs/ai-sdk": "2.1.0",
     "@nx/js": "23.2.1",
     "@swc-node/register": "~1.12.1",
@@ -50,7 +54,10 @@
     "@swc/helpers": "~0.5.23",
     "@types/node": "26.5.1",
     "ai": "7.0.176",
+    "effect": "4.1.4",
+    "esbuild": "0.28.2",
     "nx": "23.2.1",
+    "oxlint": "1.94.0",
     "tslib": "2.8.1",
     "tsup": "8.5.1",
     "tsx": "4.23.13",
@@ -58,7 +65,6 @@
     "vite": "8.3.0",
     "vitest": "5.0.0",
     "yaml": "2.9.0",
-    "zod": "4.6.2",
-    "@ai-sdk/xai": "4.0.59"
+    "zod": "4.6.2"
   }
 }

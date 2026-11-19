@@ -1,0 +1,17 @@
+{
+  // Emits src as ESM, one file per module. rootDir is the packages folder so shared workspace
+  // source (the model catalog, phase 0a) compiles beside this package; the exports map hides
+  // the nested dist path.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": [],
+    "incremental": false,
+    "rootDir": "..",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"]
+}

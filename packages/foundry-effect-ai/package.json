@@ -1,0 +1,51 @@
+{
+  "name": "@shpitdev/foundry-effect-ai",
+  "version": "0.0.0",
+  "description": "Palantir Foundry LLM proxy providers for Effect AI.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shpitdev/foundry-ai.git",
+    "directory": "packages/foundry-effect-ai"
+  },
+  "homepage": "https://github.com/shpitdev/foundry-ai/tree/main/packages/foundry-effect-ai#readme",
+  "bugs": {
+    "url": "https://github.com/shpitdev/foundry-ai/issues"
+  },
+  "keywords": [
+    "ai",
+    "effect",
+    "effect-ai",
+    "foundry",
+    "llm-proxy",
+    "palantir",
+    "palantir-foundry"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./package.json": "./package.json",
+    "./internal/*": null,
+    "./*": {
+      "types": "./dist/foundry-effect-ai/src/*.d.ts",
+      "default": "./dist/foundry-effect-ai/src/*.js"
+    }
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "effect": "^4.1.4"
+  },
+  "devDependencies": {
+    "effect": "4.1.4"
+  }
+}

@@ -165,7 +165,7 @@ Foundry uses `wss://<foundry-host>/language-model-service/ws/v1/open-ai/realtime
 In your authenticated, app-local setup endpoint, return:
 
 ```ts
-import { createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
+import { createFoundryRealtimeSetup } from '@shpitdev/foundry-ai/realtime';
 
 // foundryUserToken must belong to the authenticated caller.
 return Response.json(createFoundryRealtimeSetup({
@@ -179,7 +179,7 @@ return Response.json(createFoundryRealtimeSetup({
 Pass the matching model to [AI SDK's realtime client](https://ai-sdk.dev/docs/ai-sdk-core/realtime):
 
 ```ts
-import { createFoundryRealtime } from '@nyrra/foundry-ai/realtime';
+import { createFoundryRealtime } from '@shpitdev/foundry-ai/realtime';
 
 const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2.1');
 // experimental_useRealtime({ model, api: { token: '/api/realtime/setup' } })
