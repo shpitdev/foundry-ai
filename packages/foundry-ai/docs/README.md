@@ -143,7 +143,7 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 
 Raw proxy requests without the SDK also accepted developer, system, and assistant message history, `input_json` arrays, images inside question instructions, explicit cache breakpoints on input parts, and `original` image detail. The proxy rejected:
 
-- `prompt_cache_key` and `prompt_cache_options`, as additional properties. The adapter throws on `providerOptions.openai.promptCacheKey` before sending the request.
+- `prompt_cache_key` and `prompt_cache_options`, as additional properties. The adapter throws on `providerOptions.openai.promptCacheKey` before sending the request. Implicit caching still works: a repeated 4,400-token prefix read 4,403 cached tokens on the next call. For routing affinity, Palantir documents the `X-Palantir-session-id` header, which the proxy accepts here through `experimental_decide({ headers })`.
 - `function_call`, `function_call_output`, and `custom_tool_call` input items. The SDK does not send these.
 - Public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
 - `stream` and `reasoning`. The SDK sends neither; it returns an unsupported warning for `reasoning` and `maxOutputTokens`.

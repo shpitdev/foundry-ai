@@ -154,7 +154,7 @@ function applyOpenAICompat(
 function assertFoundryDecisionOptions(options: FoundryDecisionCallOptions): void {
   if (asRecord(options.providerOptions?.openai).promptCacheKey != null) {
     throw new Error(
-      'Foundry OpenAI decisions do not support providerOptions.openai.promptCacheKey; the Foundry proxy rejects prompt_cache_key.',
+      'Foundry OpenAI decisions do not support providerOptions.openai.promptCacheKey; the Foundry proxy rejects prompt_cache_key. Implicit caching still applies; use the X-Palantir-session-id header for routing affinity.',
     );
   }
 }
