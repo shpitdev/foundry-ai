@@ -44,6 +44,8 @@ export function readDistTags({ name }) {
       ),
     );
   } catch (error) {
-    throw new Error(`Cannot read npm dist-tags for ${name}.\n${error.stderr || error.message}`);
+    throw new Error(`Cannot read npm dist-tags for ${name}.\n${error.stderr || error.message}`, {
+      cause: error,
+    });
   }
 }

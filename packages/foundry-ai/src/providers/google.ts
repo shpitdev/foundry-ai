@@ -1,6 +1,6 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NoSuchModelError } from 'ai';
-import { resolveFoundryConfig } from '../config.js';
+import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import { type FoundryLanguageModel, wrapFoundryLanguageModel } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import type { GoogleModelId } from '../models/google-models.js';
@@ -19,19 +19,11 @@ export interface FoundryGoogleProvider {
 export function createFoundryGoogle(config: FoundryConfig): FoundryGoogleProvider {
   const providerId = 'foundry-google';
   const resolvedConfig = resolveFoundryConfig(config, 'createFoundryGoogle');
-  const headers =
-    resolvedConfig.attributionRid || resolvedConfig.traceParent || resolvedConfig.traceState
-      ? {
-          ...(resolvedConfig.attributionRid ? { attribution: resolvedConfig.attributionRid } : {}),
-          ...(resolvedConfig.traceParent ? { traceParent: resolvedConfig.traceParent } : {}),
-          ...(resolvedConfig.traceState ? { traceState: resolvedConfig.traceState } : {}),
-        }
-      : undefined;
   const baseProvider = createGoogleGenerativeAI({
     apiKey: resolvedConfig.token,
     baseURL: `${resolvedConfig.foundryUrl}/api/v2/llm/proxy/google/v1`,
     fetch: createGoogleProxyFetch(resolvedConfig.token),
-    headers,
+    headers: foundryHeaders(resolvedConfig),
     name: providerId,
   });
 
@@ -44,24 +36,18 @@ export function createFoundryGoogle(config: FoundryConfig): FoundryGoogleProvide
     });
   };
 
-  function provider(modelId: GoogleModelId): FoundryLanguageModel {
-    return createLanguageModel(modelId);
-  }
-
-  const callableProvider = provider as FoundryGoogleProvider;
-
-  callableProvider.specificationVersion = baseProvider.specificationVersion;
-  callableProvider.languageModel = createLanguageModel;
-  callableProvider.chat = createLanguageModel;
-  callableProvider.generativeAI = createLanguageModel;
-  callableProvider.embeddingModel = (modelId: string) => {
-    throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
-  };
-  callableProvider.imageModel = (modelId: string) => {
-    throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
-  };
-
-  return callableProvider;
+  return Object.assign((modelId: GoogleModelId) => createLanguageModel(modelId), {
+    specificationVersion: baseProvider.specificationVersion,
+    languageModel: createLanguageModel,
+    chat: createLanguageModel,
+    generativeAI: createLanguageModel,
+    embeddingModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
+    },
+    imageModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
+    },
+  });
 }
 
 function createGoogleProxyFetch(token: string): typeof fetch {

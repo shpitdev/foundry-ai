@@ -30,33 +30,34 @@ const usesAdaptiveThinking =
 const usesSummarizedThinking =
   modelIdentifier != null && SUMMARIZED_ANTHROPIC_MODELS.has(modelIdentifier);
 
-const providerOptions: ExampleProviderOptions =
-  provider === 'openai'
-    ? {
-        openai: {
-          textVerbosity: 'low',
-        } satisfies OpenAILanguageModelResponsesOptions,
-      }
-    : provider === 'anthropic'
-      ? {
-          anthropic: {
-            thinking: usesAdaptiveThinking
-              ? {
-                  type: 'adaptive',
-                  ...(usesSummarizedThinking ? { display: 'summarized' as const } : {}),
-                }
-              : { type: 'enabled', budgetTokens: 1024 },
-            ...(usesAdaptiveThinking ? { effort: 'high' } : {}),
-            sendReasoning: true,
-          } satisfies AnthropicLanguageModelOptions,
-        }
-      : {};
+const providerOptions = exampleProviderOptions();
+
+function exampleProviderOptions(): ExampleProviderOptions {
+  if (provider === 'openai') {
+    return { openai: { textVerbosity: 'low' } satisfies OpenAILanguageModelResponsesOptions };
+  }
+  if (provider === 'anthropic') {
+    return {
+      anthropic: {
+        thinking: usesAdaptiveThinking
+          ? {
+              type: 'adaptive',
+              ...(usesSummarizedThinking ? { display: 'summarized' as const } : {}),
+            }
+          : { type: 'enabled', budgetTokens: 1024 },
+        ...(usesAdaptiveThinking ? { effort: 'high' } : {}),
+        sendReasoning: true,
+      } satisfies AnthropicLanguageModelOptions,
+    };
+  }
+  return {};
+}
 
 const result = streamText({
   model,
   prompt,
   providerOptions,
-  onFinish({ text, finishReason, usage }) {
+  onEnd({ text, finishReason, usage }) {
     logValue({ type: 'finish', finishReason, usage });
     logValue({ type: 'final-text', text });
   },

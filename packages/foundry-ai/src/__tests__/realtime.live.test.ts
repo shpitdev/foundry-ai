@@ -1,3 +1,4 @@
+import { setTimeout as sleep } from 'node:timers/promises';
 import type { Experimental_RealtimeClientEvent, Experimental_RealtimeServerEvent } from 'ai';
 import { describe, expect, it } from 'vitest';
 import { createFoundryRealtime, createFoundryRealtimeSetup } from '../providers/realtime.js';
@@ -7,6 +8,9 @@ const config = loadLiveFoundryConfig();
 const factory = createFoundryRealtime(config);
 const models = liveModels('realtime');
 
+const textOf = (items: Array<Experimental_RealtimeServerEvent>) =>
+  items.map((event) => (event.type === 'text-delta' ? event.delta : '')).join('');
+
 describe.skipIf(models.length === 0)('realtime', () => {
   for (const modelId of models) {
     it(`openai:${modelId}: text, tools, audio output and audio input`, async () => {
@@ -14,38 +18,50 @@ describe.skipIf(models.length === 0)('realtime', () => {
       const setup = createFoundryRealtimeSetup({ ...config, model: modelId });
       const connection = model.getWebSocketConfig(setup);
       const socket = new WebSocket(connection.url, connection.protocols);
-      const events: Experimental_RealtimeServerEvent[] = [];
+      const events: Array<Experimental_RealtimeServerEvent> = [];
       let failure: Error | undefined;
-      socket.onmessage = (message) => {
+      const onMessage = (message: MessageEvent) => {
         try {
           const parsed = model.parseServerEvent(JSON.parse(String(message.data)));
           for (const event of Array.isArray(parsed) ? parsed : [parsed]) {
             events.push(event);
-            if (event.type === 'error') failure = new Error(JSON.stringify(event));
+            if (event.type === 'error') {
+              failure = new Error(JSON.stringify(event));
+            }
           }
         } catch (error) {
           failure = error instanceof Error ? error : new Error(String(error));
         }
       };
-      socket.onerror = () => {
+      const onError = () => {
         failure = new Error('Foundry realtime WebSocket connection failed');
       };
-      socket.onclose = (event) => {
-        if (event.code !== 1000) failure = new Error(`WebSocket closed: ${event.code}`);
+      const onClose = (event: CloseEvent) => {
+        if (event.code !== 1000) {
+          failure = new Error(`WebSocket closed: ${event.code}`);
+        }
       };
-      const send = (event: Experimental_RealtimeClientEvent) =>
+      socket.addEventListener('message', onMessage);
+      socket.addEventListener('error', onError);
+      socket.addEventListener('close', onClose);
+      const send = (event: Experimental_RealtimeClientEvent) => {
         socket.send(JSON.stringify(model.serializeClientEvent(event)));
+      };
       const waitFor = async (type: Experimental_RealtimeServerEvent['type'], start = 0) => {
         const deadline = Date.now() + 30_000;
         while (Date.now() < deadline) {
-          if (failure) throw failure;
+          if (failure) {
+            throw failure;
+          }
           const found = events.slice(start).find((event) => event.type === type);
-          if (found) return found;
-          await new Promise((resolve) => setTimeout(resolve, 25));
+          if (found) {
+            return found;
+          }
+          await sleep(25);
         }
         throw new Error(`Timed out waiting for ${type}`);
       };
-      const response = async (text: string, modalities: string[]) => {
+      const response = async (text: string, modalities: Array<string>) => {
         const start = events.length;
         send({
           type: 'conversation-item-create',
@@ -56,8 +72,6 @@ describe.skipIf(models.length === 0)('realtime', () => {
         expect(done).toMatchObject({ status: 'completed' });
         return events.slice(start);
       };
-      const textOf = (items: Experimental_RealtimeServerEvent[]) =>
-        items.map((event) => (event.type === 'text-delta' ? event.delta : '')).join('');
       try {
         await waitFor('session-created');
         send({
@@ -93,7 +107,9 @@ describe.skipIf(models.length === 0)('realtime', () => {
         );
         const call = toolEvents.find((event) => event.type === 'function-call-arguments-done');
         expect(call?.type).toBe('function-call-arguments-done');
-        if (call?.type !== 'function-call-arguments-done') throw new Error('No tool call');
+        if (call?.type !== 'function-call-arguments-done') {
+          throw new Error('No tool call');
+        }
         expect(call.name).toBe('lookupCode');
         const code = `VERIFIED_${Math.random().toString(36).slice(2, 10)}`;
         start = events.length;
@@ -127,11 +143,12 @@ describe.skipIf(models.length === 0)('realtime', () => {
         socket.close(1000);
         const inputSocket = new WebSocket(connection.url, connection.protocols);
         events.length = 0;
-        inputSocket.onmessage = socket.onmessage;
-        inputSocket.onerror = socket.onerror;
-        inputSocket.onclose = socket.onclose;
-        const sendInput = (event: Experimental_RealtimeClientEvent) =>
+        inputSocket.addEventListener('message', onMessage);
+        inputSocket.addEventListener('error', onError);
+        inputSocket.addEventListener('close', onClose);
+        const sendInput = (event: Experimental_RealtimeClientEvent) => {
           inputSocket.send(JSON.stringify(model.serializeClientEvent(event)));
+        };
         try {
           await waitFor('session-created');
           sendInput({

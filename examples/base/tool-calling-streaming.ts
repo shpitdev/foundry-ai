@@ -13,7 +13,7 @@ const result = streamText({
   stopWhen: stepCountIs(2),
   toolChoice: 'required',
   tools,
-  onFinish({ text, toolCalls, toolResults, finishReason }) {
+  onEnd({ text, toolCalls, toolResults, finishReason }) {
     logValue({ type: 'finish', finishReason, toolCalls, toolResults });
     logValue({ type: 'final-text', text });
   },

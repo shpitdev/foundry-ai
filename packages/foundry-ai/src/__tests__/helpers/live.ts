@@ -19,7 +19,7 @@ export type LiveKind = keyof LiveModelIds;
 
 const PROVIDERS = ['openai', 'anthropic', 'google', 'xai'];
 
-const DEFAULT_MODELS: { [K in LiveKind]: readonly LiveModelIds[K][] } = {
+const DEFAULT_MODELS: { [K in LiveKind]: ReadonlyArray<LiveModelIds[K]> } = {
   language: ['gpt-6-luna', 'claude-haiku-4.5', 'gemini-3.1-flash-lite', 'grok-4-6'],
   embedding: ['text-embedding-3-small'],
   realtime: ['gpt-realtime-2.1'],
@@ -27,7 +27,7 @@ const DEFAULT_MODELS: { [K in LiveKind]: readonly LiveModelIds[K][] } = {
 };
 
 export function loadLiveFoundryConfig() {
-  if (!(process.env.FOUNDRY_URL && process.env.FOUNDRY_TOKEN)) {
+  if ((process.env.FOUNDRY_URL ?? '') === '' || (process.env.FOUNDRY_TOKEN ?? '') === '') {
     try {
       process.loadEnvFile(resolve(process.cwd(), '.env.local'));
     } catch {
@@ -42,11 +42,11 @@ export function loadLiveFoundryConfig() {
  * Models of one kind selected by `LIVE_MODELS`: unset for the defaults, otherwise a comma list
  * of `all`, provider names, or catalog model IDs. Unknown tokens throw.
  */
-export function liveModels<K extends LiveKind>(kind: K): LiveModelIds[K][] {
-  const raw = process.env.LIVE_MODELS?.trim();
+export function liveModels<K extends LiveKind>(kind: K): Array<LiveModelIds[K]> {
+  const raw = process.env.LIVE_MODELS?.trim() ?? '';
 
-  if (!raw) {
-    return [...DEFAULT_MODELS[kind]] as LiveModelIds[K][];
+  if (raw === '') {
+    return [...DEFAULT_MODELS[kind]] as Array<LiveModelIds[K]>;
   }
 
   const tokens = raw
@@ -63,13 +63,13 @@ export function liveModels<K extends LiveKind>(kind: K): LiveModelIds[K][] {
     );
   }
 
-  return (Object.keys(MODEL_CATALOG) as KnownModelId[])
+  return (Object.keys(MODEL_CATALOG) as Array<KnownModelId>)
     .filter((id) => isKind(id, kind))
     .filter((id) =>
       tokens.some(
         (token) => token === 'all' || token === id || token === MODEL_CATALOG[id].provider,
       ),
-    ) as LiveModelIds[K][];
+    ) as Array<LiveModelIds[K]>;
 }
 
 function isKind(id: KnownModelId, kind: LiveKind) {
@@ -77,16 +77,13 @@ function isKind(id: KnownModelId, kind: LiveKind) {
   const embedding = inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS');
   const realtime = inputTypes.some((type) => type === 'OPEN_AI_REALTIME');
 
-  switch (kind) {
-    case 'language':
-      return !embedding && !realtime;
-    case 'embedding':
-      return embedding;
-    case 'realtime':
-      return realtime;
-    case 'decision':
-      return (OPENAI_DECISION_MODEL_IDS as readonly string[]).includes(id);
-  }
+  const kinds: Record<LiveKind, boolean> = {
+    language: !embedding && !realtime,
+    embedding,
+    realtime,
+    decision: (OPENAI_DECISION_MODEL_IDS as ReadonlyArray<string>).includes(id),
+  };
+  return kinds[kind];
 }
 
 // A capability survey should leave room for reasoning and final output.

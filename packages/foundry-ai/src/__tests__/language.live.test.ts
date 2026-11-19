@@ -58,7 +58,7 @@ const structuredToolSchema = z.object({
 const regulatorySignalTool = tool({
   description: 'Returns a deterministic regulatory status for testing tool loops.',
   inputSchema: z.object({ topic: z.string().min(1) }),
-  execute: async ({ topic }) => ({ status: TOOL_STATUS, topic }),
+  execute: ({ topic }) => ({ status: TOOL_STATUS, topic }),
 });
 
 const executedTool = expect.arrayContaining([
@@ -72,10 +72,9 @@ describe.skipIf(languageModels.length === 0)('language', () => {
   for (const modelId of languageModels) {
     const { provider, supportsVision } = resolveKnownModelMetadata(modelId);
     const model = () => providers[provider](modelId);
-    const name = (capability: string) => `${provider}:${modelId}: ${capability}`;
     const options = (mode: ProviderOptionMode) => getProviderOptions(provider, modelId, mode);
 
-    it(name('Text'), async () => {
+    it(`${provider}:${modelId}: Text`, async () => {
       const result = await generateText({
         model: model(),
         prompt: prompts.text(provider),
@@ -86,7 +85,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       expect(result.text.toLowerCase()).toContain(provider);
     });
 
-    it(name('Stream'), async () => {
+    it(`${provider}:${modelId}: Stream`, async () => {
       const summary = await collectStreamSummary(
         streamText({
           model: model(),
@@ -99,7 +98,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       expect(summary.text.toLowerCase()).toContain('foundry');
     });
 
-    it(name('JSON'), async () => {
+    it(`${provider}:${modelId}: JSON`, async () => {
       const result = await generateText({
         model: model(),
         output: Output.object({
@@ -115,7 +114,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       expect(result.output).toEqual(expectedSignal);
     });
 
-    it(name('Tools'), async () => {
+    it(`${provider}:${modelId}: Tools`, async () => {
       const agent = new ToolLoopAgent({
         model: model(),
         maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
@@ -126,11 +125,11 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       const result = await agent.generate({ prompt: prompts.tools });
 
       expect(result.steps.flatMap((step) => step.toolResults)).toEqual(executedTool);
-      expect(result.text).toMatch(/agent/i);
-      expect(result.text).toMatch(/verified/i);
+      expect(result.text).toMatch(/agent/iu);
+      expect(result.text).toMatch(/verified/iu);
     });
 
-    it(name('Stream tools'), async () => {
+    it(`${provider}:${modelId}: Stream tools`, async () => {
       const summary = await collectStreamSummary(
         streamText({
           model: model(),
@@ -142,13 +141,13 @@ describe.skipIf(languageModels.length === 0)('language', () => {
         }),
       );
 
-      expect(summary.text).toMatch(/signal/i);
-      expect(summary.text).toMatch(/verified/i);
+      expect(summary.text).toMatch(/signal/iu);
+      expect(summary.text).toMatch(/verified/iu);
       expect(summary.eventCounts['tool-call']).toBeGreaterThan(0);
       expect(summary.eventCounts['tool-result']).toBeGreaterThan(0);
     });
 
-    it(name('JSON + tools'), async () => {
+    it(`${provider}:${modelId}: JSON + tools`, async () => {
       const result = await generateText({
         model: model(),
         output: Output.object({
@@ -164,12 +163,12 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       });
 
       expect(result.steps.flatMap((step) => step.toolResults)).toEqual(executedTool);
-      expect(result.output.status).toMatch(/verified/i);
+      expect(result.output.status).toMatch(/verified/iu);
       expect(result.output.summary.toLowerCase()).toContain('oncology');
     });
 
     if (supportsVision) {
-      it(name('Image'), async () => {
+      it(`${provider}:${modelId}: Image`, async () => {
         const result = await generateText({
           model: model(),
           messages: [
@@ -185,12 +184,12 @@ describe.skipIf(languageModels.length === 0)('language', () => {
           providerOptions: options('baseline'),
         });
 
-        expect(result.text).toMatch(/red/i);
+        expect(result.text).toMatch(/red/iu);
       });
     }
 
     if (provider !== 'google' && (provider !== 'openai' || isKnownOpenAIReasoningTarget(modelId))) {
-      it(name('Reasoning'), async () => {
+      it(`${provider}:${modelId}: Reasoning`, async () => {
         const short = provider === 'anthropic' && !usesAdaptiveThinking(modelId);
         const summary = await collectStreamSummary(
           streamText({
@@ -207,12 +206,12 @@ describe.skipIf(languageModels.length === 0)('language', () => {
           expect(hasReasoningEvidence(summary)).toBe(true);
         }
 
-        expect(summary.text).toMatch(short ? /ready/i : REASONING_ANSWER);
+        expect(summary.text).toMatch(short ? /ready/iu : REASONING_ANSWER);
       });
     }
 
     if (provider === 'xai') {
-      it(name('Chat Completions rejected'), async () => {
+      it(`${provider}:${modelId}: Chat Completions rejected`, async () => {
         await expect(
           generateText({
             model: providers.xai.chat(modelId),
@@ -249,12 +248,12 @@ function getProviderOptions(
 
   if (provider === 'openai') {
     const openai: OpenAILanguageModelResponsesOptions = {
-      textVerbosity: OPENAI_MEDIUM_VERBOSITY_MODELS.includes(modelId) ? 'medium' : 'low',
+      textVerbosity: OPENAI_MEDIUM_VERBOSITY_MODELS.has(modelId) ? 'medium' : 'low',
     };
 
-    if (OPENAI_LOW_EFFORT_MODELS.includes(modelId)) {
+    if (OPENAI_LOW_EFFORT_MODELS.has(modelId)) {
       openai.reasoningEffort = 'low';
-    } else if (OPENAI_MINIMAL_EFFORT_MODELS.includes(modelId)) {
+    } else if (OPENAI_MINIMAL_EFFORT_MODELS.has(modelId)) {
       openai.reasoningEffort = mode === 'reasoning' ? 'low' : 'minimal';
     }
 
@@ -286,7 +285,7 @@ function getProviderOptions(
   return undefined;
 }
 
-const OPENAI_MEDIUM_VERBOSITY_MODELS = [
+const OPENAI_MEDIUM_VERBOSITY_MODELS = new Set([
   'gpt-4.1',
   'gpt-4.1-mini',
   'gpt-4.1-nano',
@@ -295,10 +294,10 @@ const OPENAI_MEDIUM_VERBOSITY_MODELS = [
   'gpt-5.1-codex-mini',
   'gpt-5.4-mini',
   'gpt-5.4-nano',
-];
-const OPENAI_LOW_EFFORT_MODELS = ['gpt-5.2', 'gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano'];
+]);
+const OPENAI_LOW_EFFORT_MODELS = new Set(['gpt-5.2', 'gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano']);
 /** Only these accept `minimal`; GPT-6 Luna and newer models reject it. */
-const OPENAI_MINIMAL_EFFORT_MODELS = ['gpt-5', 'gpt-5-mini', 'gpt-5-nano'];
+const OPENAI_MINIMAL_EFFORT_MODELS = new Set(['gpt-5', 'gpt-5-mini', 'gpt-5-nano']);
 
 function usesAdaptiveThinking(modelId: string) {
   return (

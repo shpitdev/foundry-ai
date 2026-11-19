@@ -1,5 +1,5 @@
 import type { ModelDefinition } from '../types.js';
-import { createProviderModelCatalog } from './metadata.js';
+import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
 
 const ANTHROPIC_MODEL_DEFINITIONS = {
   'claude-haiku-4.5': {
@@ -231,17 +231,16 @@ export const ANTHROPIC_MODELS = createProviderModelCatalog(
 );
 
 export type KnownAnthropicModelId = keyof typeof ANTHROPIC_MODELS;
-export type AnthropicModelId = KnownAnthropicModelId | (string & {});
+export type AnthropicModelId = KnownAnthropicModelId | (string & Record<never, never>);
 
-export const ANTHROPIC_MODEL_IDS = Object.freeze(
-  Object.keys(ANTHROPIC_MODELS),
-) as readonly KnownAnthropicModelId[];
+export const ANTHROPIC_MODEL_IDS: ReadonlyArray<KnownAnthropicModelId> =
+  catalogModelIds(ANTHROPIC_MODELS);
 
 // Anthropic rejects forced tool use for these models, so the jsonTool structured-output
 // mode the adapter otherwise requests fails with HTTP 400 through the Foundry proxy.
 const ANTHROPIC_NATIVE_STRUCTURED_OUTPUT_TARGETS = new Set(
   (
-    ['claude-opus-5.5', 'claude-sonnet-5.5'] as const satisfies readonly KnownAnthropicModelId[]
+    ['claude-opus-5.5', 'claude-sonnet-5.5'] as const satisfies ReadonlyArray<KnownAnthropicModelId>
   ).flatMap((modelId) => [modelId as string, ANTHROPIC_MODELS[modelId].rid]),
 );
 

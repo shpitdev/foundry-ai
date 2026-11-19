@@ -28,11 +28,12 @@ export function createFoundryRealtime(config: FoundryRealtimeConfig) {
       specificationVersion: native.specificationVersion,
       provider: native.provider,
       modelId,
-      async doCreateClientSecret() {
-        throw new Error(
-          'Foundry realtime uses a Foundry user access token, not OpenAI client secrets. Use createFoundryRealtimeSetup with the authenticated user token.',
-        );
-      },
+      doCreateClientSecret: () =>
+        Promise.reject(
+          new Error(
+            'Foundry realtime uses a Foundry user access token, not OpenAI client secrets. Use createFoundryRealtimeSetup with the authenticated user token.',
+          ),
+        ),
       getWebSocketConfig(options) {
         // Never forward a Foundry credential to a URL supplied by an untrusted setup response.
         if (options.url !== url) {
@@ -86,7 +87,7 @@ function getRealtimeUrl(origin: string, modelId: RealtimeModelId): string {
 }
 
 function validateToken(token: string): void {
-  if (!token || !/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/.test(token)) {
+  if (!token || !/^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/u.test(token)) {
     throw new Error('A valid Foundry user access token is required for realtime.');
   }
 }

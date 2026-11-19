@@ -4,14 +4,14 @@ import { join, resolve } from 'node:path';
 import { packageByProject } from './packages.mjs';
 
 const forbiddenPatterns = [
-  /^docs\/(?!.*\.md$)/,
-  /^\.memory\//,
-  /^project\.json$/,
-  /^scripts\//,
-  /^src\//,
-  /^test\//,
-  /^tsconfig(?:\.|$)/,
-  /^vitest(?:\.|$)/,
+  /^docs\/(?!.*\.md$)/u,
+  /^\.memory\//u,
+  /^project\.json$/u,
+  /^scripts\//u,
+  /^src\//u,
+  /^test\//u,
+  /^tsconfig(?:\.|$)/u,
+  /^vitest(?:\.|$)/u,
 ];
 
 const audits = {
@@ -29,7 +29,7 @@ const audits = {
       'dist/providers/xai.d.ts',
       'package.json',
     ],
-    checkManifest: () => [],
+    checkManifest: checkAiSdkDeclarations,
   },
   'foundry-effect-ai': {
     requiredFiles: [
@@ -85,18 +85,38 @@ console.log(
   `Package audit passed for ${packSummary.name}@${packSummary.version} with ${packSummary.entryCount} files.`,
 );
 
+/**
+ * Each entry's declarations stand alone and need no Node types, so a provider subpath typechecks
+ * without the root entry or @types/node.
+ */
+function checkAiSdkDeclarations(packedFiles) {
+  const found = [];
+  for (const file of [...packedFiles].filter((path) => /\.d\.c?ts$/u.test(path))) {
+    const source = readFileSync(join(packageRoot, file), 'utf8');
+    if (/\bfrom\s*['"]\.{1,2}\//u.test(source) || /\bimport\s*['"]\.{1,2}\//u.test(source)) {
+      found.push(
+        `${file} imports another declaration file; each entry's declarations must stand alone.`,
+      );
+    }
+    if (/\bNodeJS\.|\/\/\/\s*<reference\s+types=["']node["']/u.test(source)) {
+      found.push(`${file} depends on Node's ambient types.`);
+    }
+  }
+  return found;
+}
+
 /** effect is the only peer and nothing else is installed with the package. */
-function checkEffectPackage(files) {
+function checkEffectPackage(packedFiles) {
   const manifest = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8'));
-  const problems = [];
+  const found = [];
   if (manifest.dependencies != null || manifest.optionalDependencies != null) {
-    problems.push('The Effect package must not declare dependencies; effect is its only peer.');
+    found.push('The Effect package must not declare dependencies; effect is its only peer.');
   }
   if (JSON.stringify(Object.keys(manifest.peerDependencies ?? {})) !== '["effect"]') {
-    problems.push('peerDependencies must contain exactly effect.');
+    found.push('peerDependencies must contain exactly effect.');
   }
   if (manifest.type !== 'module' || manifest.sideEffects !== false) {
-    problems.push('The Effect package must be ESM with sideEffects: false.');
+    found.push('The Effect package must be ESM with sideEffects: false.');
   }
   // Public modules resolve only through the wildcard; an exact key would expose internals.
   const expectedExports = {
@@ -108,21 +128,21 @@ function checkEffectPackage(files) {
     },
   };
   if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {
-    problems.push(`exports must be exactly ${JSON.stringify(expectedExports)}.`);
+    found.push(`exports must be exactly ${JSON.stringify(expectedExports)}.`);
   }
   if (manifest.main != null || manifest.module != null || manifest.types != null) {
-    problems.push('The Effect package has no root entry; import modules by subpath.');
+    found.push('The Effect package has no root entry; import modules by subpath.');
   }
-  for (const file of files) {
-    if (/(^|\/)index\.(js|d\.ts)$/.test(file)) {
-      problems.push(`Barrel file published: ${file}`);
+  for (const file of packedFiles) {
+    if (/(^|\/)index\.(js|d\.ts)$/u.test(file)) {
+      found.push(`Barrel file published: ${file}`);
     }
     if (file.endsWith('.js')) {
       const source = readFileSync(join(packageRoot, file), 'utf8');
-      if (/from\s*["'](?:ai|@ai-sdk\/[^"']+|@effect\/ai-[^"']+)["']/.test(source)) {
-        problems.push(`${file} imports a vendor AI SDK.`);
+      if (/from\s*["'](?:ai|@ai-sdk\/[^"']+|@effect\/ai-[^"']+)["']/u.test(source)) {
+        found.push(`${file} imports a vendor AI SDK.`);
       }
     }
   }
-  return problems;
+  return found;
 }

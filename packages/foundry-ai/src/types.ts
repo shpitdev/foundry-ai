@@ -37,7 +37,7 @@ export interface ModelDefinition {
   modelIdentifier: string;
   displayName: string;
   lifecycle: ModelLifecycle;
-  inputTypes: readonly ModelInputType[];
+  inputTypes: ReadonlyArray<ModelInputType>;
   trainingCutoffDate?: string;
   performance: ModelPerformance;
   externalUrl?: string;

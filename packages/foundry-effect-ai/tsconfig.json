@@ -1,5 +1,6 @@
 {
-  // Typecheck program (src and tests) with Effect language-service diagnostics.
+  // Typecheck program (src and tests). @effect/tsgo patches tsc to report the Effect diagnostics
+  // configured below; the plugin keeps the @effect/language-service name.
   // tsconfig.lib.json emits src only, without Node types.
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {

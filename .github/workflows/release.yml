@@ -7,10 +7,10 @@ on:
     branches:
       - main
     paths:
-      - "nx.json"
-      - "package.json"
-      - "pnpm-lock.yaml"
-      - "packages/**"
+      - 'nx.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'packages/**'
 
 permissions:
   contents: write
@@ -34,9 +34,9 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
-      - uses: actions/setup-node@v7
+      - uses: jdx/mise-action@v5
         with:
-          node-version: 24
+          cache: false
       - name: Select packages
         id: select
         env:
@@ -70,15 +70,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
-      - uses: pnpm/action-setup@v6.1.0
+      # Node and pnpm from mise.toml, without the shared tool cache. Node 26's bundled npm publishes
+      # through OIDC; no step writes an .npmrc token.
+      - uses: jdx/mise-action@v5
         with:
-          run_install: false
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: pnpm
-          registry-url: https://registry.npmjs.org
-      - run: npm install --global npm@11.16.0
+          cache: false
       - run: pnpm install --frozen-lockfile
       - name: Prepare prerelease version
         id: meta
@@ -120,7 +116,7 @@ jobs:
           PACKAGE_DIR: ${{ matrix.package.dir }}
         run: |
           cd "${PACKAGE_DIR}"
-          NODE_AUTH_TOKEN="" npm publish --access public --tag next --provenance
+          npm publish --access public --tag next --provenance
 
   publish-stable:
     needs: select-packages
@@ -142,15 +138,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
-      - uses: pnpm/action-setup@v6.1.0
+      # Node and pnpm from mise.toml, without the shared tool cache. Node 26's bundled npm publishes
+      # through OIDC; no step writes an .npmrc token.
+      - uses: jdx/mise-action@v5
         with:
-          run_install: false
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: pnpm
-          registry-url: https://registry.npmjs.org
-      - run: npm install --global npm@11.16.0
+          cache: false
       - run: pnpm install --frozen-lockfile
       - name: Build and audit
         env:
@@ -195,7 +187,7 @@ jobs:
           PACKAGE_DIR: ${{ matrix.package.dir }}
         run: |
           cd "${PACKAGE_DIR}"
-          NODE_AUTH_TOKEN="" npm publish --access public --tag latest --provenance
+          npm publish --access public --tag latest --provenance
       - name: Tag stable release
         env:
           PKG_NAME: ${{ steps.meta.outputs.name }}

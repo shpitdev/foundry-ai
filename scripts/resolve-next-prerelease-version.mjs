@@ -10,7 +10,7 @@ const releasePackage = packageByProject(project);
 const prereleaseTag = 'next';
 
 function parseStableVersion(version) {
-  const match = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$/.exec(version);
+  const match = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$/u.exec(version);
   if (!match?.groups) {
     throw new Error(`Expected a stable x.y.z version, but received "${version}".`);
   }
@@ -40,7 +40,7 @@ const expectedPrefix = `${major}.${minor}.${patch + 1}-${prereleaseId}.`;
 if (nextTag?.startsWith(expectedPrefix)) {
   const counter = nextTag.slice(expectedPrefix.length);
 
-  if (!/^\d+$/.test(counter)) {
+  if (!/^\d+$/u.test(counter)) {
     throw new Error(
       `Unsupported ${prereleaseTag} tag "${nextTag}". Expected ${expectedPrefix}<number>.`,
     );

@@ -4,6 +4,7 @@ import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
 import { createFoundryGoogle } from '@shpitdev/foundry-ai/google';
 import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';
 import { createFoundryXai } from '@shpitdev/foundry-ai/xai';
+import type * as XaiEntry from '@shpitdev/foundry-ai/xai';
 import * as ai from 'ai';
 import { createProviderRegistry, generateText, type LanguageModel } from 'ai';
 
@@ -29,7 +30,7 @@ const providersAndModels = [
   { provider: anthropic, model: anthropic('claude-opus-5') },
   { provider: google, model: google('gemini-4-argon') },
 ];
-const acceptsAiSdkModel = (_model: LanguageModel) => undefined;
+const acceptsAiSdkModel = (_model: LanguageModel) => {};
 const registry = createProviderRegistry({ anthropic, google, openai, xai });
 acceptsAiSdkModel(registry.languageModel('openai:gpt-5.6-terra'));
 acceptsAiSdkModel(registry.languageModel('xai:grok-4-6'));
@@ -37,26 +38,27 @@ acceptsAiSdkModel(registry.languageModel('xai:grok-4-6'));
 for (const { provider, model } of providersAndModels) {
   acceptsAiSdkModel(model);
 
-  if (provider.specificationVersion !== expectedVersion) {
-    throw new Error(
-      `Expected provider specification ${expectedVersion}, received ${provider.specificationVersion}.`,
-    );
-  }
-
-  if (model.specificationVersion !== expectedVersion) {
-    throw new Error(
-      `Expected model specification ${expectedVersion}, received ${model.specificationVersion}.`,
-    );
+  // Typed as string: the packed library runs against SDKs with other specification versions.
+  const versions: Record<string, string> = {
+    provider: provider.specificationVersion,
+    model: model.specificationVersion,
+  };
+  for (const [kind, version] of Object.entries(versions)) {
+    if (version !== expectedVersion) {
+      throw new Error(`Expected ${kind} specification ${expectedVersion}, received ${version}.`);
+    }
   }
 }
 
 // Exercise both package export conditions and the native transport, not only types.
 const require = createRequire(import.meta.url);
-const cjsXai = require('@shpitdev/foundry-ai/xai') as typeof import('@shpitdev/foundry-ai/xai');
-const requests: string[] = [];
+// oxlint-disable-next-line typescript/no-unsafe-type-assertion -- require() is untyped; this exercises the CJS export condition.
+const cjsXai = require('@shpitdev/foundry-ai/xai') as typeof XaiEntry;
+const requests: Array<string> = [];
 globalThis.fetch = async (input, init) => {
   const request = new Request(input, init);
-  const body = (await request.json()) as Record<string, unknown>;
+  const body: unknown = await request.json();
+  assert.ok(isRecord(body));
   requests.push(request.url);
   assert.equal(request.headers.get('authorization'), 'Bearer test-token');
   assert.equal(body.model, 'ri.language-model-service..language-model.grok-4-6');
@@ -85,15 +87,18 @@ globalThis.fetch = async (input, init) => {
     choices: [{ index: 0, message: { role: 'assistant', content: 'OK' }, finish_reason: 'stop' }],
   });
 };
-for (const factory of [createFoundryXai, cjsXai.createFoundryXai]) {
-  const provider = factory(config);
-  const registry = createProviderRegistry({ xai: provider });
-  const model = registry.languageModel('xai:grok-4-6');
-  assert.equal(model.provider, 'foundry-xai');
-  for (const selected of [model, provider.chat('grok-4-6')]) {
-    const result = await generateText({ model: selected, prompt: 'Reply OK.', maxRetries: 0 });
-    assert.equal(result.text, 'OK');
-  }
+const results = await Promise.all(
+  [createFoundryXai, cjsXai.createFoundryXai].flatMap((factory) => {
+    const provider = factory(config);
+    const model = createProviderRegistry({ xai: provider }).languageModel('xai:grok-4-6');
+    assert.equal(model.provider, 'foundry-xai');
+    return [model, provider.chat('grok-4-6')].map((selected) =>
+      generateText({ model: selected, prompt: 'Reply OK.', maxRetries: 0 }),
+    );
+  }),
+);
+for (const result of results) {
+  assert.equal(result.text, 'OK');
 }
 assert.equal(requests.length, 4);
 assert.equal(requests.filter((url) => url.endsWith('/xai/v1/responses')).length, 2);
@@ -106,6 +111,10 @@ if (typeof (ai as Record<string, unknown>).experimental_decide === 'function') {
   assert.equal(decision.provider, 'foundry-openai.decision');
   assert.equal(decision.modelId, 'ri.language-model-service..language-model.gpt-6-luna');
 } else {
-  assert.throws(() => openai.decisionModel('gpt-6-luna'), /decisionModel/);
+  assert.throws(() => openai.decisionModel('gpt-6-luna'), /decisionModel/u);
 }
 console.log(`Packed OpenAI decision model creation passed for ${expectedVersion}.`);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}

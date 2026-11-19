@@ -1,6 +1,6 @@
 # Releasing
 
-Each package releases on its own: `@shpitdev/foundry-ai` and `@shpitdev/foundry-effect-ai` have separate Nx release groups, versions, changelogs and `<name>@<version>` tags. [release.yml](../.github/workflows/release.yml) publishes through npm trusted publishing (OIDC) with provenance, which requires the repository variable `NPM_PUBLISH_ENABLED=true` and npm trust for `shpitdev/foundry-ai` / `release.yml` on each package. [release-packages.mjs](../scripts/release-packages.mjs) decides what a merged PR publishes; packages marked `private` are never published.
+Each package releases on its own: `@shpitdev/foundry-ai` and `@shpitdev/foundry-effect-ai` have separate Nx release groups, versions, changelogs and `<name>@<version>` tags. [release.yml](../.github/workflows/release.yml) publishes through npm trusted publishing (OIDC) with provenance, which requires the repository variable `NPM_PUBLISH_ENABLED=true` and npm trust for `shpitdev/foundry-ai` / `release.yml` on each package. [release-packages.mjs](../scripts/release-packages.mjs) decides what a merged PR publishes; packages marked `private` are never published. Release jobs install Node and pnpm from `mise.toml` and publish with Node's bundled npm, which supports trusted publishing; no step writes an npm token. [check-release-policy.mjs](../scripts/check-release-policy.mjs) enforces this shape in `pnpm run verify`.
 
 ## Stable release
 

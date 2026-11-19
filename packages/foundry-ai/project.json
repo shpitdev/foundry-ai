@@ -23,14 +23,23 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "command": "pnpm exec tsup --config tsup.config.ts",
+        "commands": [
+          "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+          "pnpm exec tsup --config tsup.config.ts"
+        ],
+        "parallel": false,
         "cwd": "{workspaceRoot}/packages/foundry-ai"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec biome check .github AGENTS.md README.md SECURITY.md biome.json docs examples justfile nx.json opencode.jsonc package.json packages/foundry-ai pnpm-workspace.yaml scripts tsconfig.base.json tsconfig.json",
+        "commands": [
+          "pnpm exec oxlint --ignore-pattern 'packages/foundry-effect-ai/**'",
+          "pnpm exec oxfmt --check '!packages/foundry-effect-ai/**'",
+          "actionlint"
+        ],
+        "parallel": false,
         "cwd": "{workspaceRoot}"
       }
     },

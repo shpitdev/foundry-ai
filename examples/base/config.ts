@@ -31,9 +31,9 @@ export function resolveCliModelId(): string | undefined {
 }
 
 export function requireEnv(name: string): string {
-  const value = process.env[name]?.trim();
+  const value = process.env[name]?.trim() ?? '';
 
-  if (!value) {
+  if (value === '') {
     throw new Error(`Missing required environment variable: ${name}`);
   }
 
@@ -43,7 +43,7 @@ export function requireEnv(name: string): string {
 maybeLoadLocalEnvFile();
 
 function maybeLoadLocalEnvFile() {
-  if (process.env.FOUNDRY_URL && process.env.FOUNDRY_TOKEN) {
+  if ((process.env.FOUNDRY_URL ?? '') !== '' && (process.env.FOUNDRY_TOKEN ?? '') !== '') {
     return;
   }
 

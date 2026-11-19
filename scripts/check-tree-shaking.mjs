@@ -43,7 +43,7 @@ const budgets = {
 const modules = readdirSync(distRoot)
   .filter((file) => file.endsWith('.js'))
   .map((file) => file.slice(0, -'.js'.length))
-  .sort();
+  .toSorted();
 if (modules.length === 0) {
   throw new Error(`No public modules in ${distRoot}; run the build first.`);
 }
@@ -70,24 +70,30 @@ try {
   symlinkSync(resolve('node_modules/effect'), join(scratch, 'node_modules/effect'), 'dir');
   writeFileSync(join(scratch, 'package.json'), '{"type":"module"}\n');
 
+  // A namespace export keeps the module's whole public surface: the worst case for size.
   for (const name of modules) {
-    // A namespace export keeps the module's whole public surface: the worst case for size.
     writeFileSync(
       join(scratch, `${name}.ts`),
       `export * as M from '@shpitdev/foundry-effect-ai/${name}';\n`,
     );
-    const result = await build({
-      absWorkingDir: scratch,
-      entryPoints: [`${name}.ts`],
-      bundle: true,
-      format: 'esm',
-      platform: 'neutral',
-      minify: true,
-      metafile: true,
-      write: false,
-      external: ['effect', 'effect/*'],
-      logLevel: 'silent',
-    });
+  }
+  const bundles = await Promise.all(
+    modules.map((name) =>
+      build({
+        absWorkingDir: scratch,
+        entryPoints: [`${name}.ts`],
+        bundle: true,
+        format: 'esm',
+        platform: 'neutral',
+        minify: true,
+        metafile: true,
+        write: false,
+        external: ['effect', 'effect/*'],
+        logLevel: 'silent',
+      }).then((result) => ({ name, result })),
+    ),
+  );
+  for (const { name, result } of bundles) {
     const bytes = result.outputFiles[0]?.contents.byteLength ?? 0;
     const budget = budgets[name] ?? budgets.default;
     if (bytes > budget) {
@@ -103,7 +109,7 @@ try {
           );
         }
       }
-      const publicModule = /\/src\/([A-Z]\w+)\.js$/.exec(input)?.[1];
+      const publicModule = /\/src\/([A-Z]\w+)\.js$/u.exec(input)?.[1];
       if (publicModule && publicModule !== name && publicModule !== 'FoundryClient') {
         failures.push(`${name} bundles the public module ${publicModule}.`);
       }
@@ -116,21 +122,23 @@ try {
     .map(String)
     .filter((file) => file.endsWith('.js'))
     .map((file) => `@shpitdev/foundry-effect-ai/internal/${file.slice(0, -'.js'.length)}`);
-  for (const specifier of internalModules) {
-    const resolved = await build({
-      absWorkingDir: scratch,
-      stdin: { contents: `import '${specifier}';`, resolveDir: scratch },
-      bundle: true,
-      write: false,
-      external: ['effect', 'effect/*'],
-      logLevel: 'silent',
-    }).then(
-      () => true,
-      () => false,
-    );
-    if (resolved) {
-      failures.push(`${specifier} resolved; the exports map must block internal modules.`);
-    }
+  const resolvedInternals = await Promise.all(
+    internalModules.map((specifier) =>
+      build({
+        absWorkingDir: scratch,
+        stdin: { contents: `import '${specifier}';`, resolveDir: scratch },
+        bundle: true,
+        write: false,
+        external: ['effect', 'effect/*'],
+        logLevel: 'silent',
+      }).then(
+        () => [specifier],
+        () => [],
+      ),
+    ),
+  );
+  for (const specifier of resolvedInternals.flat()) {
+    failures.push(`${specifier} resolved; the exports map must block internal modules.`);
   }
 
   // Consumers typecheck each module through the exports map with no other package installed.

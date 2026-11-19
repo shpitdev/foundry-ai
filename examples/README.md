@@ -8,18 +8,18 @@ pnpm run example tool-calling openai
 
 The runner builds first and uses Bun when installed, otherwise Node with tsx.
 
-| Example name | Purpose |
-|---|---|
-| `realtime` | SDK 7 realtime WebSocket text; optional realtime model argument |
-| `decisions` | GPT-6 Luna boolean, choice, and score answers |
-| `basic-text` | Blocking text generation |
-| `streaming` | Streaming text |
-| `structured-output` | Zod schema output |
-| `tool-calling` | Blocking tool loop |
-| `tool-calling-streaming` | Streaming tool loop |
-| `provider-registry` | Multiple providers with `provider:model` IDs |
-| `tool-calling-devtools` | Exa search with DevTools capture |
-| `tool-calling-parallel-devtools` | Parallel Exa research with step summaries |
+| Example name                     | Purpose                                                         |
+| -------------------------------- | --------------------------------------------------------------- |
+| `realtime`                       | SDK 7 realtime WebSocket text; optional realtime model argument |
+| `decisions`                      | GPT-6 Luna boolean, choice, and score answers                   |
+| `basic-text`                     | Blocking text generation                                        |
+| `streaming`                      | Streaming text                                                  |
+| `structured-output`              | Zod schema output                                               |
+| `tool-calling`                   | Blocking tool loop                                              |
+| `tool-calling-streaming`         | Streaming tool loop                                             |
+| `provider-registry`              | Multiple providers with `provider:model` IDs                    |
+| `tool-calling-devtools`          | Exa search with DevTools capture                                |
+| `tool-calling-parallel-devtools` | Parallel Exa research with step summaries                       |
 
 `streaming`, `structured-output`, `tool-calling`, and `tool-calling-streaming` accept a provider (`openai`, `anthropic`, or `google`) and optional model:
 

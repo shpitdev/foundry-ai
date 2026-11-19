@@ -16,88 +16,88 @@ JSON means schema-valid output was observed; it does not establish strict server
 
 ### OpenAI
 
-| Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
-|---|---|---|---|---|---|---|---|---|
-| `gpt-5-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-6.1-terra` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-6.1-sol` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-6-sol` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-6-luna` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-6-astra` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-5.6-terra` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-5.6-sol` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-5.6-luna` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-5.4-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5.4-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5.4` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5.3-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5.2` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5.1-codex-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5.1-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5.1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-4.1-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-4.1-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gpt-4.1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| Model                | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| -------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gpt-5-nano`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-6.1-terra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-6.1-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-6-sol`          | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-6-luna`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-6-astra`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-5.6-terra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-5.6-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-5.6-luna`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-5.5`            | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-5.4-nano`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-5.4-mini`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-5.4`            | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-5.3-codex`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-5.2`            | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-5.1-codex-mini` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-5.1-codex`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-5.1`            | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-5-mini`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-5-codex`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-5`              | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-4.1-nano`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-4.1-mini`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gpt-4.1`            | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
 
 ### Anthropic
 
-| Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
-|---|---|---|---|---|---|---|---|---|
-| `claude-haiku-4.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-sonnet-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-haiku-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-sonnet-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-4.8` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-4.7` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-sonnet-4.6` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-4.6` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-sonnet-4.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `claude-opus-4.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Model               | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `claude-haiku-4.5`  | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-sonnet-5.5` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-5.5`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-haiku-5.5`  | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-sonnet-5`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-5`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-4.8`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-4.7`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-sonnet-4.6` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-4.6`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-sonnet-4.5` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `claude-opus-4.5`   | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 
 ### Google
 
-| Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
-|---|---|---|---|---|---|---|---|---|
-| `gemini-3.1-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-4-hydrogen` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-4-carbon` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-4-argon` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.8-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | — |
-| `gemini-3.5-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | — |
-| `gemini-3.5-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.1-pro` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| Model                   | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ----------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gemini-3.1-flash-lite` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-4-hydrogen`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-4-carbon`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-4-argon`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-3.8-flash`      | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | —         |
+| `gemini-3.5-flash-lite` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | —         |
+| `gemini-3.5-flash`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-3.1-pro`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-3-flash`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
 
 ### xAI
 
 Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compatibility adapter. These columns use Responses; all seven explicit Chat Completions text probes were proxy-rejected (HTTP 400). See [xAI setup](./xai.md).
 
-| Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
-|---|---|---|---|---|---|---|---|---|
-| `grok-4-6` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `grok-420-reasoning-latest` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `grok-420-non-reasoning-latest` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `grok-4-7` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `grok-4-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `grok-4-3` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `grok-build-0-1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Model                           | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ------------------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `grok-4-6`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `grok-420-reasoning-latest`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `grok-420-non-reasoning-latest` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `grok-4-7`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `grok-4-5`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `grok-4-3`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `grok-build-0-1`                | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 
 ### Realtime
 
 Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental.
 
-| Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
-|---|---|---|---|---|---|
-| `gpt-realtime` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-1.5` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-2.1` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-2.1-mini` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Model                   | Connect | Text | Tool result round-trip | Audio output | Audio input |
+| ----------------------- | ------- | ---- | ---------------------- | ------------ | ----------- |
+| `gpt-realtime`          | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-1.5`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2.1`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2.1-mini` | ✓       | ✓    | ✓                      | ✓            | ✓           |
 
 Live probes use SDK 7.0.176 / OpenAI 4.0.121 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested.
 
@@ -105,25 +105,25 @@ See [realtime setup](#realtime-setup) for authentication, examples, and the manu
 
 ### Embeddings
 
-| Model | Probe | Dimensions |
-|---|---|---:|
-| `text-embedding-ada-002` | ✓ | 1536 |
-| `text-embedding-3-small` | ✓ | 1536 |
-| `text-embedding-3-large` | ✓ | 3072 |
+| Model                    | Probe | Dimensions |
+| ------------------------ | ----- | ---------: |
+| `text-embedding-ada-002` | ✓     |       1536 |
+| `text-embedding-3-small` | ✓     |       1536 |
+| `text-embedding-3-large` | ✓     |       3072 |
 
 ### Decisions
 
 November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. GPT-6 Luna serves Foundry's `/decisions` route by RID or the `gpt-6-luna` alias. GPT-6 Sol, GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra, and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
 
-| Probe | Result |
-|---|---|
-| Boolean question by alias and by RID | ✓ |
-| Boolean question defined only by criteria | ✓ |
-| Choice, score, and boolean questions in one call | ✓ |
-| JSON object state | ✓ |
-| Text, JSON, and PNG image state | ✓ |
-| `providerOptions.openai.safetyIdentifier` | ✓ |
-| 400 questions, the API maximum | ✓, about 1.2 s |
+| Probe                                            | Result         |
+| ------------------------------------------------ | -------------- |
+| Boolean question by alias and by RID             | ✓              |
+| Boolean question defined only by criteria        | ✓              |
+| Choice, score, and boolean questions in one call | ✓              |
+| JSON object state                                | ✓              |
+| Text, JSON, and PNG image state                  | ✓              |
+| `providerOptions.openai.safetyIdentifier`        | ✓              |
+| 400 questions, the API maximum                   | ✓, about 1.2 s |
 
 - Foundry rejects `prompt_cache_key` and `prompt_cache_options` with HTTP 400, so leave `providerOptions.openai.promptCacheKey` unset. Implicit caching still works: a repeated prefix of about 4,400 tokens was read from cache on the next call. Palantir documents the `X-Palantir-session-id` header for routing affinity; pass it through `experimental_decide({ headers })`.
 - Foundry rejects public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
@@ -141,12 +141,12 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 
 ## Model routing
 
-| Models | Factory / subpath | Required peer |
-|---|---|---|
-| GPT / OpenAI reasoning | `createFoundryOpenAI` / `openai` | `@ai-sdk/openai` |
-| Claude | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic` |
-| Gemini | `createFoundryGoogle` / `google` | `@ai-sdk/google` |
-| Grok | `createFoundryXai` / `xai` | `@ai-sdk/xai` |
+| Models                 | Factory / subpath                      | Required peer       |
+| ---------------------- | -------------------------------------- | ------------------- |
+| GPT / OpenAI reasoning | `createFoundryOpenAI` / `openai`       | `@ai-sdk/openai`    |
+| Claude                 | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic` |
+| Gemini                 | `createFoundryGoogle` / `google`       | `@ai-sdk/google`    |
+| Grok                   | `createFoundryXai` / `xai`             | `@ai-sdk/xai`       |
 
 OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
 
@@ -168,12 +168,15 @@ In your authenticated, app-local setup endpoint, return:
 import { createFoundryRealtimeSetup } from '@shpitdev/foundry-ai/realtime';
 
 // foundryUserToken must belong to the authenticated caller.
-return Response.json(createFoundryRealtimeSetup({
-  foundryUrl,
-  model: 'gpt-realtime-2.1',
-  token: foundryUserToken,
-  tools: [], // Or experimental_getRealtimeToolDefinitions({ tools }) from ai.
-}), { headers: { 'Cache-Control': 'no-store' } });
+return Response.json(
+  createFoundryRealtimeSetup({
+    foundryUrl,
+    model: 'gpt-realtime-2.1',
+    token: foundryUserToken,
+    tools: [], // Or experimental_getRealtimeToolDefinitions({ tools }) from ai.
+  }),
+  { headers: { 'Cache-Control': 'no-store' } },
+);
 ```
 
 Pass the matching model to [AI SDK's realtime client](https://ai-sdk.dev/docs/ai-sdk-core/realtime):

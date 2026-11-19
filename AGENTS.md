@@ -12,13 +12,15 @@
 
 - Use Nx generators first for new apps/packages. Manual edits only after generation. For repeated scripts, prefer Nx solutions (generators/plugins).
 - Use `pnpm exec nx <target> <project>` or `pnpm run <script>` from repo root. Don't introduce multiple ways to run the same thing.
-- Biome formats the whole repo and lints everything except `packages/foundry-effect-ai`, which oxlint (`.oxlintrc.json`) and Effect language-service diagnostics lint. Do not add ESLint or Prettier.
+- mise (`mise.toml`) pins Node, pnpm and actionlint; `package.json` `packageManager` must match its pnpm.
+- oxfmt (`.oxfmtrc.json`) formats the repo and oxlint (`.oxlintrc.json`, type-aware) lints all of it; `pnpm run format` applies formatting. Typecheck uses TypeScript 7 (`tsc` from `@typescript/native`, patched by `@effect/tsgo` so Effect diagnostics fail it); the `typescript` package is TypeScript 6 only for tools that need its JS API, such as tsup's declaration build. Do not add ESLint, Prettier or Biome.
 - Vitest is the only test runner. Use `.test` files, not `.spec` files.
 - Keep route files app-local. Shared packages must stay router-agnostic.
 - `@shpitdev/foundry-ai` (AI SDK) and `@shpitdev/foundry-effect-ai` (Effect) never import each other; lint enforces it. The Effect package depends only on `effect`; follow `packages/foundry-effect-ai/docs/PLAN.md`.
 - Each package releases independently: `pnpm run release <project>`. See `docs/RELEASING.md`.
 
 ## Reliability Rules
+
 - Verify locally before committing. Don't rely on unstaged fixes.
 
 ## See Also

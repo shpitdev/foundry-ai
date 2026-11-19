@@ -24,7 +24,7 @@ describe.skipIf(models.length === 0)('decisions', () => {
         },
       });
       expect(result.answers.damaged.probability).toBeGreaterThan(0.8);
-      expect(result.response.modelId).toMatch(/^gpt-6-luna/);
+      expect(result.response.modelId).toMatch(/^gpt-6-luna/u);
       expect(result.usage.inputTokens).toBeGreaterThan(0);
     });
 
@@ -62,11 +62,9 @@ describe.skipIf(models.length === 0)('decisions', () => {
         },
       });
       expect(result.answers.route.choice).toBe('shipping');
-      expect(Object.keys(result.answers.route.probabilities ?? {}).sort()).toEqual([
-        'billing',
-        'other',
-        'shipping',
-      ]);
+      expect(new Set(Object.keys(result.answers.route.probabilities ?? {}))).toEqual(
+        new Set(['billing', 'other', 'shipping']),
+      );
       expect(result.answers.urgency.score).toBeGreaterThan(1);
       expect(result.answers.urgency.score).toBeLessThanOrEqual(2);
       expect(Object.keys(result.answers.urgency.probabilities ?? {})).toEqual(['0', '1', '2']);

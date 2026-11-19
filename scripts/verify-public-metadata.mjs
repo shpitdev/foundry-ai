@@ -19,7 +19,7 @@ const expectedTopics = [
   'shpit',
   'typescript',
   'vercel-ai-sdk',
-].sort();
+].toSorted();
 
 function readGitHubJson(path) {
   return JSON.parse(

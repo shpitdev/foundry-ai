@@ -1,5 +1,10 @@
 set shell := ["zsh", "-lc"]
 
+# `setup` installs the toolchain pinned in mise.toml, then the locked dependencies.
+setup:
+  mise install
+  pnpm install --frozen-lockfile
+
 clean:
   pnpm run clean
 

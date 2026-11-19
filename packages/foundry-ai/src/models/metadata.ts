@@ -9,14 +9,24 @@ export function createProviderModelCatalog<const T extends Record<string, ModelD
   provider: ModelProvider,
   definitions: T,
 ): { readonly [K in keyof T]: ModelMetadata } {
-  return Object.freeze(
+  const catalog = Object.freeze(
     Object.fromEntries(
       Object.entries(definitions).map(([modelId, definition]) => [
         modelId,
         createModelMetadata(provider, definition),
       ]),
     ),
-  ) as { readonly [K in keyof T]: ModelMetadata };
+  );
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- fromEntries drops key types; the map keeps every key.
+  return catalog as { readonly [K in keyof T]: ModelMetadata };
+}
+
+/** A catalog's model IDs in definition order. */
+export function catalogModelIds<T extends object>(
+  catalog: T,
+): ReadonlyArray<Extract<keyof T, string>> {
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- Object.keys drops key types; catalogs hold only their own model IDs.
+  return Object.freeze(Object.keys(catalog) as Array<Extract<keyof T, string>>);
 }
 
 export function modelSupportsInputType(

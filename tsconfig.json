@@ -7,5 +7,5 @@
     "tsBuildInfoFile": "./out-tsc/tsconfig.tsbuildinfo"
   },
   "files": [],
-  "include": ["examples/**/*.ts"]
+  "include": ["examples/**/*.ts", ".github/fixtures/**/*.ts"]
 }

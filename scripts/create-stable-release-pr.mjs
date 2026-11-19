@@ -129,8 +129,8 @@ function resolveNextVersion(firstRelease) {
   ]);
 
   const match =
-    output.match(/New version ([0-9A-Za-z.+-]+) written to manifest/) ??
-    output.match(/to get new version ([0-9A-Za-z.+-]+)/);
+    output.match(/New version ([0-9A-Za-z.+-]+) written to manifest/u) ??
+    output.match(/to get new version ([0-9A-Za-z.+-]+)/u);
 
   if (!match) {
     throw new Error(`Unable to determine the next release version from nx output:\n${output}`);

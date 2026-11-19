@@ -1,12 +1,12 @@
 import process from 'node:process';
 import { devToolsMiddleware } from '@ai-sdk/devtools';
-import { type LanguageModel, wrapLanguageModel } from 'ai';
+import { wrapLanguageModel } from 'ai';
 
 type WrappableModel = Parameters<typeof wrapLanguageModel>[0]['model'];
 
-export function wrapWithDevTools(model: LanguageModel): WrappableModel {
+export function wrapWithDevTools(model: WrappableModel): WrappableModel {
   return wrapLanguageModel({
-    model: model as WrappableModel,
+    model,
     middleware: devToolsMiddleware(),
   });
 }

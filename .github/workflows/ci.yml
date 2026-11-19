@@ -7,7 +7,7 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
     branches-ignore:
-      - "**/graphite-base/**"
+      - '**/graphite-base/**'
   merge_group:
   workflow_dispatch:
 
@@ -39,14 +39,8 @@ jobs:
         with:
           filter: tree:0
           fetch-depth: 0
-      - uses: pnpm/action-setup@v6.1.0
-        name: Install pnpm
-        with:
-          run_install: false
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          cache: pnpm
+      # Node, pnpm and actionlint at the versions pinned in mise.toml.
+      - uses: jdx/mise-action@v5
       - run: pnpm install --frozen-lockfile
       - run: pnpm run verify
       - name: Verify AI SDK 6 and 7 compatibility

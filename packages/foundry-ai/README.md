@@ -76,7 +76,11 @@ const { answers } = await decide({
   state: 'My order arrived with a cracked screen.',
   questions: {
     damaged: { type: 'boolean', instructions: 'Is a damaged item reported?' },
-    route: { type: 'choice', instructions: 'Which team?', criteria: { billing: null, shipping: null } },
+    route: {
+      type: 'choice',
+      instructions: 'Which team?',
+      criteria: { billing: null, shipping: null },
+    },
   },
 });
 ```

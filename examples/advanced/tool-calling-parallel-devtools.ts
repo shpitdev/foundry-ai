@@ -1,7 +1,6 @@
 import type { AnthropicLanguageModelOptions } from '@ai-sdk/anthropic';
 import { webSearch } from '@exalabs/ai-sdk';
-import type { AnthropicModelId } from '@shpitdev/foundry-ai';
-import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { type AnthropicModelId, loadFoundryConfig } from '@shpitdev/foundry-ai';
 import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
 import { type LanguageModelUsage, stepCountIs, ToolLoopAgent, tool } from 'ai';
 import { z } from 'zod';
@@ -14,37 +13,37 @@ requireEnv('EXA_API_KEY');
 type ProviderOptions = NonNullable<
   ConstructorParameters<typeof ToolLoopAgent>[0]['providerOptions']
 >;
-type ToolSummary = {
+interface ToolSummary {
   input: unknown;
   outputPreview?: string;
   toolName: string;
-};
-type UsageSummary = {
+}
+interface UsageSummary {
   cachedInputTokens: number | undefined;
   inputTokens: number | undefined;
   outputTokens: number | undefined;
   reasoningTokens: number | undefined;
   totalTokens: number | undefined;
-};
-type StepSummary = {
+}
+interface StepSummary {
   finishReason: string;
   reasoningPreview?: string;
   sourceCount: number;
   stepNumber: number;
   textPreview?: string;
-  toolCalls: ToolSummary[];
-  toolResults: ToolSummary[];
+  toolCalls: Array<ToolSummary>;
+  toolResults: Array<ToolSummary>;
   usage: UsageSummary;
-};
-type FinishSummary = {
+}
+interface FinishSummary {
   finishReason: string;
   reasoningPreview?: string;
   stepCount: number;
-  toolCalls: ToolSummary[];
-  toolResults: ToolSummary[];
+  toolCalls: Array<ToolSummary>;
+  toolResults: Array<ToolSummary>;
   totalUsage: UsageSummary;
   type: 'finish';
-};
+}
 
 const DEFAULT_COMPANIES = [
   'Merck KGaA, Darmstadt, Germany',
@@ -85,7 +84,7 @@ const tools = {
       finding: z.string(),
       reason: z.string().describe('Why this is worth flagging'),
     }),
-    execute: async (flag) => {
+    execute: (flag) => {
       logValue({ type: 'flagged', ...flag });
       return { acknowledged: true };
     },
@@ -101,7 +100,7 @@ const providerOptions: ProviderOptions = {
     sendReasoning: true,
   } satisfies AnthropicLanguageModelOptions,
 };
-const stepSummaries: StepSummary[] = [];
+const stepSummaries: Array<StepSummary> = [];
 let finishSummary: FinishSummary | undefined;
 
 const agent = new ToolLoopAgent({
@@ -111,15 +110,9 @@ const agent = new ToolLoopAgent({
   stopWhen: stepCountIs(8),
   providerOptions,
   tools,
-  prepareStep({ stepNumber }) {
-    // Leave the final steps for synthesis instead of spending the full loop budget on follow-up searches.
-    if (stepNumber >= 6) {
-      return { activeTools: [] };
-    }
-
-    return undefined;
-  },
-  onStepFinish(step) {
+  // Leave the final steps for synthesis instead of spending the full loop budget on follow-up searches.
+  prepareStep: ({ stepNumber }) => (stepNumber >= 6 ? { activeTools: [] } : undefined),
+  onStepEnd(step) {
     stepSummaries.push({
       finishReason: step.finishReason,
       reasoningPreview: compactText(step.reasoningText),
@@ -133,7 +126,7 @@ const agent = new ToolLoopAgent({
       usage: summarizeUsage(step.usage),
     });
   },
-  onFinish(event) {
+  onEnd(event) {
     const allToolCalls = event.steps.flatMap((step) =>
       step.toolCalls.map((toolCall) => summarizeTool(toolCall.toolName, toolCall.input)),
     );
@@ -151,7 +144,7 @@ const agent = new ToolLoopAgent({
       stepCount: event.steps.length,
       toolCalls: allToolCalls,
       toolResults: allToolResults,
-      totalUsage: summarizeUsage(event.totalUsage),
+      totalUsage: summarizeUsage(event.usage),
       type: 'finish',
     };
   },
@@ -187,30 +180,22 @@ try {
   process.exitCode = 1;
 }
 
-function compactText(text: string | undefined, maxLength = 280) {
-  const normalized = text?.replace(/\s+/g, ' ').trim();
-
-  if (!normalized) {
-    return undefined;
-  }
-
-  if (normalized.length <= maxLength) {
-    return normalized;
-  }
-
-  return `${normalized.slice(0, maxLength - 1)}…`;
+function compactText(text: string | undefined, maxLength = 280): string | undefined {
+  const normalized = text?.replaceAll(/\s+/gu, ' ').trim();
+  return normalized === undefined || normalized === ''
+    ? undefined
+    : truncate(normalized, maxLength);
 }
 
-function getLastNonEmptyValue(values: Array<string | undefined>) {
-  for (let index = values.length - 1; index >= 0; index -= 1) {
-    const value = values[index]?.trim();
-
-    if (value) {
-      return value;
+function getLastNonEmptyValue(values: Array<string | undefined>): string | undefined {
+  let last: string | undefined;
+  for (const value of values) {
+    const trimmed = value?.trim();
+    if (trimmed !== undefined && trimmed !== '') {
+      last = trimmed;
     }
   }
-
-  return undefined;
+  return last;
 }
 
 function summarizeTool(toolName: string, input: unknown, output?: unknown): ToolSummary {
@@ -231,16 +216,12 @@ function summarizeUsage(usage: LanguageModelUsage): UsageSummary {
   };
 }
 
-function previewValue(value: unknown, maxLength = 240) {
-  const serialized = JSON.stringify(value);
+function previewValue(value: unknown, maxLength = 240): string | undefined {
+  // JSON.stringify returns undefined for undefined, functions and symbols.
+  const serialized: string | undefined = JSON.stringify(value);
+  return serialized === undefined ? undefined : truncate(serialized, maxLength);
+}
 
-  if (serialized == null) {
-    return undefined;
-  }
-
-  if (serialized.length <= maxLength) {
-    return serialized;
-  }
-
-  return `${serialized.slice(0, maxLength - 1)}…`;
+function truncate(value: string, maxLength: number): string {
+  return value.length <= maxLength ? value : `${value.slice(0, maxLength - 1)}…`;
 }

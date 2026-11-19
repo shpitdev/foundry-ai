@@ -20,7 +20,7 @@ import { notImplemented } from './internal/notImplemented.ts';
 export interface Options {
   /** Foundry stack URL, e.g. `https://example.palantirfoundry.com`. Trailing slashes are ignored. */
   readonly foundryUrl: string;
-  readonly token: Redacted.Redacted<string>;
+  readonly token: Redacted.Redacted;
   /** Sent as the `attribution` header. */
   readonly attributionRid?: string | undefined;
   /** W3C traceparent, sent as the `traceParent` header. */

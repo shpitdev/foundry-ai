@@ -1,5 +1,5 @@
 import type { ModelDefinition } from '../types.js';
-import { createProviderModelCatalog } from './metadata.js';
+import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
 
 const GOOGLE_MODEL_DEFINITIONS = {
   'gemini-4-argon': {
@@ -152,8 +152,6 @@ const GOOGLE_MODEL_DEFINITIONS = {
 export const GOOGLE_MODELS = createProviderModelCatalog('google', GOOGLE_MODEL_DEFINITIONS);
 
 export type KnownGoogleModelId = keyof typeof GOOGLE_MODELS;
-export type GoogleModelId = KnownGoogleModelId | (string & {});
+export type GoogleModelId = KnownGoogleModelId | (string & Record<never, never>);
 
-export const GOOGLE_MODEL_IDS = Object.freeze(
-  Object.keys(GOOGLE_MODELS),
-) as readonly KnownGoogleModelId[];
+export const GOOGLE_MODEL_IDS: ReadonlyArray<KnownGoogleModelId> = catalogModelIds(GOOGLE_MODELS);

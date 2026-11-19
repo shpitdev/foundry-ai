@@ -35,17 +35,11 @@ export function createToolSet(): ToolSet {
       inputSchema: z.object({
         topic: z.enum(['security', 'routing', 'compatibility']),
       }),
-      execute: async ({ topic }) => TOOL_DATA[topic],
+      execute: ({ topic }) => TOOL_DATA[topic],
     }),
   };
 }
 
 export function prepareToolStep({ stepNumber }: { stepNumber: number }) {
-  if (stepNumber !== 1) {
-    return undefined;
-  }
-
-  return {
-    toolChoice: 'auto' as const,
-  };
+  return stepNumber === 1 ? { toolChoice: 'auto' as const } : undefined;
 }

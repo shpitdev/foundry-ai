@@ -1,5 +1,9 @@
-import type { AnthropicModelId, GoogleModelId, OpenAIModelId } from '@shpitdev/foundry-ai';
-import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import {
+  type AnthropicModelId,
+  type GoogleModelId,
+  loadFoundryConfig,
+  type OpenAIModelId,
+} from '@shpitdev/foundry-ai';
 import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
 import { createFoundryGoogle } from '@shpitdev/foundry-ai/google';
 import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';

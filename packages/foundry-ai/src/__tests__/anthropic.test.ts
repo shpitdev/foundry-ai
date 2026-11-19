@@ -17,14 +17,14 @@ const schema = z.object({ answer: z.string().min(1) });
 
 afterEach(() => vi.unstubAllGlobals());
 
-type AnthropicBody = {
+interface AnthropicBody {
   output_config?: { format?: { type?: string; schema?: unknown } };
   tools?: Array<{ name: string }>;
   tool_choice?: unknown;
-};
+}
 
 function captureBodies() {
-  const bodies: AnthropicBody[] = [];
+  const bodies: Array<AnthropicBody> = [];
   vi.stubGlobal(
     'fetch',
     vi.fn(async (input: string | Request | URL, init?: RequestInit) => {

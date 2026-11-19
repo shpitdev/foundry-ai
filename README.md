@@ -13,21 +13,22 @@ Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK, and (in 
 
 ## Development
 
-Use Node.js 24 and the pnpm version declared in `package.json`.
+`mise.toml` pins Node.js, pnpm and actionlint.
 
 ```sh
+mise install
 pnpm install --frozen-lockfile
 pnpm run verify
 ```
 
 `verify` runs release-policy checks, lint, Vitest, typecheck, build, package-content audit, and the Effect package's tree-shaking check through Nx for both packages. CI also tests the packed library with AI SDK 6, SDK 7 stable, and the supported late SDK 7 beta line.
 
-| Test layer | Coverage | CI |
-|---|---|---|
-| Unit | Config, catalog, adapter behavior | Yes |
-| Integration | Offline SDK tool loop, packed-library compatibility | Yes |
-| API end-to-end | Manual live Vitest suite against Foundry | No; requires credentials |
-| Web end-to-end | None | No |
+| Test layer     | Coverage                                            | CI                       |
+| -------------- | --------------------------------------------------- | ------------------------ |
+| Unit           | Config, catalog, adapter behavior                   | Yes                      |
+| Integration    | Offline SDK tool loop, packed-library compatibility | Yes                      |
+| API end-to-end | Manual live Vitest suite against Foundry            | No; requires credentials |
+| Web end-to-end | None                                                | No                       |
 
 Run `pnpm run test:live` for the default live models, or `LIVE_MODELS=gpt-6-luna pnpm run test:live` for one model. `LIVE_MODELS=all` surveys the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains selection and evidence limits.
 

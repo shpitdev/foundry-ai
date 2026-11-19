@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTestLanguageModel } from './helpers/test-language-model.js';
 
-const openaiResponsesMock = vi.hoisted(() => vi.fn());
-const openaiEmbeddingMock = vi.hoisted(() => vi.fn());
+const openaiResponsesMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
+const openaiEmbeddingMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
 const createOpenAIMock = vi.hoisted(() =>
-  vi.fn(() => {
+  vi.fn<(options: unknown) => unknown>(() => {
     const provider = ((modelId: string) => openaiResponsesMock(modelId)) as {
       (modelId: string): ReturnType<typeof openaiResponsesMock>;
       responses(modelId: string): ReturnType<typeof openaiResponsesMock>;
@@ -22,9 +22,9 @@ const createOpenAIMock = vi.hoisted(() =>
   }),
 );
 
-const anthropicLanguageModelMock = vi.hoisted(() => vi.fn());
+const anthropicLanguageModelMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
 const createAnthropicMock = vi.hoisted(() =>
-  vi.fn(() => {
+  vi.fn<(options: unknown) => unknown>(() => {
     const provider = ((modelId: string) => anthropicLanguageModelMock(modelId)) as {
       (modelId: string): ReturnType<typeof anthropicLanguageModelMock>;
       specificationVersion: 'v3';
@@ -35,9 +35,9 @@ const createAnthropicMock = vi.hoisted(() =>
   }),
 );
 
-const googleLanguageModelMock = vi.hoisted(() => vi.fn());
+const googleLanguageModelMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
 const createGoogleMock = vi.hoisted(() =>
-  vi.fn(() => {
+  vi.fn<(options: { fetch?: typeof fetch }) => unknown>(() => {
     const provider = ((modelId: string) => googleLanguageModelMock(modelId)) as {
       (modelId: string): ReturnType<typeof googleLanguageModelMock>;
       chat(modelId: string): ReturnType<typeof googleLanguageModelMock>;
@@ -173,8 +173,8 @@ describe('provider adapters', () => {
     expect(aliasModel.modelId).toBe('gpt-5-mini');
     expect(rawModel.modelId).toBe(rawRid);
     expect(openai.specificationVersion).toBe('v3');
-    expect(openai.languageModel).toBeTypeOf('function');
-    expect(openai.responses).toBeTypeOf('function');
+    expect(typeof openai.languageModel).toBe('function');
+    expect(typeof openai.responses).toBe('function');
   });
 
   it('resolves OpenAI embedding aliases and passes through unknown model ids', () => {
@@ -318,7 +318,7 @@ describe('provider adapters', () => {
           },
         },
       }),
-    ).rejects.toThrow(/providerOptions\.openai\.store=true/);
+    ).rejects.toThrow(/providerOptions\.openai\.store=true/u);
     expect(openAIState?.lastGenerateParams).toBeUndefined();
   });
 
@@ -334,13 +334,13 @@ describe('provider adapters', () => {
         foundryUrl: '   ',
         token: 'token-123',
       }),
-    ).toThrow(/config\.foundryUrl/);
+    ).toThrow(/config\.foundryUrl/u);
     expect(() =>
       createFoundryOpenAI({
         foundryUrl: 'https://example.palantirfoundry.com',
         token: '   ',
       }),
-    ).toThrow(/config\.token/);
+    ).toThrow(/config\.token/u);
   });
 
   it('creates an Anthropic provider using authToken instead of apiKey', () => {
@@ -396,9 +396,9 @@ describe('provider adapters', () => {
     expect(aliasModel.provider).toBe('foundry-anthropic');
     expect(aliasModel.modelId).toBe('claude-sonnet-4.6');
     expect(rawModel.modelId).toBe(rawRid);
-    expect(anthropic.languageModel).toBeTypeOf('function');
-    expect(anthropic.chat).toBeTypeOf('function');
-    expect(anthropic.messages).toBeTypeOf('function');
+    expect(typeof anthropic.languageModel).toBe('function');
+    expect(typeof anthropic.chat).toBe('function');
+    expect(typeof anthropic.messages).toBe('function');
   });
 
   it('preserves supported Anthropic provider options', async () => {
@@ -542,7 +542,7 @@ describe('provider adapters', () => {
           },
         },
       }),
-    ).rejects.toThrow(/toolStreaming=true/);
+    ).rejects.toThrow(/toolStreaming=true/u);
 
     await expect(
       anthropic('claude-sonnet-5').doGenerate({
@@ -553,7 +553,7 @@ describe('provider adapters', () => {
           },
         },
       }),
-    ).rejects.toThrow(/toolStreaming=true/);
+    ).rejects.toThrow(/toolStreaming=true/u);
 
     await expect(
       anthropic('claude-sonnet-5').doGenerate({
@@ -569,7 +569,7 @@ describe('provider adapters', () => {
           },
         ],
       }),
-    ).rejects.toThrow(/providerOptions\.anthropic\.eagerInputStreaming=true/);
+    ).rejects.toThrow(/providerOptions\.anthropic\.eagerInputStreaming=true/u);
     expect(anthropicState?.lastGenerateParams).toBeUndefined();
   });
 
@@ -579,7 +579,7 @@ describe('provider adapters', () => {
         foundryUrl: 'https://example.palantirfoundry.com',
         token: '',
       }),
-    ).toThrow(/config\.token/);
+    ).toThrow(/config\.token/u);
   });
 
   it('creates a Google provider with the normalized Foundry proxy URL and auth rewrite', async () => {
@@ -605,16 +605,15 @@ describe('provider adapters', () => {
       name: 'foundry-google',
     });
 
-    const googleCalls = createGoogleMock.mock.calls as Array<unknown[]>;
-    const googleOptions = (googleCalls[0]?.[0] ?? {}) as {
-      fetch?: typeof fetch;
-    };
-    await googleOptions?.fetch?.('https://example.test/v1/models/gemini-4-argon:generateContent', {
-      headers: {
-        'x-goog-api-key': 'token-123',
-        'x-test': '1',
+    await createGoogleMock.mock.calls[0]?.[0].fetch?.(
+      'https://example.test/v1/models/gemini-4-argon:generateContent',
+      {
+        headers: {
+          'x-goog-api-key': 'token-123',
+          'x-test': '1',
+        },
       },
-    });
+    );
 
     const proxiedRequest = fetchSpy.mock.calls[0]?.[0];
 
@@ -658,9 +657,9 @@ describe('provider adapters', () => {
     expect(aliasModel.provider).toBe('foundry-google');
     expect(aliasModel.modelId).toBe('gemini-4-argon');
     expect(rawModel.modelId).toBe(rawRid);
-    expect(google.languageModel).toBeTypeOf('function');
-    expect(google.chat).toBeTypeOf('function');
-    expect(google.generativeAI).toBeTypeOf('function');
+    expect(typeof google.languageModel).toBe('function');
+    expect(typeof google.chat).toBe('function');
+    expect(typeof google.generativeAI).toBe('function');
   });
 
   it('validates Google config inputs at runtime', () => {
@@ -669,15 +668,15 @@ describe('provider adapters', () => {
         foundryUrl: '   ',
         token: 'token-123',
       }),
-    ).toThrow(/config\.foundryUrl/);
+    ).toThrow(/config\.foundryUrl/u);
   });
 
   it('keeps Anthropic and Google embedding models unsupported', () => {
     expect(() => createFoundryAnthropic(config).embeddingModel('embedding-model')).toThrow(
-      /embeddingModel/,
+      /embeddingModel/u,
     );
     expect(() => createFoundryGoogle(config).embeddingModel('embedding-model')).toThrow(
-      /embeddingModel/,
+      /embeddingModel/u,
     );
   });
 });

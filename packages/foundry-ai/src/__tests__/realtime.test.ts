@@ -32,20 +32,23 @@ describe('Foundry realtime', () => {
       `${foundryUrl}/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime`,
       `${foundryUrl.replace('https:', 'wss:')}/v1/realtime?model=gpt-realtime`,
       `${foundryUrl.replace('https:', 'wss:')}/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1`,
-    ])
+    ]) {
       expect(() => factory('gpt-realtime').getWebSocketConfig({ token: 'secret', url })).toThrow(
         'does not match',
       );
+    }
   });
 
   it('rejects invalid origins, tokens and non-realtime models without network requests', () => {
-    for (const foundryUrl of [
+    for (const invalidUrl of [
       'http://example.com',
       'https://user:pass@example.com',
       'https://example.com/path',
       'https://example.com/?q=1',
     ]) {
-      expect(() => createFoundryRealtime({ foundryUrl })).toThrow();
+      expect(() => createFoundryRealtime({ foundryUrl: invalidUrl })).toThrow(
+        /^Foundry realtime requires/u,
+      );
     }
     for (const token of ['', 'token with spaces', 'secret\nheader']) {
       expect(() =>

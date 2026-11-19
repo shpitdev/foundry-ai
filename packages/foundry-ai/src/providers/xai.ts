@@ -1,6 +1,6 @@
 import { createXai } from '@ai-sdk/xai';
 import { NoSuchModelError } from 'ai';
-import { resolveFoundryConfig } from '../config.js';
+import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import { type FoundryLanguageModel, wrapFoundryLanguageModel } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import type { XaiModelId } from '../models/xai-models.js';
@@ -24,11 +24,7 @@ export function createFoundryXai(config: FoundryConfig): FoundryXaiProvider {
   const baseProvider = createXai({
     apiKey: resolved.token,
     baseURL: `${resolved.foundryUrl}/api/v2/llm/proxy/xai/v1`,
-    headers: {
-      ...(resolved.attributionRid ? { attribution: resolved.attributionRid } : {}),
-      ...(resolved.traceParent ? { traceParent: resolved.traceParent } : {}),
-      ...(resolved.traceState ? { traceState: resolved.traceState } : {}),
-    },
+    headers: foundryHeaders(resolved),
     fetch: createXaiProxyFetch(),
   });
 
@@ -60,16 +56,16 @@ export function createFoundryXai(config: FoundryConfig): FoundryXaiProvider {
   };
 
   const responses = (modelId: XaiModelId) => createLanguageModel(modelId, 'responses');
-  const provider = responses as FoundryXaiProvider;
-  provider.specificationVersion = baseProvider.specificationVersion;
-  provider.languageModel = responses;
-  provider.responses = responses;
-  provider.chat = (modelId) => createLanguageModel(modelId, 'chat');
-  provider.embeddingModel = (modelId) => {
-    throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
-  };
-  provider.imageModel = (modelId) => {
-    throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
-  };
-  return provider;
+  return Object.assign((modelId: XaiModelId) => responses(modelId), {
+    specificationVersion: baseProvider.specificationVersion,
+    languageModel: responses,
+    responses,
+    chat: (modelId: XaiModelId) => createLanguageModel(modelId, 'chat'),
+    embeddingModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
+    },
+    imageModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
+    },
+  });
 }
