@@ -27,15 +27,7 @@ npm trusted publishing is configured on a package that already exists, so a new 
 
 1. On a branch, remove `private` from the package's `package.json`, set `publishConfig.access`, and set `version` to the first release. Run `pnpm run verify`.
 2. From the package directory, as a `shpitdev` npm org member, run `npm publish --access <access>`. This sets `latest`.
-3. In the package's npm settings, add the trusted publisher: GitHub Actions, organization `shpitdev`, repository `foundry-ai`, workflow `release.yml`, no environment. For a restricted package, also give `NPM_READ_TOKEN` read access to it, or create the token:
-
-   ```sh
-   npm token create --name foundry-ai-release-read --packages-and-scopes-permission read-only \
-     --packages @shpitdev/foundry-effect-ai --json \
-     | node -e 'process.stdout.write(JSON.parse(require("fs").readFileSync(0, "utf8")).token)' \
-     | gh secret set NPM_READ_TOKEN --repo shpitdev/foundry-ai
-   ```
-
+3. Trust the release workflow: `npm trust github <name> --file release.yml --repo shpitdev/foundry-ai --allow-publish`. For a restricted package, `NPM_READ_TOKEN` also needs read access to it. Create a token with `npm token create --name foundry-ai-release-read --packages-and-scopes-permission read-only --packages <name> [--packages <other restricted package>]`, then store it with `gh secret set NPM_READ_TOKEN --repo shpitdev/foundry-ai`.
 4. Merge the branch. The merge publishes the first release candidate through OIDC, and `pnpm run release <project>` backfills the `<name>@<version>` tag because the manifest matches npm `latest`.
 
 Use `pnpm run verify:public-metadata` to check public repository/package identity when investigating publishing problems.
