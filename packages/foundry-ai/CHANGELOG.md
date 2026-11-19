@@ -1,3 +1,14 @@
+## 0.0.9 (2026-11-19)
+
+### 🚀 Features
+
+- refresh Foundry catalog, AI SDK peers, and live results ([#82](https://github.com/shpitdev/foundry-ai/pull/82))
+- add GPT-6 Luna decision models ([#81](https://github.com/shpitdev/foundry-ai/pull/81))
+
+### ❤️ Thank You
+
+- Anand Pant @anandpant
+
 ## 0.0.8 (2026-09-25)
 
 ### 🚀 Features
