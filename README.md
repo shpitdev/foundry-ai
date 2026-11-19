@@ -1,6 +1,6 @@
 # @nyrra/foundry-ai
 
-Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK.
+Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK, and (in development) for Effect AI.
 
 [![CI](https://github.com/shpitdev/foundry-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/shpitdev/foundry-ai/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/%40nyrra%2Ffoundry-ai/latest)](https://www.npmjs.com/package/@nyrra/foundry-ai)
@@ -8,6 +8,7 @@ Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK.
 - [Install and use the package](./packages/foundry-ai/README.md)
 - [Models and test status](./packages/foundry-ai/docs/README.md)
 - [Runnable examples](./examples/README.md)
+- [Effect AI adapter plan](./packages/foundry-effect-ai/docs/PLAN.md) (`@nyrra/foundry-effect-ai`, unpublished)
 - [Release process](./docs/RELEASING.md)
 
 ## Development
@@ -19,7 +20,7 @@ pnpm install --frozen-lockfile
 pnpm run verify
 ```
 
-`verify` runs release-policy checks, Biome, Vitest, typecheck, build, and package-content audit through Nx. CI also tests the packed library with AI SDK 6, SDK 7 stable, and the supported late SDK 7 beta line.
+`verify` runs release-policy checks, lint, Vitest, typecheck, build, package-content audit, and the Effect package's tree-shaking check through Nx for both packages. CI also tests the packed library with AI SDK 6, SDK 7 stable, and the supported late SDK 7 beta line.
 
 | Test layer | Coverage | CI |
 |---|---|---|
