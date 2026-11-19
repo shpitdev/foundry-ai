@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { isPublishable, packageByProject, readManifest } from './packages.mjs';
 
-const packageName = '@nyrra/foundry-ai';
-const packageManifestPath = 'packages/foundry-ai/package.json';
+const project = process.argv[2];
+if (!project) {
+  throw new Error('Usage: pnpm run release <project>, e.g. pnpm run release foundry-ai');
+}
+const releasePackage = packageByProject(project);
+if (!isPublishable(releasePackage)) {
+  throw new Error(`${releasePackage.name} is private; remove "private" before its first release.`);
+}
+const packageName = releasePackage.name;
+const packageManifestPath = `${releasePackage.dir}/package.json`;
 const remoteName = 'origin';
 const baseBranch = 'main';
 const expectedRemoteUrls = new Set([
@@ -43,7 +51,7 @@ function runQuiet(command, args, options = {}) {
 }
 
 function readManifestVersion() {
-  return JSON.parse(readFileSync(packageManifestPath, 'utf8')).version;
+  return readManifest(releasePackage).version;
 }
 
 function readNpmDistTag(tagName) {
@@ -124,19 +132,20 @@ function ensureStableTagOnMain() {
   runStreaming('git', ['push', remoteName, tagName]);
 }
 
-function resolveNextVersion() {
+function resolveNextVersion(firstRelease) {
   const output = run('pnpm', [
     'exec',
     'nx',
     'release',
     'version',
     '--group',
-    'npm-packages',
+    project,
     '--git-commit=false',
     '--git-tag=false',
     '--git-push=false',
     '--stage-changes=false',
     '--dry-run',
+    ...(firstRelease ? ['--first-release'] : []),
   ]);
 
   const match =
@@ -168,8 +177,9 @@ runStreaming('git', ['switch', baseBranch]);
 runStreaming('git', ['pull', '--ff-only', remoteName, baseBranch]);
 ensureStableTagOnMain();
 
-const nextVersion = resolveNextVersion();
-const branchName = `release/v${nextVersion}`;
+const firstRelease = run('git', ['tag', '--list', `${packageName}@*`]).length === 0;
+const nextVersion = resolveNextVersion(firstRelease);
+const branchName = `release/${project}/v${nextVersion}`;
 
 if (localBranchExists(branchName) || remoteBranchExists(branchName)) {
   throw new Error(`Release branch ${branchName} already exists.`);
@@ -177,14 +187,13 @@ if (localBranchExists(branchName) || remoteBranchExists(branchName)) {
 
 runStreaming('git', ['switch', '--create', branchName]);
 
-const firstRelease = run('git', ['tag', '--list', `${packageName}@*`]).length === 0;
 const versionArgs = [
   'exec',
   'nx',
   'release',
   'version',
   '--group',
-  'npm-packages',
+  project,
   '--git-commit=false',
   '--git-tag=false',
   '--git-push=false',
@@ -196,7 +205,7 @@ const changelogArgs = [
   'release',
   'changelog',
   '--group',
-  'npm-packages',
+  project,
   '--git-commit=false',
   '--git-tag=false',
   '--git-push=false',
@@ -216,7 +225,7 @@ if (changedFiles.length === 0) {
   throw new Error('Release generation did not produce any file changes.');
 }
 
-runStreaming('git', ['add', packageManifestPath, 'packages/foundry-ai/CHANGELOG.md']);
+runStreaming('git', ['add', packageManifestPath, `${releasePackage.dir}/CHANGELOG.md`]);
 runStreaming('git', ['commit', '-m', `chore(release): ${packageName}@${nextVersion}`]);
 runStreaming('git', ['push', '-u', remoteName, branchName]);
 runStreaming('gh', [

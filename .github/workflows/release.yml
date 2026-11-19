@@ -10,7 +10,7 @@ on:
       - "nx.json"
       - "package.json"
       - "pnpm-lock.yaml"
-      - "packages/foundry-ai/**"
+      - "packages/**"
 
 permissions:
   contents: write
@@ -21,12 +21,42 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Each package releases independently: scripts/release-packages.mjs picks the packages this PR
+  # publishes and skips private ones.
+  select-packages:
+    if: >-
+      vars.NPM_PUBLISH_ENABLED == 'true' &&
+      github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.select.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 2
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Select packages
+        id: select
+        env:
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: node scripts/release-packages.mjs "${MERGE_SHA}" "${HEAD_REF}" >> "$GITHUB_OUTPUT"
+
   publish-prerelease:
+    needs: select-packages
     if: >-
       vars.NPM_PUBLISH_ENABLED == 'true' &&
       github.event.pull_request.merged == true &&
-      !startsWith(github.event.pull_request.head.ref, 'release/')
+      !startsWith(github.event.pull_request.head.ref, 'release/') &&
+      needs.select-packages.outputs.packages != '[]'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.select-packages.outputs.packages) }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,15 +74,20 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Prepare prerelease version
         id: meta
+        env:
+          PROJECT: ${{ matrix.package.project }}
+          PACKAGE_DIR: ${{ matrix.package.dir }}
+          PKG_NAME: ${{ matrix.package.name }}
         run: |
           set -euo pipefail
-          package_root="packages/foundry-ai"
-          name=$(node -p "require('./${package_root}/package.json').name")
-          version=$(node scripts/resolve-next-prerelease-version.mjs rc)
-          node scripts/set-package-version.mjs "${package_root}/package.json" "${version}"
-          echo "name=${name}" >> "$GITHUB_OUTPUT"
+          version=$(node scripts/resolve-next-prerelease-version.mjs "${PROJECT}" rc)
+          node scripts/set-package-version.mjs "${PACKAGE_DIR}/package.json" "${version}"
+          echo "name=${PKG_NAME}" >> "$GITHUB_OUTPUT"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
-      - run: pnpm exec nx run-many -t build package-audit --projects=foundry-ai --outputStyle=static
+      - name: Build and audit
+        env:
+          PROJECT: ${{ matrix.package.project }}
+        run: pnpm exec nx run-many -t build package-audit tree-shaking --projects="${PROJECT}" --outputStyle=static
       - name: Check if already published
         id: check
         env:
@@ -73,16 +108,24 @@ jobs:
           echo "already_published=false" >> "$GITHUB_OUTPUT"
       - name: Publish prerelease to npm
         if: steps.check.outputs.already_published != 'true'
+        env:
+          PACKAGE_DIR: ${{ matrix.package.dir }}
         run: |
-          cd packages/foundry-ai
+          cd "${PACKAGE_DIR}"
           NODE_AUTH_TOKEN="" npm publish --access public --tag next --provenance
 
   publish-stable:
+    needs: select-packages
     if: >-
       vars.NPM_PUBLISH_ENABLED == 'true' &&
       github.event.pull_request.merged == true &&
-      startsWith(github.event.pull_request.head.ref, 'release/')
+      startsWith(github.event.pull_request.head.ref, 'release/') &&
+      needs.select-packages.outputs.packages != '[]'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.select-packages.outputs.packages) }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -98,19 +141,23 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm install --global npm@11.16.0
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec nx run-many -t build package-audit --projects=foundry-ai --outputStyle=static
+      - name: Build and audit
+        env:
+          PROJECT: ${{ matrix.package.project }}
+        run: pnpm exec nx run-many -t build package-audit tree-shaking --projects="${PROJECT}" --outputStyle=static
       - name: Resolve package metadata
         id: meta
+        env:
+          PACKAGE_DIR: ${{ matrix.package.dir }}
+          PKG_NAME: ${{ matrix.package.name }}
         run: |
           set -euo pipefail
-          package_root="packages/foundry-ai"
-          name=$(node -p "require('./${package_root}/package.json').name")
-          version=$(node -p "require('./${package_root}/package.json').version")
+          version=$(node -p "require('./${PACKAGE_DIR}/package.json').version")
           if echo "${version}" | grep -qE '\-'; then
             echo "::error::Expected a stable version, found ${version}."
             exit 1
           fi
-          echo "name=${name}" >> "$GITHUB_OUTPUT"
+          echo "name=${PKG_NAME}" >> "$GITHUB_OUTPUT"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
       - name: Check if already published
         id: check
@@ -132,8 +179,10 @@ jobs:
           echo "already_published=false" >> "$GITHUB_OUTPUT"
       - name: Publish stable to npm
         if: steps.check.outputs.already_published != 'true'
+        env:
+          PACKAGE_DIR: ${{ matrix.package.dir }}
         run: |
-          cd packages/foundry-ai
+          cd "${PACKAGE_DIR}"
           NODE_AUTH_TOKEN="" npm publish --access public --tag latest --provenance
       - name: Tag stable release
         env:

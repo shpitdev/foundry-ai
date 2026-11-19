@@ -18,6 +18,9 @@ test:
 test-live:
   pnpm run test:live
 
+test-live-effect:
+  pnpm run test:live:effect
+
 typecheck:
   pnpm run typecheck
 
@@ -25,6 +28,6 @@ typecheck:
 verify:
   pnpm run verify
 
-# `release` prepares and opens the stable release PR; publish happens after merge in CI.
-release: verify
-  pnpm run release
+# `release` prepares and opens one package's stable release PR; publish happens after merge in CI.
+release project: verify
+  pnpm run release {{project}}

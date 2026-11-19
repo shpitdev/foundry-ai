@@ -1,16 +1,18 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { packageByProject, readManifest } from './packages.mjs';
 
-const manifestPath = 'packages/foundry-ai/package.json';
-const packageName = '@nyrra/foundry-ai';
+const [, , project, prereleaseId = 'rc'] = process.argv;
+if (!project) {
+  throw new Error('Usage: node scripts/resolve-next-prerelease-version.mjs <project> [preid]');
+}
+const releasePackage = packageByProject(project);
+const packageName = releasePackage.name;
 const prereleaseTag = 'next';
-const prereleaseId = process.argv[2] ?? 'rc';
 
 function readManifestVersion() {
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-  return manifest.version;
+  return readManifest(releasePackage).version;
 }
 
 function readDistTag(tagName) {
