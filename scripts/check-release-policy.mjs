@@ -11,7 +11,9 @@ const nxRelease = JSON.parse(readFileSync('nx.json', 'utf8')).release;
 const expectedRepository = 'git+https://github.com/shpitdev/foundry-ai.git';
 
 function requireCondition(condition, message) {
-  if (!condition) throw new Error(message);
+  if (!condition) {
+    throw new Error(message);
+  }
 }
 
 requireCondition(workflow.permissions?.contents === 'write', 'Release workflow needs tag access.');
@@ -23,9 +25,32 @@ requireCondition(
   workflow.jobs?.['bootstrap-package'] == null,
   'The retired new-package bootstrap job must not exist.',
 );
+// Publishing is OIDC-only: no secret, token, .npmrc writer or second toolchain may appear.
+for (const [text, message] of [
+  ['secrets.', 'Release jobs publish through OIDC and must not use secrets.'],
+  ['NODE_AUTH_TOKEN', 'Release jobs must not set NODE_AUTH_TOKEN; npm publishes through OIDC.'],
+  ['NPM_TOKEN', 'Release jobs must not use an npm token; npm publishes through OIDC.'],
+  ['registry-url', 'Release jobs must not write an .npmrc registry token.'],
+  ['actions/setup-node', 'Release jobs install Node from mise.toml, not actions/setup-node.'],
+  ['pnpm/action-setup', 'Release jobs install pnpm from mise.toml, not pnpm/action-setup.'],
+  ['npm install --global', "Release jobs publish with Node's bundled npm from mise.toml."],
+]) {
+  requireCondition(!workflowSource.includes(text), message);
+}
+
+// mise.toml is the release toolchain; package.json's packageManager must name the same pnpm.
+const miseToml = readFileSync('mise.toml', 'utf8');
+const misePnpm = /^pnpm\s*=\s*"([^"]+)"$/mu.exec(miseToml)?.[1];
+const miseNode = /^node\s*=\s*"(\d+)[^"]*"$/mu.exec(miseToml)?.[1];
+const packageManager = JSON.parse(readFileSync('package.json', 'utf8')).packageManager;
 requireCondition(
-  !workflowSource.includes('secrets.'),
-  'Release jobs publish through OIDC and must not use secrets.',
+  misePnpm != null && packageManager === `pnpm@${misePnpm}`,
+  `package.json packageManager (${packageManager}) must match mise.toml pnpm (${misePnpm}).`,
+);
+// npm supports trusted publishing from 11.5.1; Node 26 bundles a release after that.
+requireCondition(
+  Number(miseNode) >= 26,
+  `mise.toml must pin Node 26 or later for OIDC publishing with the bundled npm; found ${miseNode}.`,
 );
 
 for (const entry of packages) {
@@ -51,11 +76,14 @@ for (const entry of packages) {
 }
 
 // Gates are compared whole: a substring check would accept an inverted clause.
-const normalize = (expression) => expression?.replace(/\s+/g, ' ').trim();
+const normalize = (expression) => expression?.replaceAll(/\s+/gu, ' ').trim();
 const published = "vars.NPM_PUBLISH_ENABLED == 'true' && github.event.pull_request.merged == true";
 const releaseBranch = "startsWith(github.event.pull_request.head.ref, 'release/')";
 const selected = "needs.select-packages.outputs.packages != '[]'";
 const mergeCommit = '${{ github.event.pull_request.merge_commit_sha }}';
+const miseAction = 'jdx/mise-action@v5';
+// Release jobs install tools fresh, so a cache written elsewhere never reaches a publish step.
+const isUncachedMise = (step) => step.uses === miseAction && step.with?.cache === false;
 
 const select = workflow.jobs?.['select-packages'];
 requireCondition(select != null, 'Missing release job select-packages.');
@@ -74,6 +102,10 @@ requireCondition(
       step.run?.includes('node scripts/release-packages.mjs'),
   ),
   "select-packages must choose packages from the PR's changed files with scripts/release-packages.mjs.",
+);
+requireCondition(
+  select.steps?.some((step) => isUncachedMise(step)),
+  `select-packages must install Node with ${miseAction} and cache: false.`,
 );
 
 for (const [name, channel, branchGate] of [
@@ -101,17 +133,25 @@ for (const [name, channel, branchGate] of [
     `${name} must build and tag the merge commit.`,
   );
   requireCondition(job['runs-on'] === 'ubuntu-latest', `${name} must use a GitHub-hosted runner.`);
-  requireCondition(
-    job.steps?.some((step) => step.run === 'npm install --global npm@11.16.0'),
-    `${name} must pin a trusted-publishing-compatible npm version.`,
+  const steps = job.steps ?? [];
+  const miseStep = steps.findIndex((step) => isUncachedMise(step));
+  const publishSteps = steps.flatMap((step, index) =>
+    step.run?.includes('npm publish') ? [index] : [],
   );
   requireCondition(
-    job.steps?.some((step) =>
-      step.run?.includes(
-        `NODE_AUTH_TOKEN="" npm publish --access public --tag ${channel} --provenance`,
-      ),
-    ),
-    `${name} must publish to ${channel} through OIDC rather than an npm token.`,
+    miseStep >= 0,
+    `${name} must install Node and pnpm from mise.toml with ${miseAction} and cache: false.`,
+  );
+  requireCondition(
+    publishSteps.length === 1 && publishSteps[0] > miseStep,
+    `${name} must publish exactly once, after installing tools from mise.toml.`,
+  );
+  const publish = steps[publishSteps[0]];
+  requireCondition(
+    normalize(publish.run) ===
+      `cd "\${PACKAGE_DIR}" npm publish --access public --tag ${channel} --provenance` &&
+      Object.keys(publish.env ?? {}).join() === 'PACKAGE_DIR',
+    `${name} must run only "npm publish --access public --tag ${channel} --provenance" through OIDC.`,
   );
 }
 
