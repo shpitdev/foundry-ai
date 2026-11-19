@@ -322,6 +322,12 @@ describe('provider adapters', () => {
     expect(openAIState?.lastGenerateParams).toBeUndefined();
   });
 
+  it('explains the SDK requirement when the OpenAI peer predates decision models', () => {
+    expect(() => createFoundryOpenAI(config).decisionModel('gpt-6-luna')).toThrow(
+      'an @ai-sdk/openai release with decisionModel',
+    );
+  });
+
   it('validates OpenAI config inputs at runtime', () => {
     expect(() =>
       createFoundryOpenAI({

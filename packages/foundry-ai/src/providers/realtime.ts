@@ -10,10 +10,14 @@ export interface FoundryRealtimeConfig {
   foundryUrl: string;
 }
 
+/** Methods that newer SDK typings mark optional; Foundry always implements both. */
+export type FoundryRealtimeModel = RealtimeModel &
+  Required<Pick<RealtimeModel, 'doCreateClientSecret' | 'getWebSocketConfig'>>;
+
 /** AI SDK 7 realtime models using Foundry's native WebSocket proxy. */
 export function createFoundryRealtime(config: FoundryRealtimeConfig) {
   const origin = getFoundryOrigin(config.foundryUrl);
-  return (modelId: RealtimeModelId): RealtimeModel => {
+  return (modelId: RealtimeModelId): FoundryRealtimeModel => {
     const url = getRealtimeUrl(origin, modelId);
     const native = new OpenAIRealtimeModel(modelId, {
       provider: 'foundry-realtime',

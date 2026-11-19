@@ -5,6 +5,7 @@ import { createFoundryGoogle } from '@nyrra/foundry-ai/google';
 import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
 import { createFoundryThirdParty } from '@nyrra/foundry-ai/third-party';
 import { createFoundryXai } from '@nyrra/foundry-ai/xai';
+import * as ai from 'ai';
 import { createProviderRegistry, generateText, type LanguageModel } from 'ai';
 
 const expectedVersion = process.argv[2];
@@ -102,3 +103,13 @@ assert.equal(requests.length, 4);
 assert.equal(requests.filter((url) => url.endsWith('/xai/v1/responses')).length, 2);
 assert.equal(requests.filter((url) => url.endsWith('/xai/v1/chat/completions')).length, 2);
 console.log(`Packed ESM/CJS native xAI routing and registry passed for ${expectedVersion}.`);
+
+// Decision models need an @ai-sdk/openai release with decisionModel; older peers get a clear error.
+if (typeof (ai as Record<string, unknown>).experimental_decide === 'function') {
+  const decision = openai.decisionModel('gpt-6-luna') as { provider: string; modelId: string };
+  assert.equal(decision.provider, 'foundry-openai.decision');
+  assert.equal(decision.modelId, 'ri.language-model-service..language-model.gpt-6-luna');
+} else {
+  assert.throws(() => openai.decisionModel('gpt-6-luna'), /decisionModel/);
+}
+console.log(`Packed OpenAI decision model creation passed for ${expectedVersion}.`);

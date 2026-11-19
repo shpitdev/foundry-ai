@@ -93,6 +93,14 @@
         "cwd": "{workspaceRoot}"
       }
     },
+    "test-decisions": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "pnpm exec vitest run --config packages/foundry-ai/vitest.decisions.config.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "test-realtime": {
       "executor": "nx:run-commands",
       "cache": false,

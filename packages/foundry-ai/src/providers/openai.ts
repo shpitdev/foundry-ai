@@ -9,13 +9,21 @@ import {
 import { resolveModelTarget } from '../models/catalog.js';
 import {
   isKnownOpenAIReasoningTarget,
+  type OpenAIDecisionModelId,
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
 } from '../models/openai-models.js';
 import type { FoundryConfig } from '../types.js';
 
-type FoundryEmbeddingModel = ReturnType<ReturnType<typeof createOpenAI>['embeddingModel']>;
+type BaseOpenAIProvider = ReturnType<typeof createOpenAI>;
+type FoundryEmbeddingModel = ReturnType<BaseOpenAIProvider['embeddingModel']>;
 type FoundryFunctionTool = NonNullable<FoundryCallOptions['tools']>[number];
+/** AI SDK decision model; `never` with SDK versions that predate the Decisions API. */
+export type FoundryDecisionModel = BaseOpenAIProvider extends {
+  decisionModel(modelId: string): infer Model;
+}
+  ? Model
+  : never;
 
 export interface FoundryOpenAIProvider {
   (modelId: OpenAIModelId): FoundryLanguageModel;
@@ -24,6 +32,8 @@ export interface FoundryOpenAIProvider {
   responses(modelId: OpenAIModelId): FoundryLanguageModel;
   embeddingModel(modelId: OpenAIEmbeddingModelId): FoundryEmbeddingModel;
   embedding(modelId: OpenAIEmbeddingModelId): FoundryEmbeddingModel;
+  /** GPT-6 Luna through Foundry's `/decisions` route. Needs an `@ai-sdk/openai` release with `decisionModel`. */
+  decisionModel(modelId: OpenAIDecisionModelId): FoundryDecisionModel;
   imageModel(modelId: string): never;
 }
 
@@ -70,6 +80,18 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
     return baseProvider.embeddingModel(resolvedModel.rid);
   };
 
+  const createDecisionModel = (modelId: OpenAIDecisionModelId): FoundryDecisionModel => {
+    const decisionProvider = baseProvider as Partial<
+      Record<'decisionModel', (modelId: string) => FoundryDecisionModel>
+    >;
+    if (typeof decisionProvider.decisionModel !== 'function') {
+      throw new Error(
+        'Foundry OpenAI decision models need an @ai-sdk/openai release with decisionModel.',
+      );
+    }
+    return decisionProvider.decisionModel(resolveModelTarget(modelId).rid);
+  };
+
   function provider(modelId: OpenAIModelId): FoundryLanguageModel {
     return createLanguageModel(modelId);
   }
@@ -81,6 +103,7 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
   callableProvider.responses = createLanguageModel;
   callableProvider.embeddingModel = createEmbeddingModel;
   callableProvider.embedding = createEmbeddingModel;
+  callableProvider.decisionModel = createDecisionModel;
   callableProvider.imageModel = (modelId: string) => {
     throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
   };

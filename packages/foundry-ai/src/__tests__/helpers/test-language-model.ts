@@ -27,12 +27,12 @@ export function createTestLanguageModel(options?: { provider?: string; modelId?:
     async doGenerate(params) {
       state.lastGenerateParams = params;
 
-      return {} as Awaited<ReturnType<TestLanguageModel['doGenerate']>>;
+      return { content: [] } as unknown as Awaited<ReturnType<TestLanguageModel['doGenerate']>>;
     },
     async doStream(params) {
       state.lastStreamParams = params;
 
-      return {} as Awaited<ReturnType<TestLanguageModel['doStream']>>;
+      return { stream: new ReadableStream() } as Awaited<ReturnType<TestLanguageModel['doStream']>>;
     },
   };
 

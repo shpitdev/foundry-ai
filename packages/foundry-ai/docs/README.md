@@ -126,6 +126,24 @@ See [realtime setup](#realtime-setup) for authentication, examples, and the manu
 | `text-embedding-3-small` | ✓ | 1536 |
 | `text-embedding-3-large` | ✓ | 3072 |
 
+### Decisions
+
+November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. Only GPT-6 Luna serves Foundry's `/decisions` route. The proxy accepts its RID or the `gpt-6-luna` alias; GPT-6 Sol and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
+
+| Probe | Result |
+|---|---|
+| Boolean question by alias and by RID | ✓ |
+| Boolean question defined only by criteria | ✓ |
+| Choice, score, and boolean questions in one call | ✓ |
+| JSON object state | ✓ |
+| Text, JSON, and PNG image state | ✓ |
+| `providerOptions.openai.safetyIdentifier` | ✓ |
+| 400 questions, the API maximum | ✓, about 2.4 s |
+
+- Foundry rejects `prompt_cache_key` and `prompt_cache_options` with HTTP 400, so leave `providerOptions.openai.promptCacheKey` unset. Implicit caching still works: a repeated prefix of about 4,400 tokens was read from cache on the next call. Palantir documents the `X-Palantir-session-id` header for routing affinity; pass it through `experimental_decide({ headers })`.
+- Foundry rejects public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
+- The SDK allows choice and score questions without `instructions`, but OpenAI requires them and returns HTTP 400. OpenAI also enforces 1–400 questions, 2–10 score levels, and at least two choices.
+
 ## Findings
 
 - **Enrollment versus proxy access:** enrollment does not imply a usable route. Four models listed on September 24 were probed and left out of the catalog. GPT-5.2 Pro and GPT-5.4 Pro return `DisabledForUser` on Responses and have no Chat Completions route. o1 (Azure OpenAI) and Schematic 7B (Palantir Hub) return `LanguageModelNotAvailable`: their backends serve neither `OPEN_AI_RESPONSES` nor `GPT_CHAT_COMPLETION`. Llama Nemotron Super stays cataloged with `transport: 'unavailable'` and no verified route. Claude Opus 4.1 is now Sunset and has been removed.
@@ -218,7 +236,7 @@ Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for ID
 
 OpenAI and third-party reject `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI and third-party Chat Completions omit it. xAI options use the native `xai` namespace; third-party uses `openai`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5, which rejects forced tool use and therefore keeps the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
 
-Only OpenAI exposes `embeddingModel()` and `embedding()`. Embedding strings pass through without language-model RID routing. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
+Only OpenAI exposes `embeddingModel()`, `embedding()`, and `decisionModel()`. Embedding strings pass through without language-model RID routing; decision aliases resolve to RIDs like language models. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
 
 ### SDK selection and reasoning diagnostics
 
@@ -284,6 +302,7 @@ With `FOUNDRY_URL` and `FOUNDRY_TOKEN` set, from the repository root:
 ```sh
 pnpm run test:live -- --catalog
 pnpm run test:live:summary
+pnpm run test:decisions
 ```
 
 Use `--provider xai` for the default Grok model, `--catalog --provider xai` for all seven Grok aliases, or `--model openai:gpt-5-nano` for a focused run. To rerun a single case, add `--testNamePattern 'openai:gpt-5-nano: deterministic tool loop$'`. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.
