@@ -23,7 +23,11 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "command": "pnpm exec tsup --config tsup.config.ts",
+        "commands": [
+          "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+          "pnpm exec tsup --config tsup.config.ts"
+        ],
+        "parallel": false,
         "cwd": "{workspaceRoot}/packages/foundry-ai"
       }
     },

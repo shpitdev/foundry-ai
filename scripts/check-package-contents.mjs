@@ -29,7 +29,7 @@ const audits = {
       'dist/providers/xai.d.ts',
       'package.json',
     ],
-    checkManifest: () => [],
+    checkManifest: checkAiSdkDeclarations,
   },
   'foundry-effect-ai': {
     requiredFiles: [
@@ -84,6 +84,26 @@ if (problems.length > 0) {
 console.log(
   `Package audit passed for ${packSummary.name}@${packSummary.version} with ${packSummary.entryCount} files.`,
 );
+
+/**
+ * Each entry's declarations stand alone and need no Node types, so a provider subpath typechecks
+ * without the root entry or @types/node.
+ */
+function checkAiSdkDeclarations(packedFiles) {
+  const found = [];
+  for (const file of [...packedFiles].filter((path) => /\.d\.c?ts$/u.test(path))) {
+    const source = readFileSync(join(packageRoot, file), 'utf8');
+    if (/\bfrom\s*['"]\.{1,2}\//u.test(source) || /\bimport\s*['"]\.{1,2}\//u.test(source)) {
+      found.push(
+        `${file} imports another declaration file; each entry's declarations must stand alone.`,
+      );
+    }
+    if (/\bNodeJS\.|\/\/\/\s*<reference\s+types=["']node["']/u.test(source)) {
+      found.push(`${file} depends on Node's ambient types.`);
+    }
+  }
+  return found;
+}
 
 /** effect is the only peer and nothing else is installed with the package. */
 function checkEffectPackage(packedFiles) {
