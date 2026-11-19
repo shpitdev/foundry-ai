@@ -12,7 +12,7 @@ const prereleaseTag = 'next';
 function parseStableVersion(version) {
   const match = /^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$/.exec(version);
   if (!match?.groups) {
-    throw new Error(`Expected a stable x.y.z manifest version, but received "${version}".`);
+    throw new Error(`Expected a stable x.y.z version, but received "${version}".`);
   }
 
   return {
@@ -25,13 +25,16 @@ function parseStableVersion(version) {
 const stableVersion = readManifest(releasePackage).version;
 const { latest: latestTag, [prereleaseTag]: nextTag } = readDistTags(releasePackage);
 
-if (latestTag !== stableVersion) {
-  throw new Error(
-    `Stable manifest version ${stableVersion} is out of sync with npm latest ${latestTag}.`,
-  );
+const { major, minor, patch } = parseStableVersion(stableVersion);
+// A manifest ahead of npm latest means a stable release merged and its publish job has not
+// finished; release candidates build on the new version. One behind it is out of sync.
+const latest = parseStableVersion(latestTag);
+const firstDifference =
+  [major - latest.major, minor - latest.minor, patch - latest.patch].find((d) => d !== 0) ?? 0;
+if (firstDifference < 0) {
+  throw new Error(`Stable manifest version ${stableVersion} is behind npm latest ${latestTag}.`);
 }
 
-const { major, minor, patch } = parseStableVersion(stableVersion);
 const expectedPrefix = `${major}.${minor}.${patch + 1}-${prereleaseId}.`;
 
 if (nextTag?.startsWith(expectedPrefix)) {
