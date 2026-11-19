@@ -41,7 +41,7 @@ describe('Foundry realtime', () => {
       'wss://attacker.example/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime',
       `${foundryUrl}/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime`,
       `${foundryUrl.replace('https:', 'wss:')}/v1/realtime?model=gpt-realtime`,
-      `${foundryUrl.replace('https:', 'wss:')}/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2`,
+      `${foundryUrl.replace('https:', 'wss:')}/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1`,
     ])
       expect(() => factory('gpt-realtime').getWebSocketConfig({ token: 'secret', url })).toThrow(
         'does not match',

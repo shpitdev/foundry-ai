@@ -70,7 +70,7 @@ The standard capability cases use Responses. `chat.text.generate` separately pro
 
 ### Live verification
 
-**September 15, 2026:** AI SDK 7.0.97 / `@ai-sdk/xai` 4.0.58 with the compatibility adapter above recorded **44 passes, 16 failed probes, 6 chat proxy rejections, and 30 skipped modalities**. See the [current six-model table](./README.md#xai).
+**September 15, 2026:** AI SDK 7.0.97 / `@ai-sdk/xai` 4.0.58 with the compatibility adapter above recorded **44 passes, 16 failed probes, 6 chat proxy rejections, and 30 skipped modalities**. See the [September 25 Grok results](./README.md#xai).
 
 On the September 24 sweep all seven models passed text, conversation history, raw-RID routing, JSON, blocking tools, and image input. Grok 420 non-reasoning also passed streaming text and an executed streaming tool loop; Grok 4.5 passed the streaming tool loop but not streaming text. Grok 4.5 and Grok 420 reasoning failed JSON with executed tools. Successful JSON output does not prove strict server-side schema enforcement; image checks cover acceptance and a description.
 

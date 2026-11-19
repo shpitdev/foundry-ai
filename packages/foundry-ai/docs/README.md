@@ -1,6 +1,8 @@
 # Models and live test status
 
-**Updated September 25, 2026 (UTC):** every provider table below comes from one catalog sweep on AI SDK 7.0.97 with `@ai-sdk/openai` 4.0.65, `@ai-sdk/anthropic` 4.0.52, `@ai-sdk/google` 4.0.67, and `@ai-sdk/xai` 4.0.58, plus isolated reruns of the rate-limited cases. The catalog holds 69 entries: 63 language aliases, three embedding models, and three separately tested realtime models. Basic text passed on 62 language aliases; Llama Nemotron Super has no usable adapter route. All three embeddings passed.
+**Catalog as of November 19, 2026 (UTC):** 62 entries — 55 language aliases, three OpenAI embeddings, and four realtime models. GPT-4o and Gemini 3.7 Flash were removed when Foundry marked them Sunset. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Transcription is not exposed.
+
+**September 25, 2026 sweep (historical):** the provider tables below use AI SDK 7.0.97 with `@ai-sdk/openai` 4.0.65, `@ai-sdk/anthropic` 4.0.52, `@ai-sdk/google` 4.0.67, and `@ai-sdk/xai` 4.0.58, plus isolated reruns of rate-limited cases. They include aliases no longer in the catalog. Basic text passed on 62 of 63 language aliases; Llama Nemotron Super had no usable adapter route. All three embeddings passed.
 
 [Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling. Raw reports stay locally under `.memory/`.
 
@@ -106,7 +108,7 @@ Uses `createFoundryThirdParty` with `@ai-sdk/openai` 4.0.65.
 
 ### Realtime
 
-Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. All three entries are enabled, usable, and Experimental in `foundry-cli models list --json` (September 24, 2026).
+Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. The current catalog includes `gpt-realtime`, `gpt-realtime-1.5`, `gpt-realtime-2.1`, and `gpt-realtime-2.1-mini`; `gpt-realtime-2` below is historical.
 
 | Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
 |---|---|---|---|---|---|
@@ -230,7 +232,7 @@ Native parsing exposes DeepSeek reasoning that the OpenAI-compatible route does 
 | Grok | `createFoundryXai` / `xai` | `@ai-sdk/xai` |
 | Gemma, Kimi, Nemotron, Qwen, GLM, DeepSeek | `createFoundryThirdParty` / `third-party` | `@ai-sdk/openai` |
 
-OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Kimi, Qwen, GLM, and DeepSeek use Chat Completions; Gemma and Nemotron Ultra use OpenAI Responses; Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
+OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Gemma uses OpenAI Responses. Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
@@ -269,7 +271,7 @@ import { createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
 // foundryUserToken must belong to the authenticated caller.
 return Response.json(createFoundryRealtimeSetup({
   foundryUrl,
-  model: 'gpt-realtime-2',
+  model: 'gpt-realtime-2.1',
   token: foundryUserToken,
   tools: [], // Or experimental_getRealtimeToolDefinitions({ tools }) from ai.
 }), { headers: { 'Cache-Control': 'no-store' } });
@@ -280,14 +282,14 @@ Pass the matching model to [AI SDK's realtime client](https://ai-sdk.dev/docs/ai
 ```ts
 import { createFoundryRealtime } from '@nyrra/foundry-ai/realtime';
 
-const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2');
+const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2.1');
 // experimental_useRealtime({ model, api: { token: '/api/realtime/setup' } })
 ```
 
 For server-side use, [the realtime example](https://github.com/shpitdev/foundry-ai/blob/main/examples/advanced/realtime.ts) shows a direct WebSocket connection. Realtime IDs are excluded from the HTTP language-model survey and rejected by `createFoundryOpenAI`; use the realtime factory instead. API names are used on this endpoint, including the dot in `gpt-realtime-1.5`, rather than model RIDs.
 
 ```sh
-pnpm run example realtime gpt-realtime-2
+pnpm run example realtime gpt-realtime-2.1
 pnpm run test:realtime
 # Optional isolated model rerun:
 pnpm run test:realtime -- --testNamePattern 'gpt-realtime-1.5:'

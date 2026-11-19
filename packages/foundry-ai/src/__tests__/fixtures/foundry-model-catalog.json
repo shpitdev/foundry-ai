@@ -9,7 +9,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-4-1"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
@@ -21,7 +22,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-haiku-4-5"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-opus",
@@ -33,7 +35,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-4-5"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-5-sonnet",
@@ -45,7 +48,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-sonnet-4-5"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-opus",
@@ -57,7 +61,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-4-6"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-6-sonnet",
@@ -69,7 +74,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-sonnet-4-6"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-7-opus",
@@ -81,7 +87,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-4-7"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-4-8-opus",
@@ -93,19 +100,21 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-4-8"
   },
   {
-    "rid": "ri.language-model-service..language-model.anthropic-claude-4-sonnet",
-    "modelIdentifier": "ANTHROPIC_CLAUDE_4_SONNET",
-    "displayName": "Claude Sonnet 4",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2025-03-01T00:00:00Z",
+    "rid": "ri.language-model-service..language-model.anthropic-claude-5-5-haiku",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_55_HAIKU",
+    "displayName": "Claude Haiku 5.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-06-01T00:00:00Z",
     "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "HEAVYWEIGHT",
-      "speed": "MEDIUM"
-    }
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    },
+    "externalUrl": "https://platform.claude.com/docs/en/models/haiku-5-5/overview"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-5-5-opus",
@@ -117,7 +126,21 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/claude-opus-5-5"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.anthropic-claude-5-5-sonnet",
+    "modelIdentifier": "ANTHROPIC_CLAUDE_55_SONNET",
+    "displayName": "Claude Sonnet 5.5",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2026-06-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-5-opus",
@@ -129,7 +152,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-opus-5"
   },
   {
     "rid": "ri.language-model-service..language-model.anthropic-claude-5-sonnet",
@@ -141,88 +165,20 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.deepseek-v3-2",
-    "modelIdentifier": "DEEPSEEK_V3_2",
-    "displayName": "DeepSeek V3.2",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2025-03-01T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.deepseek-v4-1-flash",
-    "modelIdentifier": "DEEPSEEK_V4_1_FLASH",
-    "displayName": "DeepSeek V4.1 Flash",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "LOW",
-      "modelClass": "REASONING",
-      "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.deepseek-v4-flash-0731",
-    "modelIdentifier": "DEEPSEEK_V4_FLASH_0731",
-    "displayName": "DeepSeek V4 Flash (0731)",
-    "lifecycle": "sunset",
-    "performance": {
-      "cost": "LOW",
-      "modelClass": "REASONING",
-      "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://www.anthropic.com/news/claude-sonnet-5"
   },
   {
     "rid": "ri.language-model-service..language-model.gemma-4-31b",
     "modelIdentifier": "GEMMA_4_31B",
     "displayName": "Gemma 4 31B",
-    "lifecycle": "experimental",
+    "lifecycle": "ga",
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gemini-2-5-flash",
-    "modelIdentifier": "GEMINI_2_5_FLASH",
-    "displayName": "Gemini 2.5 Flash",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2025-01-01T00:00:00Z",
-    "performance": {
-      "cost": "LOW",
-      "modelClass": "REASONING",
-      "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gemini-2-5-flash-lite",
-    "modelIdentifier": "GEMINI_2_5_FLASH_LITE",
-    "displayName": "Gemini 2.5 Flash Lite",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2025-01-01T00:00:00Z",
-    "performance": {
-      "cost": "LOW",
-      "modelClass": "LIGHTWEIGHT",
-      "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gemini-2-5-pro",
-    "modelIdentifier": "GEMINI_2_5_PRO",
-    "displayName": "Gemini 2.5 Pro",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2025-01-01T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://huggingface.co/google/gemma-4-31B-it"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-1-flash-lite",
@@ -234,7 +190,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://deepmind.google/models/model-cards/gemini-3-1-flash-lite/"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-1-pro",
@@ -246,7 +203,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-pro"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-5-flash",
@@ -258,7 +216,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-5-flash-lite",
@@ -270,25 +229,14 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gemini-3-6-flash",
-    "modelIdentifier": "GEMINI_3_6_FLASH",
-    "displayName": "Gemini 3.6 Flash",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2026-03-01T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-7-flash",
     "modelIdentifier": "GEMINI_3_7_FLASH",
     "displayName": "Gemini 3.7 Flash",
-    "lifecycle": "ga",
+    "lifecycle": "sunset",
     "trainingCutoffDate": "2026-03-01T00:00:00Z",
     "performance": {
       "cost": "MEDIUM",
@@ -306,7 +254,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-flash",
@@ -318,53 +267,47 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-flash"
   },
   {
-    "rid": "ri.language-model-service..language-model.llama-3-1-8b-instruct",
-    "modelIdentifier": "LLAMA_3_1_8B_INSTRUCT",
-    "displayName": "Llama 3.1 8b Instruct",
+    "rid": "ri.language-model-service..language-model.gemini-4-argon",
+    "modelIdentifier": "GEMINI_4_ARGON",
+    "displayName": "Gemini 4 Argon",
     "lifecycle": "ga",
-    "trainingCutoffDate": "2023-12-01T00:00:00Z",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
     "performance": {
       "cost": "MEDIUM",
-      "modelClass": "LIGHTWEIGHT",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.llama-3-3-70b-instruct",
-    "modelIdentifier": "LLAMA_3_3_70B_INSTRUCT",
-    "displayName": "Llama 3.3 70b Instruct",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2023-12-01T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "HEAVYWEIGHT",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.kimi-k2-5",
-    "modelIdentifier": "KIMI_K2_5",
-    "displayName": "Kimi K2.5",
-    "lifecycle": "ga",
-    "performance": {
-      "cost": "HIGH",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon"
   },
   {
-    "rid": "ri.language-model-service..language-model.kimi-k3",
-    "modelIdentifier": "KIMI_K3",
-    "displayName": "Kimi K3",
+    "rid": "ri.language-model-service..language-model.gemini-4-carbon",
+    "modelIdentifier": "GEMINI_4_CARBON",
+    "displayName": "Gemini 4 Carbon (Experimental)",
     "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
     "performance": {
-      "cost": "HIGH",
+      "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-carbon"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gemini-4-hydrogen",
+    "modelIdentifier": "GEMINI_4_HYDROGEN",
+    "displayName": "Gemini 4 Hydrogen",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "HIGH"
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-hydrogen"
   },
   {
     "rid": "ri.language-model-service..language-model.llama-3-3-nemotron-super-49b-v1-5",
@@ -379,18 +322,6 @@
     }
   },
   {
-    "rid": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
-    "modelIdentifier": "NEMOTRON_3_ULTRA_550B_A55B_NVFP4",
-    "displayName": "NVIDIA Nemotron 3 Ultra 550B A55B NVFP4",
-    "lifecycle": "experimental",
-    "trainingCutoffDate": "2026-05-01T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
     "rid": "ri.language-model-service..language-model.gemma-4-26b-a4b",
     "modelIdentifier": "GEMMA_4_26B_A4B",
     "displayName": "Gemma 4 26B A4B",
@@ -400,7 +331,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://huggingface.co/google/gemma-4-26B-A4B-it"
   },
   {
     "rid": "ri.language-model-service..language-model.schematic-7B",
@@ -415,17 +347,6 @@
     }
   },
   {
-    "rid": "ri.language-model-service..language-model.codex-auto-review",
-    "modelIdentifier": "CODEX_AUTO_REVIEW",
-    "displayName": "Codex Auto Review",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "HEAVYWEIGHT",
-      "speed": "MEDIUM"
-    }
-  },
-  {
     "rid": "ri.language-model-service..language-model.gpt-4-1",
     "modelIdentifier": "GPT_4_1",
     "displayName": "GPT-4.1",
@@ -435,7 +356,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4.1"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-1-mini",
@@ -447,7 +369,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4.1-mini"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-1-nano",
@@ -459,19 +382,21 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4.1-nano"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o",
     "modelIdentifier": "GPT_4_O",
     "displayName": "GPT-4o",
-    "lifecycle": "ga",
+    "lifecycle": "sunset",
     "trainingCutoffDate": "2023-10-01T00:00:00Z",
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4o"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5",
@@ -483,7 +408,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1",
@@ -495,7 +421,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.1"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1-codex",
@@ -507,7 +434,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.1-codex"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-1-codex-mini",
@@ -519,7 +447,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.1-codex-mini"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-2",
@@ -531,19 +460,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gpt-5-2-pro",
-    "modelIdentifier": "GPT_5_2_PRO",
-    "displayName": "GPT-5.2 Pro",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2025-08-31T00:00:00Z",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "HEAVYWEIGHT",
-      "speed": "LOW"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.2"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-3-codex",
@@ -555,7 +473,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.3-codex"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4",
@@ -567,7 +486,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.4"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4-mini",
@@ -579,7 +499,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.4-mini"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-4-nano",
@@ -591,19 +512,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gpt-5-4-pro",
-    "modelIdentifier": "GPT_5_4_PRO",
-    "displayName": "GPT-5.4 Pro",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2025-08-31T00:00:00Z",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "HEAVYWEIGHT",
-      "speed": "LOW"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.4-nano"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-5",
@@ -615,7 +525,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.5"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-luna",
@@ -627,7 +538,8 @@
       "cost": "LOW",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.6-luna"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-sol",
@@ -639,7 +551,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.6-sol"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-6-terra",
@@ -651,7 +564,8 @@
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5.6-terra"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-codex",
@@ -663,7 +577,8 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5-codex"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-mini",
@@ -675,7 +590,8 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5-mini"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-5-nano",
@@ -687,19 +603,33 @@
       "cost": "LOW",
       "modelClass": "LIGHTWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-5-nano"
   },
   {
-    "rid": "ri.language-model-service..language-model.gpt-5-pro",
-    "modelIdentifier": "GPT_5_PRO",
-    "displayName": "GPT-5 Pro",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "rid": "ri.language-model-service..language-model.gpt-6-1-sol",
+    "modelIdentifier": "GPT_6_1_SOL",
+    "displayName": "GPT-6.1 Sol",
+    "lifecycle": "ga",
     "performance": {
-      "cost": "HIGH",
+      "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
-      "speed": "LOW"
-    }
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6.1-sol"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-1-terra",
+    "modelIdentifier": "GPT_6_1_TERRA",
+    "displayName": "GPT-6.1 Terra",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-06-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-6-astra",
@@ -708,137 +638,37 @@
     "lifecycle": "ga",
     "trainingCutoffDate": "2026-04-30T00:00:00Z",
     "performance": {
-      "cost": "MEDIUM",
+      "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6-astra"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-6-luna",
     "modelIdentifier": "GPT_6_LUNA",
     "displayName": "GPT-6 Luna",
-    "lifecycle": "experimental",
+    "lifecycle": "ga",
     "trainingCutoffDate": "2026-05-18T00:00:00Z",
     "performance": {
       "cost": "LOW",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6-luna"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-6-sol",
     "modelIdentifier": "GPT_6_SOL",
     "displayName": "GPT-6 Sol",
-    "lifecycle": "experimental",
+    "lifecycle": "ga",
     "trainingCutoffDate": "2026-04-20T00:00:00Z",
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "HEAVYWEIGHT",
       "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.o-1",
-    "modelIdentifier": "O_1",
-    "displayName": "o1",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2023-12-30T00:00:00Z",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "REASONING",
-      "speed": "LOW"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.o-3",
-    "modelIdentifier": "O_3",
-    "displayName": "o3",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2024-05-31T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "LOW"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.o-3-pro",
-    "modelIdentifier": "O_3_PRO",
-    "displayName": "o3-pro",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2024-06-01T00:00:00Z",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "REASONING",
-      "speed": "LOW"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.o-4-mini",
-    "modelIdentifier": "O_4_MINI",
-    "displayName": "o4-mini",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2024-05-31T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.qwen3-235b-a22b-2507",
-    "modelIdentifier": "QWEN3_235B_A22B_2507",
-    "displayName": "Qwen3 235B A22B 2507",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.qwen3-32b",
-    "modelIdentifier": "QWEN3_32B",
-    "displayName": "Qwen3 32B",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.glm-5",
-    "modelIdentifier": "GLM_5",
-    "displayName": "Z.ai GLM-5",
-    "lifecycle": "ga",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.glm-5-3",
-    "modelIdentifier": "GLM_5_3",
-    "displayName": "Z.ai GLM-5.3",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "HIGH",
-      "modelClass": "REASONING",
-      "speed": "MEDIUM"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.glm-5-3-flash",
-    "modelIdentifier": "GLM_5_3_FLASH",
-    "displayName": "Z.ai GLM-5.3 Flash",
-    "lifecycle": "experimental",
-    "performance": {
-      "cost": "LOW",
-      "modelClass": "REASONING",
-      "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6-sol"
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-3",
@@ -849,7 +679,8 @@
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING"
-    }
+    },
+    "externalUrl": "https://docs.x.ai/developers/models/grok-4.3"
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-5",
@@ -860,7 +691,8 @@
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING"
-    }
+    },
+    "externalUrl": "https://docs.x.ai/developers/models/grok-4.5"
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-6",
@@ -871,7 +703,8 @@
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING"
-    }
+    },
+    "externalUrl": "https://docs.x.ai/developers/models/grok-4.6"
   },
   {
     "rid": "ri.language-model-service..language-model.grok-4-7",
@@ -914,7 +747,8 @@
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "LIGHTWEIGHT"
-    }
+    },
+    "externalUrl": "https://x.ai/news/grok-build-0-1"
   },
   {
     "rid": "ri.language-model-service..language-model.llama-3-2-nv-embedqa-1b-v2",
@@ -937,7 +771,8 @@
       "cost": "LOW",
       "modelClass": "SPECIALIZED_EMBEDDING",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/guides/embeddings/embedding-models"
   },
   {
     "rid": "ri.language-model-service..language-model.text-embedding-3-small_azure",
@@ -949,7 +784,8 @@
       "cost": "LOW",
       "modelClass": "SPECIALIZED_EMBEDDING",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/guides/embeddings/embedding-models"
   },
   {
     "rid": "ri.language-model-service..language-model.text-embedding-ada-002_azure",
@@ -961,7 +797,8 @@
       "cost": "LOW",
       "modelClass": "SPECIALIZED_EMBEDDING",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/guides/embeddings/embedding-models"
   },
   {
     "rid": "ri.language-model-service..language-model.snowflake-arctic-embed-medium",
@@ -973,26 +810,18 @@
       "cost": "MEDIUM",
       "modelClass": "SPECIALIZED_EMBEDDING",
       "speed": "HIGH"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.tbd-document-information-extraction",
-    "modelIdentifier": "TBD_DOCUMENT_INFORMATION_EXTRACTION",
-    "displayName": "Document Information Extraction",
-    "lifecycle": "sunset",
-    "trainingCutoffDate": "2024-10-01T00:00:00Z",
-    "performance": {
-      "modelClass": "SPECIALIZED_EXTRACTION"
-    }
+    },
+    "externalUrl": "https://huggingface.co/Snowflake/snowflake-arctic-embed-m"
   },
   {
     "rid": "ri.language-model-service..language-model.whisper-large-v3",
     "modelIdentifier": "WHISPER_LARGE_V3",
     "displayName": "Whisper Large V3",
-    "lifecycle": "experimental",
+    "lifecycle": "ga",
     "performance": {
       "modelClass": "SPECIALIZED_AUDIO"
-    }
+    },
+    "externalUrl": "https://huggingface.co/openai/whisper-large-v3"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-mini-transcribe",
@@ -1002,7 +831,8 @@
     "trainingCutoffDate": "2024-06-01T00:00:00Z",
     "performance": {
       "modelClass": "SPECIALIZED_AUDIO"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4o-mini-transcribe"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe",
@@ -1012,7 +842,8 @@
     "trainingCutoffDate": "2024-06-01T00:00:00Z",
     "performance": {
       "modelClass": "SPECIALIZED_AUDIO"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4o-transcribe"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-4-o-transcribe-diarize",
@@ -1022,25 +853,18 @@
     "trainingCutoffDate": "2024-06-01T00:00:00Z",
     "performance": {
       "modelClass": "SPECIALIZED_AUDIO"
-    }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.gpt-realtime-whisper",
-    "modelIdentifier": "GPT_REALTIME_WHISPER",
-    "displayName": "GPT Realtime Whisper",
-    "lifecycle": "experimental",
-    "performance": {
-      "modelClass": "SPECIALIZED_AUDIO"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-4o-transcribe-diarize"
   },
   {
     "rid": "ri.language-model-service..language-model.whisper-1",
     "modelIdentifier": "OPENAI_WHISPER_1",
     "displayName": "Whisper 1",
-    "lifecycle": "ga",
+    "lifecycle": "experimental",
     "performance": {
       "modelClass": "SPECIALIZED_AUDIO"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/whisper-1"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime",
@@ -1052,7 +876,8 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://platform.openai.com/docs/models/gpt-realtime"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime-1-5",
@@ -1064,18 +889,33 @@
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-1.5"
   },
   {
-    "rid": "ri.language-model-service..language-model.gpt-realtime-2",
-    "modelIdentifier": "GPT_REALTIME_2",
-    "displayName": "GPT Realtime 2",
+    "rid": "ri.language-model-service..language-model.gpt-realtime-2-1",
+    "modelIdentifier": "GPT_REALTIME_2_1",
+    "displayName": "GPT Realtime 2.1",
     "lifecycle": "experimental",
     "trainingCutoffDate": "2024-09-30T00:00:00Z",
     "performance": {
       "cost": "HIGH",
       "modelClass": "HEAVYWEIGHT",
       "speed": "HIGH"
-    }
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime-2-1-mini",
+    "modelIdentifier": "GPT_REALTIME_2_1_MINI",
+    "displayName": "GPT Realtime 2.1 Mini",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "LIGHTWEIGHT",
+      "speed": "HIGH"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1-mini"
   }
 ]

@@ -18,21 +18,25 @@ describe('live capability provider options', () => {
     });
   });
 
-  it.each(['claude-sonnet-5', 'claude-opus-4.7', 'claude-opus-4.8'])(
-    'uses adaptive thinking for %s reasoning probes',
-    (modelId) => {
-      expect(getProviderOptions('anthropic', 'reasoning', modelId)).toEqual({
-        anthropic: {
-          effort: 'high',
-          thinking: {
-            display: 'summarized',
-            type: 'adaptive',
-          },
-          sendReasoning: true,
+  it.each([
+    'claude-sonnet-5',
+    'claude-opus-4.7',
+    'claude-opus-4.8',
+    'claude-opus-5.5',
+    'claude-haiku-5.5',
+    'claude-sonnet-5.5',
+  ])('uses adaptive thinking for %s reasoning probes', (modelId) => {
+    expect(getProviderOptions('anthropic', 'reasoning', modelId)).toEqual({
+      anthropic: {
+        effort: 'high',
+        thinking: {
+          display: 'summarized',
+          type: 'adaptive',
         },
-      });
-    },
-  );
+        sendReasoning: true,
+      },
+    });
+  });
 
   it('keeps anthropic tool-loop options intact', () => {
     expect(getProviderOptions('anthropic', 'tools', 'claude-haiku-4.5')).toEqual({

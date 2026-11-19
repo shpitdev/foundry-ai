@@ -22,15 +22,25 @@ const definitions = {
     performance: { cost: 'HIGH', modelClass: 'HEAVYWEIGHT', speed: 'HIGH' },
     externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-1.5',
   },
-  'gpt-realtime-2': {
-    rid: 'ri.language-model-service..language-model.gpt-realtime-2',
-    modelIdentifier: 'GPT_REALTIME_2',
-    displayName: 'GPT Realtime 2',
+  'gpt-realtime-2.1': {
+    rid: 'ri.language-model-service..language-model.gpt-realtime-2-1',
+    modelIdentifier: 'GPT_REALTIME_2_1',
+    displayName: 'GPT Realtime 2.1',
     lifecycle: 'experimental',
     inputTypes: ['OPEN_AI_REALTIME'],
     trainingCutoffDate: '2024-09-30T00:00:00Z',
     performance: { cost: 'HIGH', modelClass: 'HEAVYWEIGHT', speed: 'HIGH' },
-    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-2',
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-2.1',
+  },
+  'gpt-realtime-2.1-mini': {
+    rid: 'ri.language-model-service..language-model.gpt-realtime-2-1-mini',
+    modelIdentifier: 'GPT_REALTIME_2_1_MINI',
+    displayName: 'GPT Realtime 2.1 Mini',
+    lifecycle: 'experimental',
+    inputTypes: ['OPEN_AI_REALTIME'],
+    trainingCutoffDate: '2024-09-30T00:00:00Z',
+    performance: { cost: 'LOW', modelClass: 'LIGHTWEIGHT', speed: 'HIGH' },
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-2.1-mini',
   },
 } as const satisfies Record<string, ModelDefinition>;
 

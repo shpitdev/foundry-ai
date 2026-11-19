@@ -24,14 +24,13 @@ const google = createFoundryGoogle(config);
 const xai = createFoundryXai(config);
 const thirdParty = createFoundryThirdParty(config);
 const providersAndModels = [
-  { provider: thirdParty, model: thirdParty('kimi-k2-5') },
   { provider: thirdParty, model: thirdParty('gemma-4-31b') },
   { provider: xai, model: xai('grok-4-6') },
   { provider: xai, model: xai.responses('grok-4-6') },
   { provider: xai, model: xai.chat('grok-4-6') },
   { provider: openai, model: openai('gpt-5.6-terra') },
   { provider: anthropic, model: anthropic('claude-opus-5') },
-  { provider: google, model: google('gemini-3.6-flash') },
+  { provider: google, model: google('gemini-4-argon') },
 ];
 const acceptsAiSdkModel = (_model: LanguageModel) => undefined;
 const registry = createProviderRegistry({ anthropic, google, openai, xai });

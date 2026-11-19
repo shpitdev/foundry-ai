@@ -246,19 +246,16 @@ function requiresMediumOpenAITextVerbosity(modelId?: string) {
     'gpt-4.1',
     'gpt-4.1-mini',
     'gpt-4.1-nano',
-    'gpt-4o',
     'gpt-5-codex',
     'gpt-5.1-codex',
     'gpt-5.1-codex-mini',
     'gpt-5.4-mini',
     'gpt-5.4-nano',
-    'o3',
-    'o4-mini',
   ].includes(modelId);
 }
 
 function supportsExplicitLowReasoningEffort(modelId: string) {
-  return ['gpt-5.2', 'gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano', 'o3', 'o4-mini'].includes(modelId);
+  return ['gpt-5.2', 'gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano'].includes(modelId);
 }
 
 function supportsMinimalReasoningEffort(modelId: string) {
@@ -293,7 +290,8 @@ export function usesAdaptiveThinking(modelId?: string) {
     modelId?.endsWith('-5') === true ||
     modelId === 'claude-opus-4.7' ||
     modelId === 'claude-opus-4.8' ||
-    // The proxy rejects budget-based thinking for Opus 5.5 with HTTP 400.
-    modelId === 'claude-opus-5.5'
+    modelId === 'claude-opus-5.5' ||
+    modelId === 'claude-haiku-5.5' ||
+    modelId === 'claude-sonnet-5.5'
   );
 }

@@ -12,7 +12,7 @@ const config = {
   foundryUrl: 'https://foundry.example',
   token: 'test-token',
 };
-const OPUS_55_RID = 'ri.language-model-service..language-model.anthropic-claude-5-5-opus';
+const RID_PREFIX = 'ri.language-model-service..language-model.anthropic-claude-';
 const schema = z.object({ answer: z.string().min(1) });
 
 afterEach(() => vi.unstubAllGlobals());
@@ -63,22 +63,24 @@ async function requestStructuredOutput(target: string) {
 }
 
 describe('Foundry Anthropic structured output', () => {
-  it.each(['claude-opus-5.5', OPUS_55_RID])(
-    'sends a native output format and no forced tool for %s',
-    async (target) => {
-      const body = await requestStructuredOutput(target);
+  it.each([
+    'claude-opus-5.5',
+    `${RID_PREFIX}5-5-opus`,
+    'claude-sonnet-5.5',
+    `${RID_PREFIX}5-5-sonnet`,
+  ])('sends a native output format and no forced tool for %s', async (target) => {
+    const body = await requestStructuredOutput(target);
 
-      expect(body.output_config?.format?.type).toBe('json_schema');
-      expect(body.output_config?.format?.schema).toMatchObject({
-        type: 'object',
-        required: ['answer'],
-      });
-      expect(body.tools).toBeUndefined();
-      expect(body.tool_choice).toBeUndefined();
-    },
-  );
+    expect(body.output_config?.format?.type).toBe('json_schema');
+    expect(body.output_config?.format?.schema).toMatchObject({
+      type: 'object',
+      required: ['answer'],
+    });
+    expect(body.tools).toBeUndefined();
+    expect(body.tool_choice).toBeUndefined();
+  });
 
-  it.each(['claude-opus-5', 'ri.language-model-service..language-model.anthropic-claude-5-opus'])(
+  it.each(['claude-opus-5', `${RID_PREFIX}5-opus`, 'claude-haiku-5.5', `${RID_PREFIX}5-5-haiku`])(
     'keeps the forced JSON tool for %s',
     async (target) => {
       const body = await requestStructuredOutput(target);

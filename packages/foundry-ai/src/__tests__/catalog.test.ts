@@ -33,6 +33,7 @@ describe('model catalog', () => {
       lifecycle: string;
       trainingCutoffDate?: string;
       performance: { cost?: string; modelClass?: string; speed?: string };
+      externalUrl?: string;
     }>;
     for (const [id, model] of Object.entries(MODEL_CATALOG)) {
       const enrollment = enrollments.find((entry) =>
@@ -44,6 +45,9 @@ describe('model catalog', () => {
       expect(['ga', 'experimental'], `${id} must not be deprecated`).toContain(
         enrollment?.lifecycle,
       );
+      expect(model.modelIdentifier, `${id} modelIdentifier must match Foundry`).toBe(
+        enrollment?.modelIdentifier,
+      );
       expect(model.lifecycle, `${id} lifecycle must match Foundry`).toBe(enrollment?.lifecycle);
       // Catch metadata drift, not just enrollment and lifecycle drift.
       expect(model.displayName, `${id} displayName must match Foundry`).toBe(
@@ -54,6 +58,9 @@ describe('model catalog', () => {
       );
       expect(model.performance, `${id} performance must match Foundry`).toEqual(
         enrollment?.performance,
+      );
+      expect(model.externalUrl, `${id} externalUrl must match Foundry`).toBe(
+        enrollment?.externalUrl,
       );
     }
   });
@@ -68,6 +75,22 @@ describe('model catalog', () => {
     'claude-sonnet-4',
     'claude-opus-4',
     'claude-opus-4.1',
+    'codex-auto-review',
+    'deepseek-v4-1-flash',
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'glm-5',
+    'glm-5-3',
+    'glm-5-3-flash',
+    'gpt-4o',
+    'gpt-realtime-2',
+    'kimi-k2-5',
+    'kimi-k3',
+    'nemotron-3-ultra-550b-a55b-nvfp4',
+    'o3',
+    'o4-mini',
+    'qwen3-235b-a22b-2507',
+    'qwen3-32b',
   ])('removes deprecated or delisted alias %s', (id) => {
     expect(hasKnownModel(id)).toBe(false);
     expect(getModelMetadata(id)).toBeUndefined();
@@ -156,7 +179,7 @@ describe('model catalog', () => {
         'OPEN_AI_RESPONSES',
       ]),
       performance: {
-        cost: 'MEDIUM',
+        cost: 'HIGH',
         modelClass: 'HEAVYWEIGHT',
         speed: 'MEDIUM',
       },
@@ -165,35 +188,18 @@ describe('model catalog', () => {
     });
     expect(getModelMetadata('gpt-6-luna')).toMatchObject({
       displayName: 'GPT-6 Luna',
-      lifecycle: 'experimental',
+      lifecycle: 'ga',
       modelIdentifier: 'GPT_6_LUNA',
       trainingCutoffDate: '2026-05-18T00:00:00Z',
       performance: { cost: 'LOW', modelClass: 'HEAVYWEIGHT', speed: 'MEDIUM' },
     });
     expect(getModelMetadata('gpt-6-sol')).toMatchObject({
       displayName: 'GPT-6 Sol',
-      lifecycle: 'experimental',
+      lifecycle: 'ga',
       modelIdentifier: 'GPT_6_SOL',
       trainingCutoffDate: '2026-04-20T00:00:00Z',
     });
-    expect(resolveModelRid('codex-auto-review')).toBe(
-      'ri.language-model-service..language-model.codex-auto-review',
-    );
-    expect(getModelMetadata('codex-auto-review')).toMatchObject({
-      displayName: 'Codex Auto Review',
-      lifecycle: 'experimental',
-      modelIdentifier: 'CODEX_AUTO_REVIEW',
-      provider: 'openai',
-      inputTypes: [
-        'GENERIC_COMPLETION',
-        'GENERIC_CHAT_COMPLETION',
-        'GENERIC_VISION_COMPLETION',
-        'OPEN_AI_RESPONSES',
-      ],
-      supportsResponses: true,
-      supportsVision: true,
-    });
-    expect(getModelMetadata('codex-auto-review')?.trainingCutoffDate).toBeUndefined();
+    expect(getModelMetadata('gpt-6.1-sol')?.trainingCutoffDate).toBeUndefined();
   });
 
   it('resolves metadata for known OpenAI embedding models', () => {
@@ -343,22 +349,24 @@ describe('model catalog', () => {
       provider: 'google',
       lifecycle: 'ga',
     });
-    expect(resolveModelRid('gemini-3.6-flash')).toBe(
-      'ri.language-model-service..language-model.gemini-3-6-flash',
-    );
-    expect(getModelMetadata('gemini-3.6-flash')).toMatchObject({
-      displayName: 'Gemini 3.6 Flash',
-      lifecycle: 'ga',
-      modelIdentifier: 'GEMINI_3_6_FLASH',
-      provider: 'google',
-      performance: {
-        cost: 'MEDIUM',
-        modelClass: 'REASONING',
-        speed: 'HIGH',
-      },
-      trainingCutoffDate: '2026-03-01T00:00:00Z',
-      supportsResponses: false,
+  });
+
+  it.each([
+    ['gpt-6.1-sol', 'gpt-6-1-sol', 'openai', 'GPT_CHAT_COMPLETION'],
+    ['gpt-6.1-terra', 'gpt-6-1-terra', 'openai', 'GPT_CHAT_COMPLETION'],
+    ['claude-haiku-5.5', 'anthropic-claude-5-5-haiku', 'anthropic', 'CLAUDE_CHAT'],
+    ['claude-sonnet-5.5', 'anthropic-claude-5-5-sonnet', 'anthropic', 'CLAUDE_CHAT'],
+    ['gemini-4-argon', 'gemini-4-argon', 'google', 'GEMINI_CHAT'],
+    ['gemini-4-carbon', 'gemini-4-carbon', 'google', 'GEMINI_CHAT'],
+    ['gemini-4-hydrogen', 'gemini-4-hydrogen', 'google', 'GEMINI_CHAT'],
+  ])('resolves %s through its provider route', (alias, modelRid, provider, inputType) => {
+    const rid = `ri.language-model-service..language-model.${modelRid}`;
+    expect(resolveModelRid(alias)).toBe(rid);
+    expect(resolveModelTarget(rid).metadata).toMatchObject({
+      provider,
+      inputTypes: expect.arrayContaining([inputType]),
       supportsVision: true,
+      supportsResponses: provider === 'openai',
     });
   });
 

@@ -109,7 +109,7 @@ const DEFAULT_MODELS = {
   anthropic: 'claude-haiku-4.5',
   google: 'gemini-3.1-flash-lite',
   openai: 'gpt-5-nano',
-  'third-party': 'qwen3-32b',
+  'third-party': 'gemma-4-31b',
   xai: 'grok-4-6',
 } as const satisfies Record<LiveProvider, string>;
 
