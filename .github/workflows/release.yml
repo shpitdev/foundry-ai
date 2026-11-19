@@ -16,34 +16,39 @@ permissions:
   contents: write
   id-token: write
 
-concurrency:
-  group: release-publish
-  cancel-in-progress: false
-
 jobs:
   # Each package releases independently: scripts/release-packages.mjs picks the packages this PR
-  # publishes and skips private ones.
+  # publishes from its changed files and skips private ones. Publish jobs build and tag the merge
+  # commit and queue per package and channel, so one package's runs never displace another's.
   select-packages:
     if: >-
       vars.NPM_PUBLISH_ENABLED == 'true' &&
       github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       packages: ${{ steps.select.outputs.packages }}
     steps:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
-          fetch-depth: 2
       - uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Select packages
         id: select
         env:
-          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: node scripts/release-packages.mjs "${MERGE_SHA}" "${HEAD_REF}" >> "$GITHUB_OUTPUT"
+        run: |
+          set -euo pipefail
+          gh api --paginate "repos/${REPOSITORY}/pulls/${PR_NUMBER}/files" \
+            --jq '.[] | .filename, (.previous_filename // empty)' > "${RUNNER_TEMP}/changed-files"
+          node scripts/release-packages.mjs "${HEAD_REF}" < "${RUNNER_TEMP}/changed-files" >> "$GITHUB_OUTPUT"
 
   publish-prerelease:
     needs: select-packages
@@ -53,6 +58,9 @@ jobs:
       !startsWith(github.event.pull_request.head.ref, 'release/') &&
       needs.select-packages.outputs.packages != '[]'
     runs-on: ubuntu-latest
+    concurrency:
+      group: release-${{ matrix.package.project }}-next
+      cancel-in-progress: false
     strategy:
       fail-fast: false
       matrix:
@@ -60,7 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
       - uses: pnpm/action-setup@v6.1.0
         with:
@@ -122,6 +130,9 @@ jobs:
       startsWith(github.event.pull_request.head.ref, 'release/') &&
       needs.select-packages.outputs.packages != '[]'
     runs-on: ubuntu-latest
+    concurrency:
+      group: release-${{ matrix.package.project }}-latest
+      cancel-in-progress: false
     strategy:
       fail-fast: false
       matrix:
@@ -129,7 +140,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: 0
       - uses: pnpm/action-setup@v6.1.0
         with:
@@ -150,11 +161,12 @@ jobs:
         env:
           PACKAGE_DIR: ${{ matrix.package.dir }}
           PKG_NAME: ${{ matrix.package.name }}
+          EXPECTED_VERSION: ${{ matrix.package.version }}
         run: |
           set -euo pipefail
           version=$(node -p "require('./${PACKAGE_DIR}/package.json').version")
-          if echo "${version}" | grep -qE '\-'; then
-            echo "::error::Expected a stable version, found ${version}."
+          if [ "${version}" != "${EXPECTED_VERSION}" ] || echo "${version}" | grep -qE '\-'; then
+            echo "::error::Expected stable ${EXPECTED_VERSION} from the release branch, found ${version}."
             exit 1
           fi
           echo "name=${PKG_NAME}" >> "$GITHUB_OUTPUT"

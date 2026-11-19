@@ -98,7 +98,19 @@ function checkEffectPackage(files) {
   if (manifest.type !== 'module' || manifest.sideEffects !== false) {
     problems.push('The Effect package must be ESM with sideEffects: false.');
   }
-  if (manifest.main != null || manifest.module != null || manifest.exports?.['.'] != null) {
+  // Public modules resolve only through the wildcard; an exact key would expose internals.
+  const expectedExports = {
+    './package.json': './package.json',
+    './internal/*': null,
+    './*': {
+      types: './dist/foundry-effect-ai/src/*.d.ts',
+      default: './dist/foundry-effect-ai/src/*.js',
+    },
+  };
+  if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {
+    problems.push(`exports must be exactly ${JSON.stringify(expectedExports)}.`);
+  }
+  if (manifest.main != null || manifest.module != null || manifest.types != null) {
     problems.push('The Effect package has no root entry; import modules by subpath.');
   }
   for (const file of files) {

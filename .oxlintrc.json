@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   // Strict lint for the Effect package only; Biome lints and formats everything else.
-  // Rules follow ~/shpitdev/foundry-cli's Effect projects. Effect-specific checks (fetch,
+  // Rules follow the shpitdev/foundry-cli Effect projects. Effect-specific checks (fetch,
   // process.env, Date, timers, console, unstable APIs) run as language-service diagnostics in
   // the typecheck target. Cross-protocol imports are enforced on the built graph by
   // scripts/check-tree-shaking.mjs.

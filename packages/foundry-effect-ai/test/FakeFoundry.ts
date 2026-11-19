@@ -16,7 +16,8 @@ export interface Fixture {
   readonly status?: number;
   /** `application/json` or `text/event-stream`. */
   readonly contentType: string;
-  readonly body: string;
+  /** `null` for bodyless responses such as 204. */
+  readonly body: string | null;
 }
 
 export interface CapturedRequest {

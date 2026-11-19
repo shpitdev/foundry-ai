@@ -14,6 +14,11 @@ Merging any other PR publishes a release candidate under npm's `next` tag for ea
 
 ## First publish of a new package
 
-npm trusted publishing is configured on an existing package, so a new package's first version is published by hand: build and audit it, publish once from its directory with an npm account that owns the `@nyrra` scope, then add the trusted publisher (`shpitdev/foundry-ai`, `release.yml`) in the package's npm settings. Only then remove `private` from its `package.json`.
+npm trusted publishing is configured on a package that already exists, so a new package's first version is published by hand:
+
+1. On a branch, remove `private` from the package's `package.json` and set `version` to the first release, for example `0.1.0`. Run `pnpm run verify`.
+2. From the package directory, run `npm publish --access public` with an npm account that owns the `@nyrra` scope. This sets `latest`.
+3. In the package's npm settings, add the trusted publisher `shpitdev/foundry-ai` / `release.yml`.
+4. Merge the branch. Its manifest now matches npm `latest`, so `pnpm run release <project>` can backfill the `<name>@<version>` tag, and the merge publishes the first release candidate through OIDC.
 
 Use `pnpm run verify:public-metadata` to check public repository/package identity when investigating publishing problems.

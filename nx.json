@@ -28,7 +28,9 @@
       "!{projectRoot}/src/**/*.test.ts",
       "!{projectRoot}/src/**/*.spec.ts",
       "!{projectRoot}/src/**/__tests__/**",
+      "!{projectRoot}/test/**",
       "!{projectRoot}/vitest.config.ts",
+      "!{projectRoot}/vitest.live.config.ts",
       "!{projectRoot}/tsconfig.test.json",
       "!{projectRoot}/tsconfig.typecheck.json",
       "!{workspaceRoot}/examples/**"

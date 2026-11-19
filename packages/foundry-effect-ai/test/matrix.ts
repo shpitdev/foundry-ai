@@ -13,7 +13,10 @@ export const languageCapabilities = [
   'image',
   'reasoning',
 ] as const;
-export type LanguageCapability = (typeof languageCapabilities)[number];
+export type LanguageCapability =
+  | (typeof languageCapabilities)[number]
+  // Claude Opus and Sonnet 5.5 reject forced tool use and need native `output_config.format`.
+  | 'json-native-claude-sonnet-5.5';
 
 export interface LanguageRow {
   readonly module: string;
@@ -40,7 +43,7 @@ export const languageRows: ReadonlyArray<LanguageRow> = [
     module: 'AnthropicLanguageModel',
     phase: 4,
     liveModel: 'claude-haiku-4.5',
-    capabilities: languageCapabilities,
+    capabilities: [...languageCapabilities, 'json-native-claude-sonnet-5.5'],
   },
   {
     module: 'GoogleLanguageModel',

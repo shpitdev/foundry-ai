@@ -1,6 +1,7 @@
-// Proves @nyrra/foundry-effect-ai tree-shakes per module: bundles each public module through the
-// package exports map (effect external) and fails when a bundle reaches code owned by another
-// protocol or vendor, exceeds its size budget, or when a consumer cannot typecheck the module.
+// Proves @nyrra/foundry-effect-ai tree-shakes per module. Installs the packed tarball beside
+// effect in a scratch project, bundles each public module through the exports map (effect
+// external), and fails when a bundle reaches code owned by another protocol or vendor, exceeds its
+// size budget, when internal modules resolve, or when a consumer cannot typecheck the module.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -50,8 +51,22 @@ if (modules.length === 0) {
 const scratch = mkdtempSync(join(tmpdir(), 'foundry-effect-ai-tree-shaking-'));
 const failures = [];
 try {
-  mkdirSync(join(scratch, 'node_modules/@nyrra'), { recursive: true });
-  symlinkSync(packageRoot, join(scratch, 'node_modules/@nyrra/foundry-effect-ai'), 'dir');
+  // A real copy of the published files, so nothing resolves from the workspace behind a symlink.
+  const installed = join(scratch, 'node_modules/@nyrra/foundry-effect-ai');
+  mkdirSync(installed, { recursive: true });
+  const [packed] = JSON.parse(
+    execFileSync('npm', ['pack', '--json', '--pack-destination', scratch], {
+      cwd: packageRoot,
+      encoding: 'utf8',
+    }),
+  );
+  execFileSync('tar', [
+    '-xzf',
+    join(scratch, packed.filename),
+    '-C',
+    installed,
+    '--strip-components=1',
+  ]);
   symlinkSync(resolve('node_modules/effect'), join(scratch, 'node_modules/effect'), 'dir');
   writeFileSync(join(scratch, 'package.json'), '{"type":"module"}\n');
 
@@ -96,23 +111,26 @@ try {
     console.log(`${name}: ${bytes} bytes`);
   }
 
-  // Internal modules are not part of the exports map.
-  const internal = await build({
-    absWorkingDir: scratch,
-    stdin: {
-      contents: "import '@nyrra/foundry-effect-ai/internal/notImplemented';",
-      resolveDir: scratch,
-    },
-    bundle: true,
-    write: false,
-    external: ['effect', 'effect/*'],
-    logLevel: 'silent',
-  }).then(
-    () => true,
-    () => false,
-  );
-  if (internal) {
-    failures.push('@nyrra/foundry-effect-ai/internal/* resolved; the exports map must block it.');
+  // No built internal module may resolve through the exports map.
+  const internalModules = readdirSync(join(distRoot, 'internal'), { recursive: true })
+    .map(String)
+    .filter((file) => file.endsWith('.js'))
+    .map((file) => `@nyrra/foundry-effect-ai/internal/${file.slice(0, -'.js'.length)}`);
+  for (const specifier of internalModules) {
+    const resolved = await build({
+      absWorkingDir: scratch,
+      stdin: { contents: `import '${specifier}';`, resolveDir: scratch },
+      bundle: true,
+      write: false,
+      external: ['effect', 'effect/*'],
+      logLevel: 'silent',
+    }).then(
+      () => true,
+      () => false,
+    );
+    if (resolved) {
+      failures.push(`${specifier} resolved; the exports map must block internal modules.`);
+    }
   }
 
   // Consumers typecheck each module through the exports map with no other package installed.

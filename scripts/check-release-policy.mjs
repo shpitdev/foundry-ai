@@ -46,41 +46,55 @@ for (const entry of packages) {
   );
 }
 
+// Gates are compared whole: a substring check would accept an inverted clause.
+const normalize = (expression) => expression?.replace(/\s+/g, ' ').trim();
+const published = "vars.NPM_PUBLISH_ENABLED == 'true' && github.event.pull_request.merged == true";
+const releaseBranch = "startsWith(github.event.pull_request.head.ref, 'release/')";
+const selected = "needs.select-packages.outputs.packages != '[]'";
+const mergeCommit = '${{ github.event.pull_request.merge_commit_sha }}';
+
 const select = workflow.jobs?.['select-packages'];
 requireCondition(select != null, 'Missing release job select-packages.');
 requireCondition(
-  select.if?.includes("vars.NPM_PUBLISH_ENABLED == 'true'") &&
-    select.if?.includes('github.event.pull_request.merged == true'),
-  'select-packages must require NPM_PUBLISH_ENABLED=true and a merged PR.',
+  normalize(select.if) === published,
+  'select-packages must run only for merged PRs with NPM_PUBLISH_ENABLED=true.',
 );
 requireCondition(
-  select.steps?.some((step) => step.run?.includes('node scripts/release-packages.mjs')),
-  'select-packages must choose packages with scripts/release-packages.mjs.',
+  select.steps?.some((step) => step.with?.ref === mergeCommit),
+  'select-packages must read manifests at the merge commit.',
+);
+requireCondition(
+  select.steps?.some(
+    (step) =>
+      step.run?.includes('/pulls/${PR_NUMBER}/files') &&
+      step.run?.includes('node scripts/release-packages.mjs'),
+  ),
+  "select-packages must choose packages from the PR's changed files with scripts/release-packages.mjs.",
 );
 
-const releaseBranch = "startsWith(github.event.pull_request.head.ref, 'release/')";
-for (const [name, expectedReleaseBranch] of [
-  ['publish-prerelease', false],
-  ['publish-stable', true],
+for (const [name, channel, branchGate] of [
+  ['publish-prerelease', 'next', `!${releaseBranch}`],
+  ['publish-stable', 'latest', releaseBranch],
 ]) {
   const job = workflow.jobs?.[name];
   requireCondition(job != null, `Missing release job ${name}.`);
   requireCondition(
-    job.if?.includes("vars.NPM_PUBLISH_ENABLED == 'true'"),
-    `${name} must require NPM_PUBLISH_ENABLED=true.`,
-  );
-  requireCondition(
-    job.if?.includes('github.event.pull_request.merged == true'),
-    `${name} must require a merged PR.`,
-  );
-  requireCondition(
-    expectedReleaseBranch ? job.if?.includes(releaseBranch) : job.if?.includes(`!${releaseBranch}`),
-    `${name} has the wrong release-branch gate.`,
+    normalize(job.if) === `${published} && ${branchGate} && ${selected}`,
+    `${name} has the wrong gate; expected: ${published} && ${branchGate} && ${selected}`,
   );
   requireCondition(
     job.needs === 'select-packages' &&
       job.strategy?.matrix?.package === '${{ fromJSON(needs.select-packages.outputs.packages) }}',
     `${name} must publish one matrix entry per selected package.`,
+  );
+  requireCondition(
+    job.concurrency?.group === `release-\${{ matrix.package.project }}-${channel}` &&
+      job.concurrency?.['cancel-in-progress'] === false,
+    `${name} must queue per package and channel without cancelling.`,
+  );
+  requireCondition(
+    job.steps?.[0]?.with?.ref === mergeCommit,
+    `${name} must build and tag the merge commit.`,
   );
   requireCondition(job['runs-on'] === 'ubuntu-latest', `${name} must use a GitHub-hosted runner.`);
   requireCondition(
@@ -88,8 +102,12 @@ for (const [name, expectedReleaseBranch] of [
     `${name} must pin a trusted-publishing-compatible npm version.`,
   );
   requireCondition(
-    job.steps?.some((step) => step.run?.includes('NODE_AUTH_TOKEN="" npm publish')),
-    `${name} must publish through OIDC rather than an npm token.`,
+    job.steps?.some((step) =>
+      step.run?.includes(
+        `NODE_AUTH_TOKEN="" npm publish --access public --tag ${channel} --provenance`,
+      ),
+    ),
+    `${name} must publish to ${channel} through OIDC rather than an npm token.`,
   );
 }
 
