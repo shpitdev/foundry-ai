@@ -1,6 +1,6 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { NoSuchModelError } from 'ai';
-import { resolveFoundryConfig } from '../config.js';
+import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import {
   type FoundryCallOptions,
   type FoundryLanguageModel,
@@ -11,6 +11,7 @@ import {
   requiresAnthropicNativeStructuredOutput,
 } from '../models/anthropic-models.js';
 import { resolveModelTarget } from '../models/catalog.js';
+import { asRecord } from '../records.js';
 import type { FoundryConfig } from '../types.js';
 
 type FoundryFunctionTool = NonNullable<FoundryCallOptions['tools']>[number];
@@ -28,18 +29,10 @@ export interface FoundryAnthropicProvider {
 export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicProvider {
   const providerId = 'foundry-anthropic';
   const resolvedConfig = resolveFoundryConfig(config, 'createFoundryAnthropic');
-  const headers =
-    resolvedConfig.attributionRid || resolvedConfig.traceParent || resolvedConfig.traceState
-      ? {
-          ...(resolvedConfig.attributionRid ? { attribution: resolvedConfig.attributionRid } : {}),
-          ...(resolvedConfig.traceParent ? { traceParent: resolvedConfig.traceParent } : {}),
-          ...(resolvedConfig.traceState ? { traceState: resolvedConfig.traceState } : {}),
-        }
-      : undefined;
   const baseProvider = createAnthropic({
     authToken: resolvedConfig.token,
     baseURL: `${resolvedConfig.foundryUrl}/api/v2/llm/proxy/anthropic/v1`,
-    headers,
+    headers: foundryHeaders(resolvedConfig),
     name: providerId,
   });
 
@@ -56,24 +49,18 @@ export function createFoundryAnthropic(config: FoundryConfig): FoundryAnthropicP
     });
   };
 
-  function provider(modelId: AnthropicModelId): FoundryLanguageModel {
-    return createLanguageModel(modelId);
-  }
-
-  const callableProvider = provider as FoundryAnthropicProvider;
-
-  callableProvider.specificationVersion = baseProvider.specificationVersion;
-  callableProvider.languageModel = createLanguageModel;
-  callableProvider.chat = createLanguageModel;
-  callableProvider.messages = createLanguageModel;
-  callableProvider.embeddingModel = (modelId: string) => {
-    throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
-  };
-  callableProvider.imageModel = (modelId: string) => {
-    throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
-  };
-
-  return callableProvider;
+  return Object.assign((modelId: AnthropicModelId) => createLanguageModel(modelId), {
+    specificationVersion: baseProvider.specificationVersion,
+    languageModel: createLanguageModel,
+    chat: createLanguageModel,
+    messages: createLanguageModel,
+    embeddingModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
+    },
+    imageModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
+    },
+  });
 }
 
 function applyAnthropicCompat(
@@ -102,25 +89,25 @@ function applyAnthropicCompat(
   return {
     ...params,
     providerOptions: {
-      ...(params.providerOptions ?? {}),
+      ...params.providerOptions,
       anthropic: {
         ...anthropicOptions,
         ...structuredOutputMode,
         toolStreaming: false,
       },
-      ...(params.providerOptions?.['foundry-anthropic'] != null
-        ? {
+      ...(params.providerOptions?.['foundry-anthropic'] == null
+        ? {}
+        : {
             'foundry-anthropic': {
               ...foundryAnthropicOptions,
               ...structuredOutputMode,
               toolStreaming: false,
             },
-          }
-        : {}),
+          }),
     },
-    ...(params.tools != null
-      ? { tools: params.tools.map(rejectAnthropicEagerInputStreaming) }
-      : {}),
+    ...(params.tools == null
+      ? {}
+      : { tools: params.tools.map(rejectAnthropicEagerInputStreaming) }),
   };
 }
 
@@ -138,12 +125,4 @@ function rejectAnthropicEagerInputStreaming(tool: FoundryFunctionTool): FoundryF
   }
 
   return tool;
-}
-
-function asRecord(value: unknown): Record<string, unknown> {
-  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
-    return {};
-  }
-
-  return value as Record<string, unknown>;
 }

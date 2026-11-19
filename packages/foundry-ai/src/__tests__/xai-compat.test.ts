@@ -3,8 +3,8 @@ import { createXai } from '@ai-sdk/xai';
 import { generateText, stepCountIs, streamText, tool } from 'ai';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
-import { createFoundryXai } from '../providers/xai.js';
 import { createXaiProxyFetch } from '../providers/xai-compat.js';
+import { createFoundryXai } from '../providers/xai.js';
 
 const config = { foundryUrl: 'https://foundry.example', token: 'test-token' };
 const fixture = (name: string) =>
@@ -18,7 +18,10 @@ function sseResponse(sse: string, split = 17) {
   return new Response(
     new ReadableStream({
       pull(controller) {
-        if (offset === bytes.length) return controller.close();
+        if (offset === bytes.length) {
+          controller.close();
+          return;
+        }
         controller.enqueue(bytes.slice(offset, offset + split));
         offset = Math.min(bytes.length, offset + split);
       },
@@ -30,18 +33,29 @@ function sseResponse(sse: string, split = 17) {
 async function consume(model: ReturnType<ReturnType<typeof createFoundryXai>>, options = {}) {
   const result = streamText({ model, prompt: 'Reply OK.', maxRetries: 0, ...options });
   let text = '';
-  for await (const part of result.fullStream) {
-    if (part.type === 'error') throw part.error;
-    if (part.type === 'text-delta') text += part.text;
+  for await (const part of result.stream) {
+    if (part.type === 'error') {
+      throw part.error;
+    }
+    if (part.type === 'text-delta') {
+      text += part.text;
+    }
   }
   return text;
+}
+
+function responsesRequest() {
+  return new Request(`${config.foundryUrl}/api/v2/llm/proxy/xai/v1/responses`, {
+    method: 'POST',
+    body: '{}',
+  });
 }
 
 describe('native xAI compatibility with recorded Foundry responses', () => {
   it('reproduces native schema rejection and restores the recorded completed response', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => Response.json(responseFixture)),
+      vi.fn(() => Promise.resolve(Response.json(responseFixture))),
     );
     const native = createXai({
       apiKey: config.token,
@@ -74,18 +88,18 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
   it('retains the native missing reasoning-start failure on the historical SSE fixture', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => sseResponse(fixture('xai-foundry-reasoning.sse'))),
+      vi.fn(() => Promise.resolve(sseResponse(fixture('xai-foundry-reasoning.sse')))),
     );
     await expect(consume(createFoundryXai(config)('grok-4-6'))).rejects.toMatch(
-      /reasoning part .* not found/,
+      /reasoning part .* not found/u,
     );
   });
 
   it.each(['\n', '\r\n'])(
     'executes a tool from the recorded stream and completes its follow-up with %j framing',
     async (newline) => {
-      const requests: Record<string, unknown>[] = [];
-      const toolStream = fixture('xai-foundry-tool.sse').replace(/\r?\n/g, newline);
+      const requests: Array<Record<string, unknown>> = [];
+      const toolStream = fixture('xai-foundry-tool.sse').replaceAll(/\r?\n/gu, newline);
       // Follow-up is a small protocol fixture; the first request replays a live tool call.
       const message = {
         type: 'message',
@@ -122,13 +136,13 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
         'fetch',
         vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
           requests.push((await new Request(input, init).json()) as Record<string, unknown>);
-          return sseResponse(requests.length === 1 ? toolStream : final, 1);
+          // The first request replays the tool call; the follow-up gets the final answer.
+          return sseResponse([toolStream, final][requests.length - 1], 1);
         }),
       );
-      const execute = vi.fn(async ({ topic }: { topic: string }) => ({
-        topic,
-        status: 'verified',
-      }));
+      const execute = vi.fn<(input: { topic: string }) => { topic: string; status: string }>(
+        ({ topic }) => ({ topic, status: 'verified' }),
+      );
       const text = await consume(createFoundryXai(config)('grok-420-non-reasoning-latest'), {
         tools: { lookup: tool({ inputSchema: z.object({ topic: z.string() }), execute }) },
         stopWhen: stepCountIs(3),
@@ -155,17 +169,12 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
 
   it('preserves errors, explicit invalid fields, and incomplete output without marking it complete', async () => {
     const wireFetch = createXaiProxyFetch();
-    const request = () =>
-      new Request(`${config.foundryUrl}/api/v2/llm/proxy/xai/v1/responses`, {
-        method: 'POST',
-        body: '{}',
-      });
     const error = Response.json({ error: 'invalid' }, { status: 400 });
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => error),
+      vi.fn(() => Promise.resolve(error)),
     );
-    expect(await wireFetch(request())).toBe(error);
+    expect(await wireFetch(responsesRequest())).toBe(error);
     const incomplete = {
       object: 'wrong',
       status: 'incomplete',
@@ -173,9 +182,9 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
     };
     vi.stubGlobal(
       'fetch',
-      vi.fn(async () => Response.json(incomplete)),
+      vi.fn(() => Promise.resolve(Response.json(incomplete))),
     );
-    expect(await (await wireFetch(request())).json()).toEqual(incomplete);
+    expect(await (await wireFetch(responsesRequest())).json()).toEqual(incomplete);
   });
 
   it('preserves unknown/malformed SSE events and removes stale body headers', async () => {
@@ -183,8 +192,8 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
       ': comment\ndata: [DONE]\n\ndata: {"type":"error","message":"upstream failure"}\n\ndata: malformed\n\n';
     vi.stubGlobal(
       'fetch',
-      vi.fn(
-        async () =>
+      vi.fn(() =>
+        Promise.resolve(
           new Response(data, {
             headers: {
               'content-type': 'text/event-stream',
@@ -193,6 +202,7 @@ describe('native xAI compatibility with recorded Foundry responses', () => {
               'x-trace': 'preserved',
             },
           }),
+        ),
       ),
     );
     const response = await createXaiProxyFetch()(

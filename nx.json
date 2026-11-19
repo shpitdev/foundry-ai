@@ -7,7 +7,8 @@
       "{workspaceRoot}/pnpm-workspace.yaml",
       "{workspaceRoot}/nx.json",
       "{workspaceRoot}/tsconfig.base.json",
-      "{workspaceRoot}/biome.json",
+      "{workspaceRoot}/mise.toml",
+      "{workspaceRoot}/.oxfmtrc.json",
       "{workspaceRoot}/.oxlintrc.json"
     ],
     "workspaceLintFiles": [

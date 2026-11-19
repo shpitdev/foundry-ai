@@ -1,5 +1,5 @@
 import type { ModelDefinition } from '../types.js';
-import { createProviderModelCatalog, modelSupportsInputType } from './metadata.js';
+import { catalogModelIds, createProviderModelCatalog, modelSupportsInputType } from './metadata.js';
 
 const OPENAI_MODEL_DEFINITIONS = {
   'gpt-4.1': {
@@ -559,23 +559,20 @@ export const OPENAI_EMBEDDING_MODELS = createProviderModelCatalog(
 );
 
 export type KnownOpenAIModelId = keyof typeof OPENAI_MODELS;
-export type OpenAIModelId = KnownOpenAIModelId | (string & {});
+export type OpenAIModelId = KnownOpenAIModelId | (string & Record<never, never>);
 export type KnownOpenAIEmbeddingModelId = keyof typeof OPENAI_EMBEDDING_MODELS;
-export type OpenAIEmbeddingModelId = KnownOpenAIEmbeddingModelId | (string & {});
+export type OpenAIEmbeddingModelId = KnownOpenAIEmbeddingModelId | (string & Record<never, never>);
 
-export const OPENAI_MODEL_IDS = Object.freeze(
-  Object.keys(OPENAI_MODELS),
-) as readonly KnownOpenAIModelId[];
-export const OPENAI_EMBEDDING_MODEL_IDS = Object.freeze(
-  Object.keys(OPENAI_EMBEDDING_MODELS),
-) as readonly KnownOpenAIEmbeddingModelId[];
+export const OPENAI_MODEL_IDS: ReadonlyArray<KnownOpenAIModelId> = catalogModelIds(OPENAI_MODELS);
+export const OPENAI_EMBEDDING_MODEL_IDS: ReadonlyArray<KnownOpenAIEmbeddingModelId> =
+  catalogModelIds(OPENAI_EMBEDDING_MODELS);
 
 /** Models verified on Foundry's OpenAI `/decisions` proxy route. */
 export const OPENAI_DECISION_MODEL_IDS = Object.freeze([
   'gpt-6-luna',
-] as const satisfies readonly KnownOpenAIModelId[]);
+] as const satisfies ReadonlyArray<KnownOpenAIModelId>);
 export type KnownOpenAIDecisionModelId = (typeof OPENAI_DECISION_MODEL_IDS)[number];
-export type OpenAIDecisionModelId = KnownOpenAIDecisionModelId | (string & {});
+export type OpenAIDecisionModelId = KnownOpenAIDecisionModelId | (string & Record<never, never>);
 
 const OPENAI_REASONING_MODEL_TARGETS = new Set(
   Object.entries(OPENAI_MODELS)

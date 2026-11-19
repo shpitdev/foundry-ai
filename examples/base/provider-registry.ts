@@ -12,15 +12,13 @@ const registry = createProviderRegistry({
 });
 const prompt = 'In one sentence, what is your model name and who made you?';
 
-for (const modelId of [
-  'openai:gpt-5.6-terra',
-  'anthropic:claude-sonnet-5',
-  'google:gemini-4-argon',
-] as const) {
-  const result = await generateText({
-    model: registry.languageModel(modelId),
-    prompt,
-  });
+const answers = await Promise.all(
+  (['openai:gpt-5.6-terra', 'anthropic:claude-sonnet-5', 'google:gemini-4-argon'] as const).map(
+    async (modelId) => {
+      const result = await generateText({ model: registry.languageModel(modelId), prompt });
+      return `${modelId}: ${result.text}`;
+    },
+  ),
+);
 
-  console.log(`${modelId}: ${result.text}`);
-}
+console.log(answers.join('\n'));

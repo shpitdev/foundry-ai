@@ -24,15 +24,17 @@ export function createTestLanguageModel(options?: { provider?: string; modelId?:
     get supportedUrls() {
       return Promise.resolve({});
     },
-    async doGenerate(params) {
+    doGenerate(params) {
       state.lastGenerateParams = params;
 
-      return { content: [] } as unknown as Awaited<ReturnType<TestLanguageModel['doGenerate']>>;
+      return Promise.resolve({ content: [] } as unknown as Awaited<
+        ReturnType<TestLanguageModel['doGenerate']>
+      >);
     },
-    async doStream(params) {
+    doStream(params) {
       state.lastStreamParams = params;
 
-      return { stream: new ReadableStream() } as Awaited<ReturnType<TestLanguageModel['doStream']>>;
+      return Promise.resolve({ stream: new ReadableStream() });
     },
   };
 

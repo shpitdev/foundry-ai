@@ -2,10 +2,10 @@ import { createProviderRegistry } from 'ai';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTestLanguageModel } from './helpers/test-language-model.js';
 
-const openaiLanguageModelMock = vi.hoisted(() => vi.fn());
-const anthropicLanguageModelMock = vi.hoisted(() => vi.fn());
+const openaiLanguageModelMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
+const anthropicLanguageModelMock = vi.hoisted(() => vi.fn<(modelId: string) => unknown>());
 const createFoundryOpenAIMock = vi.hoisted(() =>
-  vi.fn(() => {
+  vi.fn<(config: unknown) => unknown>(() => {
     const provider = ((modelId: string) => openaiLanguageModelMock(modelId)) as {
       (modelId: string): ReturnType<typeof openaiLanguageModelMock>;
       specificationVersion: 'v3';
@@ -21,7 +21,7 @@ const createFoundryOpenAIMock = vi.hoisted(() =>
   }),
 );
 const createFoundryAnthropicMock = vi.hoisted(() =>
-  vi.fn(() => {
+  vi.fn<(config: unknown) => unknown>(() => {
     const provider = ((modelId: string) => anthropicLanguageModelMock(modelId)) as {
       (modelId: string): ReturnType<typeof anthropicLanguageModelMock>;
       specificationVersion: 'v3';

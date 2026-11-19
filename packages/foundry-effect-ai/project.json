@@ -18,11 +18,11 @@
     },
     "lint": {
       "executor": "nx:run-commands",
-      "inputs": ["default", "{workspaceRoot}/.oxlintrc.json"],
+      "inputs": ["default"],
       "options": {
         "commands": [
-          "pnpm exec oxlint --deny-warnings packages/foundry-effect-ai",
-          "pnpm exec biome check .oxlintrc.json packages/foundry-effect-ai scripts/check-tree-shaking.mjs"
+          "pnpm exec oxlint packages/foundry-effect-ai",
+          "pnpm exec oxfmt --check packages/foundry-effect-ai"
         ],
         "parallel": false,
         "cwd": "{workspaceRoot}"

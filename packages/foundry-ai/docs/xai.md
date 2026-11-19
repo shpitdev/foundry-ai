@@ -24,10 +24,10 @@ const { text } = await generateText({
 
 ## Routes and identity
 
-| Method | Foundry route |
-|---|---|
-| `xai(id)`, `xai.languageModel(id)`, `xai.responses(id)` | `/api/v2/llm/proxy/xai/v1/responses` |
-| `xai.chat(id)` | `/api/v2/llm/proxy/xai/v1/chat/completions` |
+| Method                                                  | Foundry route                               |
+| ------------------------------------------------------- | ------------------------------------------- |
+| `xai(id)`, `xai.languageModel(id)`, `xai.responses(id)` | `/api/v2/llm/proxy/xai/v1/responses`        |
+| `xai.chat(id)`                                          | `/api/v2/llm/proxy/xai/v1/chat/completions` |
 
 [Palantir documents both endpoints as beta](https://www.palantir.com/docs/foundry/aip/llm-provider-compatible-apis). Endpoint availability does not prove that a particular model or feature is supported. There is no automatic route fallback. Responses is the default and the route verified for generation on all seven Grok models.
 

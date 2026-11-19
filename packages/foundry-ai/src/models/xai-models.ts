@@ -1,5 +1,5 @@
 import type { ModelDefinition } from '../types.js';
-import { createProviderModelCatalog } from './metadata.js';
+import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
 
 // Foundry enrollment metadata; Responses remains the default proxy route.
 const XAI_MODEL_DEFINITIONS = {
@@ -102,5 +102,5 @@ const XAI_MODEL_DEFINITIONS = {
 
 export const XAI_MODELS = createProviderModelCatalog('xai', XAI_MODEL_DEFINITIONS);
 export type KnownXaiModelId = keyof typeof XAI_MODELS;
-export type XaiModelId = KnownXaiModelId | (string & {});
-export const XAI_MODEL_IDS = Object.freeze(Object.keys(XAI_MODELS)) as readonly KnownXaiModelId[];
+export type XaiModelId = KnownXaiModelId | (string & Record<never, never>);
+export const XAI_MODEL_IDS: ReadonlyArray<KnownXaiModelId> = catalogModelIds(XAI_MODELS);

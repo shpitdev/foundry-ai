@@ -48,13 +48,11 @@ function resolveExamplePath(name) {
         resolve(workspaceRoot, 'examples', 'advanced', normalizedName),
       ];
 
-  for (const candidate of candidates) {
-    if (existsSync(candidate)) {
-      return candidate;
-    }
+  const match = candidates.find((candidate) => existsSync(candidate));
+  if (match === undefined) {
+    fail(`Unknown example: ${name}`);
   }
-
-  fail(`Unknown example: ${name}`);
+  return match;
 }
 
 function resolveExampleAlias(name) {

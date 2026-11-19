@@ -1,11 +1,13 @@
 import { FoundryModelNotFoundError } from '../errors.js';
 import type { ModelMetadata, ModelProvider, ResolvedModelTarget } from '../types.js';
-import type { KnownAnthropicModelId } from './anthropic-models.js';
-import { ANTHROPIC_MODELS } from './anthropic-models.js';
-import type { KnownGoogleModelId } from './google-models.js';
-import { GOOGLE_MODELS } from './google-models.js';
-import type { KnownOpenAIEmbeddingModelId, KnownOpenAIModelId } from './openai-models.js';
-import { OPENAI_EMBEDDING_MODELS, OPENAI_MODELS } from './openai-models.js';
+import { ANTHROPIC_MODELS, type KnownAnthropicModelId } from './anthropic-models.js';
+import { GOOGLE_MODELS, type KnownGoogleModelId } from './google-models.js';
+import {
+  type KnownOpenAIEmbeddingModelId,
+  type KnownOpenAIModelId,
+  OPENAI_EMBEDDING_MODELS,
+  OPENAI_MODELS,
+} from './openai-models.js';
 import { REALTIME_MODELS, type RealtimeModelId } from './realtime-models.js';
 import { type KnownXaiModelId, XAI_MODELS } from './xai-models.js';
 
@@ -29,8 +31,13 @@ export const MODEL_CATALOG_BY_RID = Object.fromEntries(
   Object.values(MODEL_CATALOG).map((metadata) => [metadata.rid, metadata]),
 ) as Record<string, ModelMetadata>;
 
+// A Map, so inherited object keys such as `constructor` are not model IDs.
+const MODEL_CATALOG_BY_ID: ReadonlyMap<string, ModelMetadata> = new Map(
+  Object.entries(MODEL_CATALOG),
+);
+
 export function getModelMetadata(modelId: string): ModelMetadata | undefined {
-  return MODEL_CATALOG[modelId as KnownModelId];
+  return MODEL_CATALOG_BY_ID.get(modelId);
 }
 
 export function hasKnownModel(modelId: string): modelId is KnownModelId {

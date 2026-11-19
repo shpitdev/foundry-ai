@@ -10,7 +10,7 @@
 import { readFileSync } from 'node:fs';
 import { isPublishable, packageByProject, packages, readManifest } from './packages.mjs';
 
-const sharedInputs = ['nx.json', 'package.json', 'pnpm-lock.yaml'];
+const sharedInputs = new Set(['nx.json', 'package.json', 'pnpm-lock.yaml']);
 
 const headRef = process.argv[2];
 if (!headRef) {
@@ -19,7 +19,7 @@ if (!headRef) {
 
 let selected;
 if (headRef.startsWith('release/')) {
-  const match = /^release\/(?<project>[a-z0-9-]+)\/v(?<version>\d+\.\d+\.\d+)$/.exec(headRef);
+  const match = /^release\/(?<project>[a-z0-9-]+)\/v(?<version>\d+\.\d+\.\d+)$/u.exec(headRef);
   if (!match?.groups) {
     throw new Error(`Release branch ${headRef} must be release/<project>/v<x.y.z>.`);
   }
@@ -39,7 +39,7 @@ if (headRef.startsWith('release/')) {
   if (changed.length === 0) {
     throw new Error('No changed files on stdin; cannot tell which packages this PR touched.');
   }
-  const touchesShared = changed.some((file) => sharedInputs.includes(file));
+  const touchesShared = changed.some((file) => sharedInputs.has(file));
   selected = packages.filter(
     (entry) =>
       (touchesShared || changed.some((file) => file.startsWith(`${entry.dir}/`))) &&
@@ -47,5 +47,10 @@ if (headRef.startsWith('release/')) {
   );
 }
 
-const output = selected.map((entry) => ({ ...entry, version: readManifest(entry).version }));
+const output = selected.map(({ project, dir, name }) => ({
+  project,
+  dir,
+  name,
+  version: readManifest({ dir }).version,
+}));
 console.log(`packages=${JSON.stringify(output)}`);

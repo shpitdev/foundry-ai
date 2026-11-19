@@ -1,7 +1,6 @@
 import type { AnthropicLanguageModelOptions } from '@ai-sdk/anthropic';
 import { webSearch } from '@exalabs/ai-sdk';
-import type { AnthropicModelId } from '@shpitdev/foundry-ai';
-import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { type AnthropicModelId, loadFoundryConfig } from '@shpitdev/foundry-ai';
 import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
 import { stepCountIs, streamText, tool } from 'ai';
 import { z } from 'zod';
@@ -40,7 +39,7 @@ const tools = {
       targetAudience: z.string(),
       githubOrg: z.string().describe('GitHub org handle, or "unknown" if not found'),
     }),
-    execute: async (profile) => {
+    execute: (profile) => {
       logValue({ type: 'company-profile', ...profile });
       return { saved: true };
     },
@@ -61,11 +60,11 @@ const providerOptions: ProviderOptions = {
 const result = streamText({
   model,
   prompt,
-  system,
+  instructions: system,
   stopWhen: stepCountIs(8),
   providerOptions,
   tools,
-  onFinish({ text, toolCalls, toolResults, finishReason }) {
+  onEnd({ text, toolCalls, toolResults, finishReason }) {
     logValue({ type: 'finish', finishReason, toolCalls, toolResults });
     logValue({ type: 'final-text', text });
   },

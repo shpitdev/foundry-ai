@@ -16,9 +16,7 @@ export function wrapFoundryLanguageModel(
     model,
     middleware: {
       specificationVersion: model.specificationVersion,
-      transformParams: async ({ params }) => {
-        return options.transformParams?.(params) ?? params;
-      },
+      transformParams: ({ params }) => Promise.resolve(options.transformParams?.(params) ?? params),
     },
     modelId: options.modelId,
     providerId: options.providerId,

@@ -1,5 +1,5 @@
 import type { ModelDefinition } from '../types.js';
-import { createProviderModelCatalog } from './metadata.js';
+import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
 
 const definitions = {
   'gpt-realtime': {
@@ -46,4 +46,4 @@ const definitions = {
 
 export type RealtimeModelId = keyof typeof definitions;
 export const REALTIME_MODELS = createProviderModelCatalog('openai', definitions);
-export const REALTIME_MODEL_IDS = Object.keys(definitions) as RealtimeModelId[];
+export const REALTIME_MODEL_IDS: Array<RealtimeModelId> = [...catalogModelIds(definitions)];

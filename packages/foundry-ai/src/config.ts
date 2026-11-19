@@ -5,7 +5,7 @@ const FOUNDRY_TOKEN_ENV = 'FOUNDRY_TOKEN';
 const FOUNDRY_ATTRIBUTION_RID_ENV = 'FOUNDRY_ATTRIBUTION_RID';
 const FOUNDRY_TRACE_PARENT_ENV = 'FOUNDRY_TRACE_PARENT';
 const FOUNDRY_TRACE_STATE_ENV = 'FOUNDRY_TRACE_STATE';
-const TRACE_PARENT_PATTERN = /^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/;
+const TRACE_PARENT_PATTERN = /^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/u;
 
 export function loadFoundryConfig(env: NodeJS.ProcessEnv = process.env): FoundryConfig {
   return normalizeResolvedFoundryConfig({
@@ -46,6 +46,16 @@ export function resolveFoundryConfig(config: FoundryConfig, callerName: string):
   return normalizedConfig;
 }
 
+/** Attribution and trace headers for the configured values; `undefined` when there are none. */
+export function foundryHeaders(config: FoundryConfig): Record<string, string> | undefined {
+  const headers = {
+    ...(config.attributionRid === undefined ? {} : { attribution: config.attributionRid }),
+    ...(config.traceParent === undefined ? {} : { traceParent: config.traceParent }),
+    ...(config.traceState === undefined ? {} : { traceState: config.traceState }),
+  };
+  return Object.keys(headers).length > 0 ? headers : undefined;
+}
+
 function requireEnv(env: NodeJS.ProcessEnv, name: string): string {
   const value = optionalEnv(env, name);
 
@@ -57,9 +67,12 @@ function requireEnv(env: NodeJS.ProcessEnv, name: string): string {
 }
 
 function optionalEnv(env: NodeJS.ProcessEnv, name: string): string | undefined {
-  const value = env[name]?.trim();
+  return nonEmpty(env[name]);
+}
 
-  return value ? value : undefined;
+function nonEmpty(value: string | undefined): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed === '' ? undefined : trimmed;
 }
 
 function normalizeResolvedFoundryConfig(config: {
@@ -69,11 +82,9 @@ function normalizeResolvedFoundryConfig(config: {
   traceParent?: string;
   traceState?: string;
 }): FoundryConfig {
-  const attributionRid = config.attributionRid?.trim();
-  const traceParent = config.traceParent?.trim();
-  const traceState = config.traceState?.trim();
+  const traceParent = nonEmpty(config.traceParent);
 
-  if (traceParent && !TRACE_PARENT_PATTERN.test(traceParent)) {
+  if (traceParent !== undefined && !TRACE_PARENT_PATTERN.test(traceParent)) {
     throw new Error(
       'Foundry traceParent must match the W3C traceparent format: <2 lowercase hex version>-<32 lowercase hex trace ID>-<16 lowercase hex parent ID>-<2 lowercase hex flags>.',
     );
@@ -82,8 +93,8 @@ function normalizeResolvedFoundryConfig(config: {
   return {
     foundryUrl: normalizeFoundryUrl(config.foundryUrl),
     token: config.token.trim(),
-    attributionRid: attributionRid || undefined,
-    traceParent: traceParent || undefined,
-    traceState: traceState || undefined,
+    attributionRid: nonEmpty(config.attributionRid),
+    traceParent,
+    traceState: nonEmpty(config.traceState),
   };
 }

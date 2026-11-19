@@ -1,6 +1,6 @@
 import { createOpenAI } from '@ai-sdk/openai';
 import { NoSuchModelError } from 'ai';
-import { resolveFoundryConfig } from '../config.js';
+import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import {
   type FoundryCallOptions,
   type FoundryLanguageModel,
@@ -13,6 +13,7 @@ import {
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
 } from '../models/openai-models.js';
+import { asRecord } from '../records.js';
 import type { FoundryConfig } from '../types.js';
 
 type BaseOpenAIProvider = ReturnType<typeof createOpenAI>;
@@ -40,24 +41,16 @@ export interface FoundryOpenAIProvider {
 export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvider {
   const providerId = 'foundry-openai';
   const resolvedConfig = resolveFoundryConfig(config, 'createFoundryOpenAI');
-  const headers =
-    resolvedConfig.attributionRid || resolvedConfig.traceParent || resolvedConfig.traceState
-      ? {
-          ...(resolvedConfig.attributionRid ? { attribution: resolvedConfig.attributionRid } : {}),
-          ...(resolvedConfig.traceParent ? { traceParent: resolvedConfig.traceParent } : {}),
-          ...(resolvedConfig.traceState ? { traceState: resolvedConfig.traceState } : {}),
-        }
-      : undefined;
   const baseProvider = createOpenAI({
     apiKey: resolvedConfig.token,
     baseURL: `${resolvedConfig.foundryUrl}/api/v2/llm/proxy/openai/v1`,
-    headers,
+    headers: foundryHeaders(resolvedConfig),
     name: providerId,
   });
 
   const createLanguageModel = (modelId: OpenAIModelId): FoundryLanguageModel => {
     const resolvedModel = resolveModelTarget(modelId);
-    if (resolvedModel.metadata?.inputTypes.includes('OPEN_AI_REALTIME')) {
+    if (resolvedModel.metadata?.inputTypes.includes('OPEN_AI_REALTIME') === true) {
       throw new NoSuchModelError({
         modelId,
         modelType: 'languageModel',
@@ -85,30 +78,24 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
       Record<'decisionModel', (modelId: string) => FoundryDecisionModel>
     >;
     if (typeof decisionProvider.decisionModel !== 'function') {
-      throw new Error(
+      throw new TypeError(
         'Foundry OpenAI decision models need an @ai-sdk/openai release with decisionModel.',
       );
     }
     return decisionProvider.decisionModel(resolveModelTarget(modelId).rid);
   };
 
-  function provider(modelId: OpenAIModelId): FoundryLanguageModel {
-    return createLanguageModel(modelId);
-  }
-
-  const callableProvider = provider as FoundryOpenAIProvider;
-
-  callableProvider.specificationVersion = baseProvider.specificationVersion;
-  callableProvider.languageModel = createLanguageModel;
-  callableProvider.responses = createLanguageModel;
-  callableProvider.embeddingModel = createEmbeddingModel;
-  callableProvider.embedding = createEmbeddingModel;
-  callableProvider.decisionModel = createDecisionModel;
-  callableProvider.imageModel = (modelId: string) => {
-    throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
-  };
-
-  return callableProvider;
+  return Object.assign((modelId: OpenAIModelId) => createLanguageModel(modelId), {
+    specificationVersion: baseProvider.specificationVersion,
+    languageModel: createLanguageModel,
+    responses: createLanguageModel,
+    embeddingModel: createEmbeddingModel,
+    embedding: createEmbeddingModel,
+    decisionModel: createDecisionModel,
+    imageModel: (modelId: string): never => {
+      throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
+    },
+  });
 }
 
 function applyOpenAICompat(
@@ -126,7 +113,7 @@ function applyOpenAICompat(
   return {
     ...params,
     providerOptions: {
-      ...(params.providerOptions ?? {}),
+      ...params.providerOptions,
       openai: {
         ...openaiOptions,
         ...(openaiOptions.forceReasoning == null && shouldForceReasoning
@@ -135,16 +122,8 @@ function applyOpenAICompat(
         store: false,
       },
     },
-    ...(params.tools != null ? { tools: params.tools.map(applyOpenAIFunctionToolCompat) } : {}),
+    ...(params.tools == null ? {} : { tools: params.tools.map(applyOpenAIFunctionToolCompat) }),
   };
-}
-
-function asRecord(value: unknown): Record<string, unknown> {
-  if (value == null || typeof value !== 'object' || Array.isArray(value)) {
-    return {};
-  }
-
-  return value as Record<string, unknown>;
 }
 
 function applyOpenAIFunctionToolCompat(tool: FoundryFunctionTool): FoundryFunctionTool {

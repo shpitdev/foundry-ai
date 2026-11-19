@@ -19,7 +19,7 @@ const usage = {
   total_tokens: 42,
 };
 
-function stubDecisions(answers: unknown[]) {
+function stubDecisions(answers: Array<unknown>) {
   const requests: Array<{ url: string; headers: Headers; body: Record<string, unknown> }> = [];
   vi.stubGlobal('fetch', async (input: string | URL | Request, init?: RequestInit) => {
     const request = new Request(input, init);
@@ -182,10 +182,12 @@ describe('Foundry OpenAI decisions', () => {
         questions: { feasible: { type: 'boolean', instructions: 'Would this work?' } },
         maxRetries: 0,
       }),
-    ).rejects.toSatisfy(
-      (error) =>
-        Experimental_DecisionRefusalError.isInstance(error) &&
-        error.questionIds.join() === 'feasible',
-    );
+    ).rejects.toSatisfy(isFeasibleRefusal);
   });
 });
+
+function isFeasibleRefusal(error: unknown): boolean {
+  return (
+    Experimental_DecisionRefusalError.isInstance(error) && error.questionIds.join() === 'feasible'
+  );
+}

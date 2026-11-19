@@ -21,6 +21,7 @@ import type {
   OpenAIEmbeddingModelId,
   OpenAIModelId,
 } from '../models/openai-models.js';
+import type { ModelMetadata } from '../types.js';
 
 const enrollments = JSON.parse(
   readFileSync(new URL('./fixtures/foundry-model-catalog.json', import.meta.url), 'utf8'),
@@ -34,14 +35,17 @@ const enrollments = JSON.parse(
   externalUrl?: string;
 }>;
 
+// Embedding enrollments are matched by identifier; every other model by RID.
+function findEnrollment(model: ModelMetadata) {
+  return model.inputTypes.includes('OPEN_AI_EMBEDDINGS')
+    ? enrollments.find((entry) => entry.modelIdentifier === model.modelIdentifier)
+    : enrollments.find((entry) => entry.rid === model.rid);
+}
+
 describe('model catalog', () => {
   it('only catalogs models present and active in the retained Foundry CLI listing', () => {
     for (const [id, model] of Object.entries(MODEL_CATALOG)) {
-      const enrollment = enrollments.find((entry) =>
-        model.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS')
-          ? entry.modelIdentifier === model.modelIdentifier
-          : entry.rid === model.rid,
-      );
+      const enrollment = findEnrollment(model);
       expect(enrollment, `${id} must exist in foundry-cli models list`).toBeDefined();
       expect(['ga', 'experimental'], `${id} must not be deprecated`).toContain(
         enrollment?.lifecycle,
@@ -409,9 +413,9 @@ describe('model catalog', () => {
   });
 
   it('throws a clear validation error for unknown aliases', () => {
-    expect(() => resolveKnownModelMetadata('gpt-5-mni')).toThrowError(FoundryModelNotFoundError);
-    expect(() => resolveKnownModelMetadata('gpt-5-mni')).toThrowError(
-      /Check the catalog for supported aliases/,
+    expect(() => resolveKnownModelMetadata('gpt-5-mni')).toThrow(FoundryModelNotFoundError);
+    expect(() => resolveKnownModelMetadata('gpt-5-mni')).toThrow(
+      /Check the catalog for supported aliases/u,
     );
   });
 
@@ -419,7 +423,7 @@ describe('model catalog', () => {
     expect(hasKnownModel('ri.language-model-service..language-model.gpt-5-2')).toBe(false);
     expect(() =>
       resolveKnownModelMetadata('ri.language-model-service..language-model.gpt-5-2'),
-    ).toThrowError(FoundryModelNotFoundError);
+    ).toThrow(FoundryModelNotFoundError);
   });
 });
 
@@ -466,7 +470,7 @@ describe('config loading', () => {
         FOUNDRY_TOKEN: 'token',
         FOUNDRY_TRACE_PARENT: 'not-a-trace-parent',
       }),
-    ).toThrow(/W3C traceparent format/);
+    ).toThrow(/W3C traceparent format/u);
 
     expect(() =>
       resolveFoundryConfig(
@@ -477,7 +481,7 @@ describe('config loading', () => {
         },
         'test',
       ),
-    ).toThrow(/W3C traceparent format/);
+    ).toThrow(/W3C traceparent format/u);
   });
 });
 
