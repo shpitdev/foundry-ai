@@ -36,9 +36,9 @@ describe('run-live-capability-suite args', () => {
   });
 
   it('selects the third-party model catalog from the CLI', () => {
-    expect(parseArgs(['--model', 'third-party:kimi-k3'], {}).extraEnv).toMatchObject({
+    expect(parseArgs(['--model', 'third-party:gemma-4-31b'], {}).extraEnv).toMatchObject({
       LIVE_PROVIDER_FILTER: 'third-party',
-      LIVE_MODEL_FILTER: 'kimi-k3',
+      LIVE_MODEL_FILTER: 'gemma-4-31b',
       LIVE_MODEL_SCOPE: 'catalog',
     });
   });

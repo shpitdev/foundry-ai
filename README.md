@@ -28,7 +28,7 @@ pnpm run verify
 | API end-to-end | Manual Foundry capability harness | No; requires credentials |
 | Web end-to-end | None | No |
 
-Run `pnpm run test:live -- --model openai:gpt-5-nano` for a focused live probe. Use `--catalog` to survey the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains evidence limits and local artifacts.
+Run `pnpm run test:live -- --model openai:gpt-6-luna` for a focused live probe. Use `--catalog` to survey the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains evidence limits and local artifacts.
 
 Provider factories stay thin: config and catalog exports live at the package root, provider clients use separate subpaths, and applications compose registries with AI SDK `createProviderRegistry`. Base examples are shared with the published agent skill through the `examples/base` symlink.
 

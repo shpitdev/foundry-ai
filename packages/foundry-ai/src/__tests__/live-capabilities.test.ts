@@ -29,7 +29,7 @@ describe('live capability model matrix', () => {
 
     expect(matrix.anthropic).toEqual(['claude-haiku-4.5']);
     expect(matrix.google).toEqual(['gemini-3.1-flash-lite']);
-    expect(matrix.openai).toEqual(['gpt-5-nano']);
+    expect(matrix.openai).toEqual(['gpt-6-luna']);
     expect(matrix['third-party']).toEqual([]);
     expect(matrix.xai).toEqual(['grok-4-6']);
   });
@@ -52,19 +52,19 @@ describe('live capability model matrix', () => {
     expect(matrix.openai).toContain('gpt-5.4-mini');
     expect(matrix.openai).toContain('gpt-5.4-nano');
     expect(matrix.openai).toContain('gpt-6-astra');
-    expect(matrix.openai).toContain('codex-auto-review');
+    expect(matrix.openai).toContain('gpt-6.1-sol');
     expect(matrix.openai).not.toContain('gpt-4o-mini');
     expect(matrix.anthropic).toContain('claude-opus-5.5');
     expect(matrix.anthropic).not.toContain('claude-opus-4.1');
     expect(matrix.google).not.toContain('gemini-3-pro');
     expect(matrix.google).toContain('gemini-3.8-flash');
-    expect(matrix['third-party']).toHaveLength(12);
+    expect(matrix['third-party']).toHaveLength(3);
     expect(matrix['third-party']).not.toContain('grok-4-6');
     expect(matrix.xai).toHaveLength(7);
     expect(matrix.xai).toContain('grok-4-6');
     expect(matrix.xai).toContain('grok-4-7');
-    expect(matrix['third-party']).toContain('kimi-k3');
-    expect(matrix['third-party']).toContain('deepseek-v4-1-flash');
+    expect(matrix['third-party']).toContain('gemma-4-31b');
+    expect(matrix['third-party']).toContain('gemma-4-26b-a4b');
     expect(matrix['third-party']).toContain('llama-3-3-nemotron-super-49b-v1-5');
   });
 
@@ -75,7 +75,7 @@ describe('live capability model matrix', () => {
 
     const matrix = getLiveCapabilityModelMatrix();
 
-    expect(matrix.openai[0]).toBe('gpt-5-nano');
+    expect(matrix.openai[0]).toBe('gpt-6-luna');
     expect(matrix.anthropic[0]).toBe('claude-haiku-4.5');
     expect(matrix.openai.indexOf('gpt-5.4')).toBeLessThan(matrix.openai.indexOf('gpt-4.1'));
     expect(matrix.anthropic.indexOf('claude-opus-4.8')).toBeLessThan(

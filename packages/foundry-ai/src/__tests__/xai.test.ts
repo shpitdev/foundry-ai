@@ -165,7 +165,7 @@ describe('xAI routing through the real SDK', () => {
         await generateText({ model: xai[route](id), prompt: 'OK', maxRetries: 0 });
         expect((await readBody(requests.at(-1)!)).model).toBe(id);
       }
-      for (const id of ['gpt-5', 'kimi-k3', resolveModelTarget('kimi-k3').rid]) {
+      for (const id of ['gpt-5', 'gemma-4-31b', resolveModelTarget('gemma-4-31b').rid]) {
         expect(() => xai[route](id)).toThrow(NoSuchModelError);
       }
     },

@@ -2,7 +2,7 @@ import { loadFoundryConfig, REALTIME_MODEL_IDS, type RealtimeModelId } from '@ny
 import { createFoundryRealtime, createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
 
 const config = loadFoundryConfig();
-const modelId = process.argv[2] ?? 'gpt-realtime-2';
+const modelId = process.argv[2] ?? 'gpt-realtime-2.1';
 if (!REALTIME_MODEL_IDS.includes(modelId as RealtimeModelId)) {
   throw new Error(`Choose a realtime model: ${REALTIME_MODEL_IDS.join(', ')}`);
 }

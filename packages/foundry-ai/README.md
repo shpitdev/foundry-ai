@@ -83,7 +83,7 @@ Boolean, choice, and score questions are supported. Do not set `providerOptions.
 
 ## Realtime (AI SDK 7 only)
 
-Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@nyrra/foundry-ai/realtime` with `gpt-realtime`, `gpt-realtime-1.5`, or `gpt-realtime-2`. Install `ai@7` and `@ai-sdk/openai@4`; this subpath uses the SDK's experimental realtime interface and does not support SDK 6.
+Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@nyrra/foundry-ai/realtime` with `gpt-realtime`, `gpt-realtime-1.5`, `gpt-realtime-2.1`, or `gpt-realtime-2.1-mini`. Install `ai@7` and `@ai-sdk/openai@4`; this subpath uses the SDK's experimental realtime interface and does not support SDK 6.
 
 Foundry authenticates WebSockets with the current user's access token. It does not use OpenAI's client-secret endpoint. See [realtime setup and live results](./docs/README.md#realtime) for the browser flow and the manual test command.
 

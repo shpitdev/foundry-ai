@@ -7,7 +7,7 @@ pnpm add @nyrra/foundry-ai ai@7 @ai-sdk/xai@4
 # AI SDK 6: use ai@6 with @ai-sdk/xai@3.
 ```
 
-The tested native versions are `4.0.58` for SDK 7 and `3.0.132` for SDK 6; the supported late beta matrix uses `4.0.0-beta.76`. Native 5.0.0 removes Chat Completions and is outside this package's peer range.
+The tested native versions are `4.0.59` for SDK 7 and `3.0.132` for SDK 6; the supported late beta matrix uses `4.0.0-beta.76`. Native 5.0.0 removes Chat Completions and is outside this package's peer range.
 
 ```ts
 import { loadFoundryConfig } from '@nyrra/foundry-ai';
@@ -56,7 +56,7 @@ Third-party no longer contains Grok catalog entries or xAI routing, and rejects 
 
 ## Verification
 
-Offline SDK fetch tests cover both URLs, alias/RID routing, custom IDs, identity and registry calls, authentication/trace headers, store handling before generate/stream calls, cancellation, and Responses history/tool normalization. Recorded response/SSE fixtures test native schema adaptation, text/tool parsing, an executed tool round-trip, and the remaining missing reasoning-start failure. They complement the dated live checks below.
+Offline SDK fetch tests cover both URLs, alias/RID routing, custom IDs, identity and registry calls, authentication/trace headers, store handling before generate/stream calls, cancellation, and Responses history/tool normalization. Recorded response/SSE fixtures test native schema adaptation, text/tool parsing, an executed tool round-trip, and the September stream shape that omitted reasoning-start events. They complement the dated live checks below.
 
 Run the affected manual survey with process-only `FOUNDRY_URL` and `FOUNDRY_TOKEN`:
 
@@ -70,12 +70,8 @@ The standard capability cases use Responses. `chat.text.generate` separately pro
 
 ### Live verification
 
-**September 15, 2026:** AI SDK 7.0.97 / `@ai-sdk/xai` 4.0.58 with the compatibility adapter above recorded **44 passes, 16 failed probes, 6 chat proxy rejections, and 30 skipped modalities**. See the [current six-model table](./README.md#xai).
+**November 19, 2026:** AI SDK 7.0.176 / `@ai-sdk/xai` 4.0.59 passed 55 of 56 Responses probes across the seven models, after isolated reruns of two JSON + tools cases that failed once. Grok 420 non-reasoning produced no reasoning signal. See the [Grok results](./README.md#xai).
 
-On the September 24 sweep all seven models passed text, conversation history, raw-RID routing, JSON, blocking tools, and image input. Grok 420 non-reasoning also passed streaming text and an executed streaming tool loop; Grok 4.5 passed the streaming tool loop but not streaming text. Grok 4.5 and Grok 420 reasoning failed JSON with executed tools. Successful JSON output does not prove strict server-side schema enforcement; image checks cover acceptance and a description.
+Foundry now sends reasoning-start events before reasoning-summary deltas. On September 24, their absence failed streaming text or streamed tools on six aliases. Grok 4.6 also passes on `main` with 4.0.58, so the fix is on the proxy side. The adapter still does not invent these events.
 
-Remaining gaps:
-
-- Fourteen cases fail when Foundry sends reasoning-summary deltas without start events: native 4.0.58 emits a reasoning delta before opening its SDK reasoning part. This is an interaction between the proxy shape and that parser. The adapter does not invent reasoning-start events.
-- One streaming-tool case for `grok-420-reasoning-latest` returned empty final text. The non-reasoning model's reasoning probe found no reasoning evidence. These are separate outcomes.
-- All seven native chat requests returned HTTP 400 deserialization errors. This does not prove all possible chat requests are unsupported.
+All seven explicit Chat Completions text probes returned HTTP 400 (`Failed to deserialize request body`). This does not prove all possible chat requests are unsupported.

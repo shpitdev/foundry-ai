@@ -15,7 +15,7 @@ const prompt = 'In one sentence, what is your model name and who made you?';
 for (const modelId of [
   'openai:gpt-5.6-terra',
   'anthropic:claude-sonnet-5',
-  'google:gemini-3.6-flash',
+  'google:gemini-4-argon',
 ] as const) {
   const result = await generateText({
     model: registry.languageModel(modelId),

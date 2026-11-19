@@ -2,18 +2,38 @@ import type { ModelDefinition } from '../types.js';
 import { createProviderModelCatalog } from './metadata.js';
 
 const GOOGLE_MODEL_DEFINITIONS = {
-  'gemini-3.7-flash': {
-    rid: 'ri.language-model-service..language-model.gemini-3-7-flash',
-    modelIdentifier: 'GEMINI_3_7_FLASH',
-    displayName: 'Gemini 3.7 Flash',
+  'gemini-4-argon': {
+    rid: 'ri.language-model-service..language-model.gemini-4-argon',
+    modelIdentifier: 'GEMINI_4_ARGON',
+    displayName: 'Gemini 4 Argon',
     lifecycle: 'ga',
     inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
-    performance: {
-      cost: 'MEDIUM',
-      modelClass: 'REASONING',
-      speed: 'HIGH',
-    },
     trainingCutoffDate: '2026-03-01T00:00:00Z',
+    performance: { cost: 'MEDIUM', modelClass: 'REASONING', speed: 'MEDIUM' },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon',
+  },
+  'gemini-4-carbon': {
+    rid: 'ri.language-model-service..language-model.gemini-4-carbon',
+    modelIdentifier: 'GEMINI_4_CARBON',
+    displayName: 'Gemini 4 Carbon (Experimental)',
+    lifecycle: 'experimental',
+    inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+    performance: { cost: 'MEDIUM', modelClass: 'REASONING', speed: 'MEDIUM' },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-carbon',
+  },
+  'gemini-4-hydrogen': {
+    rid: 'ri.language-model-service..language-model.gemini-4-hydrogen',
+    modelIdentifier: 'GEMINI_4_HYDROGEN',
+    displayName: 'Gemini 4 Hydrogen',
+    lifecycle: 'experimental',
+    inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+    performance: { cost: 'MEDIUM', modelClass: 'REASONING', speed: 'HIGH' },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-hydrogen',
   },
   'gemini-3.8-flash': {
     rid: 'ri.language-model-service..language-model.gemini-3-8-flash',
@@ -126,26 +146,6 @@ const GOOGLE_MODEL_DEFINITIONS = {
     },
     externalUrl:
       'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite',
-  },
-  'gemini-3.6-flash': {
-    rid: 'ri.language-model-service..language-model.gemini-3-6-flash',
-    modelIdentifier: 'GEMINI_3_6_FLASH',
-    displayName: 'Gemini 3.6 Flash',
-    lifecycle: 'ga',
-    inputTypes: [
-      'GEMINI_CHAT',
-      'GENERIC_COMPLETION',
-      'GENERIC_CHAT_COMPLETION',
-      'GENERIC_VISION_COMPLETION',
-    ],
-    trainingCutoffDate: '2026-03-01T00:00:00Z',
-    performance: {
-      cost: 'MEDIUM',
-      modelClass: 'REASONING',
-      speed: 'HIGH',
-    },
-    externalUrl:
-      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-6-flash',
   },
 } as const satisfies Record<string, ModelDefinition>;
 

@@ -1,20 +1,24 @@
 # Models and live test status
 
-**Updated September 25, 2026 (UTC):** every provider table below comes from one catalog sweep on AI SDK 7.0.97 with `@ai-sdk/openai` 4.0.65, `@ai-sdk/anthropic` 4.0.52, `@ai-sdk/google` 4.0.67, and `@ai-sdk/xai` 4.0.58, plus isolated reruns of the rate-limited cases. The catalog holds 69 entries: 63 language aliases, three embedding models, and three separately tested realtime models. Basic text passed on 62 language aliases; Llama Nemotron Super has no usable adapter route. All three embeddings passed.
+**Catalog as of November 19, 2026 (UTC):** 62 entries — 55 language aliases, three OpenAI embeddings, and four realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Transcription is not exposed.
 
-[Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling. Raw reports stay locally under `.memory/`.
+**November 19, 2026 sweep:** AI SDK 7.0.176 with `@ai-sdk/openai` 4.0.121, `@ai-sdk/anthropic` 4.0.106, `@ai-sdk/google` 4.0.122, and `@ai-sdk/xai` 4.0.59, run serially over the full catalog, plus isolated reruns of unexpected outcomes. Basic text passed on 54 of 55 language aliases; Llama Nemotron Super has no usable adapter route. All three embeddings passed.
+
+[Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Each cell is one probe run, or its isolated rerun; a pass shows the request worked then, not that it is reliable. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling. Raw reports stay locally under `.memory/`.
 
 ## Results
 
 ✓ passed; × probe failed; T rate-limited after SDK retries; R proxy rejected; A disabled for this account; U no usable adapter route; — not tested. These are probe outcomes, not a list of intrinsic model capabilities. A failure can reflect the fixture, budget, serving backend, or proxy.
 
-JSON means schema-valid output was observed; it does not establish strict server-side schema enforcement. The focused audit below tests that separately. Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON + tools requires an executed tool result and matching final structured output with automatic tool selection and a three-step limit. Image checks acceptance and a nonempty description, not visual accuracy. Reasoning checks stream events or token usage; it does not rate reasoning quality.
+JSON means schema-valid output was observed; it does not establish strict server-side schema enforcement. Tools uses non-streaming `ToolLoopAgent`; stream tools uses `streamText`. JSON + tools requires an executed tool result and matching final structured output with automatic tool selection and a three-step limit. Image checks acceptance and a nonempty description, not visual accuracy. Reasoning checks stream events or token usage; it does not rate reasoning quality.
 
 ### OpenAI
 
 | Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 |---|---|---|---|---|---|---|---|---|
-| `gpt-5-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-5-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
+| `gpt-6.1-terra` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-6.1-sol` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-6-sol` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-6-luna` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-6-astra` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -23,7 +27,7 @@ JSON means schema-valid output was observed; it does not establish strict server
 | `gpt-5.6-luna` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-5.4-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-5.4-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-5.4-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
 | `gpt-5.4` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
 | `gpt-5.3-codex` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gpt-5.2` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
@@ -36,17 +40,15 @@ JSON means schema-valid output was observed; it does not establish strict server
 | `gpt-4.1-nano` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gpt-4.1-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gpt-4.1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `o4-mini` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `gpt-4o` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `o3` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `codex-auto-review` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 
 ### Anthropic
 
 | Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 |---|---|---|---|---|---|---|---|---|
 | `claude-haiku-4.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `claude-sonnet-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `claude-opus-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `claude-haiku-5.5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `claude-sonnet-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `claude-opus-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `claude-opus-4.8` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -61,60 +63,51 @@ JSON means schema-valid output was observed; it does not establish strict server
 | Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 |---|---|---|---|---|---|---|---|---|
 | `gemini-3.1-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gemini-4-hydrogen` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gemini-4-carbon` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gemini-4-argon` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3.8-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | — |
-| `gemini-3.7-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.6-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
-| `gemini-3.5-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
+| `gemini-3.5-flash-lite` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | — |
 | `gemini-3.5-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3.1-pro` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | `gemini-3-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 
 ### xAI
 
-Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.58 and the Foundry compatibility adapter. These columns use Responses.
+Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compatibility adapter. These columns use Responses; all seven explicit Chat Completions text probes were proxy-rejected (HTTP 400). See [xAI setup](./xai.md).
 
 | Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 |---|---|---|---|---|---|---|---|---|
-| `grok-4-6` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
-| `grok-420-reasoning-latest` | ✓ | × | ✓ | ✓ | × | × | ✓ | × |
+| `grok-4-6` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `grok-420-reasoning-latest` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `grok-420-non-reasoning-latest` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | × |
-| `grok-4-7` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
-| `grok-4-5` | ✓ | × | ✓ | ✓ | ✓ | × | ✓ | × |
-| `grok-4-3` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
-| `grok-build-0-1` | ✓ | × | ✓ | ✓ | × | ✓ | ✓ | × |
-
-Native xAI passed 36 of the 56 probes in these columns. Grok 420 non-reasoning is the only alias that streams text; Grok 4.5 also passed the streaming tool loop without passing streaming text. Reasoning-start parsing accounts for most streaming failures, and no alias produced a reasoning signal. All seven explicit Chat Completions text probes were proxy-rejected (HTTP 400). See [xAI setup and remaining gaps](./xai.md#live-verification).
+| `grok-4-7` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `grok-4-5` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `grok-4-3` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `grok-build-0-1` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ### Third-party
 
-Uses `createFoundryThirdParty` with `@ai-sdk/openai` 4.0.65.
+Uses `createFoundryThirdParty` with `@ai-sdk/openai` 4.0.121.
 
 | Model | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 |---|---|---|---|---|---|---|---|---|
-| `qwen3-32b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | × |
-| `glm-5-3-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
-| `glm-5-3` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | ✓ |
-| `glm-5` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | × |
 | `gemma-4-31b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
 | `gemma-4-26b-a4b` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
-| `deepseek-v4-1-flash` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
-| `nemotron-3-ultra-550b-a55b-nvfp4` | ✓ | ✓ | ✓ | ✓ | × | ✓ | R | × |
-| `qwen3-235b-a22b-2507` | ✓ | ✓ | ✓ | ✓ | ✓ | × | R | × |
 | `llama-3-3-nemotron-super-49b-v1-5` | U | U | U | U | U | U | U | U |
-| `kimi-k3` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | ✓ |
-| `kimi-k2-5` | ✓ | ✓ | ✓ | ✓ | ✓ | × | ✓ | × |
 
 ### Realtime
 
-Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental. All three entries are enabled, usable, and Experimental in `foundry-cli models list --json` (September 24, 2026).
+Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains experimental.
 
 | Model | Connect | Text | Tool result round-trip | Audio output | Audio input |
 |---|---|---|---|---|---|
 | `gpt-realtime` | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `gpt-realtime-1.5` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `gpt-realtime-2` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-2.1` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `gpt-realtime-2.1-mini` | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-Live probes use SDK 7.0.97 / OpenAI 4.0.65 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested.
+Live probes use SDK 7.0.176 / OpenAI 4.0.121 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested.
 
 See [realtime setup](#realtime-setup) for authentication, examples, and the manual test command.
 
@@ -128,7 +121,7 @@ See [realtime setup](#realtime-setup) for authentication, examples, and the manu
 
 ### Decisions
 
-November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. Only GPT-6 Luna serves Foundry's `/decisions` route. The proxy accepts its RID or the `gpt-6-luna` alias; GPT-6 Sol and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
+November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. GPT-6 Luna serves Foundry's `/decisions` route by RID or the `gpt-6-luna` alias. GPT-6 Sol, GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra, and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
 
 | Probe | Result |
 |---|---|
@@ -138,7 +131,7 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 | JSON object state | ✓ |
 | Text, JSON, and PNG image state | ✓ |
 | `providerOptions.openai.safetyIdentifier` | ✓ |
-| 400 questions, the API maximum | ✓, about 2.4 s |
+| 400 questions, the API maximum | ✓, about 1.2 s |
 
 - Foundry rejects `prompt_cache_key` and `prompt_cache_options` with HTTP 400, so leave `providerOptions.openai.promptCacheKey` unset. Implicit caching still works: a repeated prefix of about 4,400 tokens was read from cache on the next call. Palantir documents the `X-Palantir-session-id` header for routing affinity; pass it through `experimental_decide({ headers })`.
 - Foundry rejects public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
@@ -146,28 +139,17 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 
 ## Findings
 
-- **Enrollment versus proxy access:** enrollment does not imply a usable route. Four models listed on September 24 were probed and left out of the catalog. GPT-5.2 Pro and GPT-5.4 Pro return `DisabledForUser` on Responses and have no Chat Completions route. o1 (Azure OpenAI) and Schematic 7B (Palantir Hub) return `LanguageModelNotAvailable`: their backends serve neither `OPEN_AI_RESPONSES` nor `GPT_CHAT_COMPLETION`. Llama Nemotron Super stays cataloged with `transport: 'unavailable'` and no verified route. Claude Opus 4.1 is now Sunset and has been removed.
-- **Rate limits:** the account throttles sustained sweeps. Twenty-seven cases returned HTTP 429 after the SDK's own retries, concentrated in the later cases of each model's serial sequence. Every one passed on isolated rerun; the tables above use those reruns, and the raw runs record the history.
-- **Streaming:** native xAI passes text and streamed tools only for Grok 420 non-reasoning. The other six Grok aliases fail both; the failures involve the proxy event shape and the native parser. Seven OpenAI reasoning probes fail on incomplete `response.reasoning_summary_part.added` events even where text streaming passes.
-- **Output budgets:** use an explicit `maxOutputTokens`; the harness uses 8192. GLM Flash standalone JSON passed with sufficient budget and a fully specified prompt. Use adaptive thinking for Opus 4.7/4.8, Claude 5, and Opus 5.5; the proxy rejects budget-based thinking for Opus 5.5 with HTTP 400.
-- **Structured output and tools:** Claude Opus 5.5 rejects forced tool use, so the adapter keeps the provider's native structured output for it instead of the JSON-tool mode used for other Claude models; with that, all ten of its probes pass. Gemini 3.8 Flash returned no output for the combined JSON + tools probe in this run, a change from September 15. The Fireworks-backed third-party models, including DeepSeek V4.1 Flash, still fail the combined probe; the tool-first, JSON-second workflow below remains the workaround.
-- **Image and reasoning limits:** Qwen, GLM-5/5.3, and Nemotron Ultra reject image input; DeepSeek V4.1 Flash accepts it. Missing reasoning events or token usage do not establish that a model cannot reason. Google reasoning is not probed by this harness, and the codex-family aliases are not asserted for reasoning.
+- **Rate limits:** no case returned HTTP 429 in this serial sweep. Earlier sweeps were throttled, so keep `--catalog` at concurrency 1 and rerun 429s in isolation.
+- **Flaky cases:** three sweep failures passed on isolated rerun, and the tables use the reruns: GPT-5.1 Codex text (the model refused the prompt), and JSON + tools on Grok 4.7 and Grok 420 non-reasoning.
+- **OpenAI reasoning streams:** the SDK rejects `response.reasoning_summary_part.added` events from the proxy with a type-validation error, so these probes fail even where text streaming passes. GPT-5 Nano is intermittent: it passed in the sweep and failed both isolated reruns. GPT-5 Nano and GPT-5.4 Mini, which passed on September 25, fail the same way on `main`, so this refresh did not cause them.
+- **xAI streaming:** Foundry now sends the reasoning-start events the native parser needs. Streaming text, streamed tools, and reasoning passed on every Grok alias except Grok 420 non-reasoning, which produced no reasoning signal. Grok 4.6 also passes on `main` with `@ai-sdk/xai` 4.0.58, so the change is on the proxy side, not the SDK bump.
+- **JSON + tools:** the two Gemini failures return no output; Gemini 3.5 Flash-Lite passed on September 25 and fails the same way on `main`. Both Gemma models run the tool, then wrap the final JSON in a Markdown fence that the SDK cannot parse; use [tools, then JSON](#tools-then-json).
+- **Thinking:** use adaptive thinking for Opus 4.7/4.8, Claude 5, and the Claude 5.5 models; the proxy rejects budget-based thinking for Claude 5.5 with HTTP 400.
+- **Not proven:** missing reasoning events or token usage do not show that a model cannot reason.
 
-## Structured-output audit
+## Tools, then JSON
 
-September 14, 2026: controlled probes distinguish schema-valid output from server-side constraint enforcement. These are smoke tests, not reliability estimates.
-
-| Model | Prompted JSON | Strict schema constraint | Forced tool + JSON together | Tool first, then JSON |
-|---|---|---|---|---|
-| GLM 5.3 Flash | ✓ | ✓ | Fireworks HTTP 400 | ✓ |
-| Kimi K3 | ✓ | ✓ | Fireworks HTTP 400 | ✓ |
-| Gemma 4-31B | ✓ | ✓ | ✓ | ✓ |
-| Qwen 3-32B | ✓ | ✓ | Returned JSON without required tool | ✓ |
-| Nemotron Ultra | ✓ | Failed twice | ✓ | ✓ |
-
-**GLM Flash supports structured output through Foundry.** Its [model card](https://huggingface.co/zai-org/GLM-5.3-Flash) documents default maximum reasoning effort. The audit used 4096 output tokens; the harness uses 8192. Supply all facts requested by the schema and validate their values, not just the output shape.
-
-**Tools and JSON can conflict at the serving layer.** GLM Flash and Kimi K3 returned a Fireworks-attributed error: `tool_choice (required or a specific function) cannot be combined with response_format`. Automatic selection returned schema-shaped answers without running the tool. This is consistent with JSON constraints preventing tool generation; it does not imply the models lack tools. [Fireworks documents](https://docs.fireworks.ai/guides/function-calling) tool selection, while [Google documents](https://ai.google.dev/gemma/docs/core/model_card_4) Gemma's native function calling. Separating the two requests passed on every audited model:
+When the combined JSON + tools probe fails, split the work: force the tool call, then request structured output with the tool result in history. On September 14, 2026 this passed for every audited model, including Gemma 4 31B, which also passed prompted JSON, a strict schema constraint, and forced tool + JSON in one request. These were smoke tests, not reliability estimates.
 
 ```ts
 // model, tools and prompt are your configured model, tool definitions and task.
@@ -188,37 +170,7 @@ const final = await generateText({
 });
 ```
 
-**Nemotron's JSON pass does not prove enforcement.** It obeyed the prompt instead of two strict schemas, including an enum-only raw HTTP control. It also reported zero token usage for nonempty output. Foundry identifies an Azure OpenAI backend; Chat Completions returns 404 and `reasoning.effort` settings return 400. The outgoing Responses request contains the correct `text.format`. This isolates the issue beyond SDK serialization, but cannot distinguish Palantir translation from Azure serving. [NVIDIA also documents serving-runtime limitations](https://docs.nvidia.com/dynamo/dev/recipes/nemotron-3-ultra) around constrained output; we have no evidence that Foundry uses that runtime.
-
-**An SDK replacement has not been shown to fix these failures.** The outgoing requests already contain the schema and tool constraints; GLM Flash/Kimi K3 reject their combination at the Fireworks serving layer. Direct Fireworks parity remains unverified. Use the staged workflow above; see [SDK selection and reasoning diagnostics](#sdk-selection-and-reasoning-diagnostics) for the separate parser question.
-
-## Kimi K3 protocol check
-
-Moonshot supports [native Responses](https://platform.kimi.ai/docs/api/responses) and [OpenAI/Anthropic-compatible APIs](https://github.com/MoonshotAI/Kimi-K3/blob/main/README.md). Its Chat Completions guidance requires returning `reasoning_content` with assistant history. API format support depends on the serving backend; our Foundry responses identify Fireworks.
-
-| Foundry route | Focused result |
-|---|---|
-| Chat Completions (current default) | Blocking tool loop passed on retry; JSON + tools still returned a made-up status without executing the tool. |
-| OpenAI Responses | Basic text and blocking tool loop worked. JSON + tools still skipped execution; streaming failed on an incomplete reasoning event. An initial raw tool request timed out at 90 seconds. |
-| Anthropic Messages | HTTP 404: the Fireworks backend does not support `CLAUDE_CHAT` for this model. |
-
-Preserving reasoning is a separate proxy gap: Foundry rejects Chat Completions assistant `reasoning_content` with HTTP 400. Removing that field allowed the same tool-result continuation to finish. Responses also supplied reasoning without encrypted content, which SDK 7 warned it would omit with `store: false`. This does not explain the earlier first-turn tool omission, where no assistant history existed yet.
-
-Keep Chat Completions as the default. These probes do not show that Responses or Anthropic works better through this enrollment. The alternative-route SDK probes used a 4096-token budget and no retries; they supplement the catalog survey rather than replacing its results.
-
-## DeepSeek V4.1 Flash route comparison
-
-September 24, 2026: matched probes compared native `@ai-sdk/deepseek` 3.0.52 (provider v4) against the third-party `@ai-sdk/openai` 4.0.65 route. Both used the same Foundry Chat Completions endpoint, the same prompts, and an 8,192-token budget with no retries.
-
-| Probe | Native `@ai-sdk/deepseek` | Third-party `@ai-sdk/openai` |
-|---|---|---|
-| Text | ✓ | ✓ |
-| Stream | ✓, with reasoning events | ✓, text only |
-| JSON | ✓, exact field match | ✓, exact field match |
-| Tools | HTTP 400 | ✓, tool executed |
-| Reasoning text | ✓, about 500 characters | none returned |
-
-Native parsing exposes DeepSeek reasoning that the OpenAI-compatible route does not, but it breaks tool loops. The continuation request carries assistant `reasoning_content`, and Foundry rejects it with `unrecognizedProperty=reasoning_content` — the same proxy gap recorded for native Moonshot above. Losing tool execution outweighs gaining reasoning text, so DeepSeek V4.1 Flash is cataloged as third-party with the verified `openai-chat` transport, and no optional peer was added. Revisit this if Foundry begins accepting `reasoning_content` on assistant history.
+Supply every fact the schema asks for and validate values, not just shape.
 
 ## Model routing
 
@@ -228,32 +180,15 @@ Native parsing exposes DeepSeek reasoning that the OpenAI-compatible route does 
 | Claude | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic` |
 | Gemini | `createFoundryGoogle` / `google` | `@ai-sdk/google` |
 | Grok | `createFoundryXai` / `xai` | `@ai-sdk/xai` |
-| Gemma, Kimi, Nemotron, Qwen, GLM, DeepSeek | `createFoundryThirdParty` / `third-party` | `@ai-sdk/openai` |
+| Gemma, Llama Nemotron Super | `createFoundryThirdParty` / `third-party` | `@ai-sdk/openai` |
 
-OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Kimi, Qwen, GLM, and DeepSeek use Chat Completions; Gemma and Nemotron Ultra use OpenAI Responses; Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
+OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Third-party routing requires a cataloged alias or exact RID because the adapter must select a proxy. Gemma uses OpenAI Responses; Llama Nemotron Super has no verified route. Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
-OpenAI and third-party reject `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI and third-party Chat Completions omit it. xAI options use the native `xai` namespace; third-party uses `openai`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5, which rejects forced tool use and therefore keeps the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
+OpenAI and third-party reject `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI Chat Completions omits it. xAI options use the native `xai` namespace; third-party uses `openai`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5 and Sonnet 5.5, which reject forced tool use and therefore keep the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
 
 Only OpenAI exposes `embeddingModel()`, `embedding()`, and `decisionModel()`. Embedding strings pass through without language-model RID routing; decision aliases resolve to RIDs like language models. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
-
-### SDK selection and reasoning diagnostics
-
-Model creator, serving backend, proxy protocol, and client SDK are separate choices:
-
-| Layer | Example from the tested enrollment |
-|---|---|
-| Model creator | Moonshot (Kimi) or Z.ai (GLM) |
-| Serving backend | Fireworks, identified in the Kimi K3 / GLM 5.3 Flash error responses |
-| Proxy protocol | Foundry OpenAI Chat Completions |
-| Client SDK | `@ai-sdk/openai`, selected for that protocol |
-
-[Palantir documents](https://www.palantir.com/docs/foundry/aip/llm-provider-compatible-apis) OpenAI, Anthropic, Google, and xAI proxy families, with no dedicated Moonshot or Z.ai route. A creator-specific SDK does not change the serving backend or add fields accepted by Foundry. Keep third-party transport selection generic; adopt another SDK only when a request or parser comparison demonstrates a fix.
-
-**Reasoning diagnostics, September 15:** one SDK-free Chat stream each for Kimi K2.5, GLM 5, and Qwen 3-32B returned text but no reasoning content or reasoning-token count. Another parser cannot recover data absent from those responses. These bounded checks do not replace the capability survey.
-
-**Native Moonshot trial, September 16:** `@ai-sdk/moonshotai` 3.0.50 with `ai` 7.0.97 exposed Kimi K3 reasoning text in blocking and streamed responses that the `@ai-sdk/openai` 4.0.65 baseline did not parse. Matched probes used the same Foundry Chat route and 8192-token budget. Native tool execution succeeded, but continuation failed with HTTP 400 on assistant `reasoning_content`, even with `reasoningHistory: 'disabled'`. Experimentally omitting only that history field restored blocking and streamed tool continuation while retaining returned reasoning. Native SDK aliases mapped to catalog RIDs preserved `json_schema`; raw RIDs selected `json_object`. Neither variant fixed combined forced tools + JSON: K3 rejected the combination, and K2.5 omitted the tool. K2.5 returned no reasoning content. Native Moonshot alone is not a drop-in fix; production adapters and dependencies remain unchanged.
 
 ## Realtime setup
 
@@ -269,7 +204,7 @@ import { createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
 // foundryUserToken must belong to the authenticated caller.
 return Response.json(createFoundryRealtimeSetup({
   foundryUrl,
-  model: 'gpt-realtime-2',
+  model: 'gpt-realtime-2.1',
   token: foundryUserToken,
   tools: [], // Or experimental_getRealtimeToolDefinitions({ tools }) from ai.
 }), { headers: { 'Cache-Control': 'no-store' } });
@@ -280,14 +215,14 @@ Pass the matching model to [AI SDK's realtime client](https://ai-sdk.dev/docs/ai
 ```ts
 import { createFoundryRealtime } from '@nyrra/foundry-ai/realtime';
 
-const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2');
+const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2.1');
 // experimental_useRealtime({ model, api: { token: '/api/realtime/setup' } })
 ```
 
 For server-side use, [the realtime example](https://github.com/shpitdev/foundry-ai/blob/main/examples/advanced/realtime.ts) shows a direct WebSocket connection. Realtime IDs are excluded from the HTTP language-model survey and rejected by `createFoundryOpenAI`; use the realtime factory instead. API names are used on this endpoint, including the dot in `gpt-realtime-1.5`, rather than model RIDs.
 
 ```sh
-pnpm run example realtime gpt-realtime-2
+pnpm run example realtime gpt-realtime-2.1
 pnpm run test:realtime
 # Optional isolated model rerun:
 pnpm run test:realtime -- --testNamePattern 'gpt-realtime-1.5:'
@@ -305,4 +240,4 @@ pnpm run test:live:summary
 pnpm run test:decisions
 ```
 
-Use `--provider xai` for the default Grok model, `--catalog --provider xai` for all seven Grok aliases, or `--model openai:gpt-5-nano` for a focused run. To rerun a single case, add `--testNamePattern 'openai:gpt-5-nano: deterministic tool loop$'`. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.
+Use `--provider xai` for the default Grok model, `--catalog --provider xai` for all seven Grok aliases, or `--model openai:gpt-6-luna` for a focused run. To rerun a single case, add `--testNamePattern 'openai:gpt-6-luna: deterministic tool loop$'`. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.

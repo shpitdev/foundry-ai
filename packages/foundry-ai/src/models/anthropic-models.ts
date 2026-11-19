@@ -21,6 +21,21 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://www.anthropic.com/news/claude-haiku-4-5',
   },
+  'claude-haiku-5.5': {
+    rid: 'ri.language-model-service..language-model.anthropic-claude-5-5-haiku',
+    modelIdentifier: 'ANTHROPIC_CLAUDE_55_HAIKU',
+    displayName: 'Claude Haiku 5.5',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'CLAUDE_CHAT',
+    ],
+    trainingCutoffDate: '2026-06-01T00:00:00Z',
+    performance: { cost: 'LOW', modelClass: 'LIGHTWEIGHT', speed: 'HIGH' },
+    externalUrl: 'https://platform.claude.com/docs/en/models/haiku-5-5/overview',
+  },
   'claude-opus-4.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-4-5-opus',
     modelIdentifier: 'ANTHROPIC_CLAUDE_45_OPUS',
@@ -193,6 +208,21 @@ const ANTHROPIC_MODEL_DEFINITIONS = {
     },
     externalUrl: 'https://www.anthropic.com/news/claude-sonnet-5',
   },
+  'claude-sonnet-5.5': {
+    rid: 'ri.language-model-service..language-model.anthropic-claude-5-5-sonnet',
+    modelIdentifier: 'ANTHROPIC_CLAUDE_55_SONNET',
+    displayName: 'Claude Sonnet 5.5',
+    lifecycle: 'ga',
+    inputTypes: [
+      'GENERIC_COMPLETION',
+      'GENERIC_CHAT_COMPLETION',
+      'GENERIC_VISION_COMPLETION',
+      'CLAUDE_CHAT',
+    ],
+    trainingCutoffDate: '2026-06-01T00:00:00Z',
+    performance: { cost: 'MEDIUM', modelClass: 'HEAVYWEIGHT', speed: 'MEDIUM' },
+    externalUrl: 'https://platform.claude.com/docs/en/models/sonnet-5-5/overview',
+  },
 } as const satisfies Record<string, ModelDefinition>;
 
 export const ANTHROPIC_MODELS = createProviderModelCatalog(
@@ -210,10 +240,9 @@ export const ANTHROPIC_MODEL_IDS = Object.freeze(
 // Anthropic rejects forced tool use for these models, so the jsonTool structured-output
 // mode the adapter otherwise requests fails with HTTP 400 through the Foundry proxy.
 const ANTHROPIC_NATIVE_STRUCTURED_OUTPUT_TARGETS = new Set(
-  (['claude-opus-5.5'] as const satisfies readonly KnownAnthropicModelId[]).flatMap((modelId) => [
-    modelId as string,
-    ANTHROPIC_MODELS[modelId].rid,
-  ]),
+  (
+    ['claude-opus-5.5', 'claude-sonnet-5.5'] as const satisfies readonly KnownAnthropicModelId[]
+  ).flatMap((modelId) => [modelId as string, ANTHROPIC_MODELS[modelId].rid]),
 );
 
 export function requiresAnthropicNativeStructuredOutput(modelId: string): boolean {

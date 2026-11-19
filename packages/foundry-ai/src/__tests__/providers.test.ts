@@ -609,15 +609,12 @@ describe('provider adapters', () => {
     const googleOptions = (googleCalls[0]?.[0] ?? {}) as {
       fetch?: typeof fetch;
     };
-    await googleOptions?.fetch?.(
-      'https://example.test/v1/models/gemini-3.6-flash:generateContent',
-      {
-        headers: {
-          'x-goog-api-key': 'token-123',
-          'x-test': '1',
-        },
+    await googleOptions?.fetch?.('https://example.test/v1/models/gemini-4-argon:generateContent', {
+      headers: {
+        'x-goog-api-key': 'token-123',
+        'x-test': '1',
       },
-    );
+    });
 
     const proxiedRequest = fetchSpy.mock.calls[0]?.[0];
 
@@ -650,16 +647,16 @@ describe('provider adapters', () => {
     const google = createFoundryGoogle(config);
     const rawRid = 'ri.language-model-service..language-model.gemini-3-1-flash-lite';
 
-    const aliasModel = google('gemini-3.6-flash');
+    const aliasModel = google('gemini-4-argon');
     const rawModel = google(rawRid);
 
     expect(googleLanguageModelMock).toHaveBeenNthCalledWith(
       1,
-      'ri.language-model-service..language-model.gemini-3-6-flash',
+      'ri.language-model-service..language-model.gemini-4-argon',
     );
     expect(googleLanguageModelMock).toHaveBeenNthCalledWith(2, rawRid);
     expect(aliasModel.provider).toBe('foundry-google');
-    expect(aliasModel.modelId).toBe('gemini-3.6-flash');
+    expect(aliasModel.modelId).toBe('gemini-4-argon');
     expect(rawModel.modelId).toBe(rawRid);
     expect(google.languageModel).toBeTypeOf('function');
     expect(google.chat).toBeTypeOf('function');
