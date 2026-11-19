@@ -1,8 +1,8 @@
 # Effect AI adapters: plan
 
-`@shpitdev/foundry-effect-ai` gives Effect AI programs the Foundry coverage `@nyrra/foundry-ai` gives the Vercel AI SDK: OpenAI, Anthropic, Google and xAI models through Foundry's LLM proxy, addressed by catalog alias or RID. It ships as one package whose only peer dependency is `effect`, and an application that uses one vendor bundles only that vendor's code.
+`@shpitdev/foundry-effect-ai` gives Effect AI programs the Foundry coverage `@shpitdev/foundry-ai` gives the Vercel AI SDK: OpenAI, Anthropic, Google and xAI models through Foundry's LLM proxy, addressed by catalog alias or RID. It ships as one package whose only peer dependency is `effect`, and an application that uses one vendor bundles only that vendor's code.
 
-The package is private until phase 8. The scaffold, guardrails and protocol notes are in place; every public function is a stub that dies with a pointer to this file.
+The package publishes to npm with access restricted to the `shpitdev` org until phase 8 makes it public. The scaffold, guardrails and protocol notes are in place; every public function is a stub that dies with a pointer to this file.
 
 ## Decisions
 
@@ -17,7 +17,7 @@ The package is private until phase 8. The scaffold, guardrails and protocol note
 | Streaming | Every language model implements both `generateText` and `streamText`. | `LanguageModel.make` requires both. |
 | xAI | `XaiLanguageModel` reuses the Responses codec with an xAI dialect. | Foundry serves Grok through Responses; the AI SDK adapter's `xai-compat.ts` rewrites are unnecessary with lenient decoding. |
 | Build | `tsc` emits ESM, one file per module, `sideEffects: false`. | Effect 4 is ESM-only; per-file output lets bundlers drop unused modules without a pure-annotation pass. |
-| Model catalog | Moves to `packages/foundry-catalog` (workspace source with no `package.json`), compiled into both packages (phase 0a). | Depending on `@nyrra/foundry-ai` would install the `ai` peer; a third published package would couple release lines. |
+| Model catalog | Moves to `packages/foundry-catalog` (workspace source with no `package.json`), compiled into both packages (phase 0a). | Depending on `@shpitdev/foundry-ai` would install the `ai` peer; a third published package would couple release lines. |
 | Upstream code | Port logic (prompt conversion, stream state machines), not generated schemas. Each derived file starts with `// Adapted from @effect/ai-<x> (MIT), effect@4.1.4, 82904fe.`; the MIT text is in `NOTICE`. | Keeps attribution exact and auditable. |
 
 ## Target layout
@@ -62,7 +62,7 @@ packages/foundry-effect-ai/
 
 | Check | Command (Nx target) | Enforces |
 |---|---|---|
-| Lint | `foundry-effect-ai:lint` | oxlint (`.oxlintrc.json`, strict, mirrors foundry-cli): no `any`, non-null assertions, default exports, cycles or barrels. Bans `ai`, `@ai-sdk/*`, `@effect/ai-*`, the `effect`, `effect/ai` and `effect/http` barrels, and `@nyrra/foundry-ai`. Library code also bans `FetchHttpClient`, test tooling and `node:*`; `internal/` cannot import public modules. Biome checks formatting. |
+| Lint | `foundry-effect-ai:lint` | oxlint (`.oxlintrc.json`, strict, mirrors foundry-cli): no `any`, non-null assertions, default exports, cycles or barrels. Bans `ai`, `@ai-sdk/*`, `@effect/ai-*`, the `effect`, `effect/ai` and `effect/http` barrels, and `@shpitdev/foundry-ai`. Library code also bans `FetchHttpClient`, test tooling and `node:*`; `internal/` cannot import public modules. Biome checks formatting. |
 | Typecheck | `foundry-effect-ai:typecheck` | `tsc` with `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess` and friends, then `effect-language-service diagnostics --strict`: no `fetch`, `process.env`, `Date`, timers, `console`, `Math.random`, floating Effects or unlisted unstable APIs. |
 | Contract tests | `foundry-effect-ai:test` | The support matrix. Each cell is `it.todo` until its phase lands. |
 | Tree-shaking | `foundry-effect-ai:tree-shaking` | Bundles each public module through the exports map with esbuild. Fails if the bundle reaches another protocol's `internal/` folder, another public model module or the all-vendor catalog; if it exceeds its byte budget; if `internal/*` resolves; or if a consumer cannot typecheck the module. |
@@ -82,7 +82,7 @@ packages/foundry-effect-ai/
 | Phase | Scope | Done when |
 |---|---|---|
 | 0 | Scaffold, guardrails, release split, protocol notes | Done: `pnpm run verify` is green. |
-| 0a | Move `packages/foundry-ai/src/models` and the model types to `packages/foundry-catalog`; both packages compile it in. Narrow `model(id)` to catalog ID types. | `@nyrra/foundry-ai`'s public API and packed-library CI check are unchanged, and the tree-shaking check sees only the right vendor's catalog per module. Fall back to a copied catalog plus a `diff` check if tsup cannot inline the declarations. |
+| 0a | Move `packages/foundry-ai/src/models` and the model types to `packages/foundry-catalog`; both packages compile it in. Narrow `model(id)` to catalog ID types. | `@shpitdev/foundry-ai`'s public API and packed-library CI check are unchanged, and the tree-shaking check sees only the right vendor's catalog per module. Fall back to a copied catalog plus a `diff` check if tsup cannot inline the declarations. |
 | 1 | `FoundryClient`, `internal/errors.ts`, fixture recording, `OpenAiDecisionModel` | The seven decision cells pass offline and live. |
 | 2 | `OpenAiLanguageModel` (Responses) and `test/capabilities.ts` | OpenAI row has no todos, including a recorded `reasoning_summary_part` stream; live passes on `gpt-6-luna`. |
 | 3 | `XaiLanguageModel` | xAI row has no todos; live passes on `grok-4-6`. |
@@ -90,7 +90,7 @@ packages/foundry-effect-ai/
 | 5 | `GoogleLanguageModel` | Gemini row has no todos; live passes. Highest risk: `effect/ai` has no Gemini structured-output codec. |
 | 6 | `OpenAiEmbeddingModel` | All three catalog embedding models pass live. |
 | 7 | Chat Completions | Starts only after a live probe shows a Foundry route accepting `/chat/completions`. Today every OpenAI alias serves Responses and xAI chat returns HTTP 400. |
-| 8 | Publish | First version published by hand, trusted publisher added, `private` removed (see [RELEASING.md](../../../docs/RELEASING.md)); full-catalog live sweep recorded in a package `docs/README.md`; stable release. |
+| 8 | Go public | Every published version audited, then made public as described in [RELEASING.md](../../../docs/RELEASING.md); full-catalog live sweep recorded in a package `docs/README.md`; stable release with provenance. |
 
 ## Per-phase checklist
 
@@ -103,7 +103,7 @@ packages/foundry-effect-ai/
 
 ## Open questions
 
-- Whether tsup inlines declarations from `packages/foundry-catalog` into `@nyrra/foundry-ai`'s `.d.ts` files (phase 0a).
+- Whether tsup inlines declarations from `packages/foundry-catalog` into `@shpitdev/foundry-ai`'s `.d.ts` files (phase 0a).
 - Which Foundry response deviations need lenient decoding beyond those already known; capture fixtures before relaxing a schema.
 - Gemini structured output: the default codec transformer or a Gemini-specific JSON Schema subset (phase 5).
 - Whether any Foundry route serves Chat Completions (phase 7).

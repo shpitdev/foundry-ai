@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 const repository = 'shpitdev/foundry-ai';
 const expectedDescription =
   'Thin Palantir Foundry provider adapters and model catalog for the Vercel AI SDK.';
-const expectedHomepage = 'https://www.npmjs.com/package/@nyrra/foundry-ai';
+const expectedHomepage = 'https://www.npmjs.com/package/@shpitdev/foundry-ai';
 const expectedTopics = [
   'ai',
   'ai-sdk',

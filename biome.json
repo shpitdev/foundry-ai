@@ -93,6 +93,16 @@
       "linter": {
         "enabled": false
       }
+    },
+    {
+      "includes": ["scripts/check-release-policy.mjs"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noTemplateCurlyInString": "off"
+          }
+        }
+      }
     }
   ]
 }

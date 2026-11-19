@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import process from 'node:process';
-import type { AnthropicModelId, GoogleModelId, OpenAIModelId } from '@nyrra/foundry-ai';
+import type { AnthropicModelId, GoogleModelId, OpenAIModelId } from '@shpitdev/foundry-ai';
 
 export type ProviderName = 'openai' | 'anthropic' | 'google';
 

@@ -1,13 +1,15 @@
-# @nyrra/foundry-ai
+# @shpitdev/foundry-ai
 
 Use Vercel AI SDK language models, GPT-6 Luna decisions, OpenAI embeddings, and realtime audio through Palantir Foundry's proxy endpoints.
+
+Formerly `@nyrra/foundry-ai`: versions up to 0.0.9 stay there, deprecated. To move, replace the package name in your dependencies and imports; the API is unchanged.
 
 ## Install
 
 Install only the provider peers you use:
 
 ```sh
-pnpm add @nyrra/foundry-ai ai@7 @ai-sdk/openai@4
+pnpm add @shpitdev/foundry-ai ai@7 @ai-sdk/openai@4
 ```
 
 Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk/xai@4` for Grok. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
@@ -17,8 +19,8 @@ Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk
 Set `FOUNDRY_URL` and `FOUNDRY_TOKEN` in your server environment. Optional variables are `FOUNDRY_ATTRIBUTION_RID`, `FOUNDRY_TRACE_PARENT`, and `FOUNDRY_TRACE_STATE`. Keep server tokens out of browser code.
 
 ```ts
-import { loadFoundryConfig } from '@nyrra/foundry-ai';
-import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
+import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';
 import { generateText } from 'ai';
 
 const openai = createFoundryOpenAI(loadFoundryConfig());
@@ -38,7 +40,7 @@ For explicit configuration, pass `{ foundryUrl, token }` to the factory. Other f
 Install `@ai-sdk/xai@4` with AI SDK 7 (or `@ai-sdk/xai@3` with SDK 6). The xAI subpath does not require the OpenAI peer.
 
 ```ts
-import { createFoundryXai } from '@nyrra/foundry-ai/xai';
+import { createFoundryXai } from '@shpitdev/foundry-ai/xai';
 
 const xai = createFoundryXai(loadFoundryConfig());
 const model = xai('grok-4-6'); // Defaults to the xAI Responses route.
@@ -83,7 +85,7 @@ Boolean, choice, and score questions are supported. Do not set `providerOptions.
 
 ## Realtime (AI SDK 7 only)
 
-Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@nyrra/foundry-ai/realtime` with `gpt-realtime`, `gpt-realtime-1.5`, `gpt-realtime-2.1`, or `gpt-realtime-2.1-mini`. Install `ai@7` and `@ai-sdk/openai@4`; this subpath uses the SDK's experimental realtime interface and does not support SDK 6.
+Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@shpitdev/foundry-ai/realtime` with `gpt-realtime`, `gpt-realtime-1.5`, `gpt-realtime-2.1`, or `gpt-realtime-2.1-mini`. Install `ai@7` and `@ai-sdk/openai@4`; this subpath uses the SDK's experimental realtime interface and does not support SDK 6.
 
 Foundry authenticates WebSockets with the current user's access token. It does not use OpenAI's client-secret endpoint. See [realtime setup and live results](./docs/README.md#realtime) for the browser flow and the manual test command.
 

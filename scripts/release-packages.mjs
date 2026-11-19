@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Selects what a merged PR publishes and prints it as a GitHub Actions output:
-//   packages=[{"project","dir","name","version"}, ...]
+//   packages=[{"project","dir","name","version","access"}, ...]
 // Run from a checkout of the merge commit, with the PR's changed files (one path per line,
 // including the previous path of renames) on stdin.
 //
@@ -8,7 +8,13 @@
 // manifest carries exactly that version. Any other PR publishes a release candidate to next for
 // each public package whose files, or the shared release inputs, it changed.
 import { readFileSync } from 'node:fs';
-import { isPublishable, packageByProject, packages, readManifest } from './packages.mjs';
+import {
+  isPublishable,
+  packageByProject,
+  packages,
+  readAccess,
+  readManifest,
+} from './packages.mjs';
 
 const sharedInputs = ['nx.json', 'package.json', 'pnpm-lock.yaml'];
 
@@ -47,5 +53,9 @@ if (headRef.startsWith('release/')) {
   );
 }
 
-const output = selected.map((entry) => ({ ...entry, version: readManifest(entry).version }));
+const output = selected.map((entry) => ({
+  ...entry,
+  version: readManifest(entry).version,
+  access: readAccess(entry),
+}));
 console.log(`packages=${JSON.stringify(output)}`);

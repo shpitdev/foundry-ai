@@ -62,7 +62,7 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
         modelId,
         modelType: 'languageModel',
         message:
-          'Use createFoundryRealtime from @nyrra/foundry-ai/realtime for realtime models (AI SDK 7).',
+          'Use createFoundryRealtime from @shpitdev/foundry-ai/realtime for realtime models (AI SDK 7).',
       });
     }
     const shouldForceReasoning =

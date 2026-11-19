@@ -1,5 +1,5 @@
-import { loadFoundryConfig } from '@nyrra/foundry-ai';
-import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
+import { loadFoundryConfig } from '@shpitdev/foundry-ai';
+import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';
 import { experimental_decide as decide } from 'ai';
 
 const openai = createFoundryOpenAI(loadFoundryConfig());

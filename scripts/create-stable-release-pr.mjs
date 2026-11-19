@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { isPublishable, packageByProject, readManifest } from './packages.mjs';
+import { isPublishable, packageByProject, readDistTags, readManifest } from './packages.mjs';
 
 const project = process.argv[2];
 if (!project) {
@@ -54,26 +54,6 @@ function readManifestVersion() {
   return readManifest(releasePackage).version;
 }
 
-function readNpmDistTag(tagName) {
-  try {
-    const output = run('npm', [
-      'view',
-      packageName,
-      `dist-tags.${tagName}`,
-      '--json',
-      '--registry=https://registry.npmjs.org',
-    ]);
-
-    if (output.length === 0 || output === 'null') {
-      return null;
-    }
-
-    return JSON.parse(output);
-  } catch {
-    return null;
-  }
-}
-
 function localBranchExists(branchName) {
   return runQuiet('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branchName}`]);
 }
@@ -121,7 +101,7 @@ function ensureStableTagOnMain() {
     return;
   }
 
-  const latestTag = readNpmDistTag('latest');
+  const latestTag = readDistTags(releasePackage).latest;
   if (latestTag !== currentVersion) {
     throw new Error(
       `Refusing to backfill ${tagName}: package manifest is ${currentVersion}, but npm latest is ${latestTag ?? '<unset>'}.`,

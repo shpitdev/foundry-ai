@@ -1,7 +1,6 @@
 {
   "name": "@shpitdev/foundry-effect-ai",
   "version": "0.0.0",
-  "private": true,
   "description": "Palantir Foundry LLM proxy providers for Effect AI.",
   "license": "Apache-2.0",
   "repository": {
@@ -41,7 +40,7 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "peerDependencies": {
     "effect": "^4.1.4"

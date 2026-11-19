@@ -1,5 +1,5 @@
-import { loadFoundryConfig, REALTIME_MODEL_IDS, type RealtimeModelId } from '@nyrra/foundry-ai';
-import { createFoundryRealtime, createFoundryRealtimeSetup } from '@nyrra/foundry-ai/realtime';
+import { loadFoundryConfig, REALTIME_MODEL_IDS, type RealtimeModelId } from '@shpitdev/foundry-ai';
+import { createFoundryRealtime, createFoundryRealtimeSetup } from '@shpitdev/foundry-ai/realtime';
 
 const config = loadFoundryConfig();
 const modelId = process.argv[2] ?? 'gpt-realtime-2.1';

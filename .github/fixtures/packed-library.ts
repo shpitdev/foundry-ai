@@ -1,9 +1,9 @@
 import { strict as assert } from 'node:assert';
 import { createRequire } from 'node:module';
-import { createFoundryAnthropic } from '@nyrra/foundry-ai/anthropic';
-import { createFoundryGoogle } from '@nyrra/foundry-ai/google';
-import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
-import { createFoundryXai } from '@nyrra/foundry-ai/xai';
+import { createFoundryAnthropic } from '@shpitdev/foundry-ai/anthropic';
+import { createFoundryGoogle } from '@shpitdev/foundry-ai/google';
+import { createFoundryOpenAI } from '@shpitdev/foundry-ai/openai';
+import { createFoundryXai } from '@shpitdev/foundry-ai/xai';
 import * as ai from 'ai';
 import { createProviderRegistry, generateText, type LanguageModel } from 'ai';
 
@@ -52,7 +52,7 @@ for (const { provider, model } of providersAndModels) {
 
 // Exercise both package export conditions and the native transport, not only types.
 const require = createRequire(import.meta.url);
-const cjsXai = require('@nyrra/foundry-ai/xai') as typeof import('@nyrra/foundry-ai/xai');
+const cjsXai = require('@shpitdev/foundry-ai/xai') as typeof import('@shpitdev/foundry-ai/xai');
 const requests: string[] = [];
 globalThis.fetch = async (input, init) => {
   const request = new Request(input, init);

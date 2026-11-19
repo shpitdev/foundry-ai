@@ -20,12 +20,12 @@
     "types": ["node"],
     "verbatimModuleSyntax": true,
     "paths": {
-      "@nyrra/foundry-ai": ["./packages/foundry-ai/src/index.ts"],
-      "@nyrra/foundry-ai/anthropic": ["./packages/foundry-ai/src/providers/anthropic.ts"],
-      "@nyrra/foundry-ai/google": ["./packages/foundry-ai/src/providers/google.ts"],
-      "@nyrra/foundry-ai/openai": ["./packages/foundry-ai/src/providers/openai.ts"],
-      "@nyrra/foundry-ai/xai": ["./packages/foundry-ai/src/providers/xai.ts"],
-      "@nyrra/foundry-ai/realtime": ["./packages/foundry-ai/src/providers/realtime.ts"]
+      "@shpitdev/foundry-ai": ["./packages/foundry-ai/src/index.ts"],
+      "@shpitdev/foundry-ai/anthropic": ["./packages/foundry-ai/src/providers/anthropic.ts"],
+      "@shpitdev/foundry-ai/google": ["./packages/foundry-ai/src/providers/google.ts"],
+      "@shpitdev/foundry-ai/openai": ["./packages/foundry-ai/src/providers/openai.ts"],
+      "@shpitdev/foundry-ai/xai": ["./packages/foundry-ai/src/providers/xai.ts"],
+      "@shpitdev/foundry-ai/realtime": ["./packages/foundry-ai/src/providers/realtime.ts"]
     }
   }
 }

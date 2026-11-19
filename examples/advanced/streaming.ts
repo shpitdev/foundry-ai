@@ -1,6 +1,6 @@
 import type { AnthropicLanguageModelOptions } from '@ai-sdk/anthropic';
 import type { OpenAILanguageModelResponsesOptions } from '@ai-sdk/openai';
-import { getModelMetadata, MODEL_CATALOG_BY_RID } from '@nyrra/foundry-ai';
+import { getModelMetadata, MODEL_CATALOG_BY_RID } from '@shpitdev/foundry-ai';
 import { streamText } from 'ai';
 import { logError, logValue } from '../base/logger.js';
 import { createLanguageModel } from '../base/model.js';
