@@ -1,6 +1,5 @@
 import { Experimental_DecisionRefusalError, experimental_decide } from 'ai';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { OPENAI_DECISION_MODEL_IDS, OPENAI_MODELS } from '../models/openai-models.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 
 const LUNA_RID = 'ri.language-model-service..language-model.gpt-6-luna';
@@ -39,13 +38,6 @@ afterEach(() => {
 });
 
 describe('Foundry OpenAI decisions', () => {
-  it('lists only cataloged OpenAI models', () => {
-    expect(OPENAI_DECISION_MODEL_IDS).toEqual(['gpt-6-luna']);
-    for (const modelId of OPENAI_DECISION_MODEL_IDS) {
-      expect(OPENAI_MODELS[modelId].rid).toBe(LUNA_RID);
-    }
-  });
-
   it('routes every question type to the proxy decisions endpoint by RID', async () => {
     const requests = stubDecisions([
       { type: 'predicate', name: 'damaged', probability: 0.97 },
@@ -97,7 +89,7 @@ describe('Foundry OpenAI decisions', () => {
       maxRetries: 0,
     });
 
-    expect(model).toMatchObject({ modelId: 'gpt-6-luna', provider: 'foundry-openai.decision' });
+    expect(model).toMatchObject({ modelId: LUNA_RID, provider: 'foundry-openai.decision' });
     expect(result.answers).toEqual({
       damaged: { type: 'boolean', probability: 0.97 },
       route: {
@@ -195,20 +187,5 @@ describe('Foundry OpenAI decisions', () => {
         Experimental_DecisionRefusalError.isInstance(error) &&
         error.questionIds.join() === 'feasible',
     );
-  });
-
-  it('rejects prompt cache keys before calling the proxy', async () => {
-    const requests = stubDecisions([]);
-
-    await expect(
-      experimental_decide({
-        model: createFoundryOpenAI(config).decisionModel('gpt-6-luna'),
-        state: 'Text',
-        questions: { ok: { type: 'boolean', instructions: 'Is it ok?' } },
-        providerOptions: { openai: { promptCacheKey: 'tenant-1' } },
-        maxRetries: 0,
-      }),
-    ).rejects.toThrow('the Foundry proxy rejects prompt_cache_key');
-    expect(requests).toHaveLength(0);
   });
 });

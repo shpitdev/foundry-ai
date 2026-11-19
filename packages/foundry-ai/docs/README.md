@@ -128,7 +128,7 @@ See [realtime setup](#realtime-setup) for authentication, examples, and the manu
 
 ### Decisions
 
-November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. Only GPT-6 Luna serves Foundry's `/decisions` route. The proxy accepts its RID or the `gpt-6-luna` alias; GPT-6 Sol and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404).
+November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. Only GPT-6 Luna serves Foundry's `/decisions` route. The proxy accepts its RID or the `gpt-6-luna` alias; GPT-6 Sol and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
 
 | Probe | Result |
 |---|---|
@@ -139,16 +139,10 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 | Text, JSON, and PNG image state | ✓ |
 | `providerOptions.openai.safetyIdentifier` | ✓ |
 | 400 questions, the API maximum | ✓, about 2.4 s |
-| Refusal | ✓, raises `Experimental_DecisionRefusalError` |
 
-Raw proxy requests without the SDK also accepted developer, system, and assistant message history, `input_json` arrays, images inside question instructions, explicit cache breakpoints on input parts, and `original` image detail. The proxy rejected:
-
-- `prompt_cache_key` and `prompt_cache_options`, as additional properties. The adapter throws on `providerOptions.openai.promptCacheKey` before sending the request. Implicit caching still works: a repeated 4,400-token prefix read 4,403 cached tokens on the next call. For routing affinity, Palantir documents the `X-Palantir-session-id` header, which the proxy accepts here through `experimental_decide({ headers })`.
-- `function_call`, `function_call_output`, and `custom_tool_call` input items. The SDK does not send these.
-- Public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
-- `stream` and `reasoning`. The SDK sends neither; it returns an unsupported warning for `reasoning` and `maxOutputTokens`.
-
-The SDK allows choice and score questions without `instructions`, but OpenAI requires them and returns HTTP 400. OpenAI also enforces 2–10 score levels and at least two choices.
+- Foundry rejects `prompt_cache_key` and `prompt_cache_options` with HTTP 400, so leave `providerOptions.openai.promptCacheKey` unset. Implicit caching still works: a repeated prefix of about 4,400 tokens was read from cache on the next call. Palantir documents the `X-Palantir-session-id` header for routing affinity; pass it through `experimental_decide({ headers })`.
+- Foundry rejects public image URLs (`InvalidImageUrl`). The SDK sends file state as data URLs.
+- The SDK allows choice and score questions without `instructions`, but OpenAI requires them and returns HTTP 400. OpenAI also enforces 1–400 questions, 2–10 score levels, and at least two choices.
 
 ## Findings
 

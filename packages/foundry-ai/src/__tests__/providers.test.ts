@@ -324,7 +324,7 @@ describe('provider adapters', () => {
 
   it('explains the SDK requirement when the OpenAI peer predates decision models', () => {
     expect(() => createFoundryOpenAI(config).decisionModel('gpt-6-luna')).toThrow(
-      'ai@>=7.0.176 and @ai-sdk/openai@>=4.0.120',
+      'an @ai-sdk/openai release with decisionModel',
     );
   });
 

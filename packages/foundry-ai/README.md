@@ -64,7 +64,7 @@ Server environment configuration is the validated runtime path. Palantir TSv1/TS
 
 ## Decisions (GPT-6 Luna)
 
-`openai.decisionModel('gpt-6-luna')` routes AI SDK's `experimental_decide` through Foundry's OpenAI `/decisions` proxy. It requires `ai@>=7.0.176` and `@ai-sdk/openai@>=4.0.120`; older peers throw when the model is created.
+`openai.decisionModel('gpt-6-luna')` routes AI SDK's `experimental_decide` through Foundry's OpenAI `/decisions` proxy. Verified with `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121; earlier SDK 7 releases had incompatible experimental decision contracts, and an `@ai-sdk/openai` without `decisionModel` throws.
 
 ```ts
 import { experimental_decide as decide } from 'ai';
@@ -79,7 +79,7 @@ const { answers } = await decide({
 });
 ```
 
-Boolean, choice, and score questions are supported. Foundry rejects `providerOptions.openai.promptCacheKey`, so the adapter throws before sending it. See [decision results](./docs/README.md#decisions).
+Boolean, choice, and score questions are supported. Do not set `providerOptions.openai.promptCacheKey`; Foundry rejects it with HTTP 400. See [decision results](./docs/README.md#decisions).
 
 ## Realtime (AI SDK 7 only)
 

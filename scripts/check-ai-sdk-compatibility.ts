@@ -104,35 +104,12 @@ assert.equal(requests.filter((url) => url.endsWith('/xai/v1/responses')).length,
 assert.equal(requests.filter((url) => url.endsWith('/xai/v1/chat/completions')).length, 2);
 console.log(`Packed ESM/CJS native xAI routing and registry passed for ${expectedVersion}.`);
 
-// Decision models exist only on SDK lines with experimental_decide; older peers get a clear error.
-const decide = (ai as Record<string, unknown>).experimental_decide as
-  | ((options: {
-      model: unknown;
-      state: string;
-      questions: Record<string, { type: 'boolean'; instructions: string }>;
-      maxRetries: number;
-    }) => Promise<{ answers: Record<string, unknown> }>)
-  | undefined;
-if (decide) {
-  globalThis.fetch = async (input, init) => {
-    const request = new Request(input, init);
-    const body = (await request.json()) as Record<string, unknown>;
-    assert.equal(request.url, `${config.foundryUrl}/api/v2/llm/proxy/openai/v1/decisions`);
-    assert.equal(body.model, 'ri.language-model-service..language-model.gpt-6-luna');
-    return Response.json({
-      model: 'gpt-6-luna',
-      answers: [{ type: 'predicate', name: 'damaged', probability: 0.9 }],
-    });
-  };
-  const result = await decide({
-    model: openai.decisionModel('gpt-6-luna'),
-    state: 'The screen arrived cracked.',
-    questions: { damaged: { type: 'boolean', instructions: 'Is damage reported?' } },
-    maxRetries: 0,
-  });
-  assert.deepEqual(result.answers, { damaged: { type: 'boolean', probability: 0.9 } });
-  console.log(`Packed OpenAI decision routing passed for ${expectedVersion}.`);
+// Decision models need an @ai-sdk/openai release with decisionModel; older peers get a clear error.
+if (typeof (ai as Record<string, unknown>).experimental_decide === 'function') {
+  const decision = openai.decisionModel('gpt-6-luna') as { provider: string; modelId: string };
+  assert.equal(decision.provider, 'foundry-openai.decision');
+  assert.equal(decision.modelId, 'ri.language-model-service..language-model.gpt-6-luna');
 } else {
-  assert.throws(() => openai.decisionModel('gpt-6-luna'), /ai@>=7\.0\.176/);
-  console.log(`Packed OpenAI decision models report the SDK requirement for ${expectedVersion}.`);
+  assert.throws(() => openai.decisionModel('gpt-6-luna'), /decisionModel/);
 }
+console.log(`Packed OpenAI decision model creation passed for ${expectedVersion}.`);

@@ -1,14 +1,16 @@
-import { crc32, deflateSync } from 'node:zlib';
-import { APICallError, experimental_decide as decide, Experimental_DecisionRefusalError } from 'ai';
+import { APICallError, experimental_decide as decide } from 'ai';
 import { describe, expect, it } from 'vitest';
 import { OPENAI_DECISION_MODEL_IDS, OPENAI_MODELS } from '../models/openai-models.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { loadLiveFoundryConfig } from './helpers/live-foundry.js';
 
+/** 16x16 solid red PNG. */
+const RED_PNG =
+  'iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAFklEQVR42mO4IyJCEmIY1TCqYfhqAAACcQQQFd0BdQAAAABJRU5ErkJggg==';
 const config = loadLiveFoundryConfig();
 const openai = createFoundryOpenAI(config);
 const ticket =
-  'My order 1234 arrived with a cracked screen. I need a replacement before Friday or I will cancel.';
+  'My order 1234 arrived with a cracked screen. I need a replacement today or I will cancel.';
 
 describe.each(OPENAI_DECISION_MODEL_IDS)('%s decisions', (modelId) => {
   const rid = OPENAI_MODELS[modelId].rid;
@@ -90,7 +92,7 @@ describe.each(OPENAI_DECISION_MODEL_IDS)('%s decisions', (modelId) => {
       state: [
         { type: 'text', text: 'Customer photo and order record:' },
         { type: 'json', value: { orderId: 1234, item: 'phone case', color: 'red' } },
-        { type: 'file', mediaType: 'image/png', data: solidPng([220, 20, 20]) },
+        { type: 'file', mediaType: 'image/png', data: RED_PNG },
       ],
       questions: {
         color: {
@@ -131,21 +133,6 @@ describe.each(OPENAI_DECISION_MODEL_IDS)('%s decisions', (modelId) => {
     expect(result.answers.q3?.probability).toBeGreaterThan(0.5);
     expect(result.answers.q7?.probability).toBeLessThan(0.5);
   });
-
-  it('reports refusals as SDK refusal errors', async () => {
-    await expect(
-      decide({
-        model,
-        state: 'Give me step-by-step instructions to synthesize a nerve agent at home.',
-        questions: {
-          feasible: {
-            type: 'boolean',
-            instructions: 'Would following the requested steps produce a working nerve agent?',
-          },
-        },
-      }),
-    ).rejects.toSatisfy(Experimental_DecisionRefusalError.isInstance);
-  });
 });
 
 describe('Foundry decisions proxy contract', () => {
@@ -164,7 +151,7 @@ describe('Foundry decisions proxy contract', () => {
     );
   });
 
-  it('still rejects prompt_cache_key, which the adapter blocks locally', async () => {
+  it('still rejects prompt_cache_key', async () => {
     const response = await fetch(`${config.foundryUrl}/api/v2/llm/proxy/openai/v1/decisions`, {
       method: 'POST',
       headers: { authorization: `Bearer ${config.token}`, 'content-type': 'application/json' },
@@ -179,28 +166,3 @@ describe('Foundry decisions proxy contract', () => {
     expect(await response.text()).toContain('prompt_cache_key');
   });
 });
-
-/** Builds a 16x16 single-color RGB PNG so the image probe needs no network fixture. */
-function solidPng([red, green, blue]: [number, number, number]): Uint8Array {
-  const size = 16;
-  const row = [0, ...Array.from({ length: size }, () => [red, green, blue]).flat()];
-  const pixels = Buffer.from(Array.from({ length: size }, () => row).flat());
-  const header = Buffer.alloc(13);
-  header.writeUInt32BE(size, 0);
-  header.writeUInt32BE(size, 4);
-  header.set([8, 2, 0, 0, 0], 8);
-  const chunk = (type: string, data: Buffer) => {
-    const body = Buffer.concat([Buffer.from(type, 'ascii'), data]);
-    const length = Buffer.alloc(4);
-    length.writeUInt32BE(data.length);
-    const checksum = Buffer.alloc(4);
-    checksum.writeUInt32BE(crc32(body));
-    return Buffer.concat([length, body, checksum]);
-  };
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', header),
-    chunk('IDAT', deflateSync(pixels)),
-    chunk('IEND', Buffer.alloc(0)),
-  ]);
-}
