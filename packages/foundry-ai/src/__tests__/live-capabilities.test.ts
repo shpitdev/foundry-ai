@@ -30,7 +30,6 @@ describe('live capability model matrix', () => {
     expect(matrix.anthropic).toEqual(['claude-haiku-4.5']);
     expect(matrix.google).toEqual(['gemini-3.1-flash-lite']);
     expect(matrix.openai).toEqual(['gpt-6-luna']);
-    expect(matrix['third-party']).toEqual([]);
     expect(matrix.xai).toEqual(['grok-4-6']);
   });
 
@@ -58,14 +57,9 @@ describe('live capability model matrix', () => {
     expect(matrix.anthropic).not.toContain('claude-opus-4.1');
     expect(matrix.google).not.toContain('gemini-3-pro');
     expect(matrix.google).toContain('gemini-3.8-flash');
-    expect(matrix['third-party']).toHaveLength(3);
-    expect(matrix['third-party']).not.toContain('grok-4-6');
     expect(matrix.xai).toHaveLength(7);
     expect(matrix.xai).toContain('grok-4-6');
     expect(matrix.xai).toContain('grok-4-7');
-    expect(matrix['third-party']).toContain('gemma-4-31b');
-    expect(matrix['third-party']).toContain('gemma-4-26b-a4b');
-    expect(matrix['third-party']).toContain('llama-3-3-nemotron-super-49b-v1-5');
   });
 
   it('keeps catalog coverage in descending model order after the preferred model', () => {
@@ -86,14 +80,15 @@ describe('live capability model matrix', () => {
     );
   });
 
-  it('selects the xAI catalog without any third-party models', () => {
+  it('selects only the xAI catalog when filtered to xAI', () => {
     process.env.FOUNDRY_URL = 'https://example.palantirfoundry.com';
     process.env.FOUNDRY_TOKEN = 'token-123';
     process.env.LIVE_MODEL_SCOPE = 'catalog';
     process.env.LIVE_PROVIDER_FILTER = 'xai';
     const matrix = getLiveCapabilityModelMatrix();
     expect(matrix.xai).toHaveLength(7);
-    expect(matrix['third-party']).toEqual([]);
+    expect(matrix.anthropic).toEqual([]);
+    expect(matrix.google).toEqual([]);
     expect(matrix.openai).toEqual([]);
   });
 

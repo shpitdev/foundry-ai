@@ -10,7 +10,7 @@ Install only the provider peers you use:
 pnpm add @nyrra/foundry-ai ai@7 @ai-sdk/openai@4
 ```
 
-Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk/xai@4` for Grok; third-party models use `@ai-sdk/openai`. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
+Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk/xai@4` for Grok. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
 
 ## Configure and call a model
 
@@ -29,7 +29,7 @@ const { text } = await generateText({
 console.log(text);
 ```
 
-For explicit configuration, pass `{ foundryUrl, token }` to the factory. Other factories are `createFoundryAnthropic`, `createFoundryGoogle`, `createFoundryXai`, and `createFoundryThirdParty`, imported from their respective `anthropic`, `google`, `xai`, and `third-party` subpaths.
+For explicit configuration, pass `{ foundryUrl, token }` to the factory. Other factories are `createFoundryAnthropic`, `createFoundryGoogle`, and `createFoundryXai`, imported from the `anthropic`, `google`, and `xai` subpaths.
 
 [Models and test status](./docs/README.md) covers model IDs, routing, known failures, and dated live results. Catalog membership alone does not establish feature support. CI verifies SDK compatibility offline; live Foundry probes are manual.
 
@@ -87,12 +87,8 @@ Use `createFoundryRealtime` and `createFoundryRealtimeSetup` from `@nyrra/foundr
 
 Foundry authenticates WebSockets with the current user's access token. It does not use OpenAI's client-secret endpoint. See [realtime setup and live results](./docs/README.md#realtime) for the browser flow and the manual test command.
 
-## Agent skill
+## Examples
 
-```sh
-npx skills add https://github.com/shpitdev/foundry-ai --skill foundry-ai-provider
-```
-
-The package also ships the skill at `skills/foundry-ai-provider/SKILL.md` for TanStack Intent discovery.
+[Runnable examples](https://github.com/shpitdev/foundry-ai/tree/main/examples) cover text, streaming, tool calls, and more.
 
 Copyright 2026 SHPIT LLC. [Apache-2.0](./LICENSE).

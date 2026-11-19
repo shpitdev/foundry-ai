@@ -16,7 +16,6 @@ const XAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2025-12-01T00:00:00Z',
     externalUrl: 'https://docs.x.ai/developers/models/grok-4.3',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-4-5': {
     rid: 'ri.language-model-service..language-model.grok-4-5',
@@ -31,7 +30,6 @@ const XAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2026-02-01T00:00:00Z',
     externalUrl: 'https://docs.x.ai/developers/models/grok-4.5',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-4-6': {
     rid: 'ri.language-model-service..language-model.grok-4-6',
@@ -46,7 +44,6 @@ const XAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2026-02-01T00:00:00Z',
     externalUrl: 'https://docs.x.ai/developers/models/grok-4.6',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-4-7': {
     rid: 'ri.language-model-service..language-model.grok-4-7',
@@ -60,7 +57,6 @@ const XAI_MODEL_DEFINITIONS = {
     },
     trainingCutoffDate: '2026-05-01T00:00:00Z',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-420-non-reasoning-latest': {
     rid: 'ri.language-model-service..language-model.grok-420-non-reasoning-latest',
@@ -74,7 +70,6 @@ const XAI_MODEL_DEFINITIONS = {
     },
     trainingCutoffDate: '2026-01-01T00:00:00Z',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-420-reasoning-latest': {
     rid: 'ri.language-model-service..language-model.grok-420-reasoning-latest',
@@ -88,7 +83,6 @@ const XAI_MODEL_DEFINITIONS = {
     },
     trainingCutoffDate: '2026-01-01T00:00:00Z',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
   'grok-build-0-1': {
     rid: 'ri.language-model-service..language-model.grok-build-0-1',
@@ -103,7 +97,6 @@ const XAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2025-03-17T00:00:00Z',
     externalUrl: 'https://x.ai/news/grok-build-0-1',
     modelCreator: 'X_AI',
-    transport: 'xai-responses',
   },
 } as const satisfies Record<string, ModelDefinition>;
 

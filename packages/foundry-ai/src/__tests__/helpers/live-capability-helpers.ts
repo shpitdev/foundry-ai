@@ -134,7 +134,7 @@ export function getReasoningExpectation(
   modelId: string,
   defaultModelId: string,
 ) {
-  if (provider === 'google' || provider === 'third-party' || provider === 'xai') {
+  if (provider === 'google' || provider === 'xai') {
     return 'investigate' as const;
   }
 

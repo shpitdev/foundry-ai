@@ -15,14 +15,14 @@ const { parseArgs, parseModelSelection } = (await import(helperModuleUrl)) as {
   };
   parseModelSelection: (value: string) => {
     modelId: string;
-    provider?: 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
+    provider?: 'openai' | 'anthropic' | 'google' | 'xai';
   };
 };
 
 describe('run-live-capability-suite args', () => {
   it('rejects removed documentation flags before a live run', () => {
-    expect(() => parseArgs(['--update-docs'], {})).toThrow('Live reports now stay local');
-    expect(() => parseArgs(['--no-update-docs'], {})).toThrow('Live reports now stay local');
+    expect(() => parseArgs(['--update-docs'], {})).toThrow('Live reports stay local');
+    expect(() => parseArgs(['--no-update-docs'], {})).toThrow('Live reports stay local');
   });
   it('selects xAI by provider or qualified model', () => {
     expect(parseArgs(['--provider', 'xai'], {}).extraEnv).toMatchObject({
@@ -35,12 +35,10 @@ describe('run-live-capability-suite args', () => {
     });
   });
 
-  it('selects the third-party model catalog from the CLI', () => {
-    expect(parseArgs(['--model', 'third-party:gemma-4-31b'], {}).extraEnv).toMatchObject({
-      LIVE_PROVIDER_FILTER: 'third-party',
-      LIVE_MODEL_FILTER: 'gemma-4-31b',
-      LIVE_MODEL_SCOPE: 'catalog',
-    });
+  it('rejects unsupported provider filters', () => {
+    expect(() => parseArgs(['--provider', 'unknown'], {})).toThrow(
+      'Expected --provider to be one of openai, anthropic, google, xai.',
+    );
   });
 
   it('promotes model-only runs to catalog scope by default', () => {

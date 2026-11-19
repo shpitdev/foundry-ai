@@ -16,7 +16,6 @@ const artifactRoot = resolve(
 );
 const runId = createRunId();
 const artifactPath = `.memory/capability-runs/${runId}`;
-const artifactSummaryPath = `${artifactPath}/harness-capability-results.md`;
 const artifactResultsPath = join(workspaceRoot, artifactPath, 'results.json');
 const { extraEnv, extraVitestArgs } = parseArgs(process.argv.slice(2));
 
@@ -33,49 +32,14 @@ const testExitCode = await runCommandWithProgress(
   { LIVE_CAPABILITY_RUN_ID: runId, ...extraEnv },
 );
 
-let exitCode = testExitCode;
-const hasResultsArtifact = existsSync(artifactResultsPath);
-
-if (hasResultsArtifact) {
-  const artifactSummaryExitCode = await runCommand('node', [
-    'scripts/update-harness-results-docs.mjs',
-    '--artifact',
-    artifactPath,
-    '--output',
-    artifactSummaryPath,
-  ]);
-
-  if (artifactSummaryExitCode !== 0 && exitCode === 0) {
-    exitCode = artifactSummaryExitCode;
-  }
-} else if (exitCode === 0) {
+if (testExitCode === 0 && !existsSync(artifactResultsPath)) {
   process.stderr.write(
     `Expected a live capability artifact at ${artifactResultsPath}, but no results were written.\n`,
   );
-  exitCode = 1;
+  process.exit(1);
 }
 
-process.exit(exitCode);
-
-function runCommand(command, args) {
-  return new Promise((resolve) => {
-    const child = spawn(command, args, {
-      cwd: workspaceRoot,
-      env: process.env,
-      stdio: 'inherit',
-    });
-
-    child.on('exit', (code, signal) => {
-      if (signal) {
-        process.stderr.write(`${command} terminated with signal ${signal}.\n`);
-        resolve(1);
-        return;
-      }
-
-      resolve(code ?? 1);
-    });
-  });
-}
+process.exit(testExitCode);
 
 function runCommandWithProgress(command, args, extraEnv) {
   return new Promise((resolve) => {

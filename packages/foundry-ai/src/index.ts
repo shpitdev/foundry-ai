@@ -42,12 +42,6 @@ export {
   type RealtimeModelId,
 } from './models/realtime-models.js';
 export {
-  type KnownThirdPartyModelId,
-  THIRD_PARTY_MODEL_IDS,
-  THIRD_PARTY_MODELS,
-  type ThirdPartyModelId,
-} from './models/third-party-models.js';
-export {
   type KnownXaiModelId,
   XAI_MODEL_IDS,
   XAI_MODELS,

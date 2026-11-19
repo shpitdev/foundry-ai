@@ -6,7 +6,7 @@ export interface FoundryConfig {
   traceState?: string;
 }
 
-export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'xai' | 'third-party';
+export type ModelProvider = 'openai' | 'anthropic' | 'google' | 'xai';
 export type ModelLifecycle = 'ga' | 'experimental';
 export type ModelInputType =
   | 'CLAUDE_CHAT'
@@ -42,8 +42,6 @@ export interface ModelDefinition {
   performance: ModelPerformance;
   externalUrl?: string;
   modelCreator?: string;
-  /** Verified proxy route; enrollment alone does not imply proxy support. */
-  transport?: 'openai-responses' | 'xai-responses' | 'unavailable';
 }
 
 export interface ModelMetadata extends ModelDefinition {

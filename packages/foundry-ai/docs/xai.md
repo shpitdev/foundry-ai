@@ -45,15 +45,6 @@ Native xAI already serializes assistant history as plain text. Foundry still rej
 
 Foundry omits `object: "response"` in Responses payloads and omits `output` in initial SSE response metadata. The native SDK requires these fields. A small fetch adapter supplies the omitted discriminator and an empty initial output array. It preserves explicit values, errors, content, and stream events; it does not synthesize missing reasoning-start events. Chat requests and responses bypass this adaptation.
 
-## Migrate from third-party
-
-- Replace the `third-party` factory import with `createFoundryXai` from the `xai` subpath for Grok calls.
-- Register `{ xai: createFoundryXai(config) }` and change `third-party:grok-*` registry selections to `xai:grok-*`.
-- Read Grok catalog entries from `XAI_MODELS` / `XAI_MODEL_IDS`; use `KnownXaiModelId` / `XaiModelId` for types.
-- Update provider filters and telemetry consumers to `xai` / `foundry-xai`. Model aliases and RIDs do not change. Install `@ai-sdk/xai` and use `providerOptions.xai` for supported options.
-
-Third-party no longer contains Grok catalog entries or xAI routing, and rejects Grok aliases and exact RIDs. No compatibility alias is retained.
-
 ## Verification
 
 Offline SDK fetch tests cover both URLs, alias/RID routing, custom IDs, identity and registry calls, authentication/trace headers, store handling before generate/stream calls, cancellation, and Responses history/tool normalization. Recorded response/SSE fixtures test native schema adaptation, text/tool parsing, an executed tool round-trip, and the September stream shape that omitted reasoning-start events. They complement the dated live checks below.

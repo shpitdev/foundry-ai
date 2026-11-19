@@ -18,9 +18,8 @@
     "test:live:full": "pnpm run test:live -- --catalog",
     "test:live:devtools": "pnpm exec nx run foundry-ai:test-live-devtools --outputStyle=stream-without-prefixes",
     "test:live:devtools:full": "pnpm run test:live:devtools -- --catalog",
-    "test:live:summary": "node scripts/update-harness-results-docs.mjs --stdout",
     "typecheck": "pnpm exec nx run foundry-ai:typecheck --outputStyle=static",
-    "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build skills-validate package-audit --projects=foundry-ai --outputStyle=static",
+    "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build package-audit --projects=foundry-ai --outputStyle=static",
     "verify:public-metadata": "node scripts/verify-public-metadata.mjs",
     "test:decisions": "pnpm exec nx run foundry-ai:test-decisions --outputStyle=stream-without-prefixes",
     "test:realtime": "pnpm exec nx run foundry-ai:test-realtime --outputStyle=stream-without-prefixes"
@@ -56,7 +55,6 @@
     "@swc-node/register": "~1.12.1",
     "@swc/core": "~1.16.2",
     "@swc/helpers": "~0.5.23",
-    "@tanstack/intent": "0.4.0",
     "@types/node": "26.5.1",
     "ai": "7.0.176",
     "nx": "23.2.1",
