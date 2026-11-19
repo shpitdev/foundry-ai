@@ -131,7 +131,7 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 
 ## Findings
 
-- **Rate limits:** no case returned HTTP 429 in this serial sweep. Earlier sweeps were throttled, so keep `--catalog` at concurrency 1 and rerun 429s in isolation.
+- **Rate limits:** no case returned HTTP 429 in this serial sweep. Earlier sweeps were throttled; rerun 429s in isolation.
 - **Flaky cases:** three sweep failures passed on isolated rerun, and the tables use the reruns: GPT-5.1 Codex text (the model refused the prompt), and JSON + tools on Grok 4.7 and Grok 420 non-reasoning.
 - **OpenAI reasoning streams:** the SDK rejects `response.reasoning_summary_part.added` events from the proxy with a type-validation error, so these probes fail even where text streaming passes. GPT-5 Nano is intermittent: it passed in the sweep and failed both isolated reruns. GPT-5 Nano and GPT-5.4 Mini, which passed on September 25, fail the same way on `main`, so this refresh did not cause them.
 - **xAI streaming:** Foundry now sends the reasoning-start events the native parser needs. Streaming text, streamed tools, and reasoning passed on every Grok alias except Grok 420 non-reasoning, which produced no reasoning signal. Grok 4.6 also passes on `main` with `@ai-sdk/xai` 4.0.58, so the change is on the proxy side, not the SDK bump.
@@ -189,20 +189,26 @@ For server-side use, [the realtime example](https://github.com/shpitdev/foundry-
 
 ```sh
 pnpm run example realtime gpt-realtime-2.1
-pnpm run test:realtime
-# Optional isolated model rerun:
-pnpm run test:realtime -- --testNamePattern 'gpt-realtime-1.5:'
+pnpm run test:live -- realtime
+# All four realtime models:
+LIVE_MODELS=openai pnpm run test:live -- realtime
 ```
 
-These tests are manual and write generated audio and results under `.memory/realtime-runs/`. They are excluded from CI and the HTTP live suite.
+These tests are manual and excluded from CI. The default live run covers `gpt-realtime-2.1`.
 
 ## Run manually
 
 With `FOUNDRY_URL` and `FOUNDRY_TOKEN` set, from the repository root:
 
 ```sh
-pnpm run test:live -- --catalog
-pnpm run test:decisions
+pnpm run test:live                              # default models
+pnpm run test:live -- realtime                  # one file: language, realtime, or decisions
+LIVE_MODELS=xai pnpm run test:live              # every catalog model of a provider
+LIVE_MODELS=gpt-5-nano,claude-opus-5.5 pnpm run test:live
+LIVE_MODELS=all pnpm run test:live              # catalog sweep
+pnpm run test:live -- -t 'openai:gpt-6-luna: JSON \+ tools$'
 ```
 
-Use `--provider xai` for the default Grok model, `--catalog --provider xai` for all seven Grok aliases, or `--model openai:gpt-6-luna` for a focused run. To rerun a single case, add `--testNamePattern 'openai:gpt-6-luna: deterministic tool loop$'`. Raw reports stay in `.memory/capability-runs/<runId>/` and record the installed SDK versions. Read the case statuses: survey failures need not fail the test process. Update this overview from reviewed results; do not replace it with raw reports.
+The defaults are `gpt-6-luna`, `claude-haiku-4.5`, `gemini-3.1-flash-lite`, `grok-4-6`, `text-embedding-3-small`, `gpt-realtime-2.1`, and decisions on `gpt-6-luna`. `LIVE_MODELS` takes a comma list of `all`, provider names, or catalog model IDs; an unknown token fails the run. Test names are `provider:model: column`, using the column names above, so `-t` selects a capability. Do not anchor `-t` with `^`: the suite name comes first.
+
+Every case is a hard assertion and runs serially. The default run must pass. A catalog sweep exits 1 on the known failures above; compare its failing test names with these tables. The Image case now sends an inline red PNG and requires the reply to name the color, which is stricter than the November 19 check. Each run writes Vitest's JSON report to `.memory/live/<timestamp>.json`. Update this overview from reviewed results; do not replace it with raw reports.

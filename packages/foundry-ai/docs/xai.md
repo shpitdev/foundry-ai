@@ -52,12 +52,12 @@ Offline SDK fetch tests cover both URLs, alias/RID routing, custom IDs, identity
 Run the affected manual survey with process-only `FOUNDRY_URL` and `FOUNDRY_TOKEN`:
 
 ```sh
-pnpm run test:live -- --catalog --provider xai
-# One model, including the explicit Chat Completions text probe:
-pnpm run test:live -- --model xai:grok-4-6
+LIVE_MODELS=xai pnpm run test:live -- language
+# One model, including the explicit Chat Completions probe:
+LIVE_MODELS=grok-4-6 pnpm run test:live -- language
 ```
 
-The standard capability cases use Responses. `chat.text.generate` separately probes the explicit Chat Completions method. Raw reports stay in `.memory/capability-runs/`; inspect individual statuses because beta-provider survey failures do not necessarily fail the test process. This is a manual integration check, not a CI or production-wide guarantee.
+The capability cases use Responses. A separate `Chat Completions rejected` case asserts that the explicit Chat Completions method still returns HTTP 400, so it fails when Foundry starts accepting those requests. This is a manual integration check, not a CI or production-wide guarantee.
 
 ### Live verification
 

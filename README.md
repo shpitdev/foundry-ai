@@ -23,12 +23,12 @@ pnpm run verify
 
 | Test layer | Coverage | CI |
 |---|---|---|
-| Unit | Config, catalog, adapter behavior, harness tooling | Yes |
-| Integration | Offline SDK tool loop, telemetry, packed-library compatibility | Yes |
-| API end-to-end | Manual Foundry capability harness | No; requires credentials |
+| Unit | Config, catalog, adapter behavior | Yes |
+| Integration | Offline SDK tool loop, packed-library compatibility | Yes |
+| API end-to-end | Manual live Vitest suite against Foundry | No; requires credentials |
 | Web end-to-end | None | No |
 
-Run `pnpm run test:live -- --model openai:gpt-6-luna` for a focused live probe. Use `--catalog` to survey the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains evidence limits and local artifacts.
+Run `pnpm run test:live` for the default live models, or `LIVE_MODELS=gpt-6-luna pnpm run test:live` for one model. `LIVE_MODELS=all` surveys the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains selection and evidence limits.
 
 Provider factories stay thin: config and catalog exports live at the package root, provider clients use separate subpaths, and applications compose registries with AI SDK `createProviderRegistry`.
 
