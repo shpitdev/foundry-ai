@@ -43,7 +43,7 @@ export interface ModelDefinition {
   externalUrl?: string;
   modelCreator?: string;
   /** Verified proxy route; enrollment alone does not imply proxy support. */
-  transport?: 'openai-chat' | 'openai-responses' | 'xai-responses' | 'unavailable';
+  transport?: 'openai-responses' | 'xai-responses' | 'unavailable';
 }
 
 export interface ModelMetadata extends ModelDefinition {

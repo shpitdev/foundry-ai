@@ -42,8 +42,7 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
         message: `${modelId} is enrolled in Foundry, but has no verified provider-compatible proxy route. See docs/README.md.`,
       });
     }
-    const model = metadata.transport === 'openai-chat' ? openai.chat(rid) : openai.responses(rid);
-    return wrapFoundryLanguageModel(model, {
+    return wrapFoundryLanguageModel(openai.responses(rid), {
       modelId,
       providerId,
       transformParams: (params) => {
@@ -57,7 +56,7 @@ export function createFoundryThirdParty(config: FoundryConfig): FoundryThirdPart
           ...params,
           providerOptions: {
             ...params.providerOptions,
-            openai: { ...options, store: metadata.transport === 'openai-chat' ? undefined : false },
+            openai: { ...options, store: false },
           },
         };
       },

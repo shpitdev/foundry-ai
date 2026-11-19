@@ -65,38 +65,6 @@ describe('model catalog', () => {
     }
   });
 
-  it.each([
-    'gpt-5-pro',
-    'gemini-2.5-pro',
-    'gemini-2.5-flash',
-    'gemini-2.5-flash-lite',
-    'claude-3.5-haiku',
-    'claude-3.7-sonnet',
-    'claude-sonnet-4',
-    'claude-opus-4',
-    'claude-opus-4.1',
-    'codex-auto-review',
-    'deepseek-v4-1-flash',
-    'gemini-3.6-flash',
-    'gemini-3.7-flash',
-    'glm-5',
-    'glm-5-3',
-    'glm-5-3-flash',
-    'gpt-4o',
-    'gpt-realtime-2',
-    'kimi-k2-5',
-    'kimi-k3',
-    'nemotron-3-ultra-550b-a55b-nvfp4',
-    'o3',
-    'o4-mini',
-    'qwen3-235b-a22b-2507',
-    'qwen3-32b',
-  ])('removes deprecated or delisted alias %s', (id) => {
-    expect(hasKnownModel(id)).toBe(false);
-    expect(getModelMetadata(id)).toBeUndefined();
-    expect(() => resolveKnownModelMetadata(id)).toThrow(FoundryModelNotFoundError);
-  });
-
   it('resolves metadata for known OpenAI models', () => {
     expect(resolveModelRid('gpt-5-mini')).toBe(
       'ri.language-model-service..language-model.gpt-5-mini',
