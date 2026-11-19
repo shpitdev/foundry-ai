@@ -57,21 +57,6 @@
       },
       "cache": false
     },
-    "docs-harness-results": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node scripts/update-harness-results-docs.mjs",
-        "cwd": "{workspaceRoot}"
-      },
-      "cache": false
-    },
-    "skills-validate": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm exec intent validate packages/foundry-ai/skills",
-        "cwd": "{workspaceRoot}"
-      }
-    },
     "package-audit": {
       "dependsOn": ["build"],
       "executor": "nx:run-commands",

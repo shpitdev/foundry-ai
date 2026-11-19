@@ -19,7 +19,7 @@ pnpm install --frozen-lockfile
 pnpm run verify
 ```
 
-`verify` runs release-policy checks, Biome, Vitest, typecheck, build, skill validation, and package-content audit through Nx. CI also tests the packed library with AI SDK 6, SDK 7 stable, and the supported late SDK 7 beta line.
+`verify` runs release-policy checks, Biome, Vitest, typecheck, build, and package-content audit through Nx. CI also tests the packed library with AI SDK 6, SDK 7 stable, and the supported late SDK 7 beta line.
 
 | Test layer | Coverage | CI |
 |---|---|---|
@@ -30,6 +30,6 @@ pnpm run verify
 
 Run `pnpm run test:live -- --model openai:gpt-6-luna` for a focused live probe. Use `--catalog` to survey the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains evidence limits and local artifacts.
 
-Provider factories stay thin: config and catalog exports live at the package root, provider clients use separate subpaths, and applications compose registries with AI SDK `createProviderRegistry`. Base examples are shared with the published agent skill through the `examples/base` symlink.
+Provider factories stay thin: config and catalog exports live at the package root, provider clients use separate subpaths, and applications compose registries with AI SDK `createProviderRegistry`.
 
 Copyright 2026 SHPIT LLC. [Apache-2.0](./LICENSE). See [security reporting](./SECURITY.md).

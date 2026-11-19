@@ -22,19 +22,20 @@ import type {
   OpenAIModelId,
 } from '../models/openai-models.js';
 
+const enrollments = JSON.parse(
+  readFileSync(new URL('./fixtures/foundry-model-catalog.json', import.meta.url), 'utf8'),
+) as Array<{
+  rid: string;
+  modelIdentifier: string;
+  displayName: string;
+  lifecycle: string;
+  trainingCutoffDate?: string;
+  performance: { cost?: string; modelClass?: string; speed?: string };
+  externalUrl?: string;
+}>;
+
 describe('model catalog', () => {
   it('only catalogs models present and active in the retained Foundry CLI listing', () => {
-    const enrollments = JSON.parse(
-      readFileSync(new URL('./fixtures/foundry-model-catalog.json', import.meta.url), 'utf8'),
-    ) as Array<{
-      rid: string;
-      modelIdentifier: string;
-      displayName: string;
-      lifecycle: string;
-      trainingCutoffDate?: string;
-      performance: { cost?: string; modelClass?: string; speed?: string };
-      externalUrl?: string;
-    }>;
     for (const [id, model] of Object.entries(MODEL_CATALOG)) {
       const enrollment = enrollments.find((entry) =>
         model.inputTypes.some((type) => type === 'OPEN_AI_EMBEDDINGS')
@@ -63,6 +64,20 @@ describe('model catalog', () => {
         enrollment?.externalUrl,
       );
     }
+  });
+
+  it.each([
+    'gemma-4-31b',
+    'gemma-4-26b-a4b',
+    'llama-3-3-nemotron-super-49b-v1-5',
+    'llama-3-2-nv-embedqa-1b-v2',
+    'schematic-7B',
+    'snowflake-arctic-embed-medium',
+  ])('leaves listed but unsupported model %s uncataloged', (modelId) => {
+    const rid = `ri.language-model-service..language-model.${modelId}`;
+    expect(enrollments.some((entry) => entry.rid === rid)).toBe(true);
+    expect(getModelMetadata(modelId)).toBeUndefined();
+    expect(resolveModelTarget(rid)).toEqual({ rid, metadata: undefined });
   });
 
   it('resolves metadata for known OpenAI models', () => {

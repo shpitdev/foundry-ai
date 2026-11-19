@@ -2,19 +2,16 @@ import { createProviderRegistry, generateText, NoSuchModelError } from 'ai';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { XAI_MODEL_IDS, XAI_MODELS } from '../index.js';
 import { MODEL_CATALOG, resolveModelTarget } from '../models/catalog.js';
-import { THIRD_PARTY_MODELS } from '../models/third-party-models.js';
-import { createFoundryThirdParty } from '../providers/third-party.js';
 import { createFoundryXai } from '../providers/xai.js';
 
 describe('xAI catalog identity', () => {
-  it('classifies every Grok alias and RID as xai, separate from third-party', () => {
+  it('classifies every Grok alias and RID as xai', () => {
     const grok = Object.entries(MODEL_CATALOG).filter(([id]) => id.startsWith('grok-'));
     expect(grok).toHaveLength(XAI_MODEL_IDS.length);
     expect(grok.map(([id]) => id)).toEqual([...XAI_MODEL_IDS]);
-    for (const [alias, metadata] of grok) {
+    for (const [, metadata] of grok) {
       expect(metadata.provider).toBe('xai');
       expect(resolveModelTarget(metadata.rid).metadata?.provider).toBe('xai');
-      expect(THIRD_PARTY_MODELS).not.toHaveProperty(alias);
     }
   });
 
@@ -27,7 +24,6 @@ describe('xAI catalog identity', () => {
       modelCreator: 'X_AI',
       provider: 'xai',
       trainingCutoffDate: '2026-05-01T00:00:00Z',
-      transport: 'xai-responses',
       performance: { modelClass: 'REASONING' },
       supportsResponses: true,
       supportsVision: true,
@@ -137,10 +133,7 @@ describe('xAI routing through the real SDK', () => {
   it('defaults callable, languageModel and registry calls to Responses with xAI identity', async () => {
     const requests = captureRequests();
     const xai = createFoundryXai(config);
-    const registry = createProviderRegistry({
-      xai,
-      'third-party': createFoundryThirdParty(config),
-    });
+    const registry = createProviderRegistry({ xai });
     for (const model of [
       xai('grok-4-6'),
       xai.languageModel('grok-4-6'),
@@ -151,7 +144,6 @@ describe('xAI routing through the real SDK', () => {
     }
     expect(requests).toHaveLength(3);
     expect(requests.every((r) => r.url.endsWith('/xai/v1/responses'))).toBe(true);
-    expect(() => registry.languageModel('third-party:grok-4-6')).toThrow(NoSuchModelError);
     expect(() => registry.embeddingModel('xai:grok-4-6')).toThrow(NoSuchModelError);
     expect(() => registry.imageModel('xai:grok-4-6')).toThrow(NoSuchModelError);
   });
@@ -165,7 +157,7 @@ describe('xAI routing through the real SDK', () => {
         await generateText({ model: xai[route](id), prompt: 'OK', maxRetries: 0 });
         expect((await readBody(requests.at(-1)!)).model).toBe(id);
       }
-      for (const id of ['gpt-5', 'gemma-4-31b', resolveModelTarget('gemma-4-31b').rid]) {
+      for (const id of ['gpt-5', resolveModelTarget('gpt-5').rid]) {
         expect(() => xai[route](id)).toThrow(NoSuchModelError);
       }
     },

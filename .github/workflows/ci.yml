@@ -48,22 +48,25 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec nx run-many -t release-policy-check lint test typecheck build skills-validate package-audit --projects=foundry-ai --outputStyle=static
+      - run: pnpm run verify
       - name: Verify AI SDK 6 and 7 compatibility
         run: |
           compatibility_dir="$RUNNER_TEMP/foundry-ai-sdk-7"
           mkdir -p "$compatibility_dir"
           pnpm --dir packages/foundry-ai pack --pack-destination "$compatibility_dir"
-          cp scripts/check-ai-sdk-compatibility.ts "$compatibility_dir"
+          cp .github/fixtures/packed-library.ts "$compatibility_dir"
           cd "$compatibility_dir"
           npm init --yes
           npm pkg set type=module
+          # Prevent tsx from resolving workspace source if the scratch directory is inside the repo.
+          printf '{}\n' > tsconfig.json
+          verify_sdk() {
+            ./node_modules/.bin/tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node packed-library.ts
+            ./node_modules/.bin/tsx packed-library.ts "$1"
+          }
           npm install ./nyrra-foundry-ai-*.tgz ai@^7.0.0 @ai-sdk/anthropic@^4.0.0 @ai-sdk/google@^4.0.0 @ai-sdk/openai@^4.0.0 @ai-sdk/xai@^4.0.58 @types/json-schema @types/node tsx typescript
-          npx tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node check-ai-sdk-compatibility.ts
-          npx tsx check-ai-sdk-compatibility.ts v4
+          verify_sdk v4
           npm install ai@6.0.224 @ai-sdk/anthropic@3.0.96 @ai-sdk/google@3.0.91 @ai-sdk/openai@3.0.84 @ai-sdk/xai@3.0.132
-          npx tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node check-ai-sdk-compatibility.ts
-          npx tsx check-ai-sdk-compatibility.ts v3
+          verify_sdk v3
           npm install ai@7.0.0-beta.187 @ai-sdk/anthropic@4.0.0-beta.69 @ai-sdk/google@4.0.0-beta.85 @ai-sdk/openai@4.0.0-beta.77 @ai-sdk/xai@4.0.0-beta.76
-          npx tsc --ignoreConfig --noEmit --module nodenext --moduleResolution nodenext --strict --target es2022 --types node check-ai-sdk-compatibility.ts
-          npx tsx check-ai-sdk-compatibility.ts v4
+          verify_sdk v4

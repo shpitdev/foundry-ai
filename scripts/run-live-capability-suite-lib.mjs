@@ -28,7 +28,7 @@ export function parseArgs(args, env = process.env) {
 
     if (arg === '--update-docs' || arg === '--no-update-docs') {
       throw new Error(
-        'Live reports now stay local. Remove the docs flag and use pnpm run test:live:summary.',
+        'Live reports stay local under .memory/capability-runs/. Remove the docs flag.',
       );
     }
 
@@ -36,9 +36,7 @@ export function parseArgs(args, env = process.env) {
       const provider = args[index + 1];
 
       if (!isLiveProvider(provider)) {
-        throw new Error(
-          'Expected --provider to be one of openai, anthropic, google, xai, third-party.',
-        );
+        throw new Error('Expected --provider to be one of openai, anthropic, google, xai.');
       }
 
       extraEnv.LIVE_PROVIDER_FILTER = provider;
@@ -109,13 +107,7 @@ export function parseModelSelection(value) {
 }
 
 export function isLiveProvider(value) {
-  return (
-    value === 'openai' ||
-    value === 'anthropic' ||
-    value === 'google' ||
-    value === 'xai' ||
-    value === 'third-party'
-  );
+  return value === 'openai' || value === 'anthropic' || value === 'google' || value === 'xai';
 }
 
 function shouldPromoteModelSelectionToCatalog({

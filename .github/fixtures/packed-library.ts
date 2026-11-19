@@ -3,7 +3,6 @@ import { createRequire } from 'node:module';
 import { createFoundryAnthropic } from '@nyrra/foundry-ai/anthropic';
 import { createFoundryGoogle } from '@nyrra/foundry-ai/google';
 import { createFoundryOpenAI } from '@nyrra/foundry-ai/openai';
-import { createFoundryThirdParty } from '@nyrra/foundry-ai/third-party';
 import { createFoundryXai } from '@nyrra/foundry-ai/xai';
 import * as ai from 'ai';
 import { createProviderRegistry, generateText, type LanguageModel } from 'ai';
@@ -22,9 +21,7 @@ const openai = createFoundryOpenAI(config);
 const anthropic = createFoundryAnthropic(config);
 const google = createFoundryGoogle(config);
 const xai = createFoundryXai(config);
-const thirdParty = createFoundryThirdParty(config);
 const providersAndModels = [
-  { provider: thirdParty, model: thirdParty('gemma-4-31b') },
   { provider: xai, model: xai('grok-4-6') },
   { provider: xai, model: xai.responses('grok-4-6') },
   { provider: xai, model: xai.chat('grok-4-6') },

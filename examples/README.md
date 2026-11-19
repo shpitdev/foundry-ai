@@ -29,4 +29,4 @@ pnpm run example streaming anthropic claude-sonnet-5
 
 DevTools examples additionally require `EXA_API_KEY`. They write `.devtools/generations.json`; run `pnpm exec devtools` to open the viewer at `http://localhost:4983`.
 
-`base/` links to the package's published skill examples; `advanced/` contains repo-only examples. See [models and test status](../packages/foundry-ai/docs/README.md) before choosing a model for a feature.
+See [models and test status](../packages/foundry-ai/docs/README.md) before choosing a model for a feature.

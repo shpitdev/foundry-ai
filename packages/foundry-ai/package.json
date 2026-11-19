@@ -54,11 +54,6 @@
       "import": "./dist/providers/xai.mjs",
       "require": "./dist/providers/xai.cjs"
     },
-    "./third-party": {
-      "types": "./dist/providers/third-party.d.ts",
-      "import": "./dist/providers/third-party.mjs",
-      "require": "./dist/providers/third-party.cjs"
-    },
     "./realtime": {
       "types": "./dist/providers/realtime.d.ts",
       "import": "./dist/providers/realtime.mjs",
@@ -68,7 +63,6 @@
   "files": [
     "dist",
     "docs",
-    "skills",
     "LICENSE",
     "NOTICE",
     "README.md"
@@ -80,7 +74,6 @@
     "@ai-sdk/anthropic": "4.0.106",
     "@ai-sdk/google": "4.0.122",
     "@ai-sdk/openai": "4.0.121",
-    "@tanstack/intent": "0.4.0",
     "ai": "7.0.176",
     "@ai-sdk/xai": "4.0.59"
   },

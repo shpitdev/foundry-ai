@@ -37,14 +37,6 @@ live-model model:
 live-provider provider:
   pnpm run test:live:devtools -- --provider {{provider}}
 
-# Prints the latest generated live summary artifact, including runs started via devtools.
-live-summary:
-  pnpm run test:live:summary
-
-# Validate the published skill bundle after touching skill docs or reference examples.
-skills:
-  pnpm exec nx run foundry-ai:skills-validate --outputStyle=static
-
 # `verify` is the required preflight before opening a stable release PR.
 verify:
   pnpm run verify

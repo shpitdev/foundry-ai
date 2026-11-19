@@ -1,7 +1,0 @@
-interface:
-  display_name: "Foundry AI Provider"
-  short_description: "Wire Foundry proxy endpoints into AI SDK apps"
-  default_prompt: "Use $foundry-ai-provider to wire @nyrra/foundry-ai into this app with the smallest correct setup."
-
-policy:
-  allow_implicit_invocation: true
