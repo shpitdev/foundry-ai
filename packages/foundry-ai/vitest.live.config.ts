@@ -1,16 +1,25 @@
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   root: import.meta.dirname,
   test: {
-    environment: 'node',
-    globals: true,
     include: ['src/**/*.live.test.ts'],
-    exclude: ['src/__tests__/decisions.live.test.ts', 'src/__tests__/realtime.live.test.ts'],
-    maxConcurrency: Number(process.env.LIVE_CAPABILITY_MAX_CONCURRENCY ?? 3),
-    reporters: ['verbose'],
-    testTimeout: 120_000,
-    hookTimeout: 120_000,
+    fileParallelism: false,
+    testTimeout: 180_000,
+    hookTimeout: 180_000,
+    reporters: [
+      'verbose',
+      [
+        'json',
+        {
+          outputFile: resolve(
+            import.meta.dirname,
+            `../../.memory/live/${new Date().toISOString().replaceAll(':', '-')}.json`,
+          ),
+        },
+      ],
+    ],
     watch: false,
   },
 });

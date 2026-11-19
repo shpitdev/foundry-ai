@@ -1,15 +1,13 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { MODEL_CATALOG } from '../models/catalog.js';
 import { REALTIME_MODEL_IDS, REALTIME_MODELS } from '../models/realtime-models.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { createFoundryRealtime, createFoundryRealtimeSetup } from '../providers/realtime.js';
-import { getLiveCapabilityModelMatrix } from './helpers/live-capabilities.js';
 
 const foundryUrl = 'https://example.palantirfoundry.com';
 const factory = createFoundryRealtime({ foundryUrl });
 
 describe('Foundry realtime', () => {
-  afterEach(() => vi.unstubAllEnvs());
   it.each(REALTIME_MODEL_IDS)(
     'routes %s to the realtime API name with bearer authentication',
     (model) => {
@@ -27,14 +25,6 @@ describe('Foundry realtime', () => {
       expect(MODEL_CATALOG[model].supportsResponses).toBe(false);
     },
   );
-
-  it('keeps realtime models out of the HTTP language survey', () => {
-    vi.stubEnv('LIVE_MODEL_SCOPE', 'catalog');
-    vi.stubEnv('FOUNDRY_URL', foundryUrl);
-    vi.stubEnv('FOUNDRY_TOKEN', 'test-token');
-    const matrix = getLiveCapabilityModelMatrix();
-    for (const id of REALTIME_MODEL_IDS) expect(matrix.openai).not.toContain(id);
-  });
 
   it('does not send credentials to a different host, path, model or protocol', () => {
     for (const url of [

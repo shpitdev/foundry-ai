@@ -45,7 +45,6 @@ Thumbs.db
 .env.local
 .dev.vars
 .wrangler
-.tanstack
 .turbo
 .agent
 .agents
