@@ -29,7 +29,7 @@ describe('live capability model matrix', () => {
 
     expect(matrix.anthropic).toEqual(['claude-haiku-4.5']);
     expect(matrix.google).toEqual(['gemini-3.1-flash-lite']);
-    expect(matrix.openai).toEqual(['gpt-5-nano']);
+    expect(matrix.openai).toEqual(['gpt-6-luna']);
     expect(matrix['third-party']).toEqual([]);
     expect(matrix.xai).toEqual(['grok-4-6']);
   });
@@ -75,7 +75,7 @@ describe('live capability model matrix', () => {
 
     const matrix = getLiveCapabilityModelMatrix();
 
-    expect(matrix.openai[0]).toBe('gpt-5-nano');
+    expect(matrix.openai[0]).toBe('gpt-6-luna');
     expect(matrix.anthropic[0]).toBe('claude-haiku-4.5');
     expect(matrix.openai.indexOf('gpt-5.4')).toBeLessThan(matrix.openai.indexOf('gpt-4.1'));
     expect(matrix.anthropic.indexOf('claude-opus-4.8')).toBeLessThan(
