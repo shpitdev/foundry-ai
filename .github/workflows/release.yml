@@ -20,8 +20,6 @@ jobs:
   # Each package releases independently: scripts/release-packages.mjs picks the packages this PR
   # publishes from its changed files and skips private ones. Publish jobs build and tag the merge
   # commit and queue per package and channel, so one package's runs never displace another's.
-  # Publishing always authenticates through OIDC. Restricted packages also need a read-only token
-  # for version lookups and cannot carry provenance.
   select-packages:
     if: >-
       vars.NPM_PUBLISH_ENABLED == 'true' &&
@@ -81,17 +79,6 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: npm install --global npm@11.16.0
-      - name: Authenticate restricted package reads
-        if: matrix.package.access == 'restricted'
-        env:
-          NPM_READ_TOKEN: ${{ secrets.NPM_READ_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "${NPM_READ_TOKEN}" ]; then
-            echo "::error::Restricted packages need the read-only NPM_READ_TOKEN secret."
-            exit 1
-          fi
-          echo "NODE_AUTH_TOKEN=${NPM_READ_TOKEN}" >> "$GITHUB_ENV"
       - run: pnpm install --frozen-lockfile
       - name: Prepare prerelease version
         id: meta
@@ -131,11 +118,9 @@ jobs:
         if: steps.check.outputs.already_published != 'true'
         env:
           PACKAGE_DIR: ${{ matrix.package.dir }}
-          ACCESS: ${{ matrix.package.access }}
-          PROVENANCE: ${{ matrix.package.access == 'public' }}
         run: |
           cd "${PACKAGE_DIR}"
-          NODE_AUTH_TOKEN="" npm publish --access "${ACCESS}" --tag next --provenance="${PROVENANCE}"
+          NODE_AUTH_TOKEN="" npm publish --access public --tag next --provenance
 
   publish-stable:
     needs: select-packages
@@ -166,17 +151,6 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: npm install --global npm@11.16.0
-      - name: Authenticate restricted package reads
-        if: matrix.package.access == 'restricted'
-        env:
-          NPM_READ_TOKEN: ${{ secrets.NPM_READ_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "${NPM_READ_TOKEN}" ]; then
-            echo "::error::Restricted packages need the read-only NPM_READ_TOKEN secret."
-            exit 1
-          fi
-          echo "NODE_AUTH_TOKEN=${NPM_READ_TOKEN}" >> "$GITHUB_ENV"
       - run: pnpm install --frozen-lockfile
       - name: Build and audit
         env:
@@ -219,11 +193,9 @@ jobs:
         if: steps.check.outputs.already_published != 'true'
         env:
           PACKAGE_DIR: ${{ matrix.package.dir }}
-          ACCESS: ${{ matrix.package.access }}
-          PROVENANCE: ${{ matrix.package.access == 'public' }}
         run: |
           cd "${PACKAGE_DIR}"
-          NODE_AUTH_TOKEN="" npm publish --access "${ACCESS}" --tag latest --provenance="${PROVENANCE}"
+          NODE_AUTH_TOKEN="" npm publish --access public --tag latest --provenance
       - name: Tag stable release
         env:
           PKG_NAME: ${{ steps.meta.outputs.name }}

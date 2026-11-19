@@ -30,21 +30,9 @@ export function isPublishable(entry) {
   return readManifest(entry).private !== true;
 }
 
-/** npm access: public packages publish with provenance; restricted ones cannot have it. */
-export function readAccess(entry) {
-  const access = readManifest(entry).publishConfig?.access;
-  if (access !== 'public' && access !== 'restricted') {
-    throw new Error(
-      `${entry.dir}/package.json needs publishConfig.access "public" or "restricted".`,
-    );
-  }
-  return access;
-}
-
 /**
  * The package's npm dist-tags. Every publishable package exists on npm (its first version is
- * published by hand), so a failed lookup is an error: usually missing read access to a restricted
- * package, which npm reports as not found.
+ * published by hand), so a failed lookup is an error rather than a missing package.
  */
 export function readDistTags({ name }) {
   try {
@@ -56,8 +44,6 @@ export function readDistTags({ name }) {
       ),
     );
   } catch (error) {
-    throw new Error(
-      `Cannot read npm dist-tags for ${name}. Restricted packages need an npm login (NPM_READ_TOKEN in CI).\n${error.stderr || error.message}`,
-    );
+    throw new Error(`Cannot read npm dist-tags for ${name}.\n${error.stderr || error.message}`);
   }
 }

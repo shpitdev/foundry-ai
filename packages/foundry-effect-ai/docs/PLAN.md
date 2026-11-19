@@ -2,7 +2,7 @@
 
 `@shpitdev/foundry-effect-ai` gives Effect AI programs the Foundry coverage `@shpitdev/foundry-ai` gives the Vercel AI SDK: OpenAI, Anthropic, Google and xAI models through Foundry's LLM proxy, addressed by catalog alias or RID. It ships as one package whose only peer dependency is `effect`, and an application that uses one vendor bundles only that vendor's code.
 
-The package publishes to npm with access restricted to the `shpitdev` org until phase 8 makes it public. The scaffold, guardrails and protocol notes are in place; every public function is a stub that dies with a pointer to this file.
+Release candidates publish to npm's `next` tag as phases land; phase 8 cuts the first stable release. The scaffold, guardrails and protocol notes are in place; every public function is a stub that dies with a pointer to this file.
 
 ## Decisions
 
@@ -90,7 +90,7 @@ packages/foundry-effect-ai/
 | 5 | `GoogleLanguageModel` | Gemini row has no todos; live passes. Highest risk: `effect/ai` has no Gemini structured-output codec. |
 | 6 | `OpenAiEmbeddingModel` | All three catalog embedding models pass live. |
 | 7 | Chat Completions | Starts only after a live probe shows a Foundry route accepting `/chat/completions`. Today every OpenAI alias serves Responses and xAI chat returns HTTP 400. |
-| 8 | Go public | Every published version audited, then made public as described in [RELEASING.md](../../../docs/RELEASING.md); full-catalog live sweep recorded in a package `docs/README.md`; stable release with provenance. |
+| 8 | Stable release | Full-catalog live sweep recorded in a package `docs/README.md`; `pnpm run release foundry-effect-ai` (see [RELEASING.md](../../../docs/RELEASING.md)). |
 
 ## Per-phase checklist
 

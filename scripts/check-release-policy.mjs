@@ -3,7 +3,7 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
-import { isPublishable, packages, readAccess, readManifest } from './packages.mjs';
+import { isPublishable, packages, readManifest } from './packages.mjs';
 
 const workflowSource = readFileSync('.github/workflows/release.yml', 'utf8');
 const workflow = parse(workflowSource);
@@ -23,6 +23,10 @@ requireCondition(
   workflow.jobs?.['bootstrap-package'] == null,
   'The retired new-package bootstrap job must not exist.',
 );
+requireCondition(
+  !workflowSource.includes('secrets.'),
+  'Release jobs publish through OIDC and must not use secrets.',
+);
 
 for (const entry of packages) {
   const manifest = readManifest(entry);
@@ -40,9 +44,10 @@ for (const entry of packages) {
     group.releaseTag?.pattern === `${entry.name}@{version}`,
     `Release group ${entry.project} must tag ${entry.name}@{version}.`,
   );
-  if (isPublishable(entry)) {
-    readAccess(entry);
-  }
+  requireCondition(
+    !isPublishable(entry) || manifest.publishConfig?.access === 'public',
+    `${entry.name} must publish with public access, which provenance requires.`,
+  );
 }
 
 // Gates are compared whole: a substring check would accept an inverted clause.
@@ -100,37 +105,15 @@ for (const [name, channel, branchGate] of [
     job.steps?.some((step) => step.run === 'npm install --global npm@11.16.0'),
     `${name} must pin a trusted-publishing-compatible npm version.`,
   );
-  const readStep = job.steps?.findIndex(
-    (step) => step.env?.NPM_READ_TOKEN === '${{ secrets.NPM_READ_TOKEN }}',
-  );
   requireCondition(
-    readStep >= 0 &&
-      job.steps[readStep].if === "matrix.package.access == 'restricted'" &&
-      job.steps[readStep].run.includes(
-        'echo "NODE_AUTH_TOKEN=${NPM_READ_TOKEN}" >> "$GITHUB_ENV"',
-      ) &&
-      job.steps.findIndex((step) => step.run?.includes('npm view')) > readStep,
-    `${name} must export NPM_READ_TOKEN, for restricted packages only, before any npm lookup.`,
-  );
-  const publish = job.steps?.find((step) => step.run?.includes('npm publish'));
-  requireCondition(
-    publish?.env?.ACCESS === '${{ matrix.package.access }}' &&
-      publish.env.PROVENANCE === "${{ matrix.package.access == 'public' }}" &&
-      publish.run.includes(
-        `NODE_AUTH_TOKEN="" npm publish --access "\${ACCESS}" --tag ${channel} --provenance="\${PROVENANCE}"`,
+    job.steps?.some((step) =>
+      step.run?.includes(
+        `NODE_AUTH_TOKEN="" npm publish --access public --tag ${channel} --provenance`,
       ),
-    `${name} must publish to ${channel} through OIDC, with provenance exactly when the package is public.`,
+    ),
+    `${name} must publish to ${channel} through OIDC rather than an npm token.`,
   );
 }
-
-requireCondition(
-  workflowSource.split('secrets.NPM_READ_TOKEN').length === 3,
-  'Only the two restricted-read steps may use NPM_READ_TOKEN.',
-);
-requireCondition(
-  !/secrets\.(?!NPM_READ_TOKEN\b)/.test(workflowSource),
-  'Release jobs publish through OIDC and must not use other secrets.',
-);
 
 for (const job of Object.values(workflow.jobs ?? {})) {
   for (const step of job.steps ?? []) {
