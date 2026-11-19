@@ -11,6 +11,7 @@ The runner builds first and uses Bun when installed, otherwise Node with tsx.
 | Example name | Purpose |
 |---|---|
 | `realtime` | SDK 7 realtime WebSocket text; optional realtime model argument |
+| `decisions` | GPT-6 Luna boolean, choice, and score answers |
 | `basic-text` | Blocking text generation |
 | `streaming` | Streaming text |
 | `structured-output` | Zod schema output |

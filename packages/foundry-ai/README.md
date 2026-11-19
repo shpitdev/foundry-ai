@@ -1,6 +1,6 @@
 # @nyrra/foundry-ai
 
-Use Vercel AI SDK language models, OpenAI embeddings, and realtime audio through Palantir Foundry's proxy endpoints.
+Use Vercel AI SDK language models, GPT-6 Luna decisions, OpenAI embeddings, and realtime audio through Palantir Foundry's proxy endpoints.
 
 ## Install
 
@@ -61,6 +61,25 @@ const { embedding } = await embed({
 Compose multiple providers with AI SDK `createProviderRegistry`; this package exports no registry wrapper. See the [runnable examples](https://github.com/shpitdev/foundry-ai/blob/main/examples/README.md) for registry and tool workflows.
 
 Server environment configuration is the validated runtime path. Palantir TSv1/TSv2 functions and `PlatformClient` fetch integration have not been verified end to end.
+
+## Decisions (GPT-6 Luna)
+
+`openai.decisionModel('gpt-6-luna')` routes AI SDK's `experimental_decide` through Foundry's OpenAI `/decisions` proxy. It requires `ai@>=7.0.176` and `@ai-sdk/openai@>=4.0.120`; older peers throw when the model is created.
+
+```ts
+import { experimental_decide as decide } from 'ai';
+
+const { answers } = await decide({
+  model: openai.decisionModel('gpt-6-luna'),
+  state: 'My order arrived with a cracked screen.',
+  questions: {
+    damaged: { type: 'boolean', instructions: 'Is a damaged item reported?' },
+    route: { type: 'choice', instructions: 'Which team?', criteria: { billing: null, shipping: null } },
+  },
+});
+```
+
+Boolean, choice, and score questions are supported. Foundry rejects `providerOptions.openai.promptCacheKey`, so the adapter throws before sending it. See [decision results](./docs/README.md#decisions).
 
 ## Realtime (AI SDK 7 only)
 

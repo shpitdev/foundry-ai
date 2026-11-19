@@ -1,6 +1,6 @@
 ---
 name: foundry-ai-provider
-description: Use when integrating @nyrra/foundry-ai with AI SDK 6 or 7 for Palantir Foundry proxy calls, model routing, tools, OpenAI embeddings, or SDK 7 realtime.
+description: Use when integrating @nyrra/foundry-ai with AI SDK 6 or 7 for Palantir Foundry proxy calls, model routing, tools, OpenAI embeddings, GPT-6 Luna decisions, or SDK 7 realtime.
 ---
 
 # Foundry AI provider
@@ -16,6 +16,7 @@ Read the package's `../../README.md` for installation and config, and `../../doc
 - Use `createFoundryXai` for Grok, with registry prefix `xai:`. Its callable and `languageModel` default to Responses; explicit `responses` and `chat` use the respective beta xAI routes. The native xAI SDK supplies serialization and the `xai` option namespace; model identity is `foundry-xai`. See `../../docs/xai.md` for migration and live limitations.
 - Select the SDK for the served proxy protocol, not just the model creator. Kimi, GLM, and DeepSeek remain third-party; their observed combined tool/JSON failures have a staged workaround, not a verified SDK replacement. See `../../docs/README.md#sdk-selection-and-reasoning-diagnostics`.
 - Never enable `providerOptions.openai.store` or `providerOptions.xai.store`. Keep Anthropic eager tool streaming disabled.
+- Use `createFoundryOpenAI(config).decisionModel('gpt-6-luna')` with `experimental_decide` for boolean, choice, and score decisions. It requires `ai@>=7.0.176` and `@ai-sdk/openai@>=4.0.120`. Do not set `providerOptions.openai.promptCacheKey`; Foundry rejects it.
 - Only OpenAI exposes embeddings. Realtime uses the separate `realtime` subpath, requires SDK 7/provider v4, and authenticates with a current Foundry user token. Never return a server service token to a browser. See the package docs for setup; OpenAI client-secret minting is not supported. Image generation and standalone speech/transcription are not exposed.
 - Validate Palantir TSv1/TSv2 or `PlatformClient` integrations before claiming those runtimes work.
 

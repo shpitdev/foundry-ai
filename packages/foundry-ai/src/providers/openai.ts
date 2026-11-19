@@ -9,13 +9,22 @@ import {
 import { resolveModelTarget } from '../models/catalog.js';
 import {
   isKnownOpenAIReasoningTarget,
+  type OpenAIDecisionModelId,
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
 } from '../models/openai-models.js';
 import type { FoundryConfig } from '../types.js';
 
-type FoundryEmbeddingModel = ReturnType<ReturnType<typeof createOpenAI>['embeddingModel']>;
+type BaseOpenAIProvider = ReturnType<typeof createOpenAI>;
+type FoundryEmbeddingModel = ReturnType<BaseOpenAIProvider['embeddingModel']>;
 type FoundryFunctionTool = NonNullable<FoundryCallOptions['tools']>[number];
+/** AI SDK decision model; `never` with SDK versions that predate the Decisions API. */
+export type FoundryDecisionModel = BaseOpenAIProvider extends {
+  decisionModel(modelId: string): infer Model;
+}
+  ? Model
+  : never;
+type FoundryDecisionCallOptions = Parameters<FoundryDecisionModel['doDecide']>[0];
 
 export interface FoundryOpenAIProvider {
   (modelId: OpenAIModelId): FoundryLanguageModel;
@@ -24,6 +33,8 @@ export interface FoundryOpenAIProvider {
   responses(modelId: OpenAIModelId): FoundryLanguageModel;
   embeddingModel(modelId: OpenAIEmbeddingModelId): FoundryEmbeddingModel;
   embedding(modelId: OpenAIEmbeddingModelId): FoundryEmbeddingModel;
+  /** GPT-6 Luna through Foundry's `/decisions` route. Requires `ai@>=7.0.176` and `@ai-sdk/openai@>=4.0.120`. */
+  decisionModel(modelId: OpenAIDecisionModelId): FoundryDecisionModel;
   imageModel(modelId: string): never;
 }
 
@@ -70,6 +81,29 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
     return baseProvider.embeddingModel(resolvedModel.rid);
   };
 
+  const createDecisionModel = (modelId: OpenAIDecisionModelId): FoundryDecisionModel => {
+    const decisionProvider = baseProvider as Partial<
+      Record<'decisionModel', (modelId: string) => FoundryDecisionModel>
+    >;
+    if (typeof decisionProvider.decisionModel !== 'function') {
+      throw new Error(
+        'Foundry OpenAI decision models require ai@>=7.0.176 and @ai-sdk/openai@>=4.0.120.',
+      );
+    }
+    const model = decisionProvider.decisionModel(resolveModelTarget(modelId).rid);
+
+    return {
+      specificationVersion: model.specificationVersion,
+      provider: model.provider,
+      modelId,
+      supportedQuestionTypes: model.supportedQuestionTypes,
+      doDecide: (options: FoundryDecisionCallOptions) => {
+        assertFoundryDecisionOptions(options);
+        return model.doDecide(options);
+      },
+    };
+  };
+
   function provider(modelId: OpenAIModelId): FoundryLanguageModel {
     return createLanguageModel(modelId);
   }
@@ -81,6 +115,7 @@ export function createFoundryOpenAI(config: FoundryConfig): FoundryOpenAIProvide
   callableProvider.responses = createLanguageModel;
   callableProvider.embeddingModel = createEmbeddingModel;
   callableProvider.embedding = createEmbeddingModel;
+  callableProvider.decisionModel = createDecisionModel;
   callableProvider.imageModel = (modelId: string) => {
     throw new NoSuchModelError({ modelId, modelType: 'imageModel' });
   };
@@ -114,6 +149,14 @@ function applyOpenAICompat(
     },
     ...(params.tools != null ? { tools: params.tools.map(applyOpenAIFunctionToolCompat) } : {}),
   };
+}
+
+function assertFoundryDecisionOptions(options: FoundryDecisionCallOptions): void {
+  if (asRecord(options.providerOptions?.openai).promptCacheKey != null) {
+    throw new Error(
+      'Foundry OpenAI decisions do not support providerOptions.openai.promptCacheKey; the Foundry proxy rejects prompt_cache_key.',
+    );
+  }
 }
 
 function asRecord(value: unknown): Record<string, unknown> {

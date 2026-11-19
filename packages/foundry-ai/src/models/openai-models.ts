@@ -614,6 +614,13 @@ export const OPENAI_EMBEDDING_MODEL_IDS = Object.freeze(
   Object.keys(OPENAI_EMBEDDING_MODELS),
 ) as readonly KnownOpenAIEmbeddingModelId[];
 
+/** Models verified on Foundry's OpenAI `/decisions` proxy route. */
+export const OPENAI_DECISION_MODEL_IDS = Object.freeze([
+  'gpt-6-luna',
+] as const satisfies readonly KnownOpenAIModelId[]);
+export type KnownOpenAIDecisionModelId = (typeof OPENAI_DECISION_MODEL_IDS)[number];
+export type OpenAIDecisionModelId = KnownOpenAIDecisionModelId | (string & {});
+
 const OPENAI_REASONING_MODEL_TARGETS = new Set(
   Object.entries(OPENAI_MODELS)
     .filter(([, metadata]) => modelSupportsInputType(metadata, 'OPEN_AI_REASONING'))
