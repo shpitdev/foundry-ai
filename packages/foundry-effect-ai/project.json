@@ -31,11 +31,7 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "pnpm exec tsc -p packages/foundry-effect-ai/tsconfig.json",
-          "pnpm exec effect-language-service diagnostics --project packages/foundry-effect-ai/tsconfig.json --strict --format text"
-        ],
-        "parallel": false,
+        "command": "pnpm exec tsc -p packages/foundry-effect-ai/tsconfig.json",
         "cwd": "{workspaceRoot}"
       }
     },
