@@ -21,7 +21,7 @@ export type InputItem =
       readonly role: 'assistant';
       readonly id?: string;
       readonly status: 'completed';
-      readonly content: ReadonlyArray<{
+      readonly content: Array<{
         readonly type: 'output_text';
         readonly text: string;
         readonly annotations: ReadonlyArray<never>;
@@ -40,7 +40,11 @@ export type InputItem =
       readonly arguments: string;
       readonly id?: string;
     }
-  | { readonly type: 'function_call_output'; readonly call_id: string; readonly output: string };
+  | {
+      readonly type: 'function_call_output';
+      readonly call_id: string;
+      readonly output: string | ReadonlyArray<InputContent>;
+    };
 
 export interface FunctionTool {
   readonly type: 'function';
@@ -93,10 +97,10 @@ export const Usage = Schema.Struct({
   output_tokens_details: Schema.optional(Schema.NullOr(Schema.Struct({ reasoning_tokens: Count }))),
 });
 
-const ErrorObject = Schema.Struct({
-  code: Schema.optional(Schema.NullOr(Schema.String)),
-  message: Schema.optional(Schema.NullOr(Schema.String)),
-});
+const Text = Schema.optional(Schema.NullOr(Schema.Union([Schema.String, Schema.Finite])));
+
+/** `{ code, type, message }`, read leniently: every field may be absent, null or numeric. */
+export const ErrorObject = Schema.Struct({ code: Text, type: Text, message: Text });
 
 export const MessageItem = Schema.Struct({
   type: Schema.Literal('message'),
@@ -124,6 +128,7 @@ export const FunctionCallItem = Schema.Struct({
   call_id: Schema.String,
   name: Schema.String,
   arguments: Schema.String,
+  status: Schema.optional(Schema.NullOr(Schema.String)),
 });
 
 export const OutputItem = Schema.Union([MessageItem, ReasoningItem, FunctionCallItem]);
@@ -135,6 +140,7 @@ export const outputItemTypes: ReadonlySet<string> = new Set([
 
 export const Response = Schema.Struct({
   id: Schema.String,
+  status: Schema.optional(Schema.NullOr(Schema.String)),
   model: Schema.String,
   created_at: Schema.Finite,
   output: Schema.Array(Schema.Unknown),
@@ -144,6 +150,13 @@ export const Response = Schema.Struct({
   ),
   error: Schema.optional(Schema.NullOr(ErrorObject)),
 });
+
+/** A 2xx body: a response, or an error envelope in nested (`{error:{...}}`) or flat form. */
+export const Body = Schema.Union([
+  Response,
+  Schema.Struct({ error: ErrorObject }),
+  Schema.Struct({ error: Schema.String, code: Text, type: Text }),
+]);
 
 export const Event = Schema.Union([
   Schema.Struct({
@@ -158,6 +171,7 @@ export const Event = Schema.Union([
   Schema.Struct({
     type: Schema.Literal('response.output_text.delta'),
     item_id: Schema.String,
+    content_index: Schema.Finite,
     delta: Schema.String,
   }),
   // Foundry sends `response.reasoning_summary_part.added` without item or summary index, so
@@ -176,6 +190,7 @@ export const Event = Schema.Union([
   Schema.Struct({
     type: Schema.Literals(['response.completed', 'response.incomplete']),
     response: Schema.Struct({
+      status: Schema.optional(Schema.NullOr(Schema.String)),
       usage: Schema.optional(Schema.NullOr(Usage)),
       incomplete_details: Schema.optional(
         Schema.NullOr(Schema.Struct({ reason: Schema.optional(Schema.NullOr(Schema.String)) })),
@@ -186,10 +201,12 @@ export const Event = Schema.Union([
     type: Schema.Literal('response.failed'),
     response: Schema.Struct({ error: Schema.optional(Schema.NullOr(ErrorObject)) }),
   }),
+  // Flat (`code`, `message` beside `type`) or nested under `error`.
   Schema.Struct({
     type: Schema.Literal('error'),
-    code: Schema.optional(Schema.NullOr(Schema.String)),
-    message: Schema.optional(Schema.NullOr(Schema.String)),
+    code: Text,
+    message: Text,
+    error: Schema.optional(Schema.NullOr(ErrorObject)),
   }),
 ]);
 export const eventTypes: ReadonlySet<string> = new Set([

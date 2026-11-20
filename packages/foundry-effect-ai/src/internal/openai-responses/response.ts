@@ -17,21 +17,34 @@ const module = 'OpenAiLanguageModel';
 export const invalidResponse = (method: string, description: string): AiError.AiError =>
   AiError.make({ module, method, reason: new AiError.InvalidResponseError({ description }) });
 
-/** A failure the provider reported inside a successful HTTP response or stream. */
-export const providerError = (
-  method: string,
-  error: {
-    readonly code?: string | null | undefined;
-    readonly message?: string | null | undefined;
-  },
-): AiError.AiError =>
-  AiError.make({
-    module,
-    method,
-    reason: new AiError.InternalProviderError({
-      description: [error.code, error.message].filter(Boolean).join(': ') || 'Response failed',
-    }),
-  });
+type ErrorFields = typeof Wire.ErrorObject.Type;
+
+const quotaCodes = new Set(['insufficient_quota', 'billing_insufficient_balance']);
+const rateLimitCodes = new Set(['rate_limit_exceeded', 'rate_limit_error', 'requests', 'tokens']);
+
+/**
+ * A failure reported inside a successful HTTP response or stream. Quota and rate-limit codes
+ * keep their own reasons; anything else is a provider failure. Code and type stay in metadata.
+ */
+export const providerError = (method: string, error: ErrorFields): AiError.AiError => {
+  const code = error.code == null ? undefined : String(error.code);
+  const type = error.type == null ? undefined : String(error.type);
+  const metadata = { [metadataKey]: { code: code ?? null, type: type ?? null } };
+  const matches = (codes: ReadonlySet<string>) => codes.has(code ?? '') || codes.has(type ?? '');
+  let reason: AiError.AiErrorReason;
+  if (matches(quotaCodes)) {
+    reason = new AiError.QuotaExhaustedError({ metadata });
+  } else if (matches(rateLimitCodes)) {
+    reason = new AiError.RateLimitError({ metadata });
+  } else {
+    const message = error.message == null ? undefined : String(error.message);
+    reason = new AiError.InternalProviderError({
+      description: [code ?? type, message].filter(Boolean).join(': ') || 'Response failed',
+      metadata,
+    });
+  }
+  return AiError.make({ module, method, reason });
+};
 
 export const timestamp = (createdAt: number): string =>
   DateTime.formatIso(DateTime.makeUnsafe(createdAt * 1000));
@@ -47,19 +60,29 @@ export const decodeItem = (method: string, item: unknown) =>
     AiError.make({ module, method, reason: AiError.InvalidResponseError.fromSchemaError(error) }),
   );
 
-const finishReasons: Readonly<Record<string, Response.FinishReason>> = {
-  content_filter: 'content-filter',
-  max_output_tokens: 'length',
-};
-
-export const finishReason = (
-  reason: string | null | undefined,
-  hasToolCalls: boolean,
-): Response.FinishReason => {
-  if (reason == null) {
-    return hasToolCalls ? 'tool-calls' : 'stop';
+/**
+ * As the OpenAI peer decides it: a completed function call wins over a refusal, so tools still
+ * run; an incomplete response without a known reason is `other`, never `stop`.
+ */
+export const finishReason = (outcome: {
+  readonly status: string | null | undefined;
+  readonly reason: string | null | undefined;
+  readonly hasToolCalls: boolean;
+  readonly hasRefusal: boolean;
+}): Response.FinishReason => {
+  if (outcome.reason === 'max_output_tokens') {
+    return 'length';
   }
-  return Object.hasOwn(finishReasons, reason) ? (finishReasons[reason] ?? 'unknown') : 'unknown';
+  if (outcome.reason === 'content_filter') {
+    return 'content-filter';
+  }
+  if (outcome.hasToolCalls) {
+    return 'tool-calls';
+  }
+  if (outcome.reason != null || outcome.status === 'incomplete') {
+    return 'other';
+  }
+  return outcome.hasRefusal ? 'content-filter' : 'stop';
 };
 
 const minus = (total: number | undefined, part: number | undefined) =>
@@ -146,12 +169,37 @@ export const itemMetadata = (
   ),
 });
 
+/**
+ * A completed function call. Its wire arguments stay in metadata: strict tools normalize the
+ * parameters for Effect, and replay must send what the model produced, not that shape.
+ */
+export const toolCall = Effect.fnUntraced(function* (
+  method: string,
+  options: LanguageModel.ProviderOptions,
+  item: typeof Wire.FunctionCallItem.Type,
+) {
+  const part: Response.ToolCallPartEncoded = {
+    type: 'tool-call',
+    id: item.call_id,
+    name: item.name,
+    params: yield* toolParams(method, options, item.name, item.arguments),
+    metadata: itemMetadata({ itemId: item.id, arguments: item.arguments }),
+  };
+  return part;
+});
+
 export const decodeResponse = Effect.fnUntraced(function* (
-  body: typeof Wire.Response.Type,
+  body: typeof Wire.Body.Type,
   options: LanguageModel.ProviderOptions,
 ) {
-  if (body.error != null) {
-    return yield* providerError('generateText', body.error);
+  if (!('output' in body)) {
+    return yield* providerError(
+      'generateText',
+      typeof body.error === 'string' ? { ...body, message: body.error } : body.error,
+    );
+  }
+  if (body.error != null || body.status === 'failed') {
+    return yield* providerError('generateText', body.error ?? {});
   }
   const parts: Array<Response.PartEncoded> = [
     {
@@ -162,6 +210,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
     },
   ];
   let hasToolCalls = false;
+  let hasRefusal = false;
   for (const raw of body.output) {
     if (!knownItem(raw)) {
       continue;
@@ -181,6 +230,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
               metadata: itemMetadata({ itemId: item.id }),
             });
           } else if (content.type === 'refusal') {
+            hasRefusal = true;
             parts.push({
               type: 'text',
               text: '',
@@ -201,20 +251,23 @@ export const decodeResponse = Effect.fnUntraced(function* (
         break;
       }
       case 'function_call':
+        // A call cut off by the output limit has partial arguments; the finish reports it.
+        if (item.status === 'incomplete') {
+          break;
+        }
         hasToolCalls = true;
-        parts.push({
-          type: 'tool-call',
-          id: item.call_id,
-          name: item.name,
-          params: yield* toolParams('generateText', options, item.name, item.arguments),
-          metadata: itemMetadata({ itemId: item.id }),
-        });
+        parts.push(yield* toolCall('generateText', options, item));
         break;
     }
   }
   parts.push({
     type: 'finish',
-    reason: finishReason(body.incomplete_details?.reason, hasToolCalls),
+    reason: finishReason({
+      status: body.status,
+      reason: body.incomplete_details?.reason,
+      hasToolCalls,
+      hasRefusal,
+    }),
     usage: usage(body.usage),
   });
   return parts;

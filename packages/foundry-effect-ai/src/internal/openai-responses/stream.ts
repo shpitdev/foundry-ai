@@ -1,8 +1,9 @@
 // Adapted from @effect/ai-openai (MIT), effect@4.1.4, 82904fe.
 /**
- * Responses server-sent events → Effect AI stream parts. Only `response.completed` or
- * `response.incomplete` finishes a stream: an in-band error fails it, and a stream that ends
- * without a terminal event fails with `InvalidResponseError`.
+ * Responses server-sent events → Effect AI stream parts. The first `response.completed` or
+ * `response.incomplete` closes open blocks, emits the finish and stops reading. An in-band
+ * error fails the stream, and a stream that ends or sends `[DONE]` before a terminal event
+ * fails with `InvalidResponseError`.
  */
 import type * as AiError from 'effect/ai/AiError';
 import type * as LanguageModel from 'effect/ai/LanguageModel';
@@ -20,7 +21,7 @@ import {
   knownItem,
   providerError,
   timestamp,
-  toolParams,
+  toolCall,
   usage,
 } from './response.ts';
 import * as Wire from './schema.ts';
@@ -35,9 +36,24 @@ export const decodeStream = (
 ): Stream.Stream<Response.StreamPartEncoded, AiError.AiError> => {
   let finished = false;
   let hasToolCalls = false;
-  // Open reasoning blocks by item, by summary index, with the item's latest ciphertext.
+  let hasRefusal = false;
+  // Open blocks by wire item: text by content index, reasoning by summary index.
+  const text = new Map<string, Set<number>>();
   const reasoning = new Map<string, { encrypted: string | undefined; open: Set<number> }>();
-  const toolCalls = new Map<number, { readonly id: string; readonly name: string }>();
+  const toolCalls = new Map<number, string>();
+
+  const endText = (itemId: string) => {
+    const parts: Array<Response.StreamPartEncoded> = [];
+    for (const index of text.get(itemId) ?? []) {
+      parts.push({
+        type: 'text-end',
+        id: `${itemId}:${index}`,
+        metadata: itemMetadata({ itemId }),
+      });
+    }
+    text.delete(itemId);
+    return parts;
+  };
 
   const endReasoning = (itemId: string, indexes: Iterable<number>) => {
     const state = reasoning.get(itemId);
@@ -53,10 +69,20 @@ export const decodeStream = (
     return parts;
   };
 
+  /** Ends every open block, so a cut-off response still leaves well-formed parts. */
+  const endAll = () => [
+    ...[...text.keys()].flatMap((itemId) => endText(itemId)),
+    ...[...reasoning].flatMap(([itemId, state]) => endReasoning(itemId, state.open)),
+    ...[...toolCalls.values()].map((id): Response.StreamPartEncoded => ({
+      type: 'tool-params-end',
+      id,
+    })),
+  ];
+
   const handle = Effect.fnUntraced(function* (event: Sse.Event) {
     const parts: Array<Response.StreamPartEncoded> = [];
     if (event.data === '[DONE]') {
-      return parts;
+      return yield* invalidResponse(method, 'Stream sent [DONE] before response.completed');
     }
     const data = yield* Effect.mapError(decodeData(event.data), (error) =>
       invalidResponse(method, `Malformed event data: ${error.message}`),
@@ -88,11 +114,20 @@ export const decodeStream = (
         const item = yield* decodeItem(method, decoded.item);
         const added = decoded.type === 'response.output_item.added';
         if (item.type === 'message') {
-          parts.push({
-            type: added ? 'text-start' : 'text-end',
-            id: item.id,
-            metadata: itemMetadata({ itemId: item.id }),
-          });
+          if (added) {
+            break;
+          }
+          parts.push(...endText(item.id));
+          const refusal = item.content.find((content) => content.type === 'refusal')?.refusal;
+          if (refusal !== undefined) {
+            // A refusal streams no text: an empty block carries the explanation.
+            hasRefusal = true;
+            const id = `${item.id}:refusal`;
+            parts.push(
+              { type: 'text-start', id },
+              { type: 'text-end', id, metadata: itemMetadata({ itemId: item.id, refusal }) },
+            );
+          }
         } else if (item.type === 'reasoning') {
           const state = reasoning.get(item.id) ?? { encrypted: undefined, open: new Set() };
           state.encrypted = item.encrypted_content ?? state.encrypted;
@@ -109,28 +144,34 @@ export const decodeStream = (
             reasoning.delete(item.id);
           }
         } else if (added) {
-          toolCalls.set(decoded.output_index, { id: item.call_id, name: item.name });
+          toolCalls.set(decoded.output_index, item.call_id);
           parts.push({ type: 'tool-params-start', id: item.call_id, name: item.name });
         } else {
-          // The finished item's arguments are authoritative over the streamed deltas.
-          hasToolCalls = true;
           toolCalls.delete(decoded.output_index);
-          parts.push(
-            { type: 'tool-params-end', id: item.call_id },
-            {
-              type: 'tool-call',
-              id: item.call_id,
-              name: item.name,
-              params: yield* toolParams(method, options, item.name, item.arguments),
-              metadata: itemMetadata({ itemId: item.id }),
-            },
-          );
+          parts.push({ type: 'tool-params-end', id: item.call_id });
+          // The finished item's arguments are authoritative; an incomplete call is not a call.
+          if (item.status !== 'incomplete') {
+            hasToolCalls = true;
+            parts.push(yield* toolCall(method, options, item));
+          }
         }
         break;
       }
-      case 'response.output_text.delta':
-        parts.push({ type: 'text-delta', id: decoded.item_id, delta: decoded.delta });
+      case 'response.output_text.delta': {
+        const open = text.get(decoded.item_id) ?? new Set();
+        const id = `${decoded.item_id}:${decoded.content_index}`;
+        if (!open.has(decoded.content_index)) {
+          open.add(decoded.content_index);
+          text.set(decoded.item_id, open);
+          parts.push({
+            type: 'text-start',
+            id,
+            metadata: itemMetadata({ itemId: decoded.item_id }),
+          });
+        }
+        parts.push({ type: 'text-delta', id, delta: decoded.delta });
         break;
+      }
       case 'response.reasoning_summary_text.delta': {
         const state = reasoning.get(decoded.item_id) ?? { encrypted: undefined, open: new Set() };
         reasoning.set(decoded.item_id, state);
@@ -149,31 +190,43 @@ export const decodeStream = (
         break;
       }
       case 'response.function_call_arguments.delta': {
-        const call = toolCalls.get(decoded.output_index);
-        if (call !== undefined) {
-          parts.push({ type: 'tool-params-delta', id: call.id, delta: decoded.delta });
+        const id = toolCalls.get(decoded.output_index);
+        if (id !== undefined) {
+          parts.push({ type: 'tool-params-delta', id, delta: decoded.delta });
         }
         break;
       }
       case 'response.completed':
       case 'response.incomplete':
         finished = true;
-        parts.push({
+        parts.push(...endAll(), {
           type: 'finish',
-          reason: finishReason(decoded.response.incomplete_details?.reason, hasToolCalls),
+          reason: finishReason({
+            status:
+              decoded.response.status ??
+              (decoded.type === 'response.incomplete' ? 'incomplete' : undefined),
+            reason: decoded.response.incomplete_details?.reason,
+            hasToolCalls,
+            hasRefusal,
+          }),
           usage: usage(decoded.response.usage),
         });
         break;
       case 'response.failed':
         return yield* providerError(method, decoded.response.error ?? {});
       case 'error':
-        return yield* providerError(method, decoded);
+        return yield* providerError(
+          method,
+          decoded.error ?? { code: decoded.code, message: decoded.message },
+        );
     }
     return parts;
   });
 
   return events.pipe(
     Stream.mapEffect(handle),
+    // Stop reading at the terminal event, even if the connection stays open.
+    Stream.takeUntil(() => finished),
     Stream.flattenIterable,
     Stream.concat(
       Stream.suspend(() =>

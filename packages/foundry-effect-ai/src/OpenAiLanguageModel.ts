@@ -58,7 +58,7 @@ export const make = Effect.fnUntraced(function* (options: {
     codecTransformer: toCodecOpenAI,
     generateText: Effect.fnUntraced(function* (providerOptions) {
       const request = yield* makeRequest(providerOptions, target, reasoning);
-      const body = yield* client.json({ path, body: request, schema: Wire.Response });
+      const body = yield* client.json({ path, body: request, schema: Wire.Body });
       return yield* decodeResponse(body, providerOptions);
     }),
     streamText: (providerOptions) =>

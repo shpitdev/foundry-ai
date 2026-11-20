@@ -42,10 +42,30 @@ const imageUrl = (part: Prompt.FilePart): string =>
     ? part.data.href
     : `data:${part.mediaType};base64,${typeof part.data === 'string' ? part.data : Base64.encode(part.data)}`;
 
-const toolOutput = (part: Prompt.ToolResultPart): string =>
-  part.modelOutput === undefined
-    ? stringify(part.result)
-    : part.modelOutput.map((output) => (output.type === 'text' ? output.text : '')).join('');
+const unsupportedFile = (mediaType: string) =>
+  fail(
+    new AiError.InvalidUserInputError({
+      description: `Unsupported file type ${mediaType}; send images only`,
+    }),
+  );
+
+/** A tool result as text, or its model output as input parts (Foundry accepts images there). */
+const toolOutput = Effect.fnUntraced(function* (part: Prompt.ToolResultPart) {
+  if (part.modelOutput === undefined) {
+    return stringify(part.result);
+  }
+  const content: Array<Wire.InputContent> = [];
+  for (const output of part.modelOutput) {
+    if (output.type === 'text') {
+      content.push({ type: 'input_text', text: output.text });
+    } else if (output.mediaType.startsWith('image/')) {
+      content.push({ type: 'input_image', image_url: imageUrl(output) });
+    } else {
+      return yield* unsupportedFile(output.mediaType);
+    }
+  }
+  return content;
+});
 
 const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target: Target) {
   const input: Array<Wire.InputItem> = [];
@@ -65,29 +85,36 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
           } else if (part.mediaType.startsWith('image/')) {
             content.push({ type: 'input_image', image_url: imageUrl(part) });
           } else {
-            return yield* fail(
-              new AiError.InvalidUserInputError({
-                description: `Unsupported file type ${part.mediaType}; send images only`,
-              }),
-            );
+            return yield* unsupportedFile(part.mediaType);
           }
         }
         input.push({ role: 'user', content });
         break;
       }
       case 'assistant': {
-        // Summary parts of one reasoning item replay as one item.
+        // Parts of one wire item (text blocks, reasoning summaries) replay as one item.
+        const messages = new Map<string, Extract<Wire.InputItem, { type: 'message' }>>();
         const reasoning = new Map<string, Extract<Wire.InputItem, { type: 'reasoning' }>>();
         for (const part of message.content) {
           const itemId = option(part.options, 'itemId');
           if (part.type === 'text') {
-            input.push({
-              type: 'message',
-              role: 'assistant',
-              status: 'completed',
-              content: [{ type: 'output_text', text: part.text, annotations: [] }],
-              ...(itemId === undefined ? undefined : { id: itemId }),
-            });
+            const content = { type: 'output_text' as const, text: part.text, annotations: [] };
+            const item = itemId === undefined ? undefined : messages.get(itemId);
+            if (item === undefined) {
+              const created: Extract<Wire.InputItem, { type: 'message' }> = {
+                type: 'message',
+                role: 'assistant',
+                status: 'completed',
+                content: [content],
+                ...(itemId === undefined ? undefined : { id: itemId }),
+              };
+              if (itemId !== undefined) {
+                messages.set(itemId, created);
+              }
+              input.push(created);
+            } else {
+              item.content.push(content);
+            }
           } else if (part.type === 'reasoning' && itemId !== undefined) {
             const encrypted = option(part.options, 'encryptedContent');
             const item = reasoning.get(itemId);
@@ -113,7 +140,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
               type: 'function_call',
               call_id: part.id,
               name: part.name,
-              arguments: stringify(part.params),
+              arguments: option(part.options, 'arguments') ?? stringify(part.params),
               ...(itemId === undefined ? undefined : { id: itemId }),
             });
           }
@@ -126,7 +153,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
             input.push({
               type: 'function_call_output',
               call_id: part.id,
-              output: toolOutput(part),
+              output: yield* toolOutput(part),
             });
           }
         }
@@ -147,10 +174,21 @@ const unsupportedSchema = (error: unknown) =>
 export const isStrict = (tool: Tool.Any): boolean => Tool.getStrictMode(tool) ?? true;
 
 const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.ProviderOptions) {
+  const choice = options.toolChoice;
+  const required =
+    choice === 'required' ||
+    (typeof choice === 'object' && ('tool' in choice || choice.mode === 'required'));
   if (options.tools.length === 0) {
+    if (required) {
+      return yield* fail(
+        new AiError.ToolConfigurationError({
+          toolName: typeof choice === 'object' && 'tool' in choice ? String(choice.tool) : '',
+          description: 'The tool choice requires a tool call, but no tools are available',
+        }),
+      );
+    }
     return {};
   }
-  const choice = options.toolChoice;
   const allowed =
     typeof choice === 'object' && 'oneOf' in choice
       ? options.tools.filter((tool) => choice.oneOf.includes(tool.name))
