@@ -1,7 +1,9 @@
 // Proves @shpitdev/foundry-effect-ai tree-shakes per module. Installs the packed tarball beside
 // effect in a scratch project, bundles each public module through the exports map (effect
 // external), and fails when a bundle reaches code owned by another protocol or vendor, exceeds its
-// size budget, when internal modules resolve, or when a consumer cannot typecheck the module.
+// size budget, when internal modules resolve, or when a consumer cannot typecheck each module and
+// all of them together, in both `exactOptionalPropertyTypes` modes, with the metadata keys typed
+// in exact mode.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -31,17 +33,17 @@ const owners = {
   'src/internal/models/xai.js': ['XaiLanguageModel'],
 };
 
-// Minified bytes with effect external. Set each module's real budget when its phase lands.
+// Minified bytes with effect external: each module's measured size plus about 20%, re-measured
+// in phase 8. A new module needs its own line.
 const budgets = {
-  AnthropicLanguageModel: 25_000,
+  AnthropicLanguageModel: 25_500,
   FoundryClient: 6_800,
   GoogleLanguageModel: 21_000,
-  OpenAiDecisionModel: 13_600,
-  OpenAiEmbeddingModel: 8_400,
-  OpenAiChatLanguageModel: 21_500,
-  OpenAiLanguageModel: 26_700,
+  OpenAiChatLanguageModel: 21_700,
+  OpenAiDecisionModel: 13_700,
+  OpenAiEmbeddingModel: 8_300,
+  OpenAiLanguageModel: 27_400,
   XaiLanguageModel: 25_400,
-  default: 64_000,
 };
 
 const modules = readdirSync(distRoot)
@@ -81,6 +83,29 @@ try {
       `export * as M from '@shpitdev/foundry-effect-ai/${name}';\n`,
     );
   }
+  // Every module together, which needs one declaration per metadata key; `typed.ts` also reads
+  // the keys, which are typed under `exactOptionalPropertyTypes` only.
+  const imports = modules.map(
+    (name) => `import * as ${name} from '@shpitdev/foundry-effect-ai/${name}';`,
+  );
+  writeFileSync(
+    join(scratch, 'all.ts'),
+    [...imports, `export const modules = [${modules.join(', ')}];`, ''].join('\n'),
+  );
+  writeFileSync(
+    join(scratch, 'typed.ts'),
+    [
+      "import type * as AiError from 'effect/ai/AiError';",
+      "import type * as Response from 'effect/ai/Response';",
+      "import './all.ts';",
+      'export const reads = [',
+      '  (metadata: AiError.RateLimitErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
+      '  (metadata: AiError.UnknownErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
+      "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-openai']?.itemId,",
+      '];',
+      '',
+    ].join('\n'),
+  );
   const bundles = await Promise.all(
     modules.map((name) =>
       build({
@@ -99,8 +124,10 @@ try {
   );
   for (const { name, result } of bundles) {
     const bytes = result.outputFiles[0]?.contents.byteLength ?? 0;
-    const budget = budgets[name] ?? budgets.default;
-    if (bytes > budget) {
+    const budget = budgets[name];
+    if (budget === undefined) {
+      failures.push(`${name}: no size budget; add one to scripts/check-tree-shaking.mjs.`);
+    } else if (bytes > budget) {
       failures.push(`${name}: ${bytes} bytes exceeds its ${budget}-byte budget.`);
     }
     for (const input of Object.keys(result.metafile.inputs).map((path) =>
@@ -145,31 +172,41 @@ try {
     failures.push(`${specifier} resolved; the exports map must block internal modules.`);
   }
 
-  // Consumers typecheck each module through the exports map with no other package installed.
-  try {
-    execFileSync(
-      resolve('node_modules/.bin/tsc'),
-      [
-        '--ignoreConfig',
-        '--noEmit',
-        '--strict',
-        '--skipLibCheck',
-        'false',
-        '--module',
-        'nodenext',
-        '--moduleResolution',
-        'nodenext',
-        '--target',
-        'es2022',
-        '--lib',
-        'es2023,dom',
-        ...modules.map((name) => `${name}.ts`),
-      ],
-      { cwd: scratch, encoding: 'utf8', stdio: 'pipe' },
-    );
-  } catch (error) {
-    failures.push(`Consumer typecheck failed:\n${error.stdout || error.message}`);
-  }
+  // Consumers typecheck each module through the exports map with no other package installed,
+  // with and without `exactOptionalPropertyTypes`.
+  const typecheck = (flags, files) => {
+    try {
+      execFileSync(
+        resolve('node_modules/.bin/tsc'),
+        [
+          '--ignoreConfig',
+          '--noEmit',
+          '--strict',
+          ...flags,
+          '--skipLibCheck',
+          'false',
+          '--allowImportingTsExtensions',
+          '--module',
+          'nodenext',
+          '--moduleResolution',
+          'nodenext',
+          '--target',
+          'es2022',
+          '--lib',
+          'es2023,dom',
+          ...modules.map((name) => `${name}.ts`),
+          ...files,
+        ],
+        { cwd: scratch, encoding: 'utf8', stdio: 'pipe' },
+      );
+    } catch (error) {
+      failures.push(
+        `Consumer typecheck failed (${flags.join(' ') || 'strict'}):\n${error.stdout || error.message}`,
+      );
+    }
+  };
+  typecheck([], ['all.ts']);
+  typecheck(['--exactOptionalPropertyTypes'], ['all.ts', 'typed.ts']);
 } finally {
   rmSync(scratch, { recursive: true, force: true });
 }

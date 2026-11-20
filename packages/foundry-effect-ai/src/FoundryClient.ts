@@ -18,6 +18,10 @@ import type * as Redacted from 'effect/Redacted';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
 import * as Errors from './internal/errors.ts';
+// Types this package adds under its own metadata keys. A bare import keeps it in every module's
+// declarations, since each one imports this file.
+// oxlint-disable-next-line import/no-unassigned-import
+import './internal/metadata.ts';
 
 export interface Options {
   /** Foundry stack URL, e.g. `https://example.palantirfoundry.com`. Trailing slashes are ignored. */
@@ -61,21 +65,16 @@ export class FoundryClient extends Context.Service<FoundryClient, Service>()(
   '@shpitdev/foundry-effect-ai/FoundryClient',
 ) {}
 
-const optionalHeaders = (headers: Record<string, string | undefined>): Record<string, string> =>
-  Object.fromEntries(
-    Object.entries(headers).flatMap(([name, value]) =>
-      value === undefined ? [] : [[name, value]],
-    ),
-  );
-
 export const make = Effect.fnUntraced(function* (options: Options) {
   const baseClient = yield* HttpClient.HttpClient;
   const baseUrl = `${options.foundryUrl.trim().replace(/\/+$/u, '')}/api/v2/llm/proxy`;
-  const headers = optionalHeaders({
+  // `setHeaders` drops undefined values.
+  const headers = {
     attribution: options.attributionRid,
     traceParent: options.traceParent,
     traceState: options.traceState,
-  });
+  };
+  // Non-2xx responses fail before `transformClient`, so its retries and taps see them.
   const authorized = HttpClient.mapRequest(
     baseClient,
     (request): HttpClientRequest.HttpClientRequest =>
@@ -84,7 +83,7 @@ export const make = Effect.fnUntraced(function* (options: Options) {
         HttpClientRequest.bearerToken(options.token),
         HttpClientRequest.setHeaders(headers),
       ),
-  );
+  ).pipe(HttpClient.filterStatusOk);
   const client = options.transformClient?.(authorized) ?? authorized;
 
   const execute = (request: HttpClientRequest.HttpClientRequest) => {
@@ -94,7 +93,10 @@ export const make = Effect.fnUntraced(function* (options: Options) {
       : Effect.provideService(sent, HttpClient.TracerPropagationEnabled, false);
   };
 
-  /** Encodes the body and sends the request; a non-2xx status fails with the mapped error. */
+  /**
+   * Encodes the body and sends the request. A non-2xx status fails with the mapped error, also
+   * when `transformClient` returns the failed response instead of its error.
+   */
   const send = (method: string, request: ProxyRequest, accept: string) => {
     const unsent = HttpClientRequest.post(request.path).pipe(
       HttpClientRequest.setUrlParams(request.urlParams ?? {}),

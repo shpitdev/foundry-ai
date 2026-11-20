@@ -14,7 +14,10 @@ export type ModelId = keyof typeof models | (string & Record<never, never>);
 
 /** Request-wide settings, sent as the Responses fields of the same name. */
 export interface Config {
-  /** For example `{ effort: 'low' }`. Foundry's Grok models reject `effort: 'none'`. */
+  /**
+   * For example `{ effort: 'low', summary: 'auto' }`. Foundry's Grok models reject
+   * `effort: 'none'`, and Grok 4.20 reasoning rejects `effort` altogether.
+   */
   readonly reasoning?:
     | {
         readonly effort?: 'low' | 'medium' | 'high' | 'xhigh';

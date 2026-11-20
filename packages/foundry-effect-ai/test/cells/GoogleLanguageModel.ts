@@ -11,12 +11,17 @@ function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
   expect(call?.metadata[namespace]).toMatchObject({ thoughtSignature: expect.any(String) });
 }
 
-export const cells = languageCells({
-  model: ({ reasoning }) =>
-    GoogleLanguageModel.model(
-      'gemini-3.1-flash-lite',
-      // Thought summaries need a level: flash-lite's default thinks too little to report any.
-      reasoning ? { thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' } } : undefined,
-    ),
-  replay: expectReplay,
-});
+export const cellsFor = (model: string) =>
+  languageCells({
+    model: ({ reasoning }) =>
+      GoogleLanguageModel.model(
+        model,
+        // Thought summaries need a level: flash-lite's default thinks too little to report any.
+        reasoning
+          ? { thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' } }
+          : undefined,
+      ),
+    replay: expectReplay,
+  });
+
+export const cells = cellsFor('gemini-3.1-flash-lite');

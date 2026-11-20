@@ -13,29 +13,48 @@ import type { Env } from '../harness.ts';
 
 const namespace = 'foundry-xai';
 
-/** Stateless replay needs encrypted reasoning and the call's item ID and wire arguments. */
-function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
-  const reasoning = parts.flatMap((part) =>
-    part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
-  );
-  expect(reasoning).toContainEqual(
-    expect.objectContaining({ encryptedContent: expect.any(String) }),
-  );
-  const call = parts.find((part) => part.type === 'tool-call');
-  expect(call?.metadata[namespace]).toMatchObject({
-    itemId: expect.any(String),
-    arguments: expect.any(String),
-  });
-}
+/**
+ * Replay needs the call's item ID and wire arguments, and any reasoning's ciphertext. With
+ * `required`, as for the recorded defaults, the turn must carry reasoning, so a recording without
+ * it fails; a sweep checks reasoning only where the model produced some.
+ */
+const expectReplay =
+  (required: boolean) =>
+  (parts: ReadonlyArray<Response.AnyPart>): void => {
+    const reasoning = parts.flatMap((part) =>
+      part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
+    );
+    if (required || reasoning.length > 0) {
+      expect(reasoning).toContainEqual(
+        expect.objectContaining({ encryptedContent: expect.any(String) }),
+      );
+    }
+    const call = parts.find((part) => part.type === 'tool-call');
+    expect(call?.metadata[namespace]).toMatchObject({
+      itemId: expect.any(String),
+      arguments: expect.any(String),
+    });
+  };
 
-const shared = languageCells({
-  model: ({ reasoning }) =>
-    XaiLanguageModel.model(
-      'grok-4-6',
-      reasoning ? { reasoning: { effort: 'medium', summary: 'auto' } } : undefined,
-    ),
-  replay: expectReplay,
-});
+/**
+ * Grok 4.20 non-reasoning gets no reasoning settings and skips `reasoning`; Grok 4.20 reasoning
+ * rejects `effort`, so it asks only for summaries.
+ */
+export const cellsFor = (model: string, recorded = false) => {
+  const reasons = model !== 'grok-420-non-reasoning-latest';
+  const effort = model === 'grok-420-reasoning-latest' ? {} : { effort: 'medium' as const };
+  const { reasoning, ...cells } = languageCells({
+    model: (options) =>
+      XaiLanguageModel.model(
+        model,
+        options.reasoning && reasons ? { reasoning: { ...effort, summary: 'auto' } } : undefined,
+      ),
+    replay: expectReplay(recorded && reasons),
+  });
+  return reasons && reasoning !== undefined ? { ...cells, reasoning } : cells;
+};
+
+const shared = cellsFor('grok-4-6', true);
 
 const Lookup = Tool.make('lookup', {
   parameters: Schema.Struct({ topic: Schema.String }),

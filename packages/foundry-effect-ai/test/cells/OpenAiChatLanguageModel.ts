@@ -4,6 +4,7 @@ import type * as Response from 'effect/ai/Response';
 import * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
 import * as Stream from 'effect/Stream';
+import { models } from '../../src/internal/models/openai.ts';
 import * as OpenAiChatLanguageModel from '../../src/OpenAiChatLanguageModel.ts';
 import { languageCells } from '../capabilities.ts';
 import type { Env } from '../harness.ts';
@@ -24,12 +25,16 @@ const puzzle =
  * is always null), so the shared cell's reasoning deltas cannot exist. The model still
  * reasons: usage reports reasoning tokens, and the answer streams as usual.
  */
-const reasoningTokens = (env: Env) =>
+const reasoningTokens = (model: string) => (env: Env) =>
   Effect.gen(function* () {
-    const model = OpenAiChatLanguageModel.model('gpt-6-luna', { reasoning_effort: 'medium' });
     const parts = yield* Stream.runCollect(LanguageModel.streamText({ prompt: puzzle })).pipe(
       Effect.map((collected) => Array.from(collected)),
-      Effect.provide(Layer.provide(model, env.client())),
+      Effect.provide(
+        Layer.provide(
+          OpenAiChatLanguageModel.model(model, { reasoning_effort: 'medium' }),
+          env.client(),
+        ),
+      ),
     );
     const text = parts.flatMap((part) => (part.type === 'text-delta' ? [part.delta] : []));
     expect(text.join('')).toMatch(/\b5\b/u);
@@ -38,16 +43,24 @@ const reasoningTokens = (env: Env) =>
     expect(finish?.usage.outputTokens.reasoning).toBeGreaterThan(0);
   });
 
+const known: Readonly<Record<string, { readonly rid: string; readonly reasoning?: boolean }>> =
+  models;
+
 // No visible reasoning to ask for, and gpt-6-luna takes tools here only without reasoning.
-const shared = languageCells({
-  model: () => OpenAiChatLanguageModel.model('gpt-6-luna'),
-  replay: expectReplay,
-});
+// Models the catalog does not mark as reasoning skip `reasoning`.
+export const cellsFor = (model: string) => {
+  const { reasoning: _, ...cells } = languageCells({
+    model: () => OpenAiChatLanguageModel.model(model),
+    replay: expectReplay,
+  });
+  return known[model]?.reasoning === true ? { ...cells, reasoning: reasoningTokens(model) } : cells;
+};
+
+const shared = cellsFor('gpt-6-luna');
 const sharedTruncated = shared['stream-truncated'] ?? (() => Effect.void);
 
 export const cells = {
   ...shared,
-  reasoning: reasoningTokens,
   // Two cuts, since Foundry sends no `[DONE]`: before the finish reason, and between it and the
   // usage chunk that ends the stream.
   'stream-truncated': (env: Env) => Effect.andThen(sharedTruncated(env), sharedTruncated(env)),

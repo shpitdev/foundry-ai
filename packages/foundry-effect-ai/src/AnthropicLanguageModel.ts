@@ -23,8 +23,10 @@ export interface Config {
   /** Defaults to the model's output limit, or 4096 for a target outside the catalog. */
   readonly max_tokens?: number | undefined;
   /**
-   * For example `{ type: 'adaptive' }`, or `{ type: 'enabled', budget_tokens: 2048 }` on models
-   * before Claude 5.5. Thinking blocks replay with their signatures on later turns.
+   * For example `{ type: 'adaptive', display: 'summarized' }`, or
+   * `{ type: 'enabled', budget_tokens: 2048 }` on models before Opus 4.7. Adaptive models
+   * return no thinking text unless `display` is `summarized`. Thinking blocks replay with their
+   * signatures on later turns.
    */
   readonly thinking?: Wire.Thinking | undefined;
 }

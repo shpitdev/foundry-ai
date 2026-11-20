@@ -3,7 +3,8 @@
  * Maps Foundry proxy failures to `AiError`. Foundry reports its own failures in a Conjure
  * envelope (`errorCode`, `errorName`, `errorInstanceId`, `parameters`) and nests a vendor's
  * rejection in `parameters.responseBody`. Vendor bodies are read leniently as
- * `error.{message,type,code,status}`, which covers OpenAI, Anthropic and Gemini. Descriptions
+ * `error.{message,type,code,status}`, which covers OpenAI, Anthropic and Gemini, or as xAI's
+ * `{ code, error }`. Descriptions
  * carry parsed messages, codes and redacted URLs; the raw body stays in `http.body`.
  */
 import * as AiError from 'effect/ai/AiError';
@@ -49,8 +50,15 @@ const readDetails = (body: string) => {
     nested === undefined ? proxy : parseJson(nested.replace(/^Optional\[(.*)\]$/su, '$1'));
   const vendor = Predicate.isObject(vendorBody) ? vendorBody['error'] : undefined;
   return {
-    message: field(vendor, 'message') ?? field(parameters, 'message'),
-    code: field(vendor, 'code') ?? field(proxy, 'errorName'),
+    // xAI sends `{ code, error: "<message>" }`.
+    message:
+      field(vendor, 'message') ??
+      (typeof vendor === 'string' ? vendor : undefined) ??
+      field(parameters, 'message'),
+    code:
+      field(vendor, 'code') ??
+      (nested === undefined ? undefined : field(vendorBody, 'code')) ??
+      field(proxy, 'errorName'),
     type: field(vendor, 'type') ?? field(vendor, 'status'),
     errorName: field(proxy, 'errorName'),
     errorInstanceId: field(proxy, 'errorInstanceId'),

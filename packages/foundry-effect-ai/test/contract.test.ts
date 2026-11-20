@@ -7,7 +7,7 @@ import { rows } from './matrix.ts';
 // Offline contract tests: each cell replays recorded Foundry fixtures through FakeFoundry and
 // asserts the decoded Effect AI result; requests must match those recorded with the fixtures.
 for (const { module, phase, cells } of rows) {
-  const implemented = await loadCells(module);
+  const implemented = (await loadCells(module))?.cells;
   describe(`${module} (phase ${phase})`, () => {
     for (const cell of cells.filter((name) => implemented?.[name] === undefined)) {
       it.todo(cell);
