@@ -27,7 +27,7 @@
 
 ## Foundry specifics
 
-- `packages/foundry-ai/src/providers/google.ts:19–45,56–77`, `models/catalog.ts:40–47`, `models/google-models.ts:4–159`: aliases resolve to RIDs (e.g. `gemini-3.1-pro`→`ri.language-model-service..language-model.gemini-3-1-pro`), unknown inputs pass through. Use `Authorization: Bearer <token>` from the start; never set `x-goog-api-key`. Forward optional `attribution`, `traceParent`, `traceState`. Only language via this wrapper; no Google embedding/image route exposed. Catalog hints aren't wire capabilities.
+- `packages/foundry-ai/src/providers/google.ts:19–45,56–77`, `models/catalog.ts:53–60`, `packages/foundry-catalog/src/google-models.ts:4–159`: aliases resolve to RIDs (e.g. `gemini-3.1-pro`→`ri.language-model-service..language-model.gemini-3-1-pro`), unknown inputs pass through. Use `Authorization: Bearer <token>` from the start; never set `x-goog-api-key`. Forward optional `attribution`, `traceParent`, `traceState`. Only language via this wrapper; no Google embedding/image route exposed. Catalog hints aren't wire capabilities.
 - Repo sweep (`packages/foundry-ai/docs/README.md:138`) saw two Gemini JSON+tools cases return no output. Foundry `cachedContent`, strict `VALIDATED`, and newer beta-only fields **UNVERIFIED**; expose only proven options by default, no Vertex path or automatic beta fallback.
 
 ## Port from (reference only)

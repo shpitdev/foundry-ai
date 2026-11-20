@@ -28,7 +28,7 @@
 
 ## Foundry specifics
 
-- `packages/foundry-ai/src/providers/anthropic.ts:28–54,78–141`, `models/anthropic-models.ts:242–250`, `models/catalog.ts:40–47`: alias→RID, pass through unknown targets, Bearer + optional `attribution`, `traceParent`, `traceState`. Reject `toolStreaming:true` in `anthropic` or `foundry-anthropic` and per-function `anthropic.eagerInputStreaming:true`; omit `eager_input_streaming` (ordinary SSE tool args still work).
+- `packages/foundry-ai/src/providers/anthropic.ts:28–54,78–141`, `packages/foundry-catalog/src/anthropic-models.ts:242–250`, `models/catalog.ts:53–60`: alias→RID, pass through unknown targets, Bearer + optional `attribution`, `traceParent`, `traceState`. Reject `toolStreaming:true` in `anthropic` or `foundry-anthropic` and per-function `anthropic.eagerInputStreaming:true`; omit `eager_input_streaming` (ordinary SSE tool args still work).
 - Opus 5.5 and Sonnet 5.5, by alias or RID, use native `outputFormat` (reject forced tool use); others use `jsonTool`, not RID-inferred `auto`. Repo sweep (`packages/foundry-ai/docs/README.md:139`) uses adaptive thinking for Opus 4.7/4.8, Claude 5/5.5; budget-based thinking rejected for 5.5. Port only feature-specific `anthropic-beta` headers needed by the chosen wire fields; proxy acceptance of other betas **UNVERIFIED**.
 
 ## Port from (reference only)

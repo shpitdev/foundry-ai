@@ -27,7 +27,7 @@
 
 ## Foundry specifics
 
-- `providers/xai.ts:21–67`, `providers/xai-compat.ts:3–11`, `models/xai-models.ts:5–106`, `models/catalog.ts:20–47`: xAI `chat()` is explicit, default is Responses; aliases resolve to RID, raw targets pass through, known other-provider targets rejected. Bearer + optional `attribution`, `traceParent`, `traceState`. Reject `xai.store:true`, omit `store` on Chat. No Responses request/response rewrites on Chat. Do not silently fall back between routes.
+- `providers/xai.ts:21–67`, `providers/xai-compat.ts:3–11`, `packages/foundry-catalog/src/xai-models.ts:5–106`, `models/catalog.ts:33–60`: xAI `chat()` is explicit, default is Responses; aliases resolve to RID, raw targets pass through, known other-provider targets rejected. Bearer + optional `attribution`, `traceParent`, `traceState`. Reject `xai.store:true`, omit `store` on Chat. No Responses request/response rewrites on Chat. Do not silently fall back between routes.
 - **Not supported in last recorded sweep:** all seven xAI Chat text probes returned HTTP 400; Responses worked (`packages/foundry-ai/docs/README.md:77–90`). Current availability for any other enrollment **UNVERIFIED**; keep opt-in and test before claiming Foundry support.
 
 ## Port from (reference only)

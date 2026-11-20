@@ -23,7 +23,7 @@
 
 ## Foundry specifics
 
-- `packages/foundry-ai/src/providers/openai.ts:39–56,82–92`, `models/openai-models.ts:385–405,573–576`, `models/catalog.ts:40–47`: only verified target `gpt-6-luna` → `ri.language-model-service..language-model.gpt-6-luna`; Bearer + optional `attribution`, `traceParent`, `traceState`. No Responses middleware (`store`, function strictness, `forceReasoning`) on Decisions. No AI SDK peer dependency in the new adapter.
+- `packages/foundry-ai/src/providers/openai.ts:39–56,82–92`, `packages/foundry-catalog/src/openai-models.ts:385–405,573–576`, `models/catalog.ts:53–60`: only verified target `gpt-6-luna` → `ri.language-model-service..language-model.gpt-6-luna`; Bearer + optional `attribution`, `traceParent`, `traceState`. No Responses middleware (`store`, function strictness, `forceReasoning`) on Decisions. No AI SDK peer dependency in the new adapter.
 - `packages/foundry-ai/docs/README.md:113–130` and `packages/foundry-ai/src/__tests__/decisions.live.test.ts:18–171`: 400 works; other tested models 404; hosted image URLs rejected; `prompt_cache_key` and `prompt_cache_options` rejected (leave unset). Implicit caching reported; optional `X-Palantir-session-id` for routing affinity. This task did not run live probes; Effect-specific payload combinations and actual frequency of optional fields **UNVERIFIED**.
 
 ## Port from (reference only)

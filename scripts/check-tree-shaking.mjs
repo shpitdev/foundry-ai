@@ -18,8 +18,8 @@ const owners = {
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
   'src/internal/google-gemini/': ['GoogleLanguageModel'],
-  // Phase 0a: per-vendor catalog files from the shared workspace source. The all-vendor
-  // catalog.ts stays in packages/foundry-ai, where lint already blocks it.
+  // Per-vendor catalog files from packages/foundry-catalog. The all-vendor catalog.ts stays in
+  // packages/foundry-ai, where lint already blocks it.
   'foundry-catalog/src/openai-models': [
     'OpenAiLanguageModel',
     'OpenAiDecisionModel',
