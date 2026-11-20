@@ -1,0 +1,127 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795139751,\"status\":\"completed\",\"usage\":{\"input_tokens\":81,\"output_tokens\":42,\"total_tokens\":123,\"output_tokens_details\":{\"reasoning_tokens\":22},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"reasoning\",\"id\":\"redacted-id-2\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"**Identifying Paris for tool use**\\n\\nI need to identify Paris before I call the appropriate tool. It's important to work that out internally first, so I can gather my thoughts before taking action. By doing this, I can ensure everything's set up properly for the task ahead. This step will help me seamlessly transition into retrieving the information I need. Let's get this figured out!\"}],\"content\":[],\"encrypted_content\":\"gAAAAABq_6ireOnGzqdFIrX-fR2yO0r1N1OfsSqNItrVrvk9zWIFOfBUmHyyZL1X6EJ4jkhWqk4GpjkH6NXBKFZrQpUsxWt5_d8OUSXU65RmIQpk8mKyo9VvJ_HiUTx6sr2lM71dSb_mo6VKr5FO_RAUwH58mkPQeyIgMLslzRqrUYOPTApfAPxVbcwMgAjyPaAgOSXlHb9h5VSOpmGetrCgpyV85pCRBok_-eDj5XPnWnQB08TZk-UnkCXQk8PRWlriQT5gI0GYOfLm32GgqZSkxcyKoCWVl9ZU68_3uailv9PBUd865kZGZH_AqdWszp_rTCttW67ebikn2HBO1zKOw4sWAmJk0lp_L_mIx8N5JDo6iI0DFLfDEmKbm5oi2--rMZDN8Kw3LCaN2f4dscIVc0VCkG7Kk-YCr3RNmX50qPGjTI395yEClP6ha4kndSPiAhkAPgoLUmHz6iduwXdxnYOACzpgQHlOdl3Jf-M2EUAnCXE01ClXhXtFjsvqnyCLZt8UkumvbkdMCdUt4usg3DrCq0e_6FqLwQOuucBuoPHmK1ex2149ij6WlXBU1tRzZVHdzUQL5GuaMsH2h6iFQgkfl2JFZ79Y1x_Nt5KBwy8BpO2FZlqoNur26pxknLvobif9nz2lx0EgrHoDhqK49FMjQnocVhoWOKkogvFpuENr8c2Ck0mf0wrJvIv0yz9o7nfVHIbhJAiN7uq7f-7fM_ZbLFzU2u58qc9xvaDzEVl3v0mYbB7PcMMoVQqXTTF9ADMffxhWIj8WLp2w2le4zvKcWIPUp6T9s2Bgsw9GH8WoTyiIfUx9-Jh_Z1uOL9lhfQaZHt9DXCqzDKdN3_Wq8RFlbJwNsfZNnYR5UI4vdXQXvVEIhbVtpNIf8_QhIxMsEW3VXHyDzJO06BH5RcSx-aWVWB7qxzHG3w6HW4c3_jf_FallsOvlc30HoP-E2p_nslobdevD7d3Re4dM9V5xwtdbUNyjISoMKWe9kraJwoq2gbYaLhoLAyzC8DV7p8aJ2uTGtslCUbdbC4TnQURISPIl_gg1TBYC2YdR6tdzGGJUDo6h_vUWaOpARjFy_E_943uXZk2iqqm_cc5vVgUb1HLL_l1rf0OLn3WPlAWqWaZIv7zRQ7hs8kb6vEkY0oYth0C_zDcoTCXB1CG2zsyZ0L6UTyhk5eaC6H5cLoyO9NWNDt87mENFxfVaRGoBDkx-yayJJ2kkTrK5n3lDfuqBDcS2RK7P6Mmtmh5w0dEtehd-yS6pQyYnM3cZwTEAbUOfd3dgAg3E0y4T1Sq1j4NhdBXMe5TGtk_oMWQ2Bsh8KQh4jL4KiOgT_qwBb5eU4DCGM-0ktpIJMTVzJ6s_aB1TASmanv89uA0q_O0kSN9wD8Ezc0CVMu8OyPDAjRNAkNOSW72gHSkAjUiTbCkcyeyiCzpZ1pmdJFbx1Bbs4MHx9ByKxnDJoCad3qz1Rpzw6QHe4GfWJbKi2dy6TAcTYWp7usrVDs3oeXWR3gVvMx3OsN-zsfgc_8__mS4_C9lkjQYuF4c61GarAQxVe4Z6mjCuPjyPMfdHxohB8bm0EU1AE7vdV9urdXkzvW22ueRnxTFtMetEJXy2t2gAnHo8X1Ei4IQaXi2wk9QEhPfJ12eMfFxVBksWZJNmawj7m2JWe_g2PGVqYuCyQfULYks5bbW4uyU4S0mkM3KB-6clEfE34SEL4i9xNqzmwu0KgSnkV9kCnTx16lu927pGeNVn8kyZMvcqcheBVvII_Ak2fzzJ4BiSKn-AMcVbciNnpvQ4XFG9-Z52Rt8SGCx0aptJhkPev5y4aMkqCeCXuPuJiKoAzVEy7RQG2sgdLBiuEk67A6aHJZD513Dwwbw6KFmfO2jvN9wY1okaUVvDfiW3ffBvFZaDzKUe4Cw=\"},{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"call_e3Qbl8Kpe65M5ZwPhrcACwlZ\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-4\",\"model\":\"gpt-6-luna\",\"created_at\":1795139756,\"status\":\"completed\",\"usage\":{\"input_tokens\":145,\"output_tokens\":28,\"total_tokens\":173,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, is currently 21°C and sunny.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "type": "reasoning",
+            "id": "redacted-id-2",
+            "summary": [
+              {
+                "type": "summary_text",
+                "text": "**Identifying Paris for tool use**\n\nI need to identify Paris before I call the appropriate tool. It's important to work that out internally first, so I can gather my thoughts before taking action. By doing this, I can ensure everything's set up properly for the task ahead. This step will help me seamlessly transition into retrieving the information I need. Let's get this figured out!"
+              }
+            ],
+            "encrypted_content": "gAAAAABq_6ireOnGzqdFIrX-fR2yO0r1N1OfsSqNItrVrvk9zWIFOfBUmHyyZL1X6EJ4jkhWqk4GpjkH6NXBKFZrQpUsxWt5_d8OUSXU65RmIQpk8mKyo9VvJ_HiUTx6sr2lM71dSb_mo6VKr5FO_RAUwH58mkPQeyIgMLslzRqrUYOPTApfAPxVbcwMgAjyPaAgOSXlHb9h5VSOpmGetrCgpyV85pCRBok_-eDj5XPnWnQB08TZk-UnkCXQk8PRWlriQT5gI0GYOfLm32GgqZSkxcyKoCWVl9ZU68_3uailv9PBUd865kZGZH_AqdWszp_rTCttW67ebikn2HBO1zKOw4sWAmJk0lp_L_mIx8N5JDo6iI0DFLfDEmKbm5oi2--rMZDN8Kw3LCaN2f4dscIVc0VCkG7Kk-YCr3RNmX50qPGjTI395yEClP6ha4kndSPiAhkAPgoLUmHz6iduwXdxnYOACzpgQHlOdl3Jf-M2EUAnCXE01ClXhXtFjsvqnyCLZt8UkumvbkdMCdUt4usg3DrCq0e_6FqLwQOuucBuoPHmK1ex2149ij6WlXBU1tRzZVHdzUQL5GuaMsH2h6iFQgkfl2JFZ79Y1x_Nt5KBwy8BpO2FZlqoNur26pxknLvobif9nz2lx0EgrHoDhqK49FMjQnocVhoWOKkogvFpuENr8c2Ck0mf0wrJvIv0yz9o7nfVHIbhJAiN7uq7f-7fM_ZbLFzU2u58qc9xvaDzEVl3v0mYbB7PcMMoVQqXTTF9ADMffxhWIj8WLp2w2le4zvKcWIPUp6T9s2Bgsw9GH8WoTyiIfUx9-Jh_Z1uOL9lhfQaZHt9DXCqzDKdN3_Wq8RFlbJwNsfZNnYR5UI4vdXQXvVEIhbVtpNIf8_QhIxMsEW3VXHyDzJO06BH5RcSx-aWVWB7qxzHG3w6HW4c3_jf_FallsOvlc30HoP-E2p_nslobdevD7d3Re4dM9V5xwtdbUNyjISoMKWe9kraJwoq2gbYaLhoLAyzC8DV7p8aJ2uTGtslCUbdbC4TnQURISPIl_gg1TBYC2YdR6tdzGGJUDo6h_vUWaOpARjFy_E_943uXZk2iqqm_cc5vVgUb1HLL_l1rf0OLn3WPlAWqWaZIv7zRQ7hs8kb6vEkY0oYth0C_zDcoTCXB1CG2zsyZ0L6UTyhk5eaC6H5cLoyO9NWNDt87mENFxfVaRGoBDkx-yayJJ2kkTrK5n3lDfuqBDcS2RK7P6Mmtmh5w0dEtehd-yS6pQyYnM3cZwTEAbUOfd3dgAg3E0y4T1Sq1j4NhdBXMe5TGtk_oMWQ2Bsh8KQh4jL4KiOgT_qwBb5eU4DCGM-0ktpIJMTVzJ6s_aB1TASmanv89uA0q_O0kSN9wD8Ezc0CVMu8OyPDAjRNAkNOSW72gHSkAjUiTbCkcyeyiCzpZ1pmdJFbx1Bbs4MHx9ByKxnDJoCad3qz1Rpzw6QHe4GfWJbKi2dy6TAcTYWp7usrVDs3oeXWR3gVvMx3OsN-zsfgc_8__mS4_C9lkjQYuF4c61GarAQxVe4Z6mjCuPjyPMfdHxohB8bm0EU1AE7vdV9urdXkzvW22ueRnxTFtMetEJXy2t2gAnHo8X1Ei4IQaXi2wk9QEhPfJ12eMfFxVBksWZJNmawj7m2JWe_g2PGVqYuCyQfULYks5bbW4uyU4S0mkM3KB-6clEfE34SEL4i9xNqzmwu0KgSnkV9kCnTx16lu927pGeNVn8kyZMvcqcheBVvII_Ak2fzzJ4BiSKn-AMcVbciNnpvQ4XFG9-Z52Rt8SGCx0aptJhkPev5y4aMkqCeCXuPuJiKoAzVEy7RQG2sgdLBiuEk67A6aHJZD513Dwwbw6KFmfO2jvN9wY1okaUVvDfiW3ffBvFZaDzKUe4Cw="
+          },
+          {
+            "type": "function_call",
+            "call_id": "call_e3Qbl8Kpe65M5ZwPhrcACwlZ",
+            "name": "GetWeather",
+            "arguments": "{\"city\":\"Paris\"}",
+            "id": "redacted-id-3"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call_e3Qbl8Kpe65M5ZwPhrcACwlZ",
+            "output": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      }
+    }
+  }
+]

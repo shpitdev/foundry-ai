@@ -1,0 +1,30 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795139559,\"status\":\"completed\",\"usage\":{\"input_tokens\":37,\"output_tokens\":21,\"total_tokens\":58,\"output_tokens_details\":{\"reasoning_tokens\":14},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"reasoning\",\"id\":\"redacted-id-2\",\"summary\":[],\"content\":[],\"encrypted_content\":\"gAAAAABq_6fnSqrHx0W_N1tp6Gxs0hiTZnUD9ZjuNIwCDqJ7prSVAdA4_JsnDu_rZ6JaYj3fkOd_pP2twAcJpw4hlwnyirGGIu6PmqDqHApPPprrfqZML85dJ8ifR9lVB-dLmOYwIfbK9hEkZxq5fPoY_Il5mEeqwG5EmpB9iutc2JEQ8SobMlLNboboLnN3X6LEEvR8SfoW2vkY5b6B9v8B0N4Ais4vN3YylIAdkSM5qLAY6EVTYvTIU5cgIqunKRxRjo43yqWzg4GVbArPFNE22Ua6bXDybkYaptKCbHEubcFdzZTWlQSD-fdiKrInI76JoOi-IhrRfivGu1Mn2XWKIKuQEJtzPGywZR2I5UnBYfEhkuIGPE49aeAqONq8A9bUjSZ_H6zXT-EhL2Rypst5suXFZJRA4buF9714lDbzXhd2827TeR8voNRmXkUAfpBepOEFpVq-1OYR0WIVHYuOap29VeCMDU2CZKWyULIOEdC-FmoAKV73Q-RWuwX0IgGqY9eZe-uBS_JANvYw8juuAv8SIAC5xpVRemq35ncGI6kO-dg4reWIr0BlF6bgdGxI6l_lpEJQbW8A-33a2ea9Q88_N5dd1VrbBp7pgep945Tzz0JksrkLQ1gTGxJaoQYlOuhFkIhxNrzHXbByLZOYoEr7YonVQQodJ08s0mXpua1fJ1bjIdIaSq2hkCY4QJHacl_jOs0qhDnfxzff9cEEbtfuvBDhFmqgSNSMhw4dXKy6mOzxtu_uCU8cCQ4fKJ8R8og0SiHAbzW31-s9V2puFKogFDRV6gPvfhMNRrFGExVIGvzirfiJxZncGn0uWuFetB3W0lfS-3tPtxAugxZN5llPFm9X9We2dj19bJvBaoG2tEfUGzDni7YbrAxLC8u3z_bZqM4BJYUyGj8ib0ceaBKrwaF1uwEGMReMigJEtD22Ksii5AhNhZGHkpkyQyCdVuKxMrNuobt5_4ww9mwP5al-HRpCKhEt0_QIsFXwacHD3yOkAh7dsajEWR4YtjGZzt3u-rb6D2mAhhq4UnyBk3OKjnUKIfJY10YEfSgpy39dZQ43z1NkC5Z9YfdMUkjDwvbARgCKRsUVjrirVrB29C0bdq35VjX82Ek_MsVkkiQ2rqLWlcSlBoHW7rKUNVcXKFaX86QVdKg5ajAsSnljQRjROtOXlXR2N2tEui2NEruA_Q7OwsFW4Wnz2w-9W-en8IG_9lxQxGvS0IkH44OhdB-_hMWoeoPw0ZBI91TvAs_WtpMgurL8ps0nIwMHhHW8cWweZ9qKGoEy9br474YkoLu3UkLp1K3Mr-YAmTiIdgpmt2P8-3PDOXY_j6reaC8BUmCJEmJZzFZCrSlvJguW12HdFnrl1kul8T4oVKVEie-7owooTAOb5DFBr6ZMIU0dxOe5c7RJDPagzVS1pqx3rWu1ohmc7jcBw60pgYMDMayebTAwg4l_hYkYHH_ZSnEtJZp6MPk4Hly_90r_umd1mIiqyEBnYqYrmJGvUJKJsSeS-i_7O3fEC2kAnW6g8ztzGMhOEjwnZoMCqQeCMB49VOJdtIkyL6C4M2Pi7uKhrDw7JslfaEE575M_W8rZj_CexEB5Vda2z287tTGJ0ABKzWL_AJZ6sWMR2h1uk_HNz6GwOvF_pLzrQsHqTkPYr7QTTi1MQDXzAPSXMaXtflB3M00hhOiIyo3cYVmUmeE0O3is0HS7pSIrycqU3te8QfDgfNZ91ot8DVNBvfOcnll8osFUN2lVAQ==\"},{\"type\":\"message\",\"id\":\"redacted-id-3\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"Red\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What color fills this image? Answer with one word."
+              },
+              {
+                "type": "input_image",
+                "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAxElEQVR42u3RMQ0AAAjAsPk3DTLgaDIFa1M6zAIAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABAADAAgAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAjAixYgaMOy89oM6gAAAABJRU5ErkJggg=="
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": ["reasoning.encrypted_content"]
+      }
+    }
+  }
+]
