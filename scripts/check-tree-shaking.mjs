@@ -38,6 +38,7 @@ const budgets = {
   OpenAiEmbeddingModel: 8_400,
   OpenAiChatLanguageModel: 21_500,
   OpenAiLanguageModel: 26_700,
+  XaiLanguageModel: 25_400,
   default: 64_000,
 };
 

@@ -14,22 +14,37 @@ import * as Base64 from 'effect/encoding/Base64';
 import * as Predicate from 'effect/Predicate';
 import type * as Wire from './schema.ts';
 
-/** Metadata and prompt-option namespace for this protocol's item IDs and reasoning. */
-export const metadataKey = 'foundry-openai';
-
-export interface Target {
+/**
+ * What one vendor's Responses route needs, passed in by its public module so this folder holds
+ * no vendor branches. OpenAI and xAI differ only in these values.
+ */
+export interface Dialect {
+  /** The public module, named in errors. */
+  readonly module: string;
+  /** The provider namespace for item IDs, reasoning and error codes in metadata and prompt options. */
+  readonly metadataKey: string;
+  /** The proxy route, such as `/openai/v1/responses`. */
+  readonly path: string;
   /** The wire model: a catalog RID or a raw target. */
-  readonly rid: string;
-  /** Developer messages and encrypted reasoning for stateless replay. */
-  readonly reasoning: boolean;
+  readonly model: string;
+  /** OpenAI reasoning models take system messages as `developer`. */
+  readonly systemRole: 'system' | 'developer';
+  /** Asks for encrypted reasoning, which later turns replay under `store: false`. */
+  readonly encryptedReasoning: boolean;
+  /** Request-wide reasoning settings, sent as given. */
+  readonly reasoning?: Wire.Reasoning | undefined;
 }
 
-const fail = (reason: AiError.AiErrorReason) =>
-  AiError.make({ module: 'OpenAiLanguageModel', method: 'makeRequest', reason });
+const fail = (dialect: Dialect, reason: AiError.AiErrorReason) =>
+  AiError.make({ module: dialect.module, method: 'makeRequest', reason });
 
-/** A string field this adapter stored under `metadataKey` on an earlier response part. */
-export const option = (options: Prompt.ProviderOptions, field: string): string | undefined => {
-  const value = options[metadataKey];
+/** A string field this adapter stored under the dialect's namespace on an earlier response part. */
+export const option = (
+  dialect: Dialect,
+  options: Prompt.ProviderOptions,
+  field: string,
+): string | undefined => {
+  const value = options[dialect.metadataKey];
   const raw = Predicate.isObject(value) ? value[field] : undefined;
   return typeof raw === 'string' ? raw : undefined;
 };
@@ -43,15 +58,16 @@ const imageUrl = (part: Prompt.FilePart): string =>
     ? part.data.href
     : `data:${part.mediaType};base64,${typeof part.data === 'string' ? part.data : Base64.encode(part.data)}`;
 
-const unsupportedFile = (mediaType: string) =>
+const unsupportedFile = (dialect: Dialect, mediaType: string) =>
   fail(
+    dialect,
     new AiError.InvalidUserInputError({
       description: `Unsupported file type ${mediaType}; send images only`,
     }),
   );
 
 /** A tool result as text, or its model output as input parts (Foundry accepts images there). */
-const toolOutput = Effect.fnUntraced(function* (part: Prompt.ToolResultPart) {
+const toolOutput = Effect.fnUntraced(function* (dialect: Dialect, part: Prompt.ToolResultPart) {
   if (part.modelOutput === undefined) {
     return stringify(part.result);
   }
@@ -62,19 +78,19 @@ const toolOutput = Effect.fnUntraced(function* (part: Prompt.ToolResultPart) {
     } else if (output.mediaType.startsWith('image/')) {
       content.push({ type: 'input_image', image_url: imageUrl(output) });
     } else {
-      return yield* unsupportedFile(output.mediaType);
+      return yield* unsupportedFile(dialect, output.mediaType);
     }
   }
   return content;
 });
 
-const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target: Target) {
+const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, dialect: Dialect) {
   const input: Array<Wire.InputItem> = [];
   for (const message of prompt.content) {
     switch (message.role) {
       case 'system':
         input.push({
-          role: target.reasoning ? 'developer' : 'system',
+          role: dialect.systemRole,
           content: [{ type: 'input_text', text: message.content }],
         });
         break;
@@ -86,7 +102,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
           } else if (part.mediaType.startsWith('image/')) {
             content.push({ type: 'input_image', image_url: imageUrl(part) });
           } else {
-            return yield* unsupportedFile(part.mediaType);
+            return yield* unsupportedFile(dialect, part.mediaType);
           }
         }
         input.push({ role: 'user', content });
@@ -97,7 +113,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
         const messages = new Map<string, Extract<Wire.InputItem, { type: 'message' }>>();
         const reasoning = new Map<string, Extract<Wire.InputItem, { type: 'reasoning' }>>();
         for (const part of message.content) {
-          const itemId = option(part.options, 'itemId');
+          const itemId = option(dialect, part.options, 'itemId');
           if (part.type === 'text') {
             const content = { type: 'output_text' as const, text: part.text, annotations: [] };
             const item = itemId === undefined ? undefined : messages.get(itemId);
@@ -117,7 +133,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
               item.content.push(content);
             }
           } else if (part.type === 'reasoning' && itemId !== undefined) {
-            const encrypted = option(part.options, 'encryptedContent');
+            const encrypted = option(dialect, part.options, 'encryptedContent');
             const item = reasoning.get(itemId);
             const summary =
               part.text === '' ? [] : [{ type: 'summary_text' as const, text: part.text }];
@@ -141,7 +157,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
               type: 'function_call',
               call_id: part.id,
               name: part.name,
-              arguments: option(part.options, 'arguments') ?? stringify(part.params),
+              arguments: option(dialect, part.options, 'arguments') ?? stringify(part.params),
               ...(itemId === undefined ? undefined : { id: itemId }),
             });
           }
@@ -154,7 +170,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
             input.push({
               type: 'function_call_output',
               call_id: part.id,
-              output: yield* toolOutput(part),
+              output: yield* toolOutput(dialect, part),
             });
           }
         }
@@ -164,8 +180,9 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt, target:
   return input;
 });
 
-const unsupportedSchema = (error: unknown) =>
+const unsupportedSchema = (dialect: Dialect) => (error: unknown) =>
   fail(
+    dialect,
     new AiError.UnsupportedSchemaError({
       description: error instanceof Error ? error.message : String(error),
     }),
@@ -174,7 +191,10 @@ const unsupportedSchema = (error: unknown) =>
 /** Foundry OpenAI defaults function tools to strict unless the tool says otherwise. */
 export const isStrict = (tool: Tool.Any): boolean => Tool.getStrictMode(tool) ?? true;
 
-const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.ProviderOptions) {
+const encodeTools = Effect.fnUntraced(function* (
+  options: LanguageModel.ProviderOptions,
+  dialect: Dialect,
+) {
   const choice = options.toolChoice;
   const required =
     choice === 'required' ||
@@ -182,6 +202,7 @@ const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.Provider
   if (options.tools.length === 0) {
     if (required) {
       return yield* fail(
+        dialect,
         new AiError.ToolConfigurationError({
           toolName: typeof choice === 'object' && 'tool' in choice ? String(choice.tool) : '',
           description: 'The tool choice requires a tool call, but no tools are available',
@@ -198,6 +219,7 @@ const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.Provider
   for (const tool of allowed) {
     if (Tool.isProviderDefined(tool)) {
       return yield* fail(
+        dialect,
         new AiError.InvalidRequestError({
           description: `Provider-defined tool '${tool.name}' is not supported`,
         }),
@@ -209,7 +231,7 @@ const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.Provider
         Tool.getJsonSchema(tool, {
           transformer: strict ? toCodecOpenAI : LanguageModel.defaultCodecTransformer,
         }),
-      catch: unsupportedSchema,
+      catch: unsupportedSchema(dialect),
     });
     const description = Tool.getDescription(tool);
     tools.push({
@@ -231,14 +253,17 @@ const encodeTools = Effect.fnUntraced(function* (options: LanguageModel.Provider
   return { tools, tool_choice: toolChoice };
 });
 
-const encodeFormat = Effect.fnUntraced(function* (options: LanguageModel.ProviderOptions) {
+const encodeFormat = Effect.fnUntraced(function* (
+  options: LanguageModel.ProviderOptions,
+  dialect: Dialect,
+) {
   if (options.responseFormat.type !== 'json') {
     return {};
   }
   const { objectName, schema } = options.responseFormat;
   const jsonSchema = yield* Effect.try({
     try: () => Tool.getJsonSchemaFromSchema(schema, { transformer: toCodecOpenAI }),
-    catch: unsupportedSchema,
+    catch: unsupportedSchema(dialect),
   });
   return {
     text: { format: { type: 'json_schema', name: objectName, schema: jsonSchema, strict: true } },
@@ -247,18 +272,17 @@ const encodeFormat = Effect.fnUntraced(function* (options: LanguageModel.Provide
 
 export const makeRequest = Effect.fnUntraced(function* (
   options: LanguageModel.ProviderOptions,
-  target: Target,
-  reasoning: Wire.Reasoning | undefined,
+  dialect: Dialect,
 ) {
-  const input = yield* encodePrompt(options.prompt, target);
-  const tools = yield* encodeTools(options);
-  const text = yield* encodeFormat(options);
+  const input = yield* encodePrompt(options.prompt, dialect);
+  const tools = yield* encodeTools(options, dialect);
+  const text = yield* encodeFormat(options, dialect);
   const request: Wire.Request = {
-    model: target.rid,
+    model: dialect.model,
     input,
     store: false,
-    ...(target.reasoning ? { include: ['reasoning.encrypted_content'] } : undefined),
-    ...(reasoning === undefined ? undefined : { reasoning }),
+    ...(dialect.encryptedReasoning ? { include: ['reasoning.encrypted_content'] } : undefined),
+    ...(dialect.reasoning === undefined ? undefined : { reasoning: dialect.reasoning }),
     ...tools,
     ...text,
   };

@@ -1,0 +1,32 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141745,\"object\":\"response\",\"status\":\"completed\",\"output\":[{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"The user wants a single-word reply: hello.\"}],\"encrypted_content\":\"MNbMOUd07fwpA67/NnqqnCpJAagvX3Kel9C8vAj+Gn9UWEcJm+fD3a35LFQCg4Di6jM0cEuGLmXU3sSfHyt0QqAPjqpxbiiIaPx4QHANChrcsil5U/xQcf6UCQsMBK0sR8N5ExrCOAb3QhOW1+Zg6c/JUwS8sDI1qjVIYqQ2g+Oikr/qrNfazkDZIgHymLDkjUkzZQx/Sz8c+3ugx5mgcQqYsfTPhAZgrTtwVhFo0K+pC2GueYIN/WwrbPiLWKvA5nWqm9WPgmlQYIUzcOxqQuHjHn9kPijZA5j6hWFKoSkKZy7yX+fQW4RZEIA2oq32lnasq5NncMZxGjeu9YVVc3+1tU3G5bdJ+MqxAvGf1piQS9IcDdWKxcsg3EY7W4NwhctAxDdBU1XGX/x6MD/pV5+QXRCRcspKbhZrlBlTWVUy7lA/TiJ9l7Zit/HEPliQF++hlSLW1H9HT71K25ICB2GKokJxEJdAynos5O8IusNqsDZ2CA00Zf9VkRHsFBJtnz3nvW/D6aH7FztFBosFt3KQqo9dpTtf+1Vvk1VLe9BeXB+zpGjiiSVbK15Lnd6Bc6WGMZtsCX6Tl+VnhJYtgTEabl/kpLzIbZwh5EWWyuS/zGV3aTzivxkGQTS2pfUGNCW/sgWhB9+5QGGXB6MEvy14OLKFbuKlWSaPOQxGne1xaZAJyJOX/ocBPcZVmdrv+vsaWfwpWqFNU4yqN8S0L8ZgSTBA5/jShblKc0Kgzx+1g6Bzs82i40zhipiNrchtAUx2deSeR2x1bLiVhVvRMym1UGBnZwPVlXSSWFnz1eOfZPalkoSk99bOaQi4pup74cAyUFpFbPoy+2VU0TIrlRhCKAFovAvk26V6zPvaqj9Yav0XpOyE6ipkv7n86WOkLTRn+ENE9pyrbxzg2GEYI4ixqRDgVYb4WiBWjR9W/gOAQQr2yxDtZ4o023llF2y/KpdFSyovtrq2bYBSYBo7\",\"status\":\"completed\"},{\"type\":\"message\",\"id\":\"msg_redacted-id-1\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"text\":\"hello\",\"annotations\":[],\"type\":\"output_text\",\"logprobs\":[]}]}],\"usage\":{\"input_tokens\":213,\"output_tokens\":158,\"total_tokens\":371,\"output_tokens_details\":{\"reasoning_tokens\":157},\"input_tokens_details\":{\"cached_tokens\":128},\"context_details\":{\"input_tokens\":213,\"output_tokens\":166},\"num_sources_used\":0,\"num_server_side_tools_used\":0,\"cost_in_usd_ticks\":11820000},\"error\":null,\"incomplete_details\":null,\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":\"high\",\"summary\":\"detailed\"},\"store\":false,\"safety_identifier\":null,\"tools\":[],\"top_p\":0.95,\"completed_at\":1795141748,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"parallel_tool_calls\":true,\"background\":false,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"user\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"max_output_tokens\":null}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

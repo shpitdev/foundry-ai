@@ -1,0 +1,33 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141749,\"object\":\"response\",\"output\":[],\"status\":\"in_progress\",\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":null,\"summary\":null},\"usage\":null,\"safety_identifier\":null,\"error\":null,\"tools\":[],\"top_p\":0.95,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"incomplete_details\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"store\":false,\"completed_at\":null,\"parallel_tool_calls\":true,\"background\":false,\"user\":null,\"max_output_tokens\":null},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"type\":\"response.in_progress\",\"response\":{\"created_at\":1795141749,\"completed_at\":null,\"id\":\"redacted-id-1\",\"max_output_tokens\":null,\"model\":\"grok-4.6\",\"object\":\"response\",\"output\":[],\"parallel_tool_calls\":true,\"previous_response_id\":null,\"reasoning\":{\"effort\":null,\"summary\":null},\"temperature\":0.7,\"text\":{\"format\":{\"type\":\"text\"}},\"tool_choice\":\"auto\",\"tools\":[],\"top_p\":0.95,\"usage\":null,\"user\":null,\"incomplete_details\":null,\"status\":\"in_progress\",\"store\":false,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"background\":false,\"service_tier\":\"default\",\"truncation\":\"disabled\",\"top_logprobs\":0,\"presence_penalty\":0.0,\"frequency_penalty\":0.0,\"prompt_cache_key\":null,\"max_tool_calls\":null,\"safety_identifier\":null,\"error\":null,\"instructions\":null}}\n\nevent: error\ndata: {\"type\":\"error\",\"code\":\"internal_error\",\"message\":\"The server had an error while processing your request.\",\"sequence_number\":2}\n\n",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

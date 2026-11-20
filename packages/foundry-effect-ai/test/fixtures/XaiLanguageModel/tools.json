@@ -1,0 +1,135 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141757,\"object\":\"response\",\"status\":\"completed\",\"output\":[{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"I need to identify the European capitals that hosted the Summer Olympics in 1900 and 1924.\"}],\"encrypted_content\":\"JzREGWE8AQnUAhiuTNg0jDud0QpeBdLXErW6FKktD3obDuIm5Q2PIlwQXYEjeObwTiV9gpFl/t8oeK9XdJJYYarbBFT8xpIFXM4cmM8fxSUKGvqzR6w7cH1AfSoUU+homF9HkS2XJuDmhwA+xBgzi34QeJ5tCzwLC80zPh62JLtdNJWqiZ8PJE+K+3WjChHGjuxOGOr1Aar0B6/Lf1D1Ao+044+/7nF+kOu4zFcl/BEOUa9L1dQDdOBceizeBoyb86LV3mIW+ypNk2Zt0cCJMyEFBt2aDxoQz+mCpV1CoLamDLz8hSuecpCwO8/X0gQuQlu2M5xrZZgWvswCfAd4Qh2whybabdNxLF5gUmHntKt0keHKbHxIsy37A2gB7ZeQSUIP5HTIi85zLcBBy6Mq0fyWpimckWhOxte8rQyCQisXn+UxfntIMcWJeEFcsjsLMjtjszO9YVuXXca8RA0UCyIB5nehtNH2DIdDxN+WwSWLktyt8VC4n9JgoE+0D0i4IBwFZREnfa36oFxIhvLWMLUJL+o39gwHA5QgklIziidcR4Zdx6T5B2FxuheB0WXDYhgBgQDHh8rxxywh+mQO+nFjPt44UlA4KJanq4O3Ea8k6/5PTQhYMymwxazfugIC7+v1TNkyESZYAxXKlWLl2nVDpbMB6QvRzeTqcus4j6QFB0oB84OTBpUqH397ddp9W4mE7I3Exhsc5Fj/AzlD/QKIBxHJrCDgFogaB7npkbZWcnVCDKT6OVIWIIBniHaJRiUttXtaxTJrvWxsISUGzgeUj5rG8XTp9onbpwWKAZPHRpZILmCTejiAisDxcyVodGWJqfwxLfg6p6JdvRbhtey7R+mVD54W1MCblFEJ+FBuv+xUk7EUYGn6BHYYL+S0827GuHBaGkkMMLqdDqnW6+fU+mEZgd8HB+aehEsVxU5HgTMIXDWWUwDz1ghPWXOGSLF7zmbg7ljp5/sfI61LiOyWPpR8eph4kfH+NsbOGGn+chMJkYjj3SahJWcIZDEvvVejzpw4ezfpx4VKPOeES6UlH34zk8JtdoE4op0/r68x3fUiI1p+7dXMHw4FbzlXHgVbPnOP2Hpd5fOUbR0v4FdndjRhXs0k4+gWRD8v397bqDx9O23qVcx+karbmkDfyilGs48b6Wdn3R6wXs1AoDxp+Rf0yzwBi2UPUKpp64ozi0WnQ/2mVM8g\",\"status\":\"completed\"},{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"call-dcda5a79-ea02-42d8-bcc1-8df252451050-0\",\"name\":\"GetWeather\",\"id\":\"fc_redacted-id-1_0\",\"status\":\"completed\"}],\"usage\":{\"input_tokens\":326,\"output_tokens\":219,\"total_tokens\":545,\"output_tokens_details\":{\"reasoning_tokens\":209},\"input_tokens_details\":{\"cached_tokens\":128},\"context_details\":{\"input_tokens\":326,\"output_tokens\":223},\"num_sources_used\":0,\"num_server_side_tools_used\":0,\"cost_in_usd_ticks\":17740000},\"error\":null,\"incomplete_details\":null,\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":\"medium\",\"summary\":\"detailed\"},\"store\":false,\"safety_identifier\":null,\"tools\":[{\"type\":\"function\",\"description\":\"Get the current weather in a city\",\"name\":\"GetWeather\",\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"additionalProperties\":false},\"strict\":true}],\"top_p\":0.95,\"completed_at\":1795141760,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"parallel_tool_calls\":true,\"background\":false,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"user\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"max_output_tokens\":null}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-4\",\"model\":\"grok-4.6\",\"created_at\":1795141760,\"object\":\"response\",\"status\":\"completed\",\"output\":[{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-4\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"The weather in Paris is 21°C and sunny.\"}],\"encrypted_content\":\"raO6iCqxbOD9zb8mxapitNrfIbEM0dNZVFht4OQdu2yq6ghMzxZ0Btm1CUAFJs10jL73i0UcjlsfuAyH9Lj/sgWnMcuy7JJwNGzPeSJIJg1ObbioDwQ4kw0OdSJMyx7QJ7lMVlkm6rGMfQTmtm5da6V/pRQMcsFZn/SaAtasj9IPMWJdZydOg9LVJUgZ9Je25hvk2dJAceuy1eepp4B6wxwJ0qsApZbgCsXmatW9cB+odNG6evrmnJpa10FsYhRAAmlO81yd3P3CQncTDQGi22DyboclTGEWy/T+tRlMkj47T2vmBfyS7vFrbiWHofZp+o7oxG1kiaYPtGJ09A51rkHumOGuULyhh9o9vcOz3zRxWKp6xDqrDU0x4/m5kFpp2xFI4tIs0nv4Oce4lLzsZHa/L19ZCehIt0udZzPhsXihOA2oCL5SlYHeomzO84A/UIi7cHwj+B3kwN/6BqEaktB2zz0ZpKRHoyOoFkoUbgXe4ilq2AubuW9JygSHzOc0ncULrj6A2CuRAJaN8mhXdEUcfq1qO+8/K7blU1j+Ey+m9CmZ5rELZp+7TJux8IvQ94awBT1klD4WiunpUBHCsgPjbjY0rfQ/EgyxFltSpu7Kc9RGzyWTKQ\",\"status\":\"completed\"},{\"type\":\"message\",\"id\":\"msg_redacted-id-4\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"text\":\"Paris hosted the 1900 and 1924 Summer Olympics and currently has sunny weather at 21°C.\",\"annotations\":[],\"type\":\"output_text\",\"logprobs\":[]}]}],\"usage\":{\"input_tokens\":564,\"output_tokens\":122,\"total_tokens\":686,\"output_tokens_details\":{\"reasoning_tokens\":99},\"input_tokens_details\":{\"cached_tokens\":128},\"context_details\":{\"input_tokens\":564,\"output_tokens\":130},\"num_sources_used\":0,\"num_server_side_tools_used\":0,\"cost_in_usd_ticks\":16680000},\"error\":null,\"incomplete_details\":null,\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":\"medium\",\"summary\":\"detailed\"},\"store\":false,\"safety_identifier\":null,\"tools\":[{\"type\":\"function\",\"description\":\"Get the current weather in a city\",\"name\":\"GetWeather\",\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"additionalProperties\":false},\"strict\":true}],\"top_p\":0.95,\"completed_at\":1795141762,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"parallel_tool_calls\":true,\"background\":false,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"user\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"max_output_tokens\":null}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "type": "reasoning",
+            "id": "rs_redacted-id-1",
+            "summary": [
+              {
+                "type": "summary_text",
+                "text": "I need to identify the European capitals that hosted the Summer Olympics in 1900 and 1924."
+              }
+            ],
+            "encrypted_content": "JzREGWE8AQnUAhiuTNg0jDud0QpeBdLXErW6FKktD3obDuIm5Q2PIlwQXYEjeObwTiV9gpFl/t8oeK9XdJJYYarbBFT8xpIFXM4cmM8fxSUKGvqzR6w7cH1AfSoUU+homF9HkS2XJuDmhwA+xBgzi34QeJ5tCzwLC80zPh62JLtdNJWqiZ8PJE+K+3WjChHGjuxOGOr1Aar0B6/Lf1D1Ao+044+/7nF+kOu4zFcl/BEOUa9L1dQDdOBceizeBoyb86LV3mIW+ypNk2Zt0cCJMyEFBt2aDxoQz+mCpV1CoLamDLz8hSuecpCwO8/X0gQuQlu2M5xrZZgWvswCfAd4Qh2whybabdNxLF5gUmHntKt0keHKbHxIsy37A2gB7ZeQSUIP5HTIi85zLcBBy6Mq0fyWpimckWhOxte8rQyCQisXn+UxfntIMcWJeEFcsjsLMjtjszO9YVuXXca8RA0UCyIB5nehtNH2DIdDxN+WwSWLktyt8VC4n9JgoE+0D0i4IBwFZREnfa36oFxIhvLWMLUJL+o39gwHA5QgklIziidcR4Zdx6T5B2FxuheB0WXDYhgBgQDHh8rxxywh+mQO+nFjPt44UlA4KJanq4O3Ea8k6/5PTQhYMymwxazfugIC7+v1TNkyESZYAxXKlWLl2nVDpbMB6QvRzeTqcus4j6QFB0oB84OTBpUqH397ddp9W4mE7I3Exhsc5Fj/AzlD/QKIBxHJrCDgFogaB7npkbZWcnVCDKT6OVIWIIBniHaJRiUttXtaxTJrvWxsISUGzgeUj5rG8XTp9onbpwWKAZPHRpZILmCTejiAisDxcyVodGWJqfwxLfg6p6JdvRbhtey7R+mVD54W1MCblFEJ+FBuv+xUk7EUYGn6BHYYL+S0827GuHBaGkkMMLqdDqnW6+fU+mEZgd8HB+aehEsVxU5HgTMIXDWWUwDz1ghPWXOGSLF7zmbg7ljp5/sfI61LiOyWPpR8eph4kfH+NsbOGGn+chMJkYjj3SahJWcIZDEvvVejzpw4ezfpx4VKPOeES6UlH34zk8JtdoE4op0/r68x3fUiI1p+7dXMHw4FbzlXHgVbPnOP2Hpd5fOUbR0v4FdndjRhXs0k4+gWRD8v397bqDx9O23qVcx+karbmkDfyilGs48b6Wdn3R6wXs1AoDxp+Rf0yzwBi2UPUKpp64ozi0WnQ/2mVM8g"
+          },
+          {
+            "type": "function_call",
+            "call_id": "call-dcda5a79-ea02-42d8-bcc1-8df252451050-0",
+            "name": "GetWeather",
+            "arguments": "{\"city\":\"Paris\"}",
+            "id": "fc_redacted-id-1_0"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call-dcda5a79-ea02-42d8-bcc1-8df252451050-0",
+            "output": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

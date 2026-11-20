@@ -1,0 +1,36 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141780,\"object\":\"response\",\"status\":\"completed\",\"output\":[{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"The user asked what color fills an image.\"}],\"encrypted_content\":\"obZBuCpsBJV71Rfi4koKpjAFujddsUFD2Hg0iz/jedRP1ihMQA99lb65gCJi7YfXTVD7PSaiEI0Fsjc3v0gnD5Ob4P0DeF3o/ByiJ0ZHZP7EA22OILcGL4R6LDiWOFZUQ//aIqzUkEAzkLGeESAB8LpqNiDBaftHTDEaNUJ1AEnUtO3GQVXLwlDM7U+p1xbUII33dRDGT0TZgHEZt1SkbJg5rh+e4cBPQd4grP5xpeEJbjKih+8DfcEkW1RLTn4JEtElB30vKghw8pjhzcPPQ21tY8jtlV0HOB2refnaVHLuBupUUN534//av2y1BLXpJ71vvFKCSG+rkoA6ccT8p3/he/RRVXozmoJEwyOPilf4zJziraI8O82v3Q+D/Y/MPso2tTEGlukLR24UWUhsR8DYXejpReDNb7pmYZsa1rilOMjvd0kWWbddg1VKAvUQzsXsCw4rHqMCJBNWzwI2peNFIk8M48q45pdWhGCvz+NZ9FOnwwuHE34rOaZP023T1w+QoBHQc6zGOLCrCbfUQdr+eB4sjWqXznB3HFcbDTNVaLjIi/euYuaGC63dErEaCChvVMKU2CkLfW9VBZPqAgnZNWL/\",\"status\":\"completed\"},{\"type\":\"message\",\"id\":\"msg_redacted-id-1\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"text\":\"Red\",\"annotations\":[],\"type\":\"output_text\",\"logprobs\":[]}]}],\"usage\":{\"input_tokens\":272,\"output_tokens\":165,\"total_tokens\":437,\"output_tokens_details\":{\"reasoning_tokens\":164},\"input_tokens_details\":{\"cached_tokens\":128},\"context_details\":{\"input_tokens\":272,\"output_tokens\":173},\"num_sources_used\":0,\"num_server_side_tools_used\":0,\"cost_in_usd_ticks\":13420000},\"error\":null,\"incomplete_details\":null,\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_e41c6060b2628547\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":\"high\",\"summary\":\"detailed\"},\"store\":false,\"safety_identifier\":null,\"tools\":[],\"top_p\":0.95,\"completed_at\":1795141784,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"parallel_tool_calls\":true,\"background\":false,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"user\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"max_output_tokens\":null}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "What color fills this image? Answer with one word."
+              },
+              {
+                "type": "input_image",
+                "image_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAxElEQVR42u3RMQ0AAAjAsPk3DTLgaDIFa1M6zAIAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABAADAAgAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAjAixYgaMOy89oM6gAAAABJRU5ErkJggg=="
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
