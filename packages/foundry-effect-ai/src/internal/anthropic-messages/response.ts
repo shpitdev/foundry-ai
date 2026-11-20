@@ -179,6 +179,10 @@ export const decodeResponse = Effect.fnUntraced(function* (
   // The JSON tool's input is the answer; prose beside it would break JSON decoding.
   const json = jsonTool(options, target)?.objectName;
   const structured = blocks.some((block) => block.type === 'tool_use' && block.name === json);
+  // A last tool call cut off by the output limit has partial input; the finish reports it.
+  if (body.stop_reason === 'max_tokens' && blocks.at(-1)?.type === 'tool_use') {
+    blocks.pop();
+  }
   for (const block of blocks) {
     switch (block.type) {
       case 'text':

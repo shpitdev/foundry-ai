@@ -2,7 +2,8 @@
 /**
  * Messages server-sent events → Effect AI stream parts. Blocks are tracked by `index`; a
  * thinking block's signature arrives as a delta and is attached to its end part. `message_stop`
- * closes any open blocks, emits the finish and stops reading. An in-band `error` fails the
+ * closes any open blocks, emits the finish and stops reading; a tool call whose input the output
+ * limit cut off is dropped, and the finish reports `length`. An in-band `error` fails the
  * stream, and a stream that ends before `message_stop` fails with `InvalidResponseError`.
  */
 import * as AiError from 'effect/ai/AiError';
@@ -11,6 +12,7 @@ import type * as Response from 'effect/ai/Response';
 import * as Tool from 'effect/ai/Tool';
 import * as Effect from 'effect/Effect';
 import type * as Sse from 'effect/encoding/Sse';
+import * as Result from 'effect/Result';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
 import { stringify } from './request.ts';
@@ -45,6 +47,8 @@ export const decodeStream = (
   // `message_delta` usage is cumulative: each reported count replaces the earlier one.
   const counts: Record<string, number> = {};
   const blocks = new Map<number, Block>();
+  // Input cut off by the output limit is not a call; any other unparsable input fails at the end.
+  let invalidInput: AiError.AiError | undefined;
 
   const mergeUsage = (wire: typeof Wire.Usage.Type | null | undefined) => {
     for (const [key, value] of Object.entries(wire ?? {})) {
@@ -73,21 +77,28 @@ export const decodeStream = (
         } as const,
       ];
     }
-    const input = yield* Effect.try({
-      try: () => Tool.unsafeSecureJsonParse(block.input === '' ? '{}' : block.input),
-      catch: (cause) =>
-        AiError.make({
-          module: 'AnthropicLanguageModel',
-          method,
-          reason: new AiError.ToolParameterValidationError({
-            toolName: block.name,
-            description: `Tool input is not valid JSON: ${String(cause)}`,
+    const paramsEnd = { type: 'tool-params-end', id: block.id } as const;
+    const input = yield* Effect.result(
+      Effect.try({
+        try: () => Tool.unsafeSecureJsonParse(block.input === '' ? '{}' : block.input),
+        catch: (cause) =>
+          AiError.make({
+            module: 'AnthropicLanguageModel',
+            method,
+            reason: new AiError.ToolParameterValidationError({
+              toolName: block.name,
+              description: `Tool input is not valid JSON: ${String(cause)}`,
+            }),
           }),
-        }),
-    });
+      }),
+    );
+    if (Result.isFailure(input)) {
+      invalidInput ??= input.failure;
+      return [paramsEnd];
+    }
     return [
-      { type: 'tool-params-end', id: block.id } as const,
-      yield* toolCall(method, options, { id: block.id, name: block.name, input }),
+      paramsEnd,
+      yield* toolCall(method, options, { id: block.id, name: block.name, input: input.success }),
     ];
   });
 
@@ -199,6 +210,9 @@ export const decodeStream = (
         finished = true;
         for (const index of blocks.keys()) {
           parts.push(...(yield* end(index)));
+        }
+        if (invalidInput !== undefined && finishReason(stopReason) !== 'length') {
+          return yield* invalidInput;
         }
         parts.push({ type: 'finish', reason: finishReason(stopReason), usage: usage(counts) });
         break;

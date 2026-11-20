@@ -218,10 +218,12 @@ const encodeTool = Effect.fnUntraced(function* (tool: Tool.Any) {
 /**
  * In JSON-tool mode the application tools allowed by the choice travel with the injected tool,
  * and the model must call one of them, one at a time: the JSON tool alone is forced by name.
+ * With thinking on, the choice stays `auto`, and a JSON text answer decodes as well.
  */
 const encodeTools = Effect.fnUntraced(function* (
   options: LanguageModel.ProviderOptions,
   json: JsonFormat | undefined,
+  thinking: boolean,
 ) {
   const choice = options.toolChoice;
   if (json !== undefined) {
@@ -252,10 +254,15 @@ const encodeTools = Effect.fnUntraced(function* (
       description: 'Respond with a JSON object.',
       input_schema: inputSchema,
     });
-    const toolChoice: Wire.ToolChoice =
-      allowed.length === 0
-        ? { type: 'tool', name: objectName, disable_parallel_tool_use: true }
-        : { type: 'any', disable_parallel_tool_use: true };
+    let toolChoice: Wire.ToolChoice;
+    if (thinking) {
+      // Thinking rejects forced tool use, so a thinking model is asked to call a tool instead.
+      toolChoice = { type: 'auto', disable_parallel_tool_use: true };
+    } else if (allowed.length === 0) {
+      toolChoice = { type: 'tool', name: objectName, disable_parallel_tool_use: true };
+    } else {
+      toolChoice = { type: 'any', disable_parallel_tool_use: true };
+    }
     return { tools, tool_choice: toolChoice };
   }
   if (options.tools.length === 0) {
@@ -310,7 +317,8 @@ export const makeRequest = Effect.fnUntraced(function* (
   settings: Settings | undefined,
 ) {
   const { system, messages } = yield* encodePrompt(options.prompt);
-  const tools = yield* encodeTools(options, jsonTool(options, target));
+  const thinking = settings?.thinking !== undefined && settings.thinking.type !== 'disabled';
+  const tools = yield* encodeTools(options, jsonTool(options, target), thinking);
   const format = yield* encodeFormat(options, target);
   const request: Wire.Request = {
     model: target.rid,
