@@ -36,6 +36,7 @@ const budgets = {
   FoundryClient: 6_800,
   OpenAiDecisionModel: 13_600,
   OpenAiEmbeddingModel: 8_400,
+  OpenAiChatLanguageModel: 21_500,
   OpenAiLanguageModel: 26_700,
   default: 64_000,
 };
