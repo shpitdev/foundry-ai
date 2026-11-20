@@ -35,6 +35,7 @@ const owners = {
 const budgets = {
   FoundryClient: 6_200,
   OpenAiDecisionModel: 10_700,
+  OpenAiEmbeddingModel: 7_500,
   default: 64_000,
 };
 
