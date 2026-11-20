@@ -73,40 +73,47 @@ const probe = (module: string, cell: string, run: Cell, record: boolean) =>
       }>
     > = [];
     // Records each exchange from a clone of the Web response; the clone tees the body, so the
-    // model reads its copy as it arrives. Cancelling a stream early waits for the copy.
-    const recorder = HttpClient.transformResponse(
-      Effect.map((response) =>
-        Option.match(HttpClientResponse.toWeb(response), {
-          onNone: () => response,
-          onSome: (web) => {
-            const { body } = response.request;
-            const path = proxyPath(web.url);
-            const headers = Object.fromEntries(
-              Object.entries(response.request.headers).filter(
-                ([name]) => !unpinnedHeaders.has(name),
-              ),
-            );
-            const sent = body._tag === 'Uint8Array' ? new TextDecoder().decode(body.body) : '';
-            recordings.push(
-              web
-                .clone()
-                .text()
-                .then((text) => ({
-                  path,
-                  headers,
-                  sent,
-                  response: {
-                    status: web.status,
-                    contentType: web.headers.get('content-type') ?? '',
-                    body: text,
-                  },
-                })),
-            );
-            return HttpClientResponse.fromWeb(response.request, web);
-          },
-        }),
-      ),
-    );
+    // caller reads its copy as it arrives. Cancelling a stream early waits for the copy.
+    const capture = (response: HttpClientResponse.HttpClientResponse) =>
+      Option.match(HttpClientResponse.toWeb(response), {
+        onNone: () => response,
+        onSome: (web) => {
+          const { body } = response.request;
+          const path = proxyPath(web.url);
+          const headers = Object.fromEntries(
+            Object.entries(response.request.headers).filter(([name]) => !unpinnedHeaders.has(name)),
+          );
+          const sent = body._tag === 'Uint8Array' ? new TextDecoder().decode(body.body) : '';
+          recordings.push(
+            web
+              .clone()
+              .text()
+              .then((text) => ({
+                path,
+                headers,
+                sent,
+                response: {
+                  status: web.status,
+                  contentType: web.headers.get('content-type') ?? '',
+                  body: text,
+                },
+              })),
+          );
+          return HttpClientResponse.fromWeb(response.request, web);
+        },
+      });
+    // Failed statuses reach `transformClient` as `StatusCodeError`; record their responses too.
+    const recorder = (client: HttpClient.HttpClient) =>
+      client.pipe(
+        HttpClient.transformResponse(Effect.map(capture)),
+        HttpClient.tapError((error) =>
+          Effect.sync(() => {
+            if (error.reason._tag === 'StatusCodeError') {
+              capture(error.reason.response);
+            }
+          }),
+        ),
+      );
     const transformClient = record ? recorder : undefined;
     // The default client reads FOUNDRY_* through layerConfig; overrides need explicit options.
     const client = (overrides?: Partial<FoundryClient.Options>) =>

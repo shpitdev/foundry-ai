@@ -7,6 +7,7 @@ import type * as Layer from 'effect/Layer';
 import * as Redacted from 'effect/Redacted';
 import * as Schedule from 'effect/Schedule';
 import * as Schema from 'effect/Schema';
+import * as Stream from 'effect/Stream';
 import * as FoundryClient from '../../src/FoundryClient.ts';
 import type { Cell } from '../harness.ts';
 
@@ -136,13 +137,36 @@ export const cells: Readonly<Record<string, Cell>> = {
       expect(xai.message).toContain('does not support parameter reasoningEffort');
     }),
 
-  // Synthetic: `transformClient` sees a non-2xx response as an error, so its retry policy runs.
-  'transform-retry': (env) =>
+  // Synthetic: `transformClient` sees a non-2xx response as an error, so its retry policy runs;
+  // a transform that hands the failed response back still fails, for `json` and `sse`.
+  'transform-client': (env) =>
     Effect.gen(function* () {
-      const body = yield* FoundryClient.FoundryClient.use((client) =>
-        client.json({ path: '/openai/v1/responses', body: {}, schema: Schema.Unknown }),
-      ).pipe(Effect.provide(env.client({ transformClient: HttpClient.retry(Schedule.recurs(1)) })));
-      expect(body).toEqual({ ok: true });
+      const path = '/openai/v1/responses';
+      const json = FoundryClient.FoundryClient.use((client) =>
+        client.json({ path, body: {}, schema: Schema.Unknown }),
+      );
+      const retried = yield* json.pipe(
+        Effect.provide(env.client({ transformClient: HttpClient.retry(Schedule.recurs(1)) })),
+      );
+      expect(retried).toEqual({ ok: true });
       expect(env.requests).toHaveLength(2);
+
+      const passThrough = env.client({
+        transformClient: HttpClient.transformResponse(
+          Effect.catchTag('HttpClientError', (error) =>
+            error.reason._tag === 'StatusCodeError'
+              ? Effect.succeed(error.reason.response)
+              : Effect.fail(error),
+          ),
+        ),
+      });
+      const sse = FoundryClient.FoundryClient.use((client) =>
+        Stream.runCollect(client.sse({ path, body: {} })),
+      );
+      for (const failed of [json, sse]) {
+        const error = yield* failed.pipe(Effect.provide(passThrough), Effect.flip, Effect.orDie);
+        expect(error.reason).toMatchObject({ _tag: 'InvalidRequestError' });
+        expect(error.reason.message).toContain('failed');
+      }
     }),
 };

@@ -1,0 +1,22 @@
+[
+  {
+    "status": 503,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"INTERNAL\",\"errorName\":\"Default:Internal\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"ok\":true}"
+  },
+  {
+    "status": 400,
+    "contentType": "application/json",
+    "body": "{\"error\":{\"message\":\"failed\",\"type\":\"invalid_request_error\",\"code\":null}}"
+  },
+  {
+    "status": 400,
+    "contentType": "application/json",
+    "body": "{\"error\":{\"message\":\"failed\",\"type\":\"invalid_request_error\",\"code\":null}}"
+  }
+]

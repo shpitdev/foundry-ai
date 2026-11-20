@@ -38,13 +38,14 @@ const decisionModels = Object.entries(OpenAi.models).flatMap(([id, entry]) =>
 /**
  * Proven offline only, from fixtures Foundry cannot produce on demand: a recorded `.sse` cut short
  * (must fail with `InvalidResponseError`, never finish as `stop`), an in-band stream error event,
- * a synthetic decision refusal, and a 503 that a `transformClient` retry recovers from.
+ * a synthetic decision refusal, and `transformClient` checks: a retry that recovers from a 503,
+ * and a failed response a transform hands back.
  */
 export const contractOnly: ReadonlySet<string> = new Set([
   'stream-truncated',
   'stream-error',
   'refusal',
-  'transform-retry',
+  'transform-client',
 ]);
 
 // `tools` is two requests (tool call, then tool result and answer) with reasoning on, so it
@@ -68,10 +69,10 @@ export const rows: ReadonlyArray<Row> = [
     phase: 1,
     // One route per vendor. Live records a bad-token 401 and an unknown-model 404 from each; the
     // contract also covers 429 with `retry-after`, 5xx, a malformed 200 and a bodyless response,
-    // and `transform-retry` checks that a `transformClient` retry policy sees a 503.
+    // and `transform-client` checks what a `transformClient` sees and returns.
     liveModels: ['gpt-6-luna', 'claude-haiku-4.5', 'gemini-3.1-flash-lite', 'grok-4-6'],
     sweep: ['gpt-6-luna', 'claude-haiku-4.5', 'gemini-3.1-flash-lite', 'grok-4-6'],
-    cells: ['error-mapping', 'transform-retry'],
+    cells: ['error-mapping', 'transform-client'],
   },
   {
     module: 'OpenAiDecisionModel',

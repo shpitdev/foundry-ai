@@ -110,7 +110,7 @@ const statusReason = (
 };
 
 /** Fails with the `AiError` for a non-2xx proxy response. */
-const fromResponse = Effect.fnUntraced(function* (
+export const fromResponse = Effect.fnUntraced(function* (
   method: string,
   response: HttpClientResponse.HttpClientResponse,
 ) {

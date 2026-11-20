@@ -6,7 +6,8 @@
  * Each key is declared once, here: merged interface properties must have one type, and
  * `foundry-openai` is written by several OpenAI modules. `FoundryClient` imports this file, so
  * every public module's declarations carry it. The upstream `openai` and `anthropic` keys are
- * never touched.
+ * never touched. The keys are typed only under `exactOptionalPropertyTypes`; see
+ * `FoundryExactOnly`.
  */
 // Type literals, not interfaces: Effect's metadata records need their implicit index signature.
 /* oxlint-disable typescript/consistent-type-definitions */
@@ -72,6 +73,15 @@ export type FoundryDecisionMetadata = {
   };
 };
 
+/**
+ * `T` when the consumer compiles with `exactOptionalPropertyTypes`, otherwise nothing. Without
+ * the flag an optional key also admits `undefined`, which Effect's JSON index signatures reject
+ * (TS2411); there the keys stay plain JSON rather than break the consumer's build.
+ */
+// Empty on purpose: without the flag, the augmentation adds nothing.
+// oxlint-disable-next-line typescript/no-generated-empty-object-type
+type FoundryExactOnly<T> = { x: undefined } extends { x?: never } ? Record<never, never> : T;
+
 /** Error metadata: transport errors under `foundry`, in-band errors under the vendor key. */
 type FoundryErrorKeys = {
   readonly foundry?: FoundryError | null;
@@ -90,31 +100,32 @@ type FoundryPartKeys = {
 };
 
 declare module 'effect/ai/AiError' {
-  export interface RateLimitErrorMetadata extends FoundryErrorKeys {}
-  export interface QuotaExhaustedErrorMetadata extends FoundryErrorKeys {}
-  export interface AuthenticationErrorMetadata extends FoundryErrorKeys {}
-  export interface InvalidRequestErrorMetadata extends FoundryErrorKeys {}
-  export interface InternalProviderErrorMetadata extends FoundryErrorKeys {}
+  export interface RateLimitErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
+  export interface QuotaExhaustedErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
+  export interface AuthenticationErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
+  export interface InvalidRequestErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
+  export interface InternalProviderErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
+  export interface UnknownErrorMetadata extends FoundryExactOnly<FoundryErrorKeys> {}
 }
 
 declare module 'effect/ai/Response' {
-  export interface TextPartMetadata extends FoundryPartKeys {}
-  export interface TextStartPartMetadata extends FoundryPartKeys {}
-  export interface TextEndPartMetadata extends FoundryPartKeys {}
-  export interface ReasoningPartMetadata extends FoundryPartKeys {}
-  export interface ReasoningStartPartMetadata extends FoundryPartKeys {}
-  export interface ReasoningEndPartMetadata extends FoundryPartKeys {}
-  export interface ToolCallPartMetadata extends FoundryPartKeys {}
+  export interface TextPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface TextStartPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface TextEndPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ReasoningPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ReasoningStartPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ReasoningEndPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ToolCallPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
 }
 
 declare module 'effect/ai/Prompt' {
-  export interface TextPartOptions extends FoundryPartKeys {}
-  export interface ReasoningPartOptions extends FoundryPartKeys {}
-  export interface ToolCallPartOptions extends FoundryPartKeys {}
+  export interface TextPartOptions extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ReasoningPartOptions extends FoundryExactOnly<FoundryPartKeys> {}
+  export interface ToolCallPartOptions extends FoundryExactOnly<FoundryPartKeys> {}
 }
 
 declare module 'effect/ai/DecisionModel' {
-  export interface DecideResponseMetadata {
+  export interface DecideResponseMetadata extends FoundryExactOnly<{
     readonly 'foundry-openai'?: FoundryDecisionMetadata | null;
-  }
+  }> {}
 }

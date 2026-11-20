@@ -39,7 +39,7 @@ import * as Layer from 'effect/Layer';
 const Foundry = FoundryClient.layerConfig().pipe(Layer.provide(FetchHttpClient.layer));
 ```
 
-For explicit settings, use `FoundryClient.layer({ foundryUrl, token: Redacted.make(token) })`. `transformClient` wraps the HTTP client after authentication. Non-2xx responses are already failures at that point, so `HttpClient.retryTransient({ times: 2 })` or `HttpClient.retry(schedule)` applies to 429 and 5xx responses. Keep server tokens out of browser code.
+For explicit settings, use `FoundryClient.layer({ foundryUrl, token: Redacted.make(token) })`. `transformClient` wraps the HTTP client after authentication. Non-2xx responses are already failures at that point, so `HttpClient.retry(schedule)` sees every failed status, and `HttpClient.retryTransient({ times: 2 })` retries 408, 429, 500, 502, 503 and 504. Keep server tokens out of browser code.
 
 ## Examples
 
@@ -173,10 +173,10 @@ const vectors = EmbeddingModel.EmbeddingModel.use((model) =>
 
 ## Provider metadata
 
-Response parts, prompt options and errors carry this package's data under its own keys: `foundry-openai`, `foundry-anthropic`, `foundry-google` and `foundry-xai`, plus `foundry` for transport errors (`errorName`, `errorInstanceId`, `code`, `type`). These keys are typed. If your project checks library declarations (`skipLibCheck: false`), enable `exactOptionalPropertyTypes`, as Effect recommends.
+Response parts, prompt options and errors carry this package's data under its own keys: `foundry-openai`, `foundry-anthropic`, `foundry-google` and `foundry-xai`, plus `foundry` for transport errors (`errorName`, `errorInstanceId`, `code`, `type`). With `exactOptionalPropertyTypes`, which Effect recommends, these keys are typed; without it they read as plain JSON.
 
 ## More
 
-- [Models and live test status](./docs/README.md): capabilities per model, Foundry quirks the adapters handle, and what is out of scope.
-- [Design record](./docs/PLAN.md) and [wire protocol notes](./docs/protocols/README.md).
-- [`@shpitdev/foundry-ai`](../foundry-ai/README.md), the Vercel AI SDK version of these adapters.
+- [Models and live test status](https://github.com/shpitdev/foundry-ai/blob/main/packages/foundry-effect-ai/docs/README.md): capabilities per model, Foundry quirks the adapters handle, and what is out of scope.
+- [Design record](https://github.com/shpitdev/foundry-ai/blob/main/packages/foundry-effect-ai/docs/PLAN.md) and [wire protocol notes](https://github.com/shpitdev/foundry-ai/blob/main/packages/foundry-effect-ai/docs/protocols/README.md).
+- [`@shpitdev/foundry-ai`](https://github.com/shpitdev/foundry-ai/blob/main/packages/foundry-ai/README.md), the Vercel AI SDK version of these adapters.

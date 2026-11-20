@@ -45,6 +45,8 @@ export type ClientLayer = Layer.Layer<FoundryClient.FoundryClient, never, HttpCl
 export const metadataReads = {
   transport: (metadata: AiError.InvalidRequestErrorMetadata): string | null | undefined =>
     metadata.foundry?.errorName,
+  fallback: (metadata: AiError.UnknownErrorMetadata): string | null | undefined =>
+    metadata.foundry?.errorName ?? metadata['foundry-google']?.status,
   inBand: (metadata: AiError.InternalProviderErrorMetadata): number | null | undefined =>
     metadata['foundry-google']?.code,
   responses: (metadata: Response.ToolCallPartMetadata): string | undefined =>

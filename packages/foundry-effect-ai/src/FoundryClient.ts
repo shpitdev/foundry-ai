@@ -93,18 +93,28 @@ export const make = Effect.fnUntraced(function* (options: Options) {
       : Effect.provideService(sent, HttpClient.TracerPropagationEnabled, false);
   };
 
-  /** Encodes the body and sends the request; a non-2xx status fails as a `StatusCodeError`. */
+  /**
+   * Encodes the body and sends the request. A non-2xx status fails with the mapped error, also
+   * when `transformClient` returns the failed response instead of its error.
+   */
   const send = (method: string, request: ProxyRequest, accept: string) => {
     const unsent = HttpClientRequest.post(request.path).pipe(
       HttpClientRequest.setUrlParams(request.urlParams ?? {}),
       HttpClientRequest.accept(accept),
       HttpClientRequest.setHeaders(request.headers ?? {}),
     );
-    return Effect.catchTag(
-      HttpClientRequest.bodyJson(unsent, request.body),
-      'HttpBodyError',
-      (error) => Errors.fromBodyError(method, unsent, error),
-    ).pipe(Effect.flatMap(execute));
+    return Effect.gen(function* () {
+      const sendable = yield* Effect.catchTag(
+        HttpClientRequest.bodyJson(unsent, request.body),
+        'HttpBodyError',
+        (error) => Errors.fromBodyError(method, unsent, error),
+      );
+      const response = yield* execute(sendable);
+      if (response.status < 200 || response.status >= 300) {
+        return yield* Errors.fromResponse(method, response);
+      }
+      return response;
+    });
   };
 
   const json = <S extends Schema.Constraint>(

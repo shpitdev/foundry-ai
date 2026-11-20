@@ -73,11 +73,15 @@ export const expectGoldenRequests = (
   }
 };
 
+/** Replaces a cell's recording; an empty one would erase a known-good fixture, so it throws. */
 export const writeFixtures = (
   module: string,
   cell: string,
   fixtures: ReadonlyArray<Fixture>,
 ): void => {
+  if (fixtures.length === 0) {
+    throw new Error(`${module} ${cell}: nothing was recorded; the fixture is unchanged.`);
+  }
   const file = fixtureFile(module, cell, 'json');
   mkdirSync(new URL('.', file), { recursive: true });
   writeFileSync(file, `${JSON.stringify(fixtures, null, 2)}\n`);

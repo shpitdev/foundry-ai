@@ -2,7 +2,8 @@
 // effect in a scratch project, bundles each public module through the exports map (effect
 // external), and fails when a bundle reaches code owned by another protocol or vendor, exceeds its
 // size budget, when internal modules resolve, or when a consumer cannot typecheck each module and
-// all of them together, with this package's metadata keys typed.
+// all of them together, in both `exactOptionalPropertyTypes` modes, with the metadata keys typed
+// in exact mode.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -82,16 +83,24 @@ try {
       `export * as M from '@shpitdev/foundry-effect-ai/${name}';\n`,
     );
   }
-  // Every module together: one declaration per metadata key, typed for the consumer.
+  // Every module together, which needs one declaration per metadata key; `typed.ts` also reads
+  // the keys, which are typed under `exactOptionalPropertyTypes` only.
+  const imports = modules.map(
+    (name) => `import * as ${name} from '@shpitdev/foundry-effect-ai/${name}';`,
+  );
   writeFileSync(
     join(scratch, 'all.ts'),
+    [...imports, `export const modules = [${modules.join(', ')}];`, ''].join('\n'),
+  );
+  writeFileSync(
+    join(scratch, 'typed.ts'),
     [
       "import type * as AiError from 'effect/ai/AiError';",
       "import type * as Response from 'effect/ai/Response';",
-      ...modules.map((name) => `import * as ${name} from '@shpitdev/foundry-effect-ai/${name}';`),
-      `export const modules = [${modules.join(', ')}];`,
+      "import './all.ts';",
       'export const reads = [',
       '  (metadata: AiError.RateLimitErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
+      '  (metadata: AiError.UnknownErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
       "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-openai']?.itemId,",
       '];',
       '',
@@ -163,35 +172,41 @@ try {
     failures.push(`${specifier} resolved; the exports map must block internal modules.`);
   }
 
-  // Consumers typecheck each module through the exports map with no other package installed.
-  try {
-    execFileSync(
-      resolve('node_modules/.bin/tsc'),
-      [
-        '--ignoreConfig',
-        '--noEmit',
-        '--strict',
-        // Effect's recommended setting; without it, typed metadata keys conflict with Effect's
-        // JSON index signatures unless the consumer skips library checks.
-        '--exactOptionalPropertyTypes',
-        '--skipLibCheck',
-        'false',
-        '--module',
-        'nodenext',
-        '--moduleResolution',
-        'nodenext',
-        '--target',
-        'es2022',
-        '--lib',
-        'es2023,dom',
-        ...modules.map((name) => `${name}.ts`),
-        'all.ts',
-      ],
-      { cwd: scratch, encoding: 'utf8', stdio: 'pipe' },
-    );
-  } catch (error) {
-    failures.push(`Consumer typecheck failed:\n${error.stdout || error.message}`);
-  }
+  // Consumers typecheck each module through the exports map with no other package installed,
+  // with and without `exactOptionalPropertyTypes`.
+  const typecheck = (flags, files) => {
+    try {
+      execFileSync(
+        resolve('node_modules/.bin/tsc'),
+        [
+          '--ignoreConfig',
+          '--noEmit',
+          '--strict',
+          ...flags,
+          '--skipLibCheck',
+          'false',
+          '--allowImportingTsExtensions',
+          '--module',
+          'nodenext',
+          '--moduleResolution',
+          'nodenext',
+          '--target',
+          'es2022',
+          '--lib',
+          'es2023,dom',
+          ...modules.map((name) => `${name}.ts`),
+          ...files,
+        ],
+        { cwd: scratch, encoding: 'utf8', stdio: 'pipe' },
+      );
+    } catch (error) {
+      failures.push(
+        `Consumer typecheck failed (${flags.join(' ') || 'strict'}):\n${error.stdout || error.message}`,
+      );
+    }
+  };
+  typecheck([], ['all.ts']);
+  typecheck(['--exactOptionalPropertyTypes'], ['all.ts', 'typed.ts']);
 } finally {
   rmSync(scratch, { recursive: true, force: true });
 }

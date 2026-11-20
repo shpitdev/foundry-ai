@@ -2,41 +2,161 @@
   {
     "status": 401,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-1\",\"parameters\":{}}"
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-1\",\"parameters\":{}}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": "Say hi.",
+        "store": false
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 404,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-2\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-2\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.does-not-exist",
+        "input": "Say hi.",
+        "store": false
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 401,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-3\",\"parameters\":{}}"
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-3\",\"parameters\":{}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 16,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Say hi."
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 404,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-4\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-4\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.does-not-exist",
+        "max_tokens": 16,
+        "messages": [
+          {
+            "role": "user",
+            "content": "Say hi."
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 401,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-5\",\"parameters\":{}}"
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-5\",\"parameters\":{}}",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:generateContent",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Say hi."
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 404,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-6\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-6\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.does-not-exist:generateContent",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Say hi."
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 401,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-7\",\"parameters\":{}}"
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"redacted-id-7\",\"parameters\":{}}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": "Say hi.",
+        "store": false
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   },
   {
     "status": 404,
     "contentType": "application/json",
-    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-8\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"redacted-id-8\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.does-not-exist",
+        "input": "Say hi.",
+        "store": false
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
   }
 ]
