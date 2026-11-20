@@ -108,7 +108,17 @@ function ensureStableTagOnMain() {
     );
   }
 
-  runStreaming('git', ['tag', '-a', tagName, '-m', `Release ${tagName}`]);
+  // Tag the commit that set this version, not HEAD: Nx reads the commits after the tag as the
+  // next release's changes.
+  const versionCommit = run('git', [
+    'log',
+    '-1',
+    '--format=%H',
+    '-G"version":',
+    '--',
+    packageManifestPath,
+  ]);
+  runStreaming('git', ['tag', '-a', tagName, versionCommit, '-m', `Release ${tagName}`]);
   runStreaming('git', ['push', remoteName, tagName]);
 }
 
