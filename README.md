@@ -30,7 +30,7 @@ pnpm run verify
 | API end-to-end | Manual live Vitest suite against Foundry            | No; requires credentials |
 | Web end-to-end | None                                                | No                       |
 
-Run `pnpm run test:live` for the default live models, or `LIVE_MODELS=gpt-6-luna pnpm run test:live` for one model. `LIVE_MODELS=all` surveys the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains selection and evidence limits.
+Run `pnpm run test:live` for the default live models (it reads `FOUNDRY_URL` and `FOUNDRY_TOKEN` from Infisical after `infisical login`), or `LIVE_MODELS=gpt-6-luna pnpm run test:live` for one model. `LIVE_MODELS=all` surveys the catalog. The [test status page](./packages/foundry-ai/docs/README.md) explains selection and evidence limits.
 
 Provider factories stay thin: config and catalog exports live at the package root, provider clients use separate subpaths, and applications compose registries with AI SDK `createProviderRegistry`.
 

@@ -201,7 +201,7 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 
 ## Run manually
 
-With `FOUNDRY_URL` and `FOUNDRY_TOKEN` set, from the repository root:
+From the repository root, after `infisical login`. The script runs under `infisical run`, which supplies `FOUNDRY_URL` and `FOUNDRY_TOKEN` from the project's `dev` environment (`.infisical.json`):
 
 ```sh
 pnpm run test:live                              # default models
