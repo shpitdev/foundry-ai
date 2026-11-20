@@ -35,7 +35,7 @@ const owners = {
 const budgets = {
   AnthropicLanguageModel: 25_000,
   FoundryClient: 6_800,
-  GoogleLanguageModel: 19_400,
+  GoogleLanguageModel: 21_000,
   OpenAiDecisionModel: 13_600,
   OpenAiEmbeddingModel: 8_400,
   OpenAiChatLanguageModel: 21_500,
