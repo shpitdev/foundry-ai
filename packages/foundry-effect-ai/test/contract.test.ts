@@ -19,7 +19,11 @@ for (const { module, phase, cells } of rows) {
         const fixtures = readFixtures(module, cell);
         const fake = FakeFoundry.replay(...fixtures);
         return run({ live: false, client: fake.client, requests: fake.requests }).pipe(
-          Effect.tap(() => Effect.sync(() => expectGoldenRequests(fixtures, fake.requests))),
+          Effect.tap(() =>
+            Effect.sync(() => {
+              expectGoldenRequests(fixtures, fake.requests);
+            }),
+          ),
         );
       });
     }

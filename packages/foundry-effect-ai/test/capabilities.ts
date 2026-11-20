@@ -122,7 +122,7 @@ export const languageCells = (target: LanguageTarget): Readonly<Record<string, C
         target,
         env,
       )(collect(LanguageModel.streamText({ prompt: weather, toolkit })));
-      const calls = parts.flatMap((part) => (part.type === 'tool-call' ? [part.name] : []));
+      const calls = parts.flatMap((part) => (part.type === 'tool-call' ? [String(part.name)] : []));
       expect(calls).toEqual(['GetWeather']);
       expect(parts.some((part) => part.type === 'tool-result')).toBe(true);
       expect(finishOf(parts)).toEqual(['tool-calls']);
