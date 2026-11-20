@@ -126,6 +126,14 @@ export const cells: Readonly<Record<string, Cell>> = {
         reason: 'EncodeError',
       });
       expect(env.requests).toHaveLength(sent);
+
+      // Recorded from xAI, whose body puts the message in a string `error` beside `code`.
+      const xai = yield* fail(client, '/xai/v1/responses', {});
+      expect(xai).toMatchObject({
+        _tag: 'InvalidRequestError',
+        metadata: { foundry: { code: 'invalid-argument' } },
+      });
+      expect(xai.message).toContain('does not support parameter reasoningEffort');
     }),
 
   // Synthetic: `transformClient` sees a non-2xx response as an error, so its retry policy runs.

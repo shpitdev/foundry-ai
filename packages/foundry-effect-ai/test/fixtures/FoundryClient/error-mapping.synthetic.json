@@ -31,5 +31,10 @@
     "status": 400,
     "contentType": "application/json",
     "body": "{\"errorCode\":\"INVALID_ARGUMENT\",\"errorName\":\"LanguageModelService:InvalidRequest\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"unsafeParams\":\"{token=unsafe-secret}\",\"message\":\"Invalid input\"}}"
+  },
+  {
+    "status": 400,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"CUSTOM_CLIENT\",\"errorName\":\"LanguageModelService:LlmHttpClientError\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"modelCreator\":\"Optional[X_AI]\",\"responseBody\":\"Optional[{\\\"code\\\":\\\"invalid-argument\\\",\\\"error\\\":\\\"Model grok-4.20-reasoning-latest does not support parameter reasoningEffort.\\\"}]\",\"modelBackendId\":\"Optional[X_AI]\",\"errorType\":\"Optional.empty\",\"errorMessage\":\"Optional[Model grok-4.20-reasoning-latest does not support parameter reasoningEffort.]\",\"errorCode\":\"Optional[invalid-argument]\",\"statusCode\":\"400\"}}"
   }
 ]

@@ -33,16 +33,18 @@ function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
   expectCallReplay(parts);
 }
 
-/** Grok 420 non-reasoning gets no reasoning settings and skips `reasoning`. */
+/**
+ * Grok 4.20 non-reasoning gets no reasoning settings and skips `reasoning`; Grok 4.20 reasoning
+ * rejects `effort`, so it asks only for summaries.
+ */
 export const cellsFor = (model: string) => {
   const reasons = model !== 'grok-420-non-reasoning-latest';
+  const effort = model === 'grok-420-reasoning-latest' ? {} : { effort: 'medium' as const };
   const { reasoning, ...cells } = languageCells({
     model: (options) =>
       XaiLanguageModel.model(
         model,
-        options.reasoning && reasons
-          ? { reasoning: { effort: 'medium', summary: 'auto' } }
-          : undefined,
+        options.reasoning && reasons ? { reasoning: { ...effort, summary: 'auto' } } : undefined,
       ),
     replay: reasons ? expectReplay : expectCallReplay,
   });
