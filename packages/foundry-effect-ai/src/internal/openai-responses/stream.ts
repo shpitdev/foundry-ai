@@ -165,7 +165,13 @@ export const decodeStream = (
           toolCalls.set(decoded.output_index, item.call_id);
           parts.push({ type: 'tool-params-start', id: item.call_id, name: item.name });
         } else {
-          toolCalls.delete(decoded.output_index);
+          // Without an added event the deltas had no block to join: send the arguments whole.
+          if (!toolCalls.delete(decoded.output_index)) {
+            parts.push(
+              { type: 'tool-params-start', id: item.call_id, name: item.name },
+              { type: 'tool-params-delta', id: item.call_id, delta: item.arguments },
+            );
+          }
           parts.push({ type: 'tool-params-end', id: item.call_id });
           // The finished item's arguments are authoritative; an incomplete call is not a call.
           if (item.status !== 'incomplete') {
