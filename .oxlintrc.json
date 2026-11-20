@@ -113,6 +113,23 @@
       }
     },
     {
+      // The model catalog compiles into both adapter packages, so it imports only itself.
+      "files": ["packages/foundry-catalog/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["*", "!./*"],
+                "message": "The catalog compiles into both adapter packages; import only sibling catalog files."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
       // The Effect package mirrors the shpitdev/foundry-cli Effect projects.
       "files": ["packages/foundry-effect-ai/**"],
       "rules": {

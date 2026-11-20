@@ -3,8 +3,11 @@ import type {
   Experimental_RealtimeModel as RealtimeModel,
   Experimental_RealtimeSetupResponse as RealtimeSetupResponse,
 } from 'ai';
+import {
+  REALTIME_MODELS,
+  type RealtimeModelId,
+} from '../../../foundry-catalog/src/realtime-models.js';
 import { FoundryModelNotFoundError } from '../errors.js';
-import { REALTIME_MODELS, type RealtimeModelId } from '../models/realtime-models.js';
 
 export interface FoundryRealtimeConfig {
   foundryUrl: string;

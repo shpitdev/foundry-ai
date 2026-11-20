@@ -1,6 +1,6 @@
 import { APICallError, experimental_decide as decide } from 'ai';
 import { describe, expect, it } from 'vitest';
-import { OPENAI_MODELS } from '../models/openai-models.js';
+import { OPENAI_MODELS } from '../../../foundry-catalog/src/openai-models.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { liveModels, loadLiveFoundryConfig, RED_PNG } from './helpers/live.js';
 

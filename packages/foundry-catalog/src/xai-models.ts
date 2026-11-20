@@ -1,5 +1,5 @@
-import type { ModelDefinition } from '../types.js';
 import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
+import type { ModelDefinition } from './types.js';
 
 // Foundry enrollment metadata; Responses remains the default proxy route.
 const XAI_MODEL_DEFINITIONS = {

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "incremental": true,
     "noEmit": true,
-    "rootDir": ".",
+    "rootDir": "..",
     "tsBuildInfoFile": "../../out-tsc/packages/foundry-ai/tsconfig.tsbuildinfo"
   },
   "include": ["src/**/*.ts", "tsup.config.ts", "vitest.config.ts", "vitest.live.config.ts"],

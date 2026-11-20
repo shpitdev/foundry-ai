@@ -1,15 +1,28 @@
-import { FoundryModelNotFoundError } from '../errors.js';
-import type { ModelMetadata, ModelProvider, ResolvedModelTarget } from '../types.js';
-import { ANTHROPIC_MODELS, type KnownAnthropicModelId } from './anthropic-models.js';
-import { GOOGLE_MODELS, type KnownGoogleModelId } from './google-models.js';
+import {
+  ANTHROPIC_MODELS,
+  type KnownAnthropicModelId,
+} from '../../../foundry-catalog/src/anthropic-models.js';
+import {
+  GOOGLE_MODELS,
+  type KnownGoogleModelId,
+} from '../../../foundry-catalog/src/google-models.js';
 import {
   type KnownOpenAIEmbeddingModelId,
   type KnownOpenAIModelId,
   OPENAI_EMBEDDING_MODELS,
   OPENAI_MODELS,
-} from './openai-models.js';
-import { REALTIME_MODELS, type RealtimeModelId } from './realtime-models.js';
-import { type KnownXaiModelId, XAI_MODELS } from './xai-models.js';
+} from '../../../foundry-catalog/src/openai-models.js';
+import {
+  REALTIME_MODELS,
+  type RealtimeModelId,
+} from '../../../foundry-catalog/src/realtime-models.js';
+import type {
+  ModelMetadata,
+  ModelProvider,
+  ResolvedModelTarget,
+} from '../../../foundry-catalog/src/types.js';
+import { type KnownXaiModelId, XAI_MODELS } from '../../../foundry-catalog/src/xai-models.js';
+import { FoundryModelNotFoundError } from '../errors.js';
 
 export type KnownModelId =
   | RealtimeModelId

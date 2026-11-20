@@ -1,13 +1,13 @@
 import { resolve } from 'node:path';
 import process from 'node:process';
-import { loadFoundryConfig } from '../../config.js';
-import { type KnownModelId, MODEL_CATALOG } from '../../models/catalog.js';
 import {
   type KnownOpenAIDecisionModelId,
   type KnownOpenAIEmbeddingModelId,
   OPENAI_DECISION_MODEL_IDS,
-} from '../../models/openai-models.js';
-import type { RealtimeModelId } from '../../models/realtime-models.js';
+} from '../../../../foundry-catalog/src/openai-models.js';
+import type { RealtimeModelId } from '../../../../foundry-catalog/src/realtime-models.js';
+import { loadFoundryConfig } from '../../config.js';
+import { type KnownModelId, MODEL_CATALOG } from '../../models/catalog.js';
 
 interface LiveModelIds {
   language: KnownModelId;

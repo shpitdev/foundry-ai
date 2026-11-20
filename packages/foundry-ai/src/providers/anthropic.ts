@@ -1,15 +1,15 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { NoSuchModelError } from 'ai';
+import {
+  type AnthropicModelId,
+  requiresAnthropicNativeStructuredOutput,
+} from '../../../foundry-catalog/src/anthropic-models.js';
 import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import {
   type FoundryCallOptions,
   type FoundryLanguageModel,
   wrapFoundryLanguageModel,
 } from '../middleware.js';
-import {
-  type AnthropicModelId,
-  requiresAnthropicNativeStructuredOutput,
-} from '../models/anthropic-models.js';
 import { resolveModelTarget } from '../models/catalog.js';
 import { asRecord } from '../records.js';
 import type { FoundryConfig } from '../types.js';

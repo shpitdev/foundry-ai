@@ -5,7 +5,7 @@ export {
   ANTHROPIC_MODELS,
   type AnthropicModelId,
   type KnownAnthropicModelId,
-} from './models/anthropic-models.js';
+} from '../../foundry-catalog/src/anthropic-models.js';
 export {
   getModelMetadata,
   hasKnownModel,
@@ -22,7 +22,7 @@ export {
   GOOGLE_MODELS,
   type GoogleModelId,
   type KnownGoogleModelId,
-} from './models/google-models.js';
+} from '../../foundry-catalog/src/google-models.js';
 export {
   type KnownOpenAIDecisionModelId,
   type KnownOpenAIEmbeddingModelId,
@@ -35,20 +35,19 @@ export {
   type OpenAIDecisionModelId,
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
-} from './models/openai-models.js';
+} from '../../foundry-catalog/src/openai-models.js';
 export {
   REALTIME_MODEL_IDS,
   REALTIME_MODELS,
   type RealtimeModelId,
-} from './models/realtime-models.js';
+} from '../../foundry-catalog/src/realtime-models.js';
 export {
   type KnownXaiModelId,
   XAI_MODEL_IDS,
   XAI_MODELS,
   type XaiModelId,
-} from './models/xai-models.js';
+} from '../../foundry-catalog/src/xai-models.js';
 export type {
-  FoundryConfig,
   ModelClass,
   ModelCost,
   ModelDefinition,
@@ -59,4 +58,5 @@ export type {
   ModelProvider,
   ModelSpeed,
   ResolvedModelTarget,
-} from './types.js';
+} from '../../foundry-catalog/src/types.js';
+export type { FoundryConfig } from './types.js';

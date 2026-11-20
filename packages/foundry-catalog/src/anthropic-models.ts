@@ -1,5 +1,5 @@
-import type { ModelDefinition } from '../types.js';
 import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
+import type { ModelDefinition } from './types.js';
 
 const ANTHROPIC_MODEL_DEFINITIONS = {
   'claude-haiku-4.5': {

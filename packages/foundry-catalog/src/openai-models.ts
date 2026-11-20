@@ -1,5 +1,5 @@
-import type { ModelDefinition } from '../types.js';
 import { catalogModelIds, createProviderModelCatalog, modelSupportsInputType } from './metadata.js';
+import type { ModelDefinition } from './types.js';
 
 const OPENAI_MODEL_DEFINITIONS = {
   'gpt-4.1': {

@@ -1,9 +1,9 @@
 import { createXai } from '@ai-sdk/xai';
 import { NoSuchModelError } from 'ai';
+import type { XaiModelId } from '../../../foundry-catalog/src/xai-models.js';
 import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import { type FoundryLanguageModel, wrapFoundryLanguageModel } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
-import type { XaiModelId } from '../models/xai-models.js';
 import type { FoundryConfig } from '../types.js';
 import { createXaiProxyFetch } from './xai-compat.js';
 

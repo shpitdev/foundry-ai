@@ -1,5 +1,11 @@
 import { createOpenAI } from '@ai-sdk/openai';
 import { NoSuchModelError } from 'ai';
+import {
+  isKnownOpenAIReasoningTarget,
+  type OpenAIDecisionModelId,
+  type OpenAIEmbeddingModelId,
+  type OpenAIModelId,
+} from '../../../foundry-catalog/src/openai-models.js';
 import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import {
   type FoundryCallOptions,
@@ -7,12 +13,6 @@ import {
   wrapFoundryLanguageModel,
 } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
-import {
-  isKnownOpenAIReasoningTarget,
-  type OpenAIDecisionModelId,
-  type OpenAIEmbeddingModelId,
-  type OpenAIModelId,
-} from '../models/openai-models.js';
 import { asRecord } from '../records.js';
 import type { FoundryConfig } from '../types.js';
 

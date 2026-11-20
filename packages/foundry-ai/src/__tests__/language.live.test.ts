@@ -11,14 +11,14 @@ import {
 } from 'ai';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
+import { isKnownOpenAIReasoningTarget } from '../../../foundry-catalog/src/openai-models.js';
+import type { ModelProvider } from '../../../foundry-catalog/src/types.js';
 import type { FoundryCallOptions } from '../middleware.js';
 import { resolveKnownModelMetadata } from '../models/catalog.js';
-import { isKnownOpenAIReasoningTarget } from '../models/openai-models.js';
 import { createFoundryAnthropic } from '../providers/anthropic.js';
 import { createFoundryGoogle } from '../providers/google.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { createFoundryXai } from '../providers/xai.js';
-import type { ModelProvider } from '../types.js';
 import {
   EMBEDDING_DIMENSIONS,
   expectedSignal,

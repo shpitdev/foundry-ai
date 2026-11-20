@@ -1,5 +1,5 @@
-import type { ModelDefinition } from '../types.js';
 import { catalogModelIds, createProviderModelCatalog } from './metadata.js';
+import type { ModelDefinition } from './types.js';
 
 const GOOGLE_MODEL_DEFINITIONS = {
   'gemini-4-argon': {

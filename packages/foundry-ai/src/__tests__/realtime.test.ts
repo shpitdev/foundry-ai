@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import {
+  REALTIME_MODEL_IDS,
+  REALTIME_MODELS,
+} from '../../../foundry-catalog/src/realtime-models.js';
 import { MODEL_CATALOG } from '../models/catalog.js';
-import { REALTIME_MODEL_IDS, REALTIME_MODELS } from '../models/realtime-models.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { createFoundryRealtime, createFoundryRealtimeSetup } from '../providers/realtime.js';
 

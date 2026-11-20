@@ -1,9 +1,9 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { NoSuchModelError } from 'ai';
+import type { GoogleModelId } from '../../../foundry-catalog/src/google-models.js';
 import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import { type FoundryLanguageModel, wrapFoundryLanguageModel } from '../middleware.js';
 import { resolveModelTarget } from '../models/catalog.js';
-import type { GoogleModelId } from '../models/google-models.js';
 import type { FoundryConfig } from '../types.js';
 
 export interface FoundryGoogleProvider {

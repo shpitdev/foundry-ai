@@ -1,4 +1,4 @@
-import type { ModelDefinition, ModelInputType, ModelMetadata, ModelProvider } from '../types.js';
+import type { ModelDefinition, ModelInputType, ModelMetadata, ModelProvider } from './types.js';
 
 const VISION_INPUT_TYPES = new Set<ModelInputType>([
   'GENERIC_VISION_COMPLETION',

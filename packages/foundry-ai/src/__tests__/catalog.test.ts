@@ -1,8 +1,22 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import type {
+  AnthropicModelId,
+  KnownAnthropicModelId,
+} from '../../../foundry-catalog/src/anthropic-models.js';
+import type {
+  GoogleModelId,
+  KnownGoogleModelId,
+} from '../../../foundry-catalog/src/google-models.js';
+import type {
+  KnownOpenAIEmbeddingModelId,
+  KnownOpenAIModelId,
+  OpenAIEmbeddingModelId,
+  OpenAIModelId,
+} from '../../../foundry-catalog/src/openai-models.js';
+import type { ModelMetadata } from '../../../foundry-catalog/src/types.js';
 import { loadFoundryConfig, normalizeFoundryUrl, resolveFoundryConfig } from '../config.js';
 import { FoundryModelNotFoundError } from '../errors.js';
-import type { AnthropicModelId, KnownAnthropicModelId } from '../models/anthropic-models.js';
 import {
   getModelMetadata,
   hasKnownModel,
@@ -14,14 +28,6 @@ import {
   resolveModelRid,
   resolveModelTarget,
 } from '../models/catalog.js';
-import type { GoogleModelId, KnownGoogleModelId } from '../models/google-models.js';
-import type {
-  KnownOpenAIEmbeddingModelId,
-  KnownOpenAIModelId,
-  OpenAIEmbeddingModelId,
-  OpenAIModelId,
-} from '../models/openai-models.js';
-import type { ModelMetadata } from '../types.js';
 
 const enrollments = JSON.parse(
   readFileSync(new URL('./fixtures/foundry-model-catalog.json', import.meta.url), 'utf8'),
