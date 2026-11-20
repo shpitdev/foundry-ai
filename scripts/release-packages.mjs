@@ -11,6 +11,8 @@ import { readFileSync } from 'node:fs';
 import { isPublishable, packageByProject, packages, readManifest } from './packages.mjs';
 
 const sharedInputs = new Set(['nx.json', 'package.json', 'pnpm-lock.yaml']);
+// Workspace source with no manifest, compiled into every package.
+const sharedSource = 'packages/foundry-catalog/';
 
 const headRef = process.argv[2];
 if (!headRef) {
@@ -39,7 +41,9 @@ if (headRef.startsWith('release/')) {
   if (changed.length === 0) {
     throw new Error('No changed files on stdin; cannot tell which packages this PR touched.');
   }
-  const touchesShared = changed.some((file) => sharedInputs.has(file));
+  const touchesShared = changed.some(
+    (file) => sharedInputs.has(file) || file.startsWith(sharedSource),
+  );
   selected = packages.filter(
     (entry) =>
       (touchesShared || changed.some((file) => file.startsWith(`${entry.dir}/`))) &&
