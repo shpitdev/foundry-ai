@@ -23,8 +23,8 @@ const expectReplay =
     }
   };
 
-// Opus 4.7 and 4.8, Claude 5 and Claude 5.5 take adaptive thinking; the proxy rejects budget
-// thinking on 5.5. Older models, such as Claude Haiku 4.5, take a thinking budget.
+// Opus 4.7 and 4.8, Claude 5 and Claude 5.5 take only adaptive thinking, and show its text only
+// when asked. Older models, such as Claude Haiku 4.5, take a thinking budget.
 const adaptive = new Set([
   'claude-opus-4.7',
   'claude-opus-4.8',
@@ -43,7 +43,7 @@ export const cellsFor = (model: string, recorded = false) =>
         reasoning
           ? {
               thinking: adaptive.has(model)
-                ? { type: 'adaptive' }
+                ? { type: 'adaptive', display: 'summarized' }
                 : { type: 'enabled', budget_tokens: 1024 },
             }
           : undefined,

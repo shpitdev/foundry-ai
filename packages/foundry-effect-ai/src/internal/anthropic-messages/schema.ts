@@ -56,9 +56,12 @@ export type ToolChoice = (
   | { readonly type: 'tool'; readonly name: string }
 ) & { readonly disable_parallel_tool_use?: boolean };
 
-/** Extended thinking, sent as given. Claude 5.5 models accept only `adaptive`. */
+/**
+ * Extended thinking, sent as given. Opus 4.7 and later, Claude 5 and the 5.5 models accept only
+ * `adaptive`, and omit the thinking text unless `display` is `summarized`.
+ */
 export type Thinking =
-  | { readonly type: 'adaptive' }
+  | { readonly type: 'adaptive'; readonly display?: 'summarized' | 'omitted' }
   | { readonly type: 'enabled'; readonly budget_tokens: number }
   | { readonly type: 'disabled' };
 
