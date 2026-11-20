@@ -27,23 +27,39 @@ export interface Options {
   readonly dimensions?: number | undefined;
 }
 
-/** The model and its vector length as `EmbeddingModel.Dimensions`. */
-export const model = (
-  modelId: ModelId,
-  options: { readonly dimensions: number },
-): AiModel.Model<
+type Model = AiModel.Model<
   typeof providerName,
   EmbeddingModel.EmbeddingModel | EmbeddingModel.Dimensions,
   FoundryClient
-> =>
-  AiModel.make(
+>;
+
+/**
+ * The model and its vector length as `EmbeddingModel.Dimensions`: a catalog model's native size
+ * unless `dimensions` shortens it. Any other model RID must give `dimensions`.
+ */
+export const model: {
+  (
+    modelId: keyof typeof embeddingModels,
+    options?: { readonly dimensions?: number | undefined },
+  ): Model;
+  (modelId: ModelId, options: { readonly dimensions: number }): Model;
+} = (modelId: ModelId, options?: { readonly dimensions?: number | undefined }): Model => {
+  const dimensions = options?.dimensions ?? known[modelId]?.dimensions;
+  return AiModel.make(
     providerName,
     modelId,
     Layer.merge(
-      layer({ model: modelId, dimensions: options.dimensions }),
-      Layer.succeed(EmbeddingModel.Dimensions, options.dimensions),
+      layer({ model: modelId, dimensions }),
+      // Unreachable from typed callers: the overloads require `dimensions` for unknown models.
+      dimensions === undefined
+        ? Layer.effect(
+            EmbeddingModel.Dimensions,
+            Effect.die(`OpenAiEmbeddingModel.model("${modelId}") needs dimensions`),
+          )
+        : Layer.succeed(EmbeddingModel.Dimensions, dimensions),
     ),
   );
+};
 
 /** Concurrent `embed` calls share one request. */
 export const make = Effect.fnUntraced(function* (options: Options) {

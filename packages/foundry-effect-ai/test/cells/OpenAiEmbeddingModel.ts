@@ -9,12 +9,9 @@ import type { Cell, Env } from '../harness.ts';
 const url = 'https://example.palantirfoundry.com/api/v2/llm/proxy/openai/v1/embeddings';
 
 const withModel =
-  (env: Env, id: OpenAiEmbeddingModel.ModelId, dimensions: number) =>
+  (env: Env, model: ReturnType<typeof OpenAiEmbeddingModel.model>) =>
   <A, R>(effect: Effect.Effect<A, AiError.AiError, R>) =>
-    Effect.provide(
-      effect,
-      Layer.provide(OpenAiEmbeddingModel.model(id, { dimensions }), env.client()),
-    );
+    Effect.provide(effect, Layer.provide(model, env.client()));
 
 /** The embeddings requests a cell sent, in order. */
 const expectRequests = (env: Env, bodies: ReadonlyArray<object>) => {
@@ -33,30 +30,29 @@ const cosine = (a: ReadonlyArray<number>, b: ReadonlyArray<number>) =>
 
 const text = 'My order arrived with a cracked screen.';
 
-// Each catalog model through `embed`. Foundry rejects `dimensions` for ada-002, so its native
-// size is not sent; the text-embedding-3 models shorten to keep the fixtures small.
+// Each catalog model through `embed`. ada-002 runs at its native size, which is not sent because
+// Foundry rejects `dimensions` for it; the text-embedding-3 models shorten to keep fixtures small.
 const catalog = [
-  { id: 'text-embedding-ada-002', dimensions: 1536 },
-  { id: 'text-embedding-3-small', dimensions: 8 },
-  { id: 'text-embedding-3-large', dimensions: 8 },
-] as const;
+  { model: OpenAiEmbeddingModel.model('text-embedding-ada-002'), size: 1536 },
+  { model: OpenAiEmbeddingModel.model('text-embedding-3-small', { dimensions: 8 }), size: 8 },
+  { model: OpenAiEmbeddingModel.model('text-embedding-3-large', { dimensions: 8 }), size: 8 },
+];
 
 export const cells: Readonly<Record<string, Cell>> = {
   embed: (env) =>
     Effect.gen(function* () {
-      for (const { id, dimensions } of catalog) {
+      for (const { model, size } of catalog) {
         const [{ vector }, reported] = yield* withModel(
           env,
-          id,
-          dimensions,
+          model,
         )(
           Effect.all([
-            EmbeddingModel.EmbeddingModel.use((model) => model.embed(text)),
-            EmbeddingModel.Dimensions.useSync((size) => size),
+            EmbeddingModel.EmbeddingModel.use((service) => service.embed(text)),
+            EmbeddingModel.Dimensions.useSync((dimensions) => dimensions),
           ]),
         );
-        expect(vector).toHaveLength(dimensions);
-        expect(reported).toBe(dimensions);
+        expect(vector).toHaveLength(size);
+        expect(reported).toBe(size);
       }
       expectRequests(env, [
         { model: 'text-embedding-ada-002', input: [text], encoding_format: 'float' },
@@ -73,9 +69,8 @@ export const cells: Readonly<Record<string, Cell>> = {
       const embedMany = (inputs: ReadonlyArray<string>) =>
         withModel(
           env,
-          'text-embedding-3-large',
-          64,
-        )(EmbeddingModel.EmbeddingModel.use((model) => model.embedMany(inputs)));
+          OpenAiEmbeddingModel.model('text-embedding-3-large', { dimensions: 64 }),
+        )(EmbeddingModel.EmbeddingModel.use((service) => service.embedMany(inputs)));
       const inputs = [text, 'Quarterly revenue grew by four percent.', text];
       const { embeddings, usage } = yield* embedMany(inputs);
       const [first, other, repeat] = embeddings.map(({ vector }) => vector);
