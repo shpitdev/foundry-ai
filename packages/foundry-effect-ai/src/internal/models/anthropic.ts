@@ -1,7 +1,7 @@
 /**
  * Anthropic models on Foundry, by catalog alias. `maxOutputTokens` is the default `max_tokens`;
- * `nativeJson` marks models that reject forced tool use, so structured output is sent as
- * `output_config.format` instead of a forced JSON tool.
+ * `rejectsForcedToolUse` marks models that reject forced tool use: structured output is sent as
+ * `output_config.format` instead of a forced JSON tool, and forced tool choices fail locally.
  */
 export const models = {
   'claude-haiku-4.5': {
@@ -35,7 +35,7 @@ export const models = {
   'claude-opus-5.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-5-5-opus',
     maxOutputTokens: 128_000,
-    nativeJson: true,
+    rejectsForcedToolUse: true,
   },
   'claude-sonnet-4.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-4-5-sonnet',
@@ -52,6 +52,6 @@ export const models = {
   'claude-sonnet-5.5': {
     rid: 'ri.language-model-service..language-model.anthropic-claude-5-5-sonnet',
     maxOutputTokens: 128_000,
-    nativeJson: true,
+    rejectsForcedToolUse: true,
   },
 } as const;

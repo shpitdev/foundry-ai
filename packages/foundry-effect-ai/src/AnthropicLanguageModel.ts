@@ -32,7 +32,11 @@ export interface Config {
 const known: Readonly<
   Record<
     string,
-    { readonly rid: string; readonly maxOutputTokens: number; readonly nativeJson?: boolean }
+    {
+      readonly rid: string;
+      readonly maxOutputTokens: number;
+      readonly rejectsForcedToolUse?: boolean;
+    }
   >
 > = models;
 
@@ -43,7 +47,7 @@ const resolve = (modelId: string): Target => {
   return {
     rid: entry?.rid ?? modelId,
     maxOutputTokens: entry?.maxOutputTokens ?? 4096,
-    nativeJson: entry?.nativeJson === true,
+    rejectsForcedToolUse: entry?.rejectsForcedToolUse === true,
   };
 };
 

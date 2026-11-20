@@ -2,9 +2,10 @@
 /**
  * Messages server-sent events → Effect AI stream parts. Blocks are tracked by `index`; a
  * thinking block's signature arrives as a delta and is attached to its end part. `message_stop`
- * closes any open blocks, emits the finish and stops reading; a tool call whose input the output
- * limit cut off is dropped, and the finish reports `length`. An in-band `error` fails the
- * stream, and a stream that ends before `message_stop` fails with `InvalidResponseError`.
+ * closes any open blocks, emits the finish and stops reading. The last tool call is held until
+ * the next block starts or the stop reason is known: one cut off by the output limit is dropped,
+ * and the finish reports `length`. An in-band `error` fails the stream, and a stream that ends
+ * before `message_stop` fails with `InvalidResponseError`.
  */
 import * as AiError from 'effect/ai/AiError';
 import type * as LanguageModel from 'effect/ai/LanguageModel';
@@ -12,7 +13,6 @@ import type * as Response from 'effect/ai/Response';
 import * as Tool from 'effect/ai/Tool';
 import * as Effect from 'effect/Effect';
 import type * as Sse from 'effect/encoding/Sse';
-import * as Result from 'effect/Result';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
 import { stringify } from './request.ts';
@@ -33,10 +33,17 @@ const method = 'streamText';
 const decodeData = Schema.decodeUnknownEffect(Schema.fromJsonString(Schema.Unknown));
 const decodeEvent = Schema.decodeUnknownEffect(Wire.Event);
 
+interface ToolBlock {
+  readonly type: 'tool';
+  readonly id: string;
+  readonly name: string;
+  input: string;
+}
+
 type Block =
   | { readonly type: 'text' }
   | { readonly type: 'reasoning'; signature?: string; readonly redactedData?: string }
-  | { readonly type: 'tool'; readonly id: string; readonly name: string; input: string };
+  | ToolBlock;
 
 export const decodeStream = (
   events: Stream.Stream<Sse.Event, AiError.AiError>,
@@ -47,8 +54,10 @@ export const decodeStream = (
   // `message_delta` usage is cumulative: each reported count replaces the earlier one.
   const counts: Record<string, number> = {};
   const blocks = new Map<number, Block>();
-  // Input cut off by the output limit is not a call; any other unparsable input fails at the end.
-  let invalidInput: AiError.AiError | undefined;
+  // Blocks of types this adapter skips; their deltas are skipped too.
+  const skipped = new Set<number>();
+  // The last finished tool call, which the output limit may have cut off.
+  let held: ToolBlock | undefined;
 
   const mergeUsage = (wire: typeof Wire.Usage.Type | null | undefined) => {
     for (const [key, value] of Object.entries(wire ?? {})) {
@@ -58,7 +67,7 @@ export const decodeStream = (
     }
   };
 
-  const end = Effect.fnUntraced(function* (index: number) {
+  const end = (index: number): Array<Response.StreamPartEncoded> => {
     const block = blocks.get(index);
     blocks.delete(index);
     const id = String(index);
@@ -66,7 +75,7 @@ export const decodeStream = (
       return [];
     }
     if (block.type === 'text') {
-      return [{ type: 'text-end', id } as const];
+      return [{ type: 'text-end', id }];
     }
     if (block.type === 'reasoning') {
       return [
@@ -74,32 +83,33 @@ export const decodeStream = (
           type: 'reasoning-end',
           id,
           metadata: metadata({ signature: block.signature, redactedData: block.redactedData }),
-        } as const,
+        },
       ];
     }
-    const paramsEnd = { type: 'tool-params-end', id: block.id } as const;
-    const input = yield* Effect.result(
-      Effect.try({
-        try: () => Tool.unsafeSecureJsonParse(block.input === '' ? '{}' : block.input),
-        catch: (cause) =>
-          AiError.make({
-            module: 'AnthropicLanguageModel',
-            method,
-            reason: new AiError.ToolParameterValidationError({
-              toolName: block.name,
-              description: `Tool input is not valid JSON: ${String(cause)}`,
-            }),
-          }),
-      }),
-    );
-    if (Result.isFailure(input)) {
-      invalidInput ??= input.failure;
-      return [paramsEnd];
+    held = block;
+    return [{ type: 'tool-params-end', id: block.id }];
+  };
+
+  /** Emits the held tool call, which is complete once another block starts or the turn ends. */
+  const release = Effect.fnUntraced(function* () {
+    const block = held;
+    held = undefined;
+    if (block === undefined) {
+      return [];
     }
-    return [
-      paramsEnd,
-      yield* toolCall(method, options, { id: block.id, name: block.name, input: input.success }),
-    ];
+    const input = yield* Effect.try({
+      try: () => Tool.unsafeSecureJsonParse(block.input === '' ? '{}' : block.input),
+      catch: (cause) =>
+        AiError.make({
+          module: 'AnthropicLanguageModel',
+          method,
+          reason: new AiError.ToolParameterValidationError({
+            toolName: block.name,
+            description: `Tool input is not valid JSON: ${String(cause)}`,
+          }),
+        }),
+    });
+    return [yield* toolCall(method, options, { id: block.id, name: block.name, input })];
   });
 
   const handle = Effect.fnUntraced(function* (event: Sse.Event) {
@@ -123,7 +133,9 @@ export const decodeStream = (
         });
         break;
       case 'content_block_start': {
+        parts.push(...(yield* release()));
         if (!isKnown(decoded.content_block, Wire.contentBlockTypes)) {
+          skipped.add(decoded.index);
           break;
         }
         const block = yield* decodeBlock(method, decoded.content_block);
@@ -174,12 +186,15 @@ export const decodeStream = (
         break;
       }
       case 'content_block_delta': {
-        const block = blocks.get(decoded.index);
-        if (block === undefined || !isKnown(decoded.delta, Wire.deltaTypes)) {
+        if (skipped.has(decoded.index) || !isKnown(decoded.delta, Wire.deltaTypes)) {
           break;
         }
         const delta = yield* decodeDelta(method, decoded.delta);
+        const block = blocks.get(decoded.index);
         const id = String(decoded.index);
+        if (block === undefined) {
+          return yield* invalidResponse(method, `Delta ${delta.type} for unopened block ${id}`);
+        }
         if (delta.type === 'text_delta' && block.type === 'text') {
           parts.push({ type: 'text-delta', id, delta: delta.text });
         } else if (delta.type === 'thinking_delta' && block.type === 'reasoning') {
@@ -200,22 +215,24 @@ export const decodeStream = (
         break;
       }
       case 'content_block_stop':
-        parts.push(...(yield* end(decoded.index)));
+        parts.push(...end(decoded.index));
         break;
       case 'message_delta':
         mergeUsage(decoded.usage);
         stopReason = decoded.delta.stop_reason ?? stopReason;
         break;
-      case 'message_stop':
+      case 'message_stop': {
         finished = true;
         for (const index of blocks.keys()) {
-          parts.push(...(yield* end(index)));
+          parts.push(...end(index));
         }
-        if (invalidInput !== undefined && finishReason(stopReason) !== 'length') {
-          return yield* invalidInput;
+        const reason = finishReason(stopReason);
+        if (reason === 'length') {
+          held = undefined;
         }
-        parts.push({ type: 'finish', reason: finishReason(stopReason), usage: usage(counts) });
+        parts.push(...(yield* release()), { type: 'finish', reason, usage: usage(counts) });
         break;
+      }
       case 'error':
         return yield* providerError(method, decoded.error);
     }

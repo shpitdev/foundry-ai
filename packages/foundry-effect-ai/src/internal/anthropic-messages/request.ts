@@ -23,8 +23,8 @@ export interface Target {
   readonly rid: string;
   /** The default `max_tokens`. */
   readonly maxOutputTokens: number;
-  /** Structured output through `output_config.format` instead of a forced JSON tool. */
-  readonly nativeJson: boolean;
+  /** Forced tool choices fail, and structured output uses `output_config.format`. */
+  readonly rejectsForcedToolUse: boolean;
 }
 
 /** The public module's request-wide settings. */
@@ -54,7 +54,9 @@ export const jsonTool = (
   options: LanguageModel.ProviderOptions,
   target: Target,
 ): JsonFormat | undefined =>
-  options.responseFormat.type === 'json' && !target.nativeJson ? options.responseFormat : undefined;
+  options.responseFormat.type === 'json' && !target.rejectsForcedToolUse
+    ? options.responseFormat
+    : undefined;
 
 /** Strict tools are sent the Anthropic codec's schema; others the default one. */
 export const isStrict = (tool: Tool.Any): boolean => Tool.getStrictMode(tool) === true;
@@ -218,14 +220,35 @@ const encodeTool = Effect.fnUntraced(function* (tool: Tool.Any) {
 /**
  * In JSON-tool mode the application tools allowed by the choice travel with the injected tool,
  * and the model must call one of them, one at a time: the JSON tool alone is forced by name.
- * With thinking on, the choice stays `auto`, and a JSON text answer decodes as well.
+ * Where forced tool use is unavailable (`unforced` says why), a forced choice fails before
+ * sending, and the JSON tool is offered with `auto`, so a JSON text answer decodes as well.
  */
 const encodeTools = Effect.fnUntraced(function* (
   options: LanguageModel.ProviderOptions,
   json: JsonFormat | undefined,
-  thinking: boolean,
+  unforced: string | undefined,
 ) {
   const choice = options.toolChoice;
+  const forced =
+    choice === 'required' ||
+    (typeof choice === 'object' && ('tool' in choice || choice.mode === 'required'));
+  const toolName = typeof choice === 'object' && 'tool' in choice ? String(choice.tool) : '';
+  if (forced && options.tools.length === 0 && json === undefined) {
+    return yield* fail(
+      new AiError.ToolConfigurationError({
+        toolName,
+        description: 'The tool choice requires a tool call, but no tools are available',
+      }),
+    );
+  }
+  if (forced && unforced !== undefined) {
+    return yield* fail(
+      new AiError.ToolConfigurationError({
+        toolName,
+        description: `${unforced}; use toolChoice 'auto'`,
+      }),
+    );
+  }
   if (json !== undefined) {
     const { objectName, schema } = json;
     if (options.tools.some((tool) => tool.name === objectName)) {
@@ -255,8 +278,7 @@ const encodeTools = Effect.fnUntraced(function* (
       input_schema: inputSchema,
     });
     let toolChoice: Wire.ToolChoice;
-    if (thinking) {
-      // Thinking rejects forced tool use, so a thinking model is asked to call a tool instead.
+    if (unforced !== undefined) {
       toolChoice = { type: 'auto', disable_parallel_tool_use: true };
     } else if (allowed.length === 0) {
       toolChoice = { type: 'tool', name: objectName, disable_parallel_tool_use: true };
@@ -266,17 +288,6 @@ const encodeTools = Effect.fnUntraced(function* (
     return { tools, tool_choice: toolChoice };
   }
   if (options.tools.length === 0) {
-    const required =
-      choice === 'required' ||
-      (typeof choice === 'object' && ('tool' in choice || choice.mode === 'required'));
-    if (required) {
-      return yield* fail(
-        new AiError.ToolConfigurationError({
-          toolName: typeof choice === 'object' && 'tool' in choice ? String(choice.tool) : '',
-          description: 'The tool choice requires a tool call, but no tools are available',
-        }),
-      );
-    }
     return {};
   }
   const tools: Array<Wire.Tool> = [];
@@ -300,7 +311,7 @@ const encodeFormat = Effect.fnUntraced(function* (
   options: LanguageModel.ProviderOptions,
   target: Target,
 ) {
-  if (options.responseFormat.type !== 'json' || !target.nativeJson) {
+  if (options.responseFormat.type !== 'json' || !target.rejectsForcedToolUse) {
     return {};
   }
   const { schema } = options.responseFormat;
@@ -317,8 +328,13 @@ export const makeRequest = Effect.fnUntraced(function* (
   settings: Settings | undefined,
 ) {
   const { system, messages } = yield* encodePrompt(options.prompt);
-  const thinking = settings?.thinking !== undefined && settings.thinking.type !== 'disabled';
-  const tools = yield* encodeTools(options, jsonTool(options, target), thinking);
+  let unforced: string | undefined;
+  if (target.rejectsForcedToolUse) {
+    unforced = `${target.rid} rejects forced tool use`;
+  } else if (settings?.thinking !== undefined && settings.thinking.type !== 'disabled') {
+    unforced = 'Thinking rejects forced tool use';
+  }
+  const tools = yield* encodeTools(options, jsonTool(options, target), unforced);
   const format = yield* encodeFormat(options, target);
   const request: Wire.Request = {
     model: target.rid,

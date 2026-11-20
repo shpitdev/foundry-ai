@@ -176,17 +176,19 @@ export const decodeResponse = Effect.fnUntraced(function* (
       blocks.push(yield* decodeBlock('generateText', raw));
     }
   }
-  // The JSON tool's input is the answer; prose beside it would break JSON decoding.
-  const json = jsonTool(options, target)?.objectName;
-  const structured = blocks.some((block) => block.type === 'tool_use' && block.name === json);
   // A last tool call cut off by the output limit has partial input; the finish reports it.
   if (body.stop_reason === 'max_tokens' && blocks.at(-1)?.type === 'tool_use') {
     blocks.pop();
   }
+  // In JSON-tool mode a tool call's input is the answer or the turn is an intermediate tool
+  // call; either way, prose beside it would break JSON decoding.
+  const json = jsonTool(options, target)?.objectName;
+  const structured = blocks.some((block) => block.type === 'tool_use' && block.name === json);
+  const prose = json === undefined || !blocks.some((block) => block.type === 'tool_use');
   for (const block of blocks) {
     switch (block.type) {
       case 'text':
-        if (!structured) {
+        if (prose) {
           parts.push({ type: 'text', text: block.text });
         }
         break;
