@@ -72,7 +72,7 @@ await program.pipe(
 );
 ```
 
-`AnthropicLanguageModel`, `GoogleLanguageModel`, `XaiLanguageModel` and `OpenAiChatLanguageModel` work the same way. Request-wide settings go in `config`, under the vendor's wire names: `OpenAiLanguageModel.model('gpt-6-luna', { reasoning: { effort: 'medium', summary: 'auto' } })`, `AnthropicLanguageModel.model('claude-opus-5.5', { thinking: { type: 'adaptive' } })`, or `GoogleLanguageModel.model('gemini-3.1-pro', { thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' } })`.
+`AnthropicLanguageModel`, `GoogleLanguageModel`, `XaiLanguageModel` and `OpenAiChatLanguageModel` work the same way. Request-wide settings go in `config`, under the vendor's wire names: `OpenAiLanguageModel.model('gpt-6-luna', { reasoning: { effort: 'medium', summary: 'auto' } })`, `AnthropicLanguageModel.model('claude-opus-5.5', { thinking: { type: 'adaptive', display: 'summarized' } })`, or `GoogleLanguageModel.model('gemini-3.1-pro', { thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' } })`.
 
 ### Tools
 

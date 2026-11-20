@@ -1,6 +1,6 @@
 # @shpitdev/foundry-ai
 
-Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK, and (in development) for Effect AI.
+Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK and Effect AI.
 
 [![CI](https://github.com/shpitdev/foundry-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/shpitdev/foundry-ai/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/%40shpitdev%2Ffoundry-ai/latest)](https://www.npmjs.com/package/@shpitdev/foundry-ai)
@@ -8,7 +8,7 @@ Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK, and (in 
 - [Install and use the package](./packages/foundry-ai/README.md)
 - [Models and test status](./packages/foundry-ai/docs/README.md)
 - [Runnable examples](./examples/README.md)
-- [Effect AI adapter plan](./packages/foundry-effect-ai/docs/PLAN.md) (`@shpitdev/foundry-effect-ai`, in development)
+- [Effect AI adapters](./packages/foundry-effect-ai/README.md) (`@shpitdev/foundry-effect-ai`) and their [models and test status](./packages/foundry-effect-ai/docs/README.md)
 - [Release process](./docs/RELEASING.md)
 
 ## Development
