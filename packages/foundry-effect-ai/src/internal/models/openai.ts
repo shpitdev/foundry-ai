@@ -1,7 +1,9 @@
 /**
  * OpenAI models on Foundry, by catalog alias. `reasoning` marks models that take developer
  * messages and return encrypted reasoning for stateless replay; `decisions` marks models that
- * serve `/openai/v1/decisions`. Each phase adds the models and flags it reads.
+ * serve `/openai/v1/decisions`; `chatToolsNeedNoReasoning` marks models whose Chat Completions
+ * route accepts function tools only with `reasoning_effort: 'none'`. Each phase adds the models
+ * and flags it reads.
  */
 export const models = {
   'gpt-4.1': { rid: 'ri.language-model-service..language-model.gpt-4-1' },
@@ -32,12 +34,18 @@ export const models = {
     rid: 'ri.language-model-service..language-model.gpt-6-luna',
     reasoning: true,
     decisions: true,
+    chatToolsNeedNoReasoning: true,
   },
-  'gpt-6-sol': { rid: 'ri.language-model-service..language-model.gpt-6-sol', reasoning: true },
+  'gpt-6-sol': {
+    rid: 'ri.language-model-service..language-model.gpt-6-sol',
+    reasoning: true,
+    chatToolsNeedNoReasoning: true,
+  },
   'gpt-6.1-sol': { rid: 'ri.language-model-service..language-model.gpt-6-1-sol', reasoning: true },
   'gpt-6.1-terra': {
     rid: 'ri.language-model-service..language-model.gpt-6-1-terra',
     reasoning: true,
+    chatToolsNeedNoReasoning: true,
   },
   'gpt-5.4-mini': {
     rid: 'ri.language-model-service..language-model.gpt-5-4-mini',
