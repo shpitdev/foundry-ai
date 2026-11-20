@@ -13,8 +13,13 @@ import * as Wire from './internal/openai-decisions/schema.ts';
 
 export const providerName = 'foundry-openai';
 
+type Catalog = typeof models;
+type DecisionAlias = {
+  [K in keyof Catalog]: Catalog[K] extends { readonly decisions: true } ? K : never;
+}[keyof Catalog];
+
 /** A catalog alias of a model that serves Decisions, or a raw Foundry model RID. */
-export type ModelId = keyof typeof models | (string & Record<never, never>);
+export type ModelId = DecisionAlias | (string & Record<never, never>);
 
 const known: Readonly<Record<string, { readonly rid: string } | undefined>> = models;
 
