@@ -1,0 +1,166 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"claude-haiku-4-5-20251001\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"input\":{\"city\":\"Paris\"},\"type\":\"tool_use\"}],\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":780,\"output_tokens\":29,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":\"standard\"}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence. Report the city and temperature."
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "name": "GetWeather",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": true
+            },
+            "description": "Get the current weather in a city"
+          },
+          {
+            "name": "generateObject",
+            "description": "Respond with a JSON object.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "temperatureC": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "city",
+                "temperatureC"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "any",
+          "disable_parallel_tool_use": true
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"model\":\"anthropic.claude-haiku-4-5-20251001-v1:0\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"id\":\"redacted-id-4\",\"name\":\"generateObject\",\"input\":{\"city\":\"Paris\",\"temperatureC\":21},\"type\":\"tool_use\"}],\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":856,\"output_tokens\":47,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":null}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence. Report the city and temperature."
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "tool_use",
+                "id": "redacted-id-2",
+                "name": "GetWeather",
+                "input": {
+                  "city": "Paris"
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "redacted-id-2",
+                "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}",
+                "is_error": false
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "name": "GetWeather",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": true
+            },
+            "description": "Get the current weather in a city"
+          },
+          {
+            "name": "generateObject",
+            "description": "Respond with a JSON object.",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "temperatureC": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "city",
+                "temperatureC"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "any",
+          "disable_parallel_tool_use": true
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

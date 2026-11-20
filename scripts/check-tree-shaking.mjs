@@ -33,6 +33,7 @@ const owners = {
 
 // Minified bytes with effect external. Set each module's real budget when its phase lands.
 const budgets = {
+  AnthropicLanguageModel: 25_000,
   FoundryClient: 6_800,
   OpenAiDecisionModel: 13_600,
   OpenAiEmbeddingModel: 8_400,
