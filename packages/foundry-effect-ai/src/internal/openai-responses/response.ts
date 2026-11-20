@@ -9,13 +9,19 @@ import * as DateTime from 'effect/DateTime';
 import * as Effect from 'effect/Effect';
 import * as Predicate from 'effect/Predicate';
 import * as Schema from 'effect/Schema';
-import { isStrict, metadataKey } from './request.ts';
+import { type Dialect, isStrict } from './request.ts';
 import * as Wire from './schema.ts';
 
-const module = 'OpenAiLanguageModel';
-
-export const invalidResponse = (method: string, description: string): AiError.AiError =>
-  AiError.make({ module, method, reason: new AiError.InvalidResponseError({ description }) });
+export const invalidResponse = (
+  dialect: Dialect,
+  method: string,
+  description: string,
+): AiError.AiError =>
+  AiError.make({
+    module: dialect.module,
+    method,
+    reason: new AiError.InvalidResponseError({ description }),
+  });
 
 type ErrorFields = typeof Wire.ErrorObject.Type;
 
@@ -26,10 +32,14 @@ const rateLimitCodes = new Set(['rate_limit_exceeded', 'rate_limit_error', 'requ
  * A failure reported inside a successful HTTP response or stream. Quota and rate-limit codes
  * keep their own reasons; anything else is a provider failure. Code and type stay in metadata.
  */
-export const providerError = (method: string, error: ErrorFields): AiError.AiError => {
+export const providerError = (
+  dialect: Dialect,
+  method: string,
+  error: ErrorFields,
+): AiError.AiError => {
   const code = error.code == null ? undefined : String(error.code);
   const type = error.type == null ? undefined : String(error.type);
-  const metadata = { [metadataKey]: { code: code ?? null, type: type ?? null } };
+  const metadata = { [dialect.metadataKey]: { code: code ?? null, type: type ?? null } };
   const matches = (codes: ReadonlySet<string>) => codes.has(code ?? '') || codes.has(type ?? '');
   let reason: AiError.AiErrorReason;
   if (matches(quotaCodes)) {
@@ -43,7 +53,7 @@ export const providerError = (method: string, error: ErrorFields): AiError.AiErr
       metadata,
     });
   }
-  return AiError.make({ module, method, reason });
+  return AiError.make({ module: dialect.module, method, reason });
 };
 
 export const timestamp = (createdAt: number): string =>
@@ -55,9 +65,13 @@ export const knownItem = (item: unknown): boolean =>
   typeof item.type === 'string' &&
   Wire.outputItemTypes.has(item.type);
 
-export const decodeItem = (method: string, item: unknown) =>
+export const decodeItem = (dialect: Dialect, method: string, item: unknown) =>
   Effect.mapError(Schema.decodeUnknownEffect(Wire.OutputItem)(item), (error) =>
-    AiError.make({ module, method, reason: AiError.InvalidResponseError.fromSchemaError(error) }),
+    AiError.make({
+      module: dialect.module,
+      method,
+      reason: AiError.InvalidResponseError.fromSchemaError(error),
+    }),
   );
 
 /**
@@ -112,6 +126,7 @@ export const usage = (
  * arguments are decoded with it and re-encoded for the tool's own schema; Toolkit validates.
  */
 export const toolParams = Effect.fnUntraced(function* (
+  dialect: Dialect,
   method: string,
   options: LanguageModel.ProviderOptions,
   name: string,
@@ -121,7 +136,7 @@ export const toolParams = Effect.fnUntraced(function* (
     try: () => Tool.unsafeSecureJsonParse(args),
     catch: (cause) =>
       AiError.make({
-        module,
+        module: dialect.module,
         method,
         reason: new AiError.ToolParameterValidationError({
           toolName: name,
@@ -135,7 +150,7 @@ export const toolParams = Effect.fnUntraced(function* (
       return params;
     }
     return yield* AiError.make({
-      module,
+      module: dialect.module,
       method,
       reason: new AiError.ToolNotFoundError({
         toolName: name,
@@ -158,11 +173,12 @@ export const toolParams = Effect.fnUntraced(function* (
   return yield* Effect.orElseSucceed(normalized, () => params);
 });
 
-/** Item IDs and reasoning ciphertext, kept for replay under `metadataKey`. */
+/** Item IDs and reasoning ciphertext, kept for replay under the dialect's namespace. */
 export const itemMetadata = (
+  dialect: Dialect,
   fields: Readonly<Record<string, string | null | undefined>>,
 ): Record<string, Record<string, string>> => ({
-  [metadataKey]: Object.fromEntries(
+  [dialect.metadataKey]: Object.fromEntries(
     Object.entries(fields).flatMap(([key, value]): Array<[string, string]> =>
       value == null ? [] : [[key, value]],
     ),
@@ -174,6 +190,7 @@ export const itemMetadata = (
  * parameters for Effect, and replay must send what the model produced, not that shape.
  */
 export const toolCall = Effect.fnUntraced(function* (
+  dialect: Dialect,
   method: string,
   options: LanguageModel.ProviderOptions,
   item: typeof Wire.FunctionCallItem.Type,
@@ -182,24 +199,26 @@ export const toolCall = Effect.fnUntraced(function* (
     type: 'tool-call',
     id: item.call_id,
     name: item.name,
-    params: yield* toolParams(method, options, item.name, item.arguments),
-    metadata: itemMetadata({ itemId: item.id, arguments: item.arguments }),
+    params: yield* toolParams(dialect, method, options, item.name, item.arguments),
+    metadata: itemMetadata(dialect, { itemId: item.id, arguments: item.arguments }),
   };
   return part;
 });
 
 export const decodeResponse = Effect.fnUntraced(function* (
+  dialect: Dialect,
   body: typeof Wire.Body.Type,
   options: LanguageModel.ProviderOptions,
 ) {
   if (!('output' in body)) {
     return yield* providerError(
+      dialect,
       'generateText',
       typeof body.error === 'string' ? { ...body, message: body.error } : body.error,
     );
   }
   if (body.error != null || body.status === 'failed') {
-    return yield* providerError('generateText', body.error ?? {});
+    return yield* providerError(dialect, 'generateText', body.error ?? {});
   }
   const parts: Array<Response.PartEncoded> = [
     {
@@ -215,7 +234,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
     if (!knownItem(raw)) {
       continue;
     }
-    const item = yield* decodeItem('generateText', raw);
+    const item = yield* decodeItem(dialect, 'generateText', raw);
     switch (item.type) {
       case 'message':
         // Commentary would be joined with the answer and break JSON decoding.
@@ -227,21 +246,21 @@ export const decodeResponse = Effect.fnUntraced(function* (
             parts.push({
               type: 'text',
               text: content.text ?? '',
-              metadata: itemMetadata({ itemId: item.id }),
+              metadata: itemMetadata(dialect, { itemId: item.id }),
             });
           } else if (content.type === 'refusal') {
             hasRefusal = true;
             parts.push({
               type: 'text',
               text: '',
-              metadata: itemMetadata({ itemId: item.id, refusal: content.refusal }),
+              metadata: itemMetadata(dialect, { itemId: item.id, refusal: content.refusal }),
             });
           }
         }
         break;
       case 'reasoning': {
         // An empty summary still carries the item ID and encrypted content for replay.
-        const metadata = itemMetadata({
+        const metadata = itemMetadata(dialect, {
           itemId: item.id,
           encryptedContent: item.encrypted_content,
         });
@@ -256,7 +275,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
           break;
         }
         hasToolCalls = true;
-        parts.push(yield* toolCall('generateText', options, item));
+        parts.push(yield* toolCall(dialect, 'generateText', options, item));
         break;
     }
   }

@@ -2,16 +2,12 @@
 /** OpenAI language models through Foundry's `/openai/v1/responses` route. */
 import * as LanguageModel from 'effect/ai/LanguageModel';
 import * as AiModel from 'effect/ai/Model';
-import { toCodecOpenAI } from 'effect/ai/OpenAiStructuredOutput';
-import * as Effect from 'effect/Effect';
+import type * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
-import * as Stream from 'effect/Stream';
-import { FoundryClient } from './FoundryClient.ts';
+import type { FoundryClient } from './FoundryClient.ts';
 import { models } from './internal/models/openai.ts';
-import { makeRequest, type Target } from './internal/openai-responses/request.ts';
-import { decodeResponse } from './internal/openai-responses/response.ts';
-import * as Wire from './internal/openai-responses/schema.ts';
-import { decodeStream } from './internal/openai-responses/stream.ts';
+import * as ResponsesModel from './internal/openai-responses/languageModel.ts';
+import type * as Wire from './internal/openai-responses/schema.ts';
 
 export const providerName = 'foundry-openai';
 
@@ -28,13 +24,8 @@ const known: Readonly<Record<string, { readonly rid: string; readonly reasoning?
   models;
 
 /** Known aliases and RIDs get their catalog flags; any other target passes through as is. */
-const resolve = (modelId: string): Target => {
-  const entry =
-    known[modelId] ?? Object.values(known).find((candidate) => candidate.rid === modelId);
-  return { rid: entry?.rid ?? modelId, reasoning: entry?.reasoning === true };
-};
-
-const path = '/openai/v1/responses';
+const resolve = (modelId: string) =>
+  known[modelId] ?? Object.values(known).find((candidate) => candidate.rid === modelId);
 
 export const model = (
   modelId: ModelId,
@@ -47,29 +38,22 @@ export const model = (
  * strict unless a tool sets otherwise. Reasoning models get developer messages and encrypted
  * reasoning, which later turns send back.
  */
-export const make = Effect.fnUntraced(function* (options: {
+export const make = (options: {
   readonly model: ModelId;
   readonly config?: Config | undefined;
-}) {
-  const client = yield* FoundryClient;
-  const target = resolve(options.model);
-  const reasoning = options.config?.reasoning;
-  return yield* LanguageModel.make({
-    codecTransformer: toCodecOpenAI,
-    generateText: Effect.fnUntraced(function* (providerOptions) {
-      const request = yield* makeRequest(providerOptions, target, reasoning);
-      const body = yield* client.json({ path, body: request, schema: Wire.Body });
-      return yield* decodeResponse(body, providerOptions);
-    }),
-    streamText: (providerOptions) =>
-      makeRequest(providerOptions, target, reasoning).pipe(
-        Effect.map((request) =>
-          decodeStream(client.sse({ path, body: { ...request, stream: true } }), providerOptions),
-        ),
-        Stream.unwrap,
-      ),
+}): Effect.Effect<LanguageModel.LanguageModel, never, FoundryClient> => {
+  const entry = resolve(options.model);
+  const reasoning = entry?.reasoning === true;
+  return ResponsesModel.make({
+    module: 'OpenAiLanguageModel',
+    metadataKey: providerName,
+    path: '/openai/v1/responses',
+    model: entry?.rid ?? options.model,
+    systemRole: reasoning ? 'developer' : 'system',
+    encryptedReasoning: reasoning,
+    reasoning: options.config?.reasoning,
   });
-});
+};
 
 export const layer = (options: {
   readonly model: ModelId;

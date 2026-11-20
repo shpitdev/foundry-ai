@@ -13,6 +13,7 @@ import type * as Sse from 'effect/encoding/Sse';
 import * as Predicate from 'effect/Predicate';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
+import type { Dialect } from './request.ts';
 import {
   decodeItem,
   finishReason,
@@ -31,6 +32,7 @@ const decodeData = Schema.decodeUnknownEffect(Schema.fromJsonString(Schema.Unkno
 const decodeEvent = Schema.decodeUnknownEffect(Wire.Event);
 
 export const decodeStream = (
+  dialect: Dialect,
   events: Stream.Stream<Sse.Event, AiError.AiError>,
   options: LanguageModel.ProviderOptions,
 ): Stream.Stream<Response.StreamPartEncoded, AiError.AiError> => {
@@ -50,7 +52,7 @@ export const decodeStream = (
       parts.push({
         type: 'text-end',
         id: `${itemId}:${index}`,
-        metadata: itemMetadata({ itemId }),
+        metadata: itemMetadata(dialect, { itemId }),
       });
     }
     text.delete(itemId);
@@ -65,7 +67,7 @@ export const decodeStream = (
       parts.push({
         type: 'reasoning-end',
         id: `${itemId}:${index}`,
-        metadata: itemMetadata({ itemId, encryptedContent: state?.encrypted }),
+        metadata: itemMetadata(dialect, { itemId, encryptedContent: state?.encrypted }),
       });
     }
     return parts;
@@ -84,10 +86,14 @@ export const decodeStream = (
   const handle = Effect.fnUntraced(function* (event: Sse.Event) {
     const parts: Array<Response.StreamPartEncoded> = [];
     if (event.data === '[DONE]') {
-      return yield* invalidResponse(method, 'Stream sent [DONE] before response.completed');
+      return yield* invalidResponse(
+        dialect,
+        method,
+        'Stream sent [DONE] before response.completed',
+      );
     }
     const data = yield* Effect.mapError(decodeData(event.data), (error) =>
-      invalidResponse(method, `Malformed event data: ${error.message}`),
+      invalidResponse(dialect, method, `Malformed event data: ${error.message}`),
     );
     if (
       !Predicate.hasProperty(data, 'type') ||
@@ -97,7 +103,7 @@ export const decodeStream = (
       return parts;
     }
     const decoded = yield* Effect.mapError(decodeEvent(data), (error) =>
-      invalidResponse(method, error.message),
+      invalidResponse(dialect, method, error.message),
     );
     switch (decoded.type) {
       case 'response.created':
@@ -113,7 +119,7 @@ export const decodeStream = (
         if (!knownItem(decoded.item)) {
           break;
         }
-        const item = yield* decodeItem(method, decoded.item);
+        const item = yield* decodeItem(dialect, method, decoded.item);
         const added = decoded.type === 'response.output_item.added';
         if (item.type === 'message') {
           if (options.responseFormat.type === 'json' && item.phase === 'commentary') {
@@ -130,7 +136,11 @@ export const decodeStream = (
             const id = `${item.id}:refusal`;
             parts.push(
               { type: 'text-start', id },
-              { type: 'text-end', id, metadata: itemMetadata({ itemId: item.id, refusal }) },
+              {
+                type: 'text-end',
+                id,
+                metadata: itemMetadata(dialect, { itemId: item.id, refusal }),
+              },
             );
           }
         } else if (item.type === 'reasoning') {
@@ -142,7 +152,10 @@ export const decodeStream = (
             parts.push({
               type: 'reasoning-start',
               id: `${item.id}:0`,
-              metadata: itemMetadata({ itemId: item.id, encryptedContent: state.encrypted }),
+              metadata: itemMetadata(dialect, {
+                itemId: item.id,
+                encryptedContent: state.encrypted,
+              }),
             });
           } else {
             parts.push(...endReasoning(item.id, state.open));
@@ -157,7 +170,7 @@ export const decodeStream = (
           // The finished item's arguments are authoritative; an incomplete call is not a call.
           if (item.status !== 'incomplete') {
             hasToolCalls = true;
-            parts.push(yield* toolCall(method, options, item));
+            parts.push(yield* toolCall(dialect, method, options, item));
           }
         }
         break;
@@ -174,7 +187,7 @@ export const decodeStream = (
           parts.push({
             type: 'text-start',
             id,
-            metadata: itemMetadata({ itemId: decoded.item_id }),
+            metadata: itemMetadata(dialect, { itemId: decoded.item_id }),
           });
         }
         parts.push({ type: 'text-delta', id, delta: decoded.delta });
@@ -191,7 +204,7 @@ export const decodeStream = (
           parts.push({
             type: 'reasoning-start',
             id,
-            metadata: itemMetadata({ itemId: decoded.item_id }),
+            metadata: itemMetadata(dialect, { itemId: decoded.item_id }),
           });
         }
         parts.push({ type: 'reasoning-delta', id, delta: decoded.delta });
@@ -221,9 +234,10 @@ export const decodeStream = (
         });
         break;
       case 'response.failed':
-        return yield* providerError(method, decoded.response.error ?? {});
+        return yield* providerError(dialect, method, decoded.response.error ?? {});
       case 'error':
         return yield* providerError(
+          dialect,
           method,
           decoded.error ?? { code: decoded.code, message: decoded.message },
         );
@@ -240,7 +254,7 @@ export const decodeStream = (
       Stream.suspend(() =>
         finished
           ? Stream.empty
-          : Stream.fail(invalidResponse(method, 'Stream ended before response.completed')),
+          : Stream.fail(invalidResponse(dialect, method, 'Stream ended before response.completed')),
       ),
     ),
   );
