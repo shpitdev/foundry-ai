@@ -13,14 +13,8 @@ import type { Env } from '../harness.ts';
 
 const namespace = 'foundry-xai';
 
-/** Stateless replay needs encrypted reasoning and the call's item ID and wire arguments. */
-function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
-  const reasoning = parts.flatMap((part) =>
-    part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
-  );
-  expect(reasoning).toContainEqual(
-    expect.objectContaining({ encryptedContent: expect.any(String) }),
-  );
+/** Every replayed call needs its item ID and wire arguments. */
+function expectCallReplay(parts: ReadonlyArray<Response.AnyPart>): void {
   const call = parts.find((part) => part.type === 'tool-call');
   expect(call?.metadata[namespace]).toMatchObject({
     itemId: expect.any(String),
@@ -28,14 +22,34 @@ function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
   });
 }
 
-const shared = languageCells({
-  model: ({ reasoning }) =>
-    XaiLanguageModel.model(
-      'grok-4-6',
-      reasoning ? { reasoning: { effort: 'medium', summary: 'auto' } } : undefined,
-    ),
-  replay: expectReplay,
-});
+/** Stateless replay on a reasoning model also needs the encrypted reasoning. */
+function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
+  const reasoning = parts.flatMap((part) =>
+    part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
+  );
+  expect(reasoning).toContainEqual(
+    expect.objectContaining({ encryptedContent: expect.any(String) }),
+  );
+  expectCallReplay(parts);
+}
+
+/** Grok 420 non-reasoning gets no reasoning settings and skips `reasoning`. */
+export const cellsFor = (model: string) => {
+  const reasons = model !== 'grok-420-non-reasoning-latest';
+  const { reasoning, ...cells } = languageCells({
+    model: (options) =>
+      XaiLanguageModel.model(
+        model,
+        options.reasoning && reasons
+          ? { reasoning: { effort: 'medium', summary: 'auto' } }
+          : undefined,
+      ),
+    replay: reasons ? expectReplay : expectCallReplay,
+  });
+  return reasons && reasoning !== undefined ? { ...cells, reasoning } : cells;
+};
+
+const shared = cellsFor('grok-4-6');
 
 const Lookup = Tool.make('lookup', {
   parameters: Schema.Struct({ topic: Schema.String }),

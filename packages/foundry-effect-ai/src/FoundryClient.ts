@@ -61,21 +61,16 @@ export class FoundryClient extends Context.Service<FoundryClient, Service>()(
   '@shpitdev/foundry-effect-ai/FoundryClient',
 ) {}
 
-const optionalHeaders = (headers: Record<string, string | undefined>): Record<string, string> =>
-  Object.fromEntries(
-    Object.entries(headers).flatMap(([name, value]) =>
-      value === undefined ? [] : [[name, value]],
-    ),
-  );
-
 export const make = Effect.fnUntraced(function* (options: Options) {
   const baseClient = yield* HttpClient.HttpClient;
   const baseUrl = `${options.foundryUrl.trim().replace(/\/+$/u, '')}/api/v2/llm/proxy`;
-  const headers = optionalHeaders({
+  // `setHeaders` drops undefined values.
+  const headers = {
     attribution: options.attributionRid,
     traceParent: options.traceParent,
     traceState: options.traceState,
-  });
+  };
+  // Non-2xx responses fail before `transformClient`, so its retries and taps see them.
   const authorized = HttpClient.mapRequest(
     baseClient,
     (request): HttpClientRequest.HttpClientRequest =>
@@ -84,7 +79,7 @@ export const make = Effect.fnUntraced(function* (options: Options) {
         HttpClientRequest.bearerToken(options.token),
         HttpClientRequest.setHeaders(headers),
       ),
-  );
+  ).pipe(HttpClient.filterStatusOk);
   const client = options.transformClient?.(authorized) ?? authorized;
 
   const execute = (request: HttpClientRequest.HttpClientRequest) => {
@@ -94,25 +89,18 @@ export const make = Effect.fnUntraced(function* (options: Options) {
       : Effect.provideService(sent, HttpClient.TracerPropagationEnabled, false);
   };
 
-  /** Encodes the body and sends the request; a non-2xx status fails with the mapped error. */
+  /** Encodes the body and sends the request; a non-2xx status fails as a `StatusCodeError`. */
   const send = (method: string, request: ProxyRequest, accept: string) => {
     const unsent = HttpClientRequest.post(request.path).pipe(
       HttpClientRequest.setUrlParams(request.urlParams ?? {}),
       HttpClientRequest.accept(accept),
       HttpClientRequest.setHeaders(request.headers ?? {}),
     );
-    return Effect.gen(function* () {
-      const sendable = yield* Effect.catchTag(
-        HttpClientRequest.bodyJson(unsent, request.body),
-        'HttpBodyError',
-        (error) => Errors.fromBodyError(method, unsent, error),
-      );
-      const response = yield* execute(sendable);
-      if (response.status < 200 || response.status >= 300) {
-        return yield* Errors.fromResponse(method, response);
-      }
-      return response;
-    });
+    return Effect.catchTag(
+      HttpClientRequest.bodyJson(unsent, request.body),
+      'HttpBodyError',
+      (error) => Errors.fromBodyError(method, unsent, error),
+    ).pipe(Effect.flatMap(execute));
   };
 
   const json = <S extends Schema.Constraint>(

@@ -15,15 +15,35 @@ function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
   expect(reasoning).toContainEqual(expect.objectContaining({ signature: expect.any(String) }));
 }
 
-// Claude Haiku 4.5 predates adaptive thinking, so reasoning cells set a thinking budget.
-const shared = languageCells({
-  model: ({ reasoning }) =>
-    AnthropicLanguageModel.model(
-      'claude-haiku-4.5',
-      reasoning ? { thinking: { type: 'enabled', budget_tokens: 1024 } } : undefined,
-    ),
-  replay: expectReplay,
-});
+// Opus 4.7 and 4.8, Claude 5 and Claude 5.5 take adaptive thinking; the proxy rejects budget
+// thinking on 5.5. Older models, such as Claude Haiku 4.5, take a thinking budget.
+const adaptive = new Set([
+  'claude-opus-4.7',
+  'claude-opus-4.8',
+  'claude-opus-5',
+  'claude-sonnet-5',
+  'claude-haiku-5.5',
+  'claude-sonnet-5.5',
+  'claude-opus-5.5',
+]);
+
+export const cellsFor = (model: string) =>
+  languageCells({
+    model: ({ reasoning }) =>
+      AnthropicLanguageModel.model(
+        model,
+        reasoning
+          ? {
+              thinking: adaptive.has(model)
+                ? { type: 'adaptive' }
+                : { type: 'enabled', budget_tokens: 1024 },
+            }
+          : undefined,
+      ),
+    replay: expectReplay,
+  });
+
+const shared = cellsFor('claude-haiku-4.5');
 
 // Claude Sonnet 5.5 rejects forced tool use and budget thinking: the shared `json` program runs
 // with native `output_config.format` and adaptive thinking.

@@ -2,8 +2,10 @@ import { expect } from '@effect/vitest';
 import type * as AiError from 'effect/ai/AiError';
 import * as Duration from 'effect/Duration';
 import * as Effect from 'effect/Effect';
+import * as HttpClient from 'effect/http/HttpClient';
 import type * as Layer from 'effect/Layer';
 import * as Redacted from 'effect/Redacted';
+import * as Schedule from 'effect/Schedule';
 import * as Schema from 'effect/Schema';
 import * as FoundryClient from '../../src/FoundryClient.ts';
 import type { Cell } from '../harness.ts';
@@ -124,5 +126,15 @@ export const cells: Readonly<Record<string, Cell>> = {
         reason: 'EncodeError',
       });
       expect(env.requests).toHaveLength(sent);
+    }),
+
+  // Synthetic: `transformClient` sees a non-2xx response as an error, so its retry policy runs.
+  'transform-retry': (env) =>
+    Effect.gen(function* () {
+      const body = yield* FoundryClient.FoundryClient.use((client) =>
+        client.json({ path: '/openai/v1/responses', body: {}, schema: Schema.Unknown }),
+      ).pipe(Effect.provide(env.client({ transformClient: HttpClient.retry(Schedule.recurs(1)) })));
+      expect(body).toEqual({ ok: true });
+      expect(env.requests).toHaveLength(2);
     }),
 };

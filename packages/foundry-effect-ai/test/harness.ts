@@ -26,15 +26,20 @@ export interface Env {
 /** Runs one matrix cell; assertions throw. */
 export type Cell = (env: Env) => Effect.Effect<void, AiError.AiError>;
 
-export const loadCells = async (
-  module: string,
-): Promise<Readonly<Record<string, Cell>> | undefined> => {
+/** What `test/cells/<Module>.ts` exports. */
+export interface CellModule {
+  /** The row's cells on its default models, recorded in the fixtures. */
+  readonly cells: Readonly<Record<string, Cell>>;
+  /** The live cells for any catalog model; a `LIVE_MODELS` sweep runs these per model. */
+  readonly cellsFor?: (model: string) => Readonly<Record<string, Cell>>;
+}
+
+export const loadCells = async (module: string): Promise<CellModule | undefined> => {
   const file = new URL(`cells/${module}.ts`, import.meta.url);
   if (!existsSync(file)) {
     return undefined;
   }
-  const loaded = (await import(file.href)) as { readonly cells: Readonly<Record<string, Cell>> };
-  return loaded.cells;
+  return (await import(file.href)) as CellModule;
 };
 
 const fixtureFile = (module: string, cell: string, kind: 'json' | 'synthetic.json') =>
