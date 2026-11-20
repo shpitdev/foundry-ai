@@ -22,36 +22,55 @@ const encodeJson = Schema.encodeUnknownEffect(Schema.fromJsonString(Schema.Unkno
 export const jsonText = (method: string, value: unknown): Effect.Effect<string, AiError.AiError> =>
   Effect.mapError(encodeJson(value), (error) => invalidResponse(method, error.message));
 
-/**
- * A part's text: its own, or the arguments of a call to the synthetic JSON function, which is
- * the answer rather than a tool call.
- */
-export const partText = (
-  method: string,
-  part: typeof Wire.ResponsePart.Type,
-): Effect.Effect<string | undefined, AiError.AiError> =>
-  part.functionCall === undefined
-    ? Effect.succeed(part.text)
-    : jsonText(method, part.functionCall.args ?? {});
+/** HTTP status for each Google RPC status, for errors that carry no numeric code. */
+const rpcStatuses: Readonly<Record<string, number>> = {
+  INVALID_ARGUMENT: 400,
+  FAILED_PRECONDITION: 400,
+  OUT_OF_RANGE: 400,
+  UNAUTHENTICATED: 401,
+  PERMISSION_DENIED: 403,
+  NOT_FOUND: 404,
+  ALREADY_EXISTS: 409,
+  ABORTED: 409,
+  RESOURCE_EXHAUSTED: 429,
+  CANCELLED: 499,
+  UNKNOWN: 500,
+  INTERNAL: 500,
+  DATA_LOSS: 500,
+  UNIMPLEMENTED: 501,
+  UNAVAILABLE: 503,
+  DEADLINE_EXCEEDED: 504,
+};
 
 /**
- * An error reported inside a successful response or stream. `RESOURCE_EXHAUSTED` is throttling;
- * anything else is a provider failure. Code and status stay in metadata.
+ * An error reported inside a successful response or stream, classified by its numeric code or
+ * RPC status as `FoundryClient` classifies HTTP statuses. Code and status stay in metadata.
  */
 export const providerError = (
   method: string,
   error: typeof Wire.ErrorObject.Type,
 ): AiError.AiError => {
-  const metadata = { [metadataKey]: { code: error.code ?? null, status: error.status ?? null } };
-  const reason =
-    error.status === 'RESOURCE_EXHAUSTED' || error.code === 429
-      ? new AiError.RateLimitError({ metadata })
-      : new AiError.InternalProviderError({
-          description:
-            [error.status ?? error.code, error.message].filter((text) => text != null).join(': ') ||
-            'Response failed',
-          metadata,
-        });
+  const status = error.code ?? (error.status == null ? undefined : rpcStatuses[error.status]);
+  const common = {
+    description:
+      [error.status ?? error.code, error.message].filter((text) => text != null).join(': ') ||
+      'Response failed',
+    metadata: { [metadataKey]: { code: error.code ?? null, status: error.status ?? null } },
+  };
+  let reason: AiError.AiErrorReason;
+  if (status === 400 || status === 404 || status === 409) {
+    reason = new AiError.InvalidRequestError(common);
+  } else if (status === 401) {
+    reason = new AiError.AuthenticationError({ kind: 'InvalidKey', ...common });
+  } else if (status === 403) {
+    reason = new AiError.AuthenticationError({ kind: 'InsufficientPermissions', ...common });
+  } else if (status === 429) {
+    reason = new AiError.RateLimitError({ metadata: common.metadata });
+  } else if (status === undefined || status >= 500) {
+    reason = new AiError.InternalProviderError(common);
+  } else {
+    reason = new AiError.UnknownError(common);
+  }
   return AiError.make({ module, method, reason });
 };
 
@@ -66,11 +85,32 @@ export const responseMetadata = (
   ),
 });
 
-/** The opaque signature Gemini needs back on the part that carried it. */
-export const signed = (
-  thoughtSignature: string | undefined,
-): { metadata?: Record<string, { thoughtSignature: string }> } =>
-  thoughtSignature === undefined ? {} : { metadata: { [metadataKey]: { thoughtSignature } } };
+/**
+ * What replay needs under `metadataKey`: the part's thought signature, `localId` for a call ID
+ * Gemini did not send, and `functionCall` for answer text that came from the synthetic JSON call.
+ */
+export const replayMetadata = (fields: {
+  readonly thoughtSignature?: string | undefined;
+  readonly localId?: boolean | undefined;
+  readonly functionCall?: typeof Wire.FunctionCall.Type | undefined;
+}): { metadata?: Response.ProviderMetadata } => {
+  const replay: Record<string, Schema.Json> = {};
+  if (fields.thoughtSignature !== undefined) {
+    replay['thoughtSignature'] = fields.thoughtSignature;
+  }
+  if (fields.localId === true) {
+    replay['localId'] = true;
+  }
+  const call = fields.functionCall;
+  if (call !== undefined) {
+    replay['functionCall'] = {
+      name: call.name,
+      args: call.args ?? {},
+      ...(call.id === undefined ? undefined : { id: call.id }),
+    };
+  }
+  return Object.keys(replay).length === 0 ? {} : { metadata: { [metadataKey]: replay } };
+};
 
 /** A prompt block reason other than the unspecified placeholder. */
 export const blocked = (body: typeof Wire.Response.Type): boolean => {
@@ -136,8 +176,8 @@ export const usage = (
 };
 
 /**
- * A function call with its wire ID, or a generated one if Gemini sent none. Arguments arrive
- * as an object and are passed through; Toolkit validates them.
+ * A function call with its wire ID, or a generated local one if Gemini sent none. Arguments
+ * arrive as an object and are passed through; Toolkit validates them.
  */
 export const toolCall = Effect.fnUntraced(function* (
   method: string,
@@ -165,9 +205,34 @@ export const toolCall = Effect.fnUntraced(function* (
     id: functionCall.id ?? (yield* ids.generateId()),
     name,
     params: functionCall.args ?? {},
-    ...signed(thoughtSignature),
+    ...replayMetadata({ thoughtSignature, localId: functionCall.id === undefined }),
   };
   return call;
+});
+
+/**
+ * The text or reasoning a part carries, if any. A call to the synthetic JSON function is the
+ * answer text, and in that mode other text is not. A signature-only fragment is empty text that
+ * keeps its signature, with or without a `text` field.
+ */
+export const partContent = Effect.fnUntraced(function* (
+  method: string,
+  part: typeof Wire.ResponsePart.Type,
+  jsonTool: string | undefined,
+) {
+  const call = part.functionCall;
+  const skipped = call === undefined && jsonTool !== undefined && part.thought !== true;
+  let text = part.text ?? '';
+  if (call !== undefined) {
+    text = yield* jsonText(method, call.args ?? {});
+  }
+  return skipped || (text === '' && part.thoughtSignature === undefined)
+    ? undefined
+    : {
+        kind: part.thought === true ? ('reasoning' as const) : ('text' as const),
+        text,
+        ...replayMetadata({ thoughtSignature: part.thoughtSignature, functionCall: call }),
+      };
 });
 
 export const decodeResponse = Effect.fnUntraced(function* (
@@ -189,14 +254,11 @@ export const decodeResponse = Effect.fnUntraced(function* (
       );
       continue;
     }
-    const text = yield* partText('generateText', part);
-    // A signature-only part stays a part of its own, so replay puts it back in place.
-    if (text !== undefined && (text !== '' || part.thoughtSignature !== undefined)) {
-      parts.push({
-        type: part.thought === true ? 'reasoning' : 'text',
-        text,
-        ...signed(part.thoughtSignature),
-      });
+    const content = yield* partContent('generateText', part, jsonTool);
+    if (content !== undefined) {
+      // A signature-only part stays a part of its own, so replay puts it back in place.
+      const { kind, ...rest } = content;
+      parts.push({ type: kind, ...rest });
     }
   }
   parts.push({

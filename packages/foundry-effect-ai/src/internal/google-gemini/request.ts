@@ -20,17 +20,32 @@ export const metadataKey = 'foundry-google';
 /**
  * Gemini accepts Effect's default JSON Schema as `responseJsonSchema`, including
  * `additionalProperties`, `anyOf`, bounds and `$defs`. It ignores `const`, which Effect never
- * emits: literals become `enum`.
+ * emits: literals become `enum`. Keywords outside Gemini's subset, and types with no JSON form,
+ * pass through unchecked; the codec still validates the answer.
  */
 export const codecTransformer = LanguageModel.defaultCodecTransformer;
 
 const fail = (reason: AiError.AiErrorReason) =>
   AiError.make({ module: 'GoogleLanguageModel', method: 'makeRequest', reason });
 
-const signature = (options: Prompt.ProviderOptions): { thoughtSignature?: string } => {
+/** What an earlier response part stored for replay under `metadataKey`. */
+const replayed = (options: Prompt.ProviderOptions) => {
   const value = options[metadataKey];
-  const raw = Predicate.isObject(value) ? value['thoughtSignature'] : undefined;
-  return typeof raw === 'string' ? { thoughtSignature: raw } : {};
+  const fields = Predicate.isObject(value) ? value : {};
+  const { thoughtSignature, functionCall } = fields;
+  return {
+    signed: typeof thoughtSignature === 'string' ? { thoughtSignature } : {},
+    localId: fields['localId'] === true,
+    // The synthetic JSON call whose arguments became answer text.
+    functionCall:
+      Predicate.isObject(functionCall) && typeof functionCall['name'] === 'string'
+        ? {
+            name: functionCall['name'],
+            args: functionCall['args'] ?? {},
+            ...(typeof functionCall['id'] === 'string' ? { id: functionCall['id'] } : undefined),
+          }
+        : undefined,
+  };
 };
 
 const base64DataUrl = /^data:[^,]*;base64,/u;
@@ -72,6 +87,8 @@ const toolResponse = Effect.fnUntraced(function* (part: Prompt.ToolResultPart) {
 const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt) {
   const system: Array<{ text: string }> = [];
   const contents: Array<Wire.Content> = [];
+  // Call IDs generated locally because Gemini sent none; they stay off the wire.
+  const localIds = new Set<string>();
   for (const message of prompt.content) {
     const parts: Array<Wire.Part> = [];
     switch (message.role) {
@@ -93,8 +110,10 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt) {
         break;
       case 'assistant':
         for (const part of message.content) {
-          const signed = signature(part.options);
-          if (
+          const { signed, localId, functionCall } = replayed(part.options);
+          if (part.type === 'text' && functionCall !== undefined) {
+            parts.push({ functionCall, ...signed });
+          } else if (
             (part.type === 'text' || part.type === 'reasoning') &&
             (part.text !== '' || signed.thoughtSignature !== undefined)
           ) {
@@ -104,8 +123,15 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt) {
               ...signed,
             });
           } else if (part.type === 'tool-call' && !part.providerExecuted) {
+            if (localId) {
+              localIds.add(part.id);
+            }
             parts.push({
-              functionCall: { id: part.id, name: part.name, args: part.params },
+              functionCall: {
+                ...(localId ? undefined : { id: part.id }),
+                name: part.name,
+                args: part.params,
+              },
               ...signed,
             });
           }
@@ -119,7 +145,7 @@ const encodePrompt = Effect.fnUntraced(function* (prompt: Prompt.Prompt) {
           if (part.type === 'tool-result') {
             parts.push({
               functionResponse: {
-                id: part.id,
+                ...(localIds.has(part.id) ? undefined : { id: part.id }),
                 name: part.name,
                 response: yield* toolResponse(part),
               },

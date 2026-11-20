@@ -16,12 +16,16 @@ export type Part =
   | { readonly inlineData: { readonly mimeType: string; readonly data: string } }
   | { readonly fileData: { readonly mimeType: string; readonly fileUri: string } }
   | {
-      readonly functionCall: { readonly id: string; readonly name: string; readonly args: unknown };
+      readonly functionCall: {
+        readonly id?: string;
+        readonly name: string;
+        readonly args: unknown;
+      };
       readonly thoughtSignature?: string;
     }
   | {
       readonly functionResponse: {
-        readonly id: string;
+        readonly id?: string;
         readonly name: string;
         readonly response:
           | { readonly name: string; readonly content: unknown }
@@ -88,7 +92,7 @@ export const ErrorObject = Schema.Struct({
 export const FunctionCall = Schema.Struct({
   id: Schema.optional(Schema.String),
   name: Schema.String,
-  args: Schema.optional(Schema.Unknown),
+  args: Schema.optional(Schema.Json),
 });
 
 export const ResponsePart = Schema.Struct({
