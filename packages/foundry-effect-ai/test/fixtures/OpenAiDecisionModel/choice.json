@@ -1,0 +1,7 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"choice\":\"shipping\",\"confidence\":1.0,\"name\":\"team\",\"probabilities\":[{\"probability\":0.0,\"value\":\"billing\"},{\"probability\":1.0,\"value\":\"shipping\"},{\"probability\":0.0,\"value\":\"other\"}],\"type\":\"choice\"}],\"model\":\"gpt-6-luna\",\"usage\":{\"input_tokens\":145,\"input_tokens_details\":{\"cache_write_tokens\":0,\"cached_tokens\":0},\"output_tokens\":0,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":145}}"
+  }
+]

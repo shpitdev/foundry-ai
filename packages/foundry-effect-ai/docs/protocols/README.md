@@ -7,7 +7,7 @@ Implementation notes for each wire protocol the package speaks, written before a
 - [OpenAI Decisions](openai-decisions.md): GPT-6 Luna questions and answers.
 - [Anthropic Messages](anthropic-messages.md): content blocks, thinking, both structured-output modes.
 - [Google Gemini](google-gemini.md): `generateContent`, SSE, thought signatures. No upstream Effect provider exists.
-- [Chat Completions](openai-chat-completions.md): generic dialect and xAI. Foundry rejected every xAI chat probe so far.
+- [Chat Completions](openai-chat-completions.md): generic dialect and xAI. Foundry serves it for OpenAI models; xAI chat returns HTTP 400 (phase 1 probe).
 
 Citations:
 

@@ -1,0 +1,22 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"name\":\"damaged\",\"type\":\"refusal\"},{\"name\":\"urgent\",\"probability\":0.9,\"type\":\"predicate\"}],\"model\":\"gpt-6-luna\",\"usage\":{\"input_tokens\":120,\"output_tokens\":0}}"
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"name\":\"damaged\",\"type\":\"refusal\"},{\"name\":\"urgent\",\"probability\":0.9,\"type\":\"predicate\"}],\"model\":\"gpt-6-luna\",\"usage\":{\"input_tokens\":120,\"output_tokens\":0}}"
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"name\":null,\"type\":\"refusal\"},{\"name\":\"urgent\",\"probability\":0.9,\"type\":\"predicate\"}],\"model\":\"gpt-6-luna\",\"usage\":{\"input_tokens\":120,\"output_tokens\":0}}"
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"name\":\"damaged\",\"type\":\"refusal\"},{\"name\":\"damaged\",\"probability\":0.1,\"type\":\"predicate\"},{\"name\":\"urgent\",\"probability\":0.9,\"type\":\"predicate\"}],\"model\":\"gpt-6-luna\"}"
+  }
+]

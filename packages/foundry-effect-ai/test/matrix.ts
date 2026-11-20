@@ -80,6 +80,12 @@ export const rows: ReadonlyArray<Row> = [
     cells: languageCells,
   },
   {
+    module: 'OpenAiChatLanguageModel',
+    phase: 7,
+    liveModels: ['gpt-6-luna'],
+    cells: languageCells,
+  },
+  {
     module: 'OpenAiEmbeddingModel',
     phase: 6,
     liveModels: ['text-embedding-ada-002', 'text-embedding-3-small', 'text-embedding-3-large'],
