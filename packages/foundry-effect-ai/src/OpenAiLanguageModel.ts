@@ -3,6 +3,7 @@ import * as LanguageModel from 'effect/ai/LanguageModel';
 import * as AiModel from 'effect/ai/Model';
 import type * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
+import type { OpenAIModelId } from '../../foundry-catalog/src/openai-models.ts';
 import type { FoundryClient } from './FoundryClient.ts';
 import { notImplemented } from './internal/notImplemented.ts';
 
@@ -10,7 +11,7 @@ export const providerName = 'foundry-openai';
 
 /** A catalog alias or a raw Foundry model RID. */
 export const model = (
-  modelId: string,
+  modelId: OpenAIModelId,
 ): AiModel.Model<typeof providerName, LanguageModel.LanguageModel, FoundryClient> =>
   AiModel.make(providerName, modelId, layer({ model: modelId }));
 
