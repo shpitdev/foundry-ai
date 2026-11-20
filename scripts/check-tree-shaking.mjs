@@ -32,17 +32,17 @@ const owners = {
   'src/internal/models/xai.js': ['XaiLanguageModel'],
 };
 
-// Minified bytes with effect external. Set each module's real budget when its phase lands.
+// Minified bytes with effect external: each module's measured size plus about 20%, re-measured
+// in phase 8. A new module needs its own line.
 const budgets = {
-  AnthropicLanguageModel: 25_000,
+  AnthropicLanguageModel: 25_500,
   FoundryClient: 6_800,
   GoogleLanguageModel: 21_000,
-  OpenAiDecisionModel: 13_600,
-  OpenAiEmbeddingModel: 8_400,
-  OpenAiChatLanguageModel: 21_500,
-  OpenAiLanguageModel: 26_700,
+  OpenAiChatLanguageModel: 21_700,
+  OpenAiDecisionModel: 13_700,
+  OpenAiEmbeddingModel: 8_300,
+  OpenAiLanguageModel: 27_400,
   XaiLanguageModel: 25_400,
-  default: 64_000,
 };
 
 const modules = readdirSync(distRoot)
@@ -115,8 +115,10 @@ try {
   );
   for (const { name, result } of bundles) {
     const bytes = result.outputFiles[0]?.contents.byteLength ?? 0;
-    const budget = budgets[name] ?? budgets.default;
-    if (bytes > budget) {
+    const budget = budgets[name];
+    if (budget === undefined) {
+      failures.push(`${name}: no size budget; add one to scripts/check-tree-shaking.mjs.`);
+    } else if (bytes > budget) {
       failures.push(`${name}: ${bytes} bytes exceeds its ${budget}-byte budget.`);
     }
     for (const input of Object.keys(result.metafile.inputs).map((path) =>
