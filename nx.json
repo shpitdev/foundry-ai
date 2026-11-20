@@ -9,8 +9,7 @@
       "{workspaceRoot}/tsconfig.base.json",
       "{workspaceRoot}/mise.toml",
       "{workspaceRoot}/.oxfmtrc.json",
-      "{workspaceRoot}/.oxlintrc.json",
-      "{workspaceRoot}/packages/foundry-catalog/**"
+      "{workspaceRoot}/.oxlintrc.json"
     ],
     "workspaceLintFiles": [
       "{workspaceRoot}/.github/**",

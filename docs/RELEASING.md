@@ -10,7 +10,7 @@ The workflow builds and audits only that package, publishes it to `latest`, and 
 
 ## Prerelease
 
-Merging any other PR publishes a release candidate under npm's `next` tag for each public package whose directory it changed. Changes to `nx.json`, `package.json`, `pnpm-lock.yaml` or `packages/foundry-catalog/` count for every package. This does not advance `latest`. Package versions are immutable; a rerun succeeds only if the expected tag already points to the computed version.
+Merging any other PR publishes a release candidate under npm's `next` tag for each public package whose directory it changed. Changes to `nx.json`, `package.json` or `pnpm-lock.yaml` count for every package. This does not advance `latest`. Package versions are immutable; a rerun succeeds only if the expected tag already points to the computed version.
 
 ## First publish of a new package
 

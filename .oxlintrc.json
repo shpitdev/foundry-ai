@@ -105,7 +105,7 @@
                   "@shpitdev/foundry-effect-ai/**",
                   "**/foundry-effect-ai/**"
                 ],
-                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+                "message": "The two adapter packages stay independent; duplicate what both need."
               }
             ]
           }
@@ -145,7 +145,7 @@
                   "@shpitdev/foundry-ai/**",
                   "**/foundry-ai/src/**"
                 ],
-                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+                "message": "The two adapter packages stay independent; duplicate what both need."
               }
             ]
           }
@@ -217,7 +217,7 @@
                   "@shpitdev/foundry-ai/**",
                   "**/foundry-ai/src/**"
                 ],
-                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+                "message": "The two adapter packages stay independent; duplicate what both need."
               },
               { "group": ["node:*"], "message": "Library code runs on any JavaScript runtime." }
             ]
@@ -264,7 +264,7 @@
                   "@shpitdev/foundry-ai/**",
                   "**/foundry-ai/src/**"
                 ],
-                "message": "The two adapter packages stay independent; shared code moves to packages/foundry-catalog."
+                "message": "The two adapter packages stay independent; duplicate what both need."
               },
               { "group": ["node:*"], "message": "Library code runs on any JavaScript runtime." },
               {
