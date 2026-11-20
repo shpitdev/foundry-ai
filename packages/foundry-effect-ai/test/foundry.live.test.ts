@@ -1,16 +1,12 @@
 import { describe, it } from '@effect/vitest';
-import { decisionRow, languageRows } from './matrix.ts';
+import { contractOnly, rows } from './matrix.ts';
 
 // Live probes against Foundry over FetchHttpClient; run with `pnpm run test:live:effect`.
-// FOUNDRY_RECORD=1 rewrites test/fixtures from the live responses with credentials redacted.
-describe.each(languageRows)('$module live ($liveModel)', ({ capabilities }) => {
-  for (const capability of capabilities) {
-    it.todo(capability);
-  }
-});
-
-describe(`${decisionRow.module} live (${decisionRow.liveModel})`, () => {
-  for (const name of decisionRow.cases) {
-    it.todo(name);
-  }
-});
+// FOUNDRY_RECORD=1 rewrites test/fixtures from the live responses (see docs/PLAN.md, Testing).
+for (const { module, liveModels, cells } of rows) {
+  describe(`${module} live (${liveModels.join(', ')})`, () => {
+    for (const cell of cells.filter((name) => !contractOnly.has(name))) {
+      it.todo(cell);
+    }
+  });
+}

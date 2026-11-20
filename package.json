@@ -15,11 +15,11 @@
     "release-policy-check": "node scripts/check-release-policy.mjs",
     "release": "node scripts/create-stable-release-pr.mjs",
     "test": "pnpm exec nx run-many -t test --outputStyle=static",
-    "test:live": "pnpm exec nx run foundry-ai:test-live --outputStyle=stream-without-prefixes",
+    "test:live": "infisical run --env=dev --silent -- pnpm exec nx run foundry-ai:test-live --outputStyle=stream-without-prefixes",
     "typecheck": "pnpm exec nx run-many -t typecheck --outputStyle=static",
     "verify": "pnpm exec nx run-many -t release-policy-check lint test typecheck build package-audit tree-shaking --outputStyle=static",
     "verify:public-metadata": "node scripts/verify-public-metadata.mjs",
-    "test:live:effect": "pnpm exec nx run foundry-effect-ai:test-live --outputStyle=stream-without-prefixes"
+    "test:live:effect": "infisical run --env=dev --silent -- pnpm exec nx run foundry-effect-ai:test-live --outputStyle=stream-without-prefixes"
   },
   "devDependencies": {
     "@ai-sdk/anthropic": "4.0.106",

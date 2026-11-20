@@ -35,6 +35,8 @@ export interface ProxyRequest {
   readonly body: unknown;
   /** Extra query parameters, e.g. `{ alt: 'sse' }` for Gemini streaming. */
   readonly urlParams?: Readonly<Record<string, string>> | undefined;
+  /** Extra request headers, e.g. `anthropic-version` or `X-Palantir-session-id`. */
+  readonly headers?: Readonly<Record<string, string>> | undefined;
 }
 
 export interface Service {
