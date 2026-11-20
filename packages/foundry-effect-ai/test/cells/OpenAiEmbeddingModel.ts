@@ -66,7 +66,8 @@ export const cells: Readonly<Record<string, Cell>> = {
     }),
 
   // Order is checked by meaning live: the repeated input lands next to its twin. Offline, a
-  // synthetic response with shuffled indexes must be reordered, and a duplicate index rejected.
+  // synthetic response with shuffled indexes must be reordered, and a duplicate index or a vector
+  // of the wrong size rejected.
   'embed-many': (env) =>
     Effect.gen(function* () {
       const embedMany = (inputs: ReadonlyArray<string>) =>
@@ -87,14 +88,19 @@ export const cells: Readonly<Record<string, Cell>> = {
       }
 
       const shuffled = yield* embedMany(['a', 'b', 'c']);
-      expect(shuffled.embeddings.map(({ vector }) => vector)).toEqual([[0], [1], [2]]);
+      expect(shuffled.embeddings.map(({ vector }) => vector)).toEqual(
+        [0, 1, 2].map((value) => Array.from({ length: 64 }, () => value)),
+      );
       expect(shuffled.usage.inputTokens).toBeUndefined();
-      const duplicate = yield* embedMany(['a', 'b']).pipe(Effect.flip, Effect.orDie);
-      expect(duplicate.reason._tag).toBe('InvalidResponseError');
+      for (const _ of ['duplicate index', 'wrong size']) {
+        const failure = yield* embedMany(['a', 'b']).pipe(Effect.flip, Effect.orDie);
+        expect(failure.reason._tag).toBe('InvalidResponseError');
+      }
       const sent = { model: 'text-embedding-3-large', encoding_format: 'float', dimensions: 64 };
       expectRequests(env, [
         { ...sent, input: inputs },
         { ...sent, input: ['a', 'b', 'c'] },
+        { ...sent, input: ['a', 'b'] },
         { ...sent, input: ['a', 'b'] },
       ]);
     }),

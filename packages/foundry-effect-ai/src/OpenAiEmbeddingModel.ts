@@ -48,8 +48,10 @@ export const model = (
 /** Concurrent `embed` calls share one request. */
 export const make = Effect.fnUntraced(function* (options: Options) {
   const client = yield* FoundryClient;
-  const dimensions =
-    options.dimensions === known[options.model]?.dimensions ? undefined : options.dimensions;
+  const native = known[options.model]?.dimensions;
+  const dimensions = options.dimensions === native ? undefined : options.dimensions;
+  // Every vector must match `Dimensions`; an unknown model without `dimensions` is not checked.
+  const size = options.dimensions ?? native;
   return yield* EmbeddingModel.make({
     embedMany: Effect.fnUntraced(function* ({ inputs }) {
       const request: Wire.Request = {
@@ -70,10 +72,15 @@ export const make = Effect.fnUntraced(function* (options: Options) {
       }
       // With the count checked, in-range and unique indexes cover every input.
       const seen = new Set<number>();
-      for (const { index } of response.data) {
+      for (const { index, embedding } of response.data) {
         if (index < 0 || index >= inputs.length || seen.has(index)) {
           return yield* invalidResponse(
             `Foundry returned an out-of-range or duplicate embedding index ${index}`,
+          );
+        }
+        if (size !== undefined && embedding.length !== size) {
+          return yield* invalidResponse(
+            `Foundry returned ${embedding.length} dimensions at index ${index}, expected ${size}`,
           );
         }
         seen.add(index);
