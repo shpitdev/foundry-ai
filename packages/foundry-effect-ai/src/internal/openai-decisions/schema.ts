@@ -30,6 +30,8 @@ export interface Request {
 }
 
 const Confidence = Schema.optional(Schema.NullOr(Schema.Finite));
+// Exact optional keys, so the decoded usage is plain JSON for response metadata.
+const Count = Schema.optionalKey(Schema.NullOr(Schema.Finite));
 
 export const Answer = Schema.Union([
   // Foundry's schema allows a refusal without a question name.
@@ -65,8 +67,15 @@ export const Response = Schema.Struct({
   usage: Schema.optional(
     Schema.NullOr(
       Schema.Struct({
-        input_tokens: Schema.optional(Schema.NullOr(Schema.Finite)),
-        output_tokens: Schema.optional(Schema.NullOr(Schema.Finite)),
+        input_tokens: Count,
+        input_tokens_details: Schema.optionalKey(
+          Schema.NullOr(Schema.Struct({ cached_tokens: Count, cache_write_tokens: Count })),
+        ),
+        output_tokens: Count,
+        output_tokens_details: Schema.optionalKey(
+          Schema.NullOr(Schema.Struct({ reasoning_tokens: Count })),
+        ),
+        total_tokens: Count,
       }),
     ),
   ),

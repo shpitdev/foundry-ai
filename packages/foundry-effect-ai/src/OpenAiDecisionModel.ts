@@ -6,6 +6,7 @@ import * as DecisionModel from 'effect/ai/DecisionModel';
 import * as AiModel from 'effect/ai/Model';
 import * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
+import * as Result from 'effect/Result';
 import { FoundryClient } from './FoundryClient.ts';
 import { models } from './internal/models/openai.ts';
 import * as Wire from './internal/openai-decisions/schema.ts';
@@ -75,14 +76,25 @@ export const make = Effect.fnUntraced(function* (options: { readonly model: Mode
         body: request,
         schema: Wire.Response,
       });
+      const answers = decodeAnswers(decisions, response.answers);
+      if (Result.isFailure(answers)) {
+        return yield* AiError.make({
+          module: 'OpenAiDecisionModel',
+          method: 'decide',
+          reason: new AiError.InvalidResponseError({ description: answers.failure }),
+        });
+      }
       return {
-        answers: decodeAnswers(decisions, response.answers),
+        answers: answers.success,
         usage: {
           inputTokens: response.usage?.input_tokens ?? undefined,
           outputTokens: response.usage?.output_tokens ?? undefined,
         },
         id: response.id ?? undefined,
         modelId: response.model ?? undefined,
+        // Usage subcounts (cache reads and writes, reasoning, total) as Foundry reports them.
+        metadata:
+          response.usage == null ? undefined : { [providerName]: { usage: response.usage } },
       };
     }),
   });
@@ -141,20 +153,31 @@ const encodeQuestion = (name: string, decision: Question): Wire.Question => {
   };
 };
 
+/** Duplicate names or probability keys are ambiguous; the last one would silently win. */
 const decodeAnswers = (
   decisions: Readonly<Record<string, Question>>,
   wire: ReadonlyArray<typeof Wire.Answer.Type>,
-): Record<string, DecisionModel.ProviderAnswer> => {
+): Result.Result<Record<string, DecisionModel.ProviderAnswer>, string> => {
   const answers = new Map<string, DecisionModel.ProviderAnswer>();
   let refusedUnnamed = false;
   for (const answer of wire) {
+    if (answer.name === null) {
+      refusedUnnamed = true;
+      continue;
+    }
+    if (answers.has(answer.name)) {
+      return Result.fail(`Foundry returned more than one answer for decision "${answer.name}"`);
+    }
+    if (
+      answer.type !== 'refusal' &&
+      answer.type !== 'predicate' &&
+      new Set(answer.probabilities.map(({ value }) => value)).size !== answer.probabilities.length
+    ) {
+      return Result.fail(`Foundry returned duplicate probabilities for decision "${answer.name}"`);
+    }
     switch (answer.type) {
       case 'refusal':
-        if (answer.name === null) {
-          refusedUnnamed = true;
-        } else {
-          answers.set(answer.name, { _tag: 'Refusal' });
-        }
+        answers.set(answer.name, { _tag: 'Refusal' });
         break;
       case 'predicate':
         answers.set(answer.name, { _tag: 'Probability', probability: answer.probability });
@@ -194,5 +217,5 @@ const decodeAnswers = (
       }
     }
   }
-  return Object.fromEntries(answers);
+  return Result.succeed(Object.fromEntries(answers));
 };
