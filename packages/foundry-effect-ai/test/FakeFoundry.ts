@@ -16,11 +16,25 @@ export interface Fixture {
   readonly status?: number;
   /** `application/json` or `text/event-stream`. */
   readonly contentType: string;
-  /** Synthetic fixtures only: recordings keep status, content type and body. */
+  /** Synthetic fixtures only: recordings keep status, content type, body and request. */
   readonly headers?: Readonly<Record<string, string>>;
   /** `null` for bodyless responses such as 204. */
   readonly body: string | null;
+  /** The request Foundry answered, recorded with the response; replays must send the same. */
+  readonly request?: SentRequest;
 }
+
+/** A request as the proxy saw it: the path below `/api/v2/llm/proxy`, with query, and body. */
+export interface SentRequest {
+  readonly path: string;
+  readonly body: unknown;
+}
+
+/** The proxy path of a full request URL. */
+export const proxyPath = (url: string): string => {
+  const { pathname, search } = new URL(url);
+  return `${pathname.replace(/^\/api\/v2\/llm\/proxy/u, '')}${search}`;
+};
 
 export interface CapturedRequest {
   readonly method: string;
