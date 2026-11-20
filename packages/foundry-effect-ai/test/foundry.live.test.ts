@@ -44,13 +44,12 @@ for (const { module, liveModels, cells } of rows) {
               },
             ),
           );
+          // The default client reads FOUNDRY_* through layerConfig; overrides need explicit options.
           const client = (overrides?: Partial<FoundryClient.Options>) =>
-            FoundryClient.layer({
-              foundryUrl,
-              token,
-              transformClient: recorder,
-              ...overrides,
-            }).pipe(Layer.provide(FetchHttpClient.layer));
+            (overrides === undefined
+              ? Layer.orDie(FoundryClient.layerConfig({ transformClient: recorder }))
+              : FoundryClient.layer({ foundryUrl, token, transformClient: recorder, ...overrides })
+            ).pipe(Layer.provide(FetchHttpClient.layer));
           yield* run({ live: true, client, requests: [] });
           if (record) {
             writeFixtures(module, cell, recorded);
