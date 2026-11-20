@@ -27,8 +27,8 @@
     "./package.json": "./package.json",
     "./internal/*": null,
     "./*": {
-      "types": "./dist/foundry-effect-ai/src/*.d.ts",
-      "default": "./dist/foundry-effect-ai/src/*.js"
+      "types": "./dist/src/*.d.ts",
+      "default": "./dist/src/*.js"
     }
   },
   "files": [
