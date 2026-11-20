@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { isPublishable, packageByProject, readDistTags, readManifest } from './packages.mjs';
+import { isPublishable, packageByProject } from './packages.mjs';
 
 const project = process.argv[2];
 if (!project) {
@@ -50,24 +50,12 @@ function runQuiet(command, args, options = {}) {
   }
 }
 
-function readManifestVersion() {
-  return readManifest(releasePackage).version;
-}
-
 function localBranchExists(branchName) {
   return runQuiet('git', ['show-ref', '--verify', '--quiet', `refs/heads/${branchName}`]);
 }
 
 function remoteBranchExists(branchName) {
   return run('git', ['ls-remote', '--heads', remoteName, `refs/heads/${branchName}`]).length > 0;
-}
-
-function remoteTagExists(tagName) {
-  return run('git', ['ls-remote', '--tags', remoteName, `refs/tags/${tagName}`]).length > 0;
-}
-
-function localTagExists(tagName) {
-  return run('git', ['tag', '--list', tagName]).length > 0;
 }
 
 function ensureCleanWorktree() {
@@ -86,40 +74,6 @@ function ensureReleaseRemote() {
       `Release remote must be the public destination. Expected one of ${[...expectedRemoteUrls].join(', ')}, received ${remoteUrl}.`,
     );
   }
-}
-
-function ensureStableTagOnMain() {
-  const currentVersion = readManifestVersion();
-  const tagName = `${packageName}@${currentVersion}`;
-
-  if (remoteTagExists(tagName)) {
-    return;
-  }
-
-  if (localTagExists(tagName)) {
-    runStreaming('git', ['push', remoteName, tagName]);
-    return;
-  }
-
-  const latestTag = readDistTags(releasePackage).latest;
-  if (latestTag !== currentVersion) {
-    throw new Error(
-      `Refusing to backfill ${tagName}: package manifest is ${currentVersion}, but npm latest is ${latestTag ?? '<unset>'}.`,
-    );
-  }
-
-  // Tag the commit that set this version, not HEAD: Nx reads the commits after the tag as the
-  // next release's changes.
-  const versionCommit = run('git', [
-    'log',
-    '-1',
-    '--format=%H',
-    '-G"version":',
-    '--',
-    packageManifestPath,
-  ]);
-  runStreaming('git', ['tag', '-a', tagName, versionCommit, '-m', `Release ${tagName}`]);
-  runStreaming('git', ['push', remoteName, tagName]);
 }
 
 function resolveNextVersion(firstRelease) {
@@ -165,7 +119,6 @@ ensureReleaseRemote();
 runStreaming('git', ['fetch', remoteName, baseBranch, '--tags']);
 runStreaming('git', ['switch', baseBranch]);
 runStreaming('git', ['pull', '--ff-only', remoteName, baseBranch]);
-ensureStableTagOnMain();
 
 const firstRelease = run('git', ['tag', '--list', `${packageName}@*`]).length === 0;
 const nextVersion = resolveNextVersion(firstRelease);

@@ -19,6 +19,6 @@ npm trusted publishing is configured on a package that already exists, so a new 
 1. On a branch, remove `private` from the package's `package.json` and set `version` to the first release. Run `pnpm run verify`.
 2. From the package directory, as a `shpitdev` npm org member, run `npm publish --access public`. This sets `latest`.
 3. Trust the release workflow: `npm trust github <name> --file release.yml --repo shpitdev/foundry-ai --allow-publish`.
-4. Merge the branch. The merge publishes the first release candidate through OIDC, and `pnpm run release <project>` backfills the `<name>@<version>` tag on the commit that set the version, because the manifest matches npm `latest`.
+4. Merge the branch, then tag its merge commit with the version you published, the tag `nx release` would have created: `git tag -a <name>@<version> <merge-commit> -m "Release <name>@<version>" && git push origin <name>@<version>`. Later releases count changes from this tag.
 
 Use `pnpm run verify:public-metadata` to check public repository/package identity when investigating publishing problems.
