@@ -34,8 +34,9 @@ export const option = (options: Prompt.ProviderOptions, field: string): string |
   return typeof raw === 'string' ? raw : undefined;
 };
 
+// A void result still serializes: `JSON.stringify(undefined)` is not a string.
 const stringify = (value: unknown): string =>
-  typeof value === 'string' ? value : JSON.stringify(value);
+  typeof value === 'string' ? value : JSON.stringify(value ?? null);
 
 const imageUrl = (part: Prompt.FilePart): string =>
   part.data instanceof URL

@@ -41,6 +41,8 @@ export const decodeStream = (
   const text = new Map<string, Set<number>>();
   const reasoning = new Map<string, { encrypted: string | undefined; open: Set<number> }>();
   const toolCalls = new Map<number, string>();
+  // Commentary would be joined with the answer and break JSON decoding.
+  const commentary = new Set<string>();
 
   const endText = (itemId: string) => {
     const parts: Array<Response.StreamPartEncoded> = [];
@@ -114,7 +116,10 @@ export const decodeStream = (
         const item = yield* decodeItem(method, decoded.item);
         const added = decoded.type === 'response.output_item.added';
         if (item.type === 'message') {
-          if (added) {
+          if (options.responseFormat.type === 'json' && item.phase === 'commentary') {
+            commentary.add(item.id);
+          }
+          if (added || commentary.has(item.id)) {
             break;
           }
           parts.push(...endText(item.id));
@@ -158,6 +163,9 @@ export const decodeStream = (
         break;
       }
       case 'response.output_text.delta': {
+        if (commentary.has(decoded.item_id)) {
+          break;
+        }
         const open = text.get(decoded.item_id) ?? new Set();
         const id = `${decoded.item_id}:${decoded.content_index}`;
         if (!open.has(decoded.content_index)) {
