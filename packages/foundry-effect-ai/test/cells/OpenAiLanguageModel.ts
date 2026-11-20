@@ -14,28 +14,31 @@ const namespace = 'foundry-openai';
 const known: Readonly<Record<string, { readonly rid: string; readonly reasoning?: boolean }>> =
   models;
 
-/** Every replayed call needs its item ID and wire arguments. */
-function expectCallReplay(parts: ReadonlyArray<Response.AnyPart>): void {
-  const call = parts.find((part) => part.type === 'tool-call');
-  expect(call?.metadata[namespace]).toMatchObject({
-    itemId: expect.any(String),
-    arguments: expect.any(String),
-  });
-}
-
-/** Stateless replay on a reasoning model also needs the encrypted reasoning. */
-function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
-  const reasoning = parts.flatMap((part) =>
-    part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
-  );
-  expect(reasoning).toContainEqual(
-    expect.objectContaining({ encryptedContent: expect.any(String) }),
-  );
-  expectCallReplay(parts);
-}
+/**
+ * Replay needs the call's item ID and wire arguments, and any reasoning's ciphertext. With
+ * `required`, as for the recorded defaults, the turn must carry reasoning, so a recording without
+ * it fails; a sweep checks reasoning only where the model produced some.
+ */
+const expectReplay =
+  (required: boolean) =>
+  (parts: ReadonlyArray<Response.AnyPart>): void => {
+    const reasoning = parts.flatMap((part) =>
+      part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
+    );
+    if (required || reasoning.length > 0) {
+      expect(reasoning).toContainEqual(
+        expect.objectContaining({ encryptedContent: expect.any(String) }),
+      );
+    }
+    const call = parts.find((part) => part.type === 'tool-call');
+    expect(call?.metadata[namespace]).toMatchObject({
+      itemId: expect.any(String),
+      arguments: expect.any(String),
+    });
+  };
 
 /** Models the catalog does not mark as reasoning get no reasoning settings and skip `reasoning`. */
-export const cellsFor = (model: string) => {
+export const cellsFor = (model: string, recorded = false) => {
   const reasons = known[model]?.reasoning === true;
   const { reasoning, ...cells } = languageCells({
     model: (options) =>
@@ -45,12 +48,12 @@ export const cellsFor = (model: string) => {
           ? { reasoning: { effort: 'medium', summary: 'auto' } }
           : undefined,
       ),
-    replay: reasons ? expectReplay : expectCallReplay,
+    replay: expectReplay(recorded && reasons),
   });
   return reasons && reasoning !== undefined ? { ...cells, reasoning } : cells;
 };
 
-const shared = cellsFor('gpt-6-luna');
+const shared = cellsFor('gpt-6-luna', true);
 
 const voidResult = Prompt.make([
   { role: 'user', content: 'Log the visit.' },

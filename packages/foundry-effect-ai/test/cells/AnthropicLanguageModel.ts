@@ -7,13 +7,21 @@ import type { Env } from '../harness.ts';
 
 const namespace = 'foundry-anthropic';
 
-/** Thinking replays only with its signature, ahead of the call. */
-function expectReplay(parts: ReadonlyArray<Response.AnyPart>): void {
-  const reasoning = parts.flatMap((part) =>
-    part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
-  );
-  expect(reasoning).toContainEqual(expect.objectContaining({ signature: expect.any(String) }));
-}
+/**
+ * Thinking replays only with its signature, ahead of the call. With `required`, as for the
+ * recorded defaults, the turn must think; adaptive models may answer without thinking, so a
+ * sweep checks signatures only where the model thought.
+ */
+const expectReplay =
+  (required: boolean) =>
+  (parts: ReadonlyArray<Response.AnyPart>): void => {
+    const reasoning = parts.flatMap((part) =>
+      part.type === 'reasoning' || part.type === 'reasoning-end' ? [part.metadata[namespace]] : [],
+    );
+    if (required || reasoning.length > 0) {
+      expect(reasoning).toContainEqual(expect.objectContaining({ signature: expect.any(String) }));
+    }
+  };
 
 // Opus 4.7 and 4.8, Claude 5 and Claude 5.5 take adaptive thinking; the proxy rejects budget
 // thinking on 5.5. Older models, such as Claude Haiku 4.5, take a thinking budget.
@@ -27,7 +35,7 @@ const adaptive = new Set([
   'claude-opus-5.5',
 ]);
 
-export const cellsFor = (model: string) =>
+export const cellsFor = (model: string, recorded = false) =>
   languageCells({
     model: ({ reasoning }) =>
       AnthropicLanguageModel.model(
@@ -40,17 +48,17 @@ export const cellsFor = (model: string) =>
             }
           : undefined,
       ),
-    replay: expectReplay,
+    replay: expectReplay(recorded),
   });
 
-const shared = cellsFor('claude-haiku-4.5');
+const shared = cellsFor('claude-haiku-4.5', true);
 
 // Claude Sonnet 5.5 rejects forced tool use and budget thinking: the shared `json` program runs
 // with native `output_config.format` and adaptive thinking.
 const nativeJson = languageCells({
   model: () =>
     AnthropicLanguageModel.model('claude-sonnet-5.5', { thinking: { type: 'adaptive' } }),
-  replay: expectReplay,
+  replay: expectReplay(true),
 })['json'];
 
 export const cells = {
