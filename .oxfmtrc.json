@@ -7,5 +7,9 @@
   "arrowParens": "always",
   "sortImports": { "newlinesBetween": false },
   "sortPackageJson": false,
-  "ignorePatterns": ["**/CHANGELOG.md", "pnpm-lock.yaml"]
+  "ignorePatterns": [
+    "**/CHANGELOG.md",
+    "pnpm-lock.yaml",
+    "packages/foundry-effect-ai/test/fixtures/**"
+  ]
 }

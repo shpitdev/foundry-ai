@@ -8,7 +8,7 @@ import * as Layer from 'effect/Layer';
 import * as Option from 'effect/Option';
 import * as Redacted from 'effect/Redacted';
 import * as FoundryClient from '../src/FoundryClient.ts';
-import type { Fixture } from './FakeFoundry.ts';
+import { type Fixture, proxyPath, unpinnedHeaders } from './FakeFoundry.ts';
 import { loadCells, scrubber, writeFixtures } from './harness.ts';
 import { contractOnly, rows } from './matrix.ts';
 
@@ -33,23 +33,43 @@ for (const { module, liveModels, cells } of rows) {
       it.live(cell, () =>
         Effect.gen(function* () {
           const { foundryUrl, token, record } = yield* settings;
-          const scrub = scrubber({ host: new URL(foundryUrl).host, token: Redacted.value(token) });
-          const recordings: Array<Promise<Fixture>> = [];
-          // Records a clone of each Web response; the clone tees the body, so the model reads
-          // its copy as it arrives. Cancelling a stream early waits for the copy to finish.
+          const recordings: Array<
+            Promise<{
+              readonly path: string;
+              readonly headers: Record<string, string>;
+              readonly sent: string;
+              readonly response: Fixture;
+            }>
+          > = [];
+          // Records each exchange from a clone of the Web response; the clone tees the body, so the
+          // model reads its copy as it arrives. Cancelling a stream early waits for the copy.
           const recorder = HttpClient.transformResponse(
             Effect.map((response) =>
               Option.match(HttpClientResponse.toWeb(response), {
                 onNone: () => response,
                 onSome: (web) => {
+                  const { body } = response.request;
+                  const path = proxyPath(web.url);
+                  const headers = Object.fromEntries(
+                    Object.entries(response.request.headers).filter(
+                      ([name]) => !unpinnedHeaders.has(name),
+                    ),
+                  );
+                  const sent =
+                    body._tag === 'Uint8Array' ? new TextDecoder().decode(body.body) : '';
                   recordings.push(
                     web
                       .clone()
                       .text()
-                      .then((body) => ({
-                        status: web.status,
-                        contentType: web.headers.get('content-type') ?? '',
-                        body: scrub(body),
+                      .then((text) => ({
+                        path,
+                        headers,
+                        sent,
+                        response: {
+                          status: web.status,
+                          contentType: web.headers.get('content-type') ?? '',
+                          body: text,
+                        },
                       })),
                   );
                   return HttpClientResponse.fromWeb(response.request, web);
@@ -66,7 +86,28 @@ for (const { module, liveModels, cells } of rows) {
             ).pipe(Layer.provide(FetchHttpClient.layer));
           yield* run({ live: true, client, requests: [] });
           if (record) {
-            writeFixtures(module, cell, yield* Effect.promise(() => Promise.all(recordings)));
+            // One scrubber, in exchange order, so an ID keeps its placeholder across the cell.
+            const scrub = scrubber({
+              host: new URL(foundryUrl).host,
+              token: Redacted.value(token),
+            });
+            const exchanges = yield* Effect.promise(() => Promise.all(recordings));
+            writeFixtures(
+              module,
+              cell,
+              exchanges.map(({ path, headers, sent, response }) => {
+                const request = scrub(sent);
+                return {
+                  ...response,
+                  request: {
+                    path,
+                    body: request === '' ? undefined : JSON.parse(request),
+                    headers,
+                  },
+                  body: scrub(response.body ?? ''),
+                };
+              }),
+            );
           }
         }),
       );

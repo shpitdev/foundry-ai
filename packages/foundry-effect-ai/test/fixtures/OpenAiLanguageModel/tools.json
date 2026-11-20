@@ -1,0 +1,130 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795140743,\"status\":\"completed\",\"usage\":{\"input_tokens\":81,\"output_tokens\":33,\"total_tokens\":114,\"output_tokens_details\":{\"reasoning_tokens\":13},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"reasoning\",\"id\":\"redacted-id-2\",\"summary\":[],\"content\":[],\"encrypted_content\":\"gAAAAABq_6yJH3bvnw81rfTrLB9EOek_U7S2GuMyamIBOpsXpLzLAxqhbm9MmZKdUtC0S1qboPAypwdRzTmP7Mxvjq-9Cb8nm7PK_N5gS5baYhsKGKUrqLrdCpN6ClkdWsUfHO6KGwzIB8ffj_7W0xcgquiYDHfjIYYmqF3AfM0xfZdZrzsocmhvqyZVGpD10kztCMHMBOGOF9wn5f1vMPhVjOvMYvoQ6hI93JA8lUS-kf8pErLhLWWgZ51efalX8zaNtZNOSKRUvEKI6yQUpBfLwO4w1HJu35_mqFUaXEgXMFiJVxtM-IoAjAgMi4whQKPcqd2CPh62xy5it3gIEoLKv-XjpglI9dq-96jWBduQ432H6Nmo50h9R7474M32JdQ1zWrMZl0xG95-BuIjvk6S8jv8hDvSM1flEpWVsjHkE8J2dpuf1ReGdUcVaO-6adyCVWmxshLb26heTc8eWrteeL0HsEpV0gWfLhqrZnulA7IY-WJB_3YYT8D00iR-I27npP-U2U8CufsXmVmMYy5kuXyEPKkHJLDn5_Z0vNkLHUB4wH7ximTFfH56Xmbjwm4Ij5SBaLnTdiitL-7DJKO90AvdxbTQjTpuQ7etmxl84BTzQNX1ybeAx27Du8TxF3CTpQtlsj8YlqASfDM_swqMk1rsbdxazqtBopwmnEQ4KuP9TbvUSCh578wkdEnt6cYFUdmeJcsOdFUimKVCOFnBXaUz84MPxKFFpKSMhg0xbZoA22fKCkyHIjAFNTk1fSlkZKgF3q2yNpbjlhoZlMl4O5EI0vk_hs29FxV9t2ilf6H4JaiWP40dtjVL7TAs__F9o5USRHeXz0fMU-C1RZnpY_gaNuAcPSIWJbexamFfER9nHGCN7P3pui_NxZeqUZgGTTR8aN8tiMV0bIfFS9Rjc7BkKSztIziopu4TojhyyL_TfmO3m3RIyBEJ0fVcmUXs592Wc7O-5KRlqHpbtzjK0jKTFpTn_dIfSPtRyI_NfLe2IYLbwdPyPvqZOCo3XkgJkE7IkKMzmUtHG2Ke4V4OjEmqyQ9RxBfFdH_STJMNtTSjBMsk6t1QbXrkE0HGyp9315Ikqc8CH-3IDtzyL9qFXuS35VBCc-owYW6pobOKG7-XuPLp_kwLhvMasqjuH6ThG1dcVaoEm1TDXu-_ur5u7YM6ZbPspiwrAkO7uLDHrUHKytWO3f57tsqoFo3nnET0n46_UxG4psR3Pc1bYmrf-q1srOhZh4jV-vcMzIDFBEF6cSY6R640uSyz0woDWmoxl0awaxIKEs9--e4Fefg8N2Xr58N2gGrn4DKvEWdD83kVLGDIsDrsDZcSyFCQl6711uE89BGQtOue-vDcq0PL7kF2G3s-eK-6FwJCSzCf8yNvDnCDTYPhjaJJv7ZR7RK_XKVAMOOgSh_YfDxbXIsUCJDvRyZgmiKXeaiFdLmrIhx56uL196RLFrtbhDo3cvipClq9B7nSjwfW1c11yH7KBWaW38yml6SqzeyF0UK2_YqAPsVJIMsPNr92r2BeQrw5vTUSvZ3z2XE1M3_sigtXyp8nRuT6SL0R8kJx6_hS5Ya3dKrPm4w13qYXpVGcwGPDhewS6Xt-jXIXPU4MUNIwVR1TxcRdlgK4f0J5mJNHUPPWPHmvGf40RtRKvebzAv5XGhLDbZdds2tlR8jJILUGf-hoL-Yb98xpTX61qnnYYxncTK8xCcSG_IlbqKj6J2ItwwQmQB0QBCfBR-R2uF99GolXfcnK-Mue5Bc71CHvq7QHHi1s6lA=\"},{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"call_mLV84LX22JJF1NO2L9JEUGX1\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-4\",\"model\":\"gpt-6-luna\",\"created_at\":1795140746,\"status\":\"completed\",\"usage\":{\"input_tokens\":136,\"output_tokens\":28,\"total_tokens\":164,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, is currently 21°C and sunny.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "type": "reasoning",
+            "id": "redacted-id-2",
+            "summary": [],
+            "encrypted_content": "gAAAAABq_6yJH3bvnw81rfTrLB9EOek_U7S2GuMyamIBOpsXpLzLAxqhbm9MmZKdUtC0S1qboPAypwdRzTmP7Mxvjq-9Cb8nm7PK_N5gS5baYhsKGKUrqLrdCpN6ClkdWsUfHO6KGwzIB8ffj_7W0xcgquiYDHfjIYYmqF3AfM0xfZdZrzsocmhvqyZVGpD10kztCMHMBOGOF9wn5f1vMPhVjOvMYvoQ6hI93JA8lUS-kf8pErLhLWWgZ51efalX8zaNtZNOSKRUvEKI6yQUpBfLwO4w1HJu35_mqFUaXEgXMFiJVxtM-IoAjAgMi4whQKPcqd2CPh62xy5it3gIEoLKv-XjpglI9dq-96jWBduQ432H6Nmo50h9R7474M32JdQ1zWrMZl0xG95-BuIjvk6S8jv8hDvSM1flEpWVsjHkE8J2dpuf1ReGdUcVaO-6adyCVWmxshLb26heTc8eWrteeL0HsEpV0gWfLhqrZnulA7IY-WJB_3YYT8D00iR-I27npP-U2U8CufsXmVmMYy5kuXyEPKkHJLDn5_Z0vNkLHUB4wH7ximTFfH56Xmbjwm4Ij5SBaLnTdiitL-7DJKO90AvdxbTQjTpuQ7etmxl84BTzQNX1ybeAx27Du8TxF3CTpQtlsj8YlqASfDM_swqMk1rsbdxazqtBopwmnEQ4KuP9TbvUSCh578wkdEnt6cYFUdmeJcsOdFUimKVCOFnBXaUz84MPxKFFpKSMhg0xbZoA22fKCkyHIjAFNTk1fSlkZKgF3q2yNpbjlhoZlMl4O5EI0vk_hs29FxV9t2ilf6H4JaiWP40dtjVL7TAs__F9o5USRHeXz0fMU-C1RZnpY_gaNuAcPSIWJbexamFfER9nHGCN7P3pui_NxZeqUZgGTTR8aN8tiMV0bIfFS9Rjc7BkKSztIziopu4TojhyyL_TfmO3m3RIyBEJ0fVcmUXs592Wc7O-5KRlqHpbtzjK0jKTFpTn_dIfSPtRyI_NfLe2IYLbwdPyPvqZOCo3XkgJkE7IkKMzmUtHG2Ke4V4OjEmqyQ9RxBfFdH_STJMNtTSjBMsk6t1QbXrkE0HGyp9315Ikqc8CH-3IDtzyL9qFXuS35VBCc-owYW6pobOKG7-XuPLp_kwLhvMasqjuH6ThG1dcVaoEm1TDXu-_ur5u7YM6ZbPspiwrAkO7uLDHrUHKytWO3f57tsqoFo3nnET0n46_UxG4psR3Pc1bYmrf-q1srOhZh4jV-vcMzIDFBEF6cSY6R640uSyz0woDWmoxl0awaxIKEs9--e4Fefg8N2Xr58N2gGrn4DKvEWdD83kVLGDIsDrsDZcSyFCQl6711uE89BGQtOue-vDcq0PL7kF2G3s-eK-6FwJCSzCf8yNvDnCDTYPhjaJJv7ZR7RK_XKVAMOOgSh_YfDxbXIsUCJDvRyZgmiKXeaiFdLmrIhx56uL196RLFrtbhDo3cvipClq9B7nSjwfW1c11yH7KBWaW38yml6SqzeyF0UK2_YqAPsVJIMsPNr92r2BeQrw5vTUSvZ3z2XE1M3_sigtXyp8nRuT6SL0R8kJx6_hS5Ya3dKrPm4w13qYXpVGcwGPDhewS6Xt-jXIXPU4MUNIwVR1TxcRdlgK4f0J5mJNHUPPWPHmvGf40RtRKvebzAv5XGhLDbZdds2tlR8jJILUGf-hoL-Yb98xpTX61qnnYYxncTK8xCcSG_IlbqKj6J2ItwwQmQB0QBCfBR-R2uF99GolXfcnK-Mue5Bc71CHvq7QHHi1s6lA="
+          },
+          {
+            "type": "function_call",
+            "call_id": "call_mLV84LX22JJF1NO2L9JEUGX1",
+            "name": "GetWeather",
+            "arguments": "{\"city\":\"Paris\"}",
+            "id": "redacted-id-3"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "call_mLV84LX22JJF1NO2L9JEUGX1",
+            "output": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "reasoning": {
+          "effort": "medium",
+          "summary": "auto"
+        },
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

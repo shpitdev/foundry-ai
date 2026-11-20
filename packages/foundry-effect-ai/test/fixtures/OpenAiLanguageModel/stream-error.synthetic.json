@@ -1,0 +1,33 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795140740,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795140740,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.in_progress\"}\n\nevent: error\ndata: {\"type\":\"error\",\"code\":\"server_error\",\"message\":\"The server had an error while processing your request.\",\"param\":null,\"sequence_number\":2}\n\n",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

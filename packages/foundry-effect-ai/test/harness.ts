@@ -6,11 +6,12 @@
 // Test tooling that runs before any Effect does: plain fs and a dynamic import.
 // @effect-diagnostics nodeBuiltinImport:off asyncFunction:off
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { expect } from '@effect/vitest';
 import type * as AiError from 'effect/ai/AiError';
 import type * as Effect from 'effect/Effect';
 import type * as Layer from 'effect/Layer';
 import type * as FoundryClient from '../src/FoundryClient.ts';
-import type { CapturedRequest, Fixture } from './FakeFoundry.ts';
+import { type CapturedRequest, type Fixture, proxyPath } from './FakeFoundry.ts';
 
 export interface Env {
   readonly live: boolean;
@@ -47,6 +48,25 @@ export const readFixtures = (module: string, cell: string): ReadonlyArray<Fixtur
   ...readFile(fixtureFile(module, cell, 'json')),
   ...readFile(fixtureFile(module, cell, 'synthetic.json')),
 ];
+
+/**
+ * A replay sends one request per fixture, each matching the request recorded with it: path and
+ * body exactly, and any pinned headers.
+ */
+export const expectGoldenRequests = (
+  fixtures: ReadonlyArray<Fixture>,
+  requests: ReadonlyArray<CapturedRequest>,
+): void => {
+  expect(requests).toHaveLength(fixtures.length);
+  for (const [index, fixture] of fixtures.entries()) {
+    const sent = requests[index];
+    if (fixture.request !== undefined && sent !== undefined) {
+      const { headers, ...golden } = fixture.request;
+      expect({ path: proxyPath(sent.url), body: sent.body }).toEqual(golden);
+      expect(sent.headers).toMatchObject(headers ?? {});
+    }
+  }
+};
 
 export const writeFixtures = (
   module: string,

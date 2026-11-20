@@ -9,12 +9,14 @@ import type * as AiError from 'effect/ai/AiError';
 import * as Config from 'effect/Config';
 import * as Context from 'effect/Context';
 import * as Effect from 'effect/Effect';
+import * as Sse from 'effect/encoding/Sse';
 import * as HttpClient from 'effect/http/HttpClient';
 import * as HttpClientRequest from 'effect/http/HttpClientRequest';
 import * as Layer from 'effect/Layer';
 import * as Option from 'effect/Option';
 import type * as Redacted from 'effect/Redacted';
 import * as Schema from 'effect/Schema';
+import * as Stream from 'effect/Stream';
 import * as Errors from './internal/errors.ts';
 
 export interface Options {
@@ -47,6 +49,12 @@ export interface Service {
   readonly json: <S extends Schema.Constraint>(
     request: ProxyRequest & { readonly schema: S },
   ) => Effect.Effect<S['Type'], AiError.AiError, S['DecodingServices']>;
+  /**
+   * POST a JSON body and stream the server-sent events of the response. The stream fails with
+   * `InvalidResponseError` on malformed framing and `NetworkError` if the body read fails;
+   * deciding whether the stream ended properly is the protocol's job.
+   */
+  readonly sse: (request: ProxyRequest) => Stream.Stream<Sse.Event, AiError.AiError>;
 }
 
 export class FoundryClient extends Context.Service<FoundryClient, Service>()(
@@ -86,25 +94,33 @@ export const make = Effect.fnUntraced(function* (options: Options) {
       : Effect.provideService(sent, HttpClient.TracerPropagationEnabled, false);
   };
 
-  const json = <S extends Schema.Constraint>(
-    request: ProxyRequest & { readonly schema: S },
-  ): Effect.Effect<S['Type'], AiError.AiError, S['DecodingServices']> => {
-    const decode = Schema.decodeEffect(Schema.fromJsonString(Schema.toCodecJson(request.schema)));
+  /** Encodes the body and sends the request; a non-2xx status fails with the mapped error. */
+  const send = (method: string, request: ProxyRequest, accept: string) => {
     const unsent = HttpClientRequest.post(request.path).pipe(
       HttpClientRequest.setUrlParams(request.urlParams ?? {}),
-      HttpClientRequest.acceptJson,
+      HttpClientRequest.accept(accept),
       HttpClientRequest.setHeaders(request.headers ?? {}),
     );
     return Effect.gen(function* () {
       const sendable = yield* Effect.catchTag(
         HttpClientRequest.bodyJson(unsent, request.body),
         'HttpBodyError',
-        (error) => Errors.fromBodyError('json', unsent, error),
+        (error) => Errors.fromBodyError(method, unsent, error),
       );
       const response = yield* execute(sendable);
       if (response.status < 200 || response.status >= 300) {
-        return yield* Errors.fromResponse('json', response);
+        return yield* Errors.fromResponse(method, response);
       }
+      return response;
+    });
+  };
+
+  const json = <S extends Schema.Constraint>(
+    request: ProxyRequest & { readonly schema: S },
+  ): Effect.Effect<S['Type'], AiError.AiError, S['DecodingServices']> => {
+    const decode = Schema.decodeEffect(Schema.fromJsonString(Schema.toCodecJson(request.schema)));
+    return Effect.gen(function* () {
+      const response = yield* send('json', request, 'application/json');
       const body = yield* response.text;
       if (body === '') {
         return yield* Errors.invalidResponse(
@@ -118,7 +134,25 @@ export const make = Effect.fnUntraced(function* (options: Options) {
     );
   };
 
-  return FoundryClient.of({ json });
+  const sse = (request: ProxyRequest): Stream.Stream<Sse.Event, AiError.AiError> =>
+    send('sse', request, 'text/event-stream').pipe(
+      Effect.map((response) =>
+        response.stream.pipe(
+          Stream.decodeText(),
+          Stream.pipeThroughChannel(Sse.decode()),
+          Stream.catchTags({
+            HttpClientError: (error) => Stream.fromEffect(Errors.fromHttpClientError('sse', error)),
+            SseError: (error) => Stream.fail(Errors.invalidResponse('sse', error.message)),
+            Retry: () =>
+              Stream.fail(Errors.invalidResponse('sse', 'Unexpected SSE retry directive')),
+          }),
+        ),
+      ),
+      Effect.catchTag('HttpClientError', (error) => Errors.fromHttpClientError('sse', error)),
+      Stream.unwrap,
+    );
+
+  return FoundryClient.of({ json, sse });
 });
 
 export const layer = (options: Options): Layer.Layer<FoundryClient, never, HttpClient.HttpClient> =>

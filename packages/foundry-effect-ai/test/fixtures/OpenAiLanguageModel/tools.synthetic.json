@@ -1,0 +1,7 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"resp_void\",\"model\":\"gpt-6-luna\",\"created_at\":1,\"status\":\"completed\",\"output\":[]}"
+  }
+]
