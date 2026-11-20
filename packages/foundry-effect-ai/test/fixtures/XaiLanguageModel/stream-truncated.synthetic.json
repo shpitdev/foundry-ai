@@ -1,0 +1,33 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141749,\"object\":\"response\",\"output\":[],\"status\":\"in_progress\",\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":null,\"summary\":null},\"usage\":null,\"safety_identifier\":null,\"error\":null,\"tools\":[],\"top_p\":0.95,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"text\"}},\"incomplete_details\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"store\":false,\"completed_at\":null,\"parallel_tool_calls\":true,\"background\":false,\"user\":null,\"max_output_tokens\":null},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"type\":\"response.in_progress\",\"response\":{\"created_at\":1795141749,\"completed_at\":null,\"id\":\"redacted-id-1\",\"max_output_tokens\":null,\"model\":\"grok-4.6\",\"object\":\"response\",\"output\":[],\"parallel_tool_calls\":true,\"previous_response_id\":null,\"reasoning\":{\"effort\":null,\"summary\":null},\"temperature\":0.7,\"text\":{\"format\":{\"type\":\"text\"}},\"tool_choice\":\"auto\",\"tools\":[],\"top_p\":0.95,\"usage\":null,\"user\":null,\"incomplete_details\":null,\"status\":\"in_progress\",\"store\":false,\"metadata\":{\"system_fingerprint\":\"fp_92a0a6ffe2\"},\"background\":false,\"service_tier\":\"default\",\"truncation\":\"disabled\",\"top_logprobs\":0,\"presence_penalty\":0.0,\"frequency_penalty\":0.0,\"prompt_cache_key\":null,\"max_tool_calls\":null,\"safety_identifier\":null,\"error\":null,\"instructions\":null}}\n\nevent: response.output_item.added\ndata: {\"item\":{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[],\"status\":\"in_progress\"},\"output_index\":0,\"sequence_number\":2,\"type\":\"response.output_item.added\"}\n\nevent: response.reasoning_summary_part.added\ndata: {\"sequence_number\":3,\"type\":\"response.reasoning_summary_part.added\",\"item_id\":\"rs_redacted-id-1\",\"output_index\":0,\"part\":{\"text\":\"\",\"type\":\"summary_text\"},\"summary_index\":0}\n\nevent: response.reasoning_summary_text.delta\ndata: {\"delta\":\"The user requested a\",\"output_index\":0,\"summary_index\":0,\"item_id\":\"rs_redacted-id-1\",\"sequence_number\":4,\"type\":\"response.reasoning_summary_text.delta\"}\n\nevent: response.reasoning_summary_text.delta\ndata: {\"delta\":\" reply of exactly one\",\"output_index\":0,\"summary_index\":0,\"item_id\":\"rs_redacted-id-1\",\"sequence_number\":5,\"type\":\"response.reasoning_summary_text.delta\"}\n\nevent: response.reasoning_summary_text.delta\ndata: {\"delta\":\" word: hello.\",\"output_index\":0,\"summary_index\":0,\"item_id\":\"rs_redacted-id-1\",\"sequence_number\":6,\"type\":\"response.reasoning_summary_text.delta\"}\n\nevent: response.reasoning_summary_text.done\ndata: {\"sequence_number\":7,\"type\":\"response.reasoning_summary_text.done\",\"item_id\":\"rs_redacted-id-1\",\"output_index\":0,\"summary_index\":0,\"text\":\"The user requested a reply of exactly one word: hello.\"}\n\nevent: response.reasoning_summary_part.done\ndata: {\"sequence_number\":8,\"type\":\"response.reasoning_summary_part.done\",\"item_id\":\"rs_redacted-id-1\",\"output_index\":0,\"part\":{\"text\":\"The user requested a reply of exactly one word: hello.\",\"type\":\"summary_text\"},\"summary_index\":0}\n\nevent: response.output_item.done\ndata: {\"item\":{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"The user requested a reply of exactly one word: hello.\"}],\"encrypted_content\":\"zM3Zh36I9l0NYek2r1gAbCVbHyOrpz4JU9i91SaGeYSGUMRPlbHWXyYEksYHBclXczkQcpbyiS7uL55DqdVQIU1088tZvE49N1I0426RAxK/aoCUMTLranocMVLsReF4YWDgDt5wqWVscGYe3EDsC9JlN9m2gxkXC4QpmM4lAi77szQ1KF5bxp/OtJdmhLOvTw+zDPU3OIhLXP5px60INw8wAxWMNgmfj6Aq0CT8WPL6ei8RDy9s3YnhsyaIWQQTRWNckZqnZaOQpkS8I5ICpyjKPIOyPVUUvvfwjgKrcnQvClWtSSJCx+DJoCBNqPiBr4EfJqJxhiyfzqyKZ1k4ZJG3hp/U9Yzwkc7+6oJqWHSqxqwb87OD3qFZeODSH5GEOB120KPOFFnWgMA2mqdl6phqoNm5Gx9uzCsbb1X2+JUNSm7SpZUeCCLKW5/RmT6j7mSgZJ6J7sgZDYEc5q47/1G5mzXGBGRBnvl7RGAVJpuhst8YUMLnqxJGz8/ZlpztJEfn5ILUVLop\",\"status\":\"completed\"},\"output_index\":0,\"sequence_number\":9,\"type\":\"response.output_item.done\"}\n\nevent: response.output_item.added\ndata: {\"item\":{\"type\":\"message\",\"id\":\"msg_redacted-id-1\",\"role\":\"assistant\",\"status\":\"in_progress\",\"content\":[]},\"output_index\":1,\"sequence_number\":10,\"type\":\"response.output_item.added\"}\n\nevent: response.content_part.added\ndata: {\"sequence_number\":11,\"type\":\"response.content_part.added\",\"content_index\":0,\"item_id\":\"msg_redacted-id-1\",\"output_index\":1,\"part\":{\"type\":\"output_text\",\"text\":\"\",\"logprobs\":[],\"annotations\":[]}}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"hello\",\"content_index\":0,\"output_index\":1,\"item_id\":\"msg_redacted-id-1\",\"sequence_number\":12,\"type\":\"response.output_text.delta\",\"logprobs\":[]}\n\nevent: response.output_text.done\ndata: {\"sequence_number\":13,\"type\":\"response.output_text.done\",\"content_index\":0,\"item_id\":\"msg_redacted-id-1\",\"output_index\":1,\"text\":\"hello\",\"logprobs\":[]}\n\nevent: response.content_part.done\ndata: {\"sequence_number\":14,\"type\":\"response.content_part.done\",\"content_index\":0,\"item_id\":\"msg_redacted-id-1\",\"output_index\":1,\"part\":{\"type\":\"output_text\",\"text\":\"hello\",\"logprobs\":[],\"annotations\":[]}}\n\nevent: response.output_item.done\ndata: {\"item\":{\"type\":\"message\",\"id\":\"msg_redacted-id-1\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"text\":\"hello\",\"annotations\":[],\"type\":\"output_text\",\"logprobs\":[]}]},\"output_index\":1,\"sequence_number\":15,\"type\":\"response.output_item.done\"}\n\n",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

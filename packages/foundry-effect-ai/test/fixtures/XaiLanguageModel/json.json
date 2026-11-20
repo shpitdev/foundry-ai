@@ -1,0 +1,55 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"grok-4.6\",\"created_at\":1795141752,\"object\":\"response\",\"status\":\"completed\",\"output\":[{\"type\":\"reasoning\",\"id\":\"rs_redacted-id-1\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"The user wants the capital of France and its country.\\n\\nThe response will be a JSON object with city \\\"Paris\\\" and country \\\"France\\\".\"}],\"encrypted_content\":\"+A9lbc4Rn3a33KV+OkBRwH+BXAogruGD3OxpP5/pdaTDhWzycWKXQ0go7oVG8tCfSsJtGRWMyFwzfMOeata89mtKmq9nDqRfsuRX3UfGnKDoW/TFQwme0nOuyyF22yZWcjDYZpvoa/V37DGXby1/RnhkguJctKWb8QT1jNp/NdVW2EpPY+0g7KJaWFT1ziVrU/efsMA9Lo9ajIZCUOKbsH7RIF668meolhHe1fMMhmqWTJS7wG34lX748a3guRPufApum5b4FilhdvSJVPjw3xJYtF/k/8Yv92ya4k687dkDwKK9R4Mf2UW131v0q62b5j+7xKvIfROqG3lBwG2dIdSKyLNnZ68X+KkeUlQzd29KQCe3O6p3Mz9PLks2tr3ibO/aJQul3eUL9JAWyIXa/Vo3m2cvSKlJG9RM3hyjVEVmcom05VuxbTWgDRU597fVFB8rWgoqXgisZzz8oOj4y7bHMF1tw6wBiBpFidznC7VbuomDjZ7gCgYbRBYTJROygF/G4iGj48MC45MgCxkydB9f8N26WKqKqAS5TUo4TuXBGroWTbgqH+b9pFsaqW0sVgBGW0xQkcV9TOdSZr/ZgvecFEFDi7XFSGIrmSSf2vKF6aenCC1Tcda4NRJld3TSQ/yG4WZTRU7aUSsiVgbCT/LI26z6V6kOXFuEmWj5FxH1zfbTbrUIzOqJ9CfQ09GYex57lRsi345mxkMOh9s5rWostLVTRyWxfcKqeForZfO8a6HvqoMTuuJ3ejJLNDIncRpy6cfnsMmcSJ+lbaoHN1K5YlcJVetKtazAtnG8JomKB4OtuM2yQP1oYHOh4pnXJ58rMORpCg3qVsSVmSW3hFe3MERjxu2aWddKD71sf/cQ88QI9mvBAAIi6DJjBaepnU6ZM/x01dgfddCjEg\",\"status\":\"completed\"},{\"type\":\"message\",\"id\":\"msg_redacted-id-1\",\"role\":\"assistant\",\"status\":\"completed\",\"content\":[{\"text\":\"{\\\"city\\\":\\\"Paris\\\",\\\"country\\\":\\\"France\\\"}\",\"annotations\":[],\"type\":\"output_text\",\"logprobs\":[]}]}],\"usage\":{\"input_tokens\":276,\"output_tokens\":364,\"total_tokens\":640,\"output_tokens_details\":{\"reasoning_tokens\":353},\"input_tokens_details\":{\"cached_tokens\":128},\"context_details\":{\"input_tokens\":276,\"output_tokens\":371},\"num_sources_used\":0,\"num_server_side_tools_used\":0,\"cost_in_usd_ticks\":25440000},\"error\":null,\"incomplete_details\":null,\"top_logprobs\":0,\"instructions\":null,\"metadata\":{\"system_fingerprint\":\"fp_e41c6060b2628547\"},\"max_tool_calls\":null,\"presence_penalty\":0.0,\"reasoning\":{\"effort\":\"high\",\"summary\":\"detailed\"},\"store\":false,\"safety_identifier\":null,\"tools\":[],\"top_p\":0.95,\"completed_at\":1795141757,\"previous_response_id\":null,\"frequency_penalty\":0.0,\"parallel_tool_calls\":true,\"background\":false,\"temperature\":0.7,\"tool_choice\":\"auto\",\"service_tier\":\"default\",\"text\":{\"format\":{\"type\":\"json_schema\",\"schema\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"}},\"required\":[\"city\",\"country\"],\"additionalProperties\":false}}},\"user\":null,\"truncation\":\"disabled\",\"prompt_cache_key\":null,\"max_output_tokens\":null}",
+    "request": {
+      "path": "/xai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.grok-4-6",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Name the capital of France and its country."
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "include": [
+          "reasoning.encrypted_content"
+        ],
+        "text": {
+          "format": {
+            "type": "json_schema",
+            "name": "generateObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city",
+                "country"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
