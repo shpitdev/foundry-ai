@@ -14,6 +14,7 @@ const distRoot = join(packageRoot, 'dist/src');
 // Internal protocol folders and the public modules allowed to reach them.
 const owners = {
   'src/internal/openai-responses/': ['OpenAiLanguageModel', 'XaiLanguageModel'],
+  'src/internal/openai-chat-completions/': ['OpenAiChatLanguageModel'],
   'src/internal/openai-decisions/': ['OpenAiDecisionModel'],
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
@@ -21,6 +22,7 @@ const owners = {
   // Per-vendor model lists.
   'src/internal/models/openai.js': [
     'OpenAiLanguageModel',
+    'OpenAiChatLanguageModel',
     'OpenAiDecisionModel',
     'OpenAiEmbeddingModel',
   ],
@@ -31,8 +33,8 @@ const owners = {
 
 // Minified bytes with effect external. Set each module's real budget when its phase lands.
 const budgets = {
-  FoundryClient: 16_000,
-  OpenAiDecisionModel: 24_000,
+  FoundryClient: 6_100,
+  OpenAiDecisionModel: 9_700,
   default: 64_000,
 };
 
