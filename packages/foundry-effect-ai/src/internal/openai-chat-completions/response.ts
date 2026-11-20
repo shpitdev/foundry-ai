@@ -89,6 +89,10 @@ export const finishReason = (
   return reason ?? 'unknown';
 };
 
+/** Output stopped by the length limit or a content filter may hold partial tool arguments. */
+export const callsComplete = (raw: string | null | undefined): boolean =>
+  raw !== 'length' && raw !== 'content_filter';
+
 /** A refusal's explanation, which is not output text. */
 export const finishMetadata = (refusal: string) =>
   refusal === '' ? undefined : { metadata: { [metadataKey]: { refusal } } };
@@ -198,9 +202,9 @@ export const decodeResponse = Effect.fnUntraced(function* (
   if (message?.content != null && message.content !== '') {
     parts.push({ type: 'text', text: message.content });
   }
-  // Output cut off by the length limit may hold partial arguments; the finish reports it.
+  // Calls that may be cut off are dropped; the finish reports why.
   let hasToolCalls = false;
-  if (choice?.finish_reason !== 'length') {
+  if (callsComplete(choice?.finish_reason)) {
     for (const call of message?.tool_calls ?? []) {
       hasToolCalls = true;
       parts.push(

@@ -1,9 +1,10 @@
 // Adapted from @effect/ai-openai-compat (MIT), effect@4.1.4, 82904fe.
 /**
- * Chat Completions server-sent events → Effect AI stream parts. Foundry ends the stream after
- * the usage chunk without sending `[DONE]`, so the stream finishes at `[DONE]` or at the end of
- * the body, but only once a chunk has carried a `finish_reason`: a stream cut off before one
- * fails with `InvalidResponseError`. Tool calls complete then, and an in-band error fails it.
+ * Chat Completions server-sent events → Effect AI stream parts. Requests ask for usage, and
+ * Foundry ends the stream after the usage chunk that follows `finish_reason`, without `[DONE]`.
+ * The stream finishes at `[DONE]` once a choice has finished, or at the end of the body once
+ * that usage chunk has arrived; anything shorter fails with `InvalidResponseError`. Tool calls
+ * complete then, and an in-band error fails the stream.
  */
 import type * as AiError from 'effect/ai/AiError';
 import type * as LanguageModel from 'effect/ai/LanguageModel';
@@ -14,6 +15,7 @@ import * as Predicate from 'effect/Predicate';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
 import {
+  callsComplete,
   finishMetadata,
   finishReason,
   invalidResponse,
@@ -39,12 +41,17 @@ export const decodeStream = (
   let refusal = '';
   let reason: string | undefined;
   let latestUsage: typeof Wire.Usage.Type | undefined;
+  // The usage chunk arrived with or after the finish reason.
+  let complete = false;
   // Calls by their `index`, in arrival order; arguments arrive in pieces.
   const calls = new Map<number, { id: string; name: string; arguments: string }>();
 
-  const finish = Effect.fnUntraced(function* () {
+  const finish = Effect.fnUntraced(function* (sentinel: boolean) {
     if (reason === undefined) {
       return yield* invalidResponse(method, 'Stream ended before a finish_reason');
+    }
+    if (!sentinel && !complete) {
+      return yield* invalidResponse(method, 'Stream ended before its final usage chunk');
     }
     const parts: Array<Response.StreamPartEncoded> = [];
     if (textOpen && textId !== undefined) {
@@ -53,8 +60,7 @@ export const decodeStream = (
     let hasToolCalls = false;
     for (const call of calls.values()) {
       parts.push({ type: 'tool-params-end', id: call.id });
-      // Output cut off by the length limit may hold partial arguments; the finish reports it.
-      if (reason !== 'length') {
+      if (callsComplete(reason)) {
         hasToolCalls = true;
         parts.push(yield* toolCall(method, options, call));
       }
@@ -71,7 +77,7 @@ export const decodeStream = (
   const handle = Effect.fnUntraced(function* (event: Sse.Event) {
     if (event.data === '[DONE]') {
       done = true;
-      return yield* finish();
+      return yield* finish(true);
     }
     const data = yield* Effect.mapError(decodeData(event.data), (error) =>
       invalidResponse(method, `Malformed event data: ${error.message}`),
@@ -90,8 +96,6 @@ export const decodeStream = (
       textId = `${chunk.id}:text`;
       parts.push(metadataPart(chunk));
     }
-    // Usage frames are totals so far; the latest wins.
-    latestUsage = chunk.usage ?? latestUsage;
     const [choice] = chunk.choices;
     const delta = choice?.delta;
     if (delta?.content != null && delta.content !== '') {
@@ -120,6 +124,11 @@ export const decodeStream = (
       }
     }
     reason = choice?.finish_reason ?? reason;
+    // Usage frames are totals so far; the latest wins.
+    if (chunk.usage != null) {
+      latestUsage = chunk.usage;
+      complete = reason !== undefined;
+    }
     return parts;
   });
 
@@ -129,7 +138,7 @@ export const decodeStream = (
     Stream.flattenIterable,
     Stream.concat(
       Stream.suspend(() =>
-        done ? Stream.empty : Stream.flattenIterable(Stream.fromEffect(finish())),
+        done ? Stream.empty : Stream.flattenIterable(Stream.fromEffect(finish(false))),
       ),
     ),
   );

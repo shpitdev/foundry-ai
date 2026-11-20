@@ -38,11 +38,17 @@ const reasoningTokens = (env: Env) =>
     expect(finish?.usage.outputTokens.reasoning).toBeGreaterThan(0);
   });
 
+// No visible reasoning to ask for, and gpt-6-luna takes tools here only without reasoning.
+const shared = languageCells({
+  model: () => OpenAiChatLanguageModel.model('gpt-6-luna'),
+  replay: expectReplay,
+});
+const sharedTruncated = shared['stream-truncated'] ?? (() => Effect.void);
+
 export const cells = {
-  // No visible reasoning to ask for, and gpt-6-luna takes tools here only without reasoning.
-  ...languageCells({
-    model: () => OpenAiChatLanguageModel.model('gpt-6-luna'),
-    replay: expectReplay,
-  }),
+  ...shared,
   reasoning: reasoningTokens,
+  // Two cuts, since Foundry sends no `[DONE]`: before the finish reason, and between it and the
+  // usage chunk that ends the stream.
+  'stream-truncated': (env: Env) => Effect.andThen(sharedTruncated(env), sharedTruncated(env)),
 };
