@@ -4,7 +4,7 @@
 
 ## Request: DecisionModel → wire
 
-- `{model,input,questions}`. Hook receives `{state,decisions,images?}`; core has already encoded state to JSON and extracted image references. Upstream sends string state verbatim, JSON-stringifies other state; with images use `input:[{role:"user",content:[{type:"input_text",text},…]}]`. Add a text label `Image <reference>:` then `{type:"input_image",image_url:"data:<mediaType>;base64,…"}` for each extracted image. Don't accept hosted URLs/file IDs.
+- `{model,input,questions}`. Hook receives `{state,decisions,images?}`; core has already encoded state to JSON and extracted image references. Upstream sends string state verbatim, JSON-stringifies other state; with images use `input:[{role:"user",content:[{type:"input_text",text},…]}]`. Add a text label `Image <reference>:` then `{type:"input_image",image_url:"data:<mediaType>;base64,…"}` for each extracted image. Fail hosted URLs/file IDs with `InvalidUserInputError` before sending.
 - The Foundry-tested Vercel peer always uses the user-message array (object JSON can use `{type:"input_json",data}`); JSON-as-text is the Effect reference and reasonable here. Direct string `input` was used by the repo's rejection probe, but successful Foundry decoding of that form is **UNVERIFIED**; prefer the verified array envelope for initial live tests.
 
 | Effect decision | Question (each includes unique `name`, `instructions`)                              |
@@ -13,12 +13,12 @@
 | `Classify`      | `type:"choice",choices:[{value,description?}]` from label keys.                     |
 | `Rate`          | `type:"score",levels:[{label,description?}]`, lowest first.                         |
 
-- Structured instructions/descriptions → JSON strings; omit absent (`null`) descriptions like the installed peer, instead of literal `"null"` as in upstream Effect. Validate 1–400 questions, at least two choices, 2–10 levels, and required choice/score instructions. Optional `safety_identifier` is Foundry-tested; only include if adapter exposes it.
+- Structured instructions/descriptions → JSON strings; omit absent (`null`) descriptions like the installed peer, instead of literal `"null"` as in upstream Effect. No client-side limit checks: core rejects too few labels, levels or decisions, and Foundry's HTTP 400 covers the rest (PLAN.md, Decision model). Optional `safety_identifier` is Foundry-tested; only include if adapter exposes it.
 
 ## Response: wire → ProviderResponse
 
 - Decode `{answers,usage?,model?,id?}`; key answers by question name. `predicate`→`{_tag:"Probability",probability}`; `choice`→`{_tag:"Classify",label:choice,probabilities,confidence?}`; `score`→`{_tag:"Rate",rating:score,probabilities,confidence?}`. Score is fractional (0-based weighted average), not a label; map integer probability `value` indices through original criterion labels. `refusal`→`{_tag:"Refusal"}`. Carry `usage.input_tokens` and `output_tokens`, optional response model/ID and raw subcounts in metadata.
-- Use Foundry peer's more tolerant response shape: `confidence` may be absent/null, score probability `label` isn't required, usage and its counts may be absent/null. Null refusal name cannot identify a decision; reject rather than inventing a name. Reject duplicate/unknown names and duplicate or out-of-range probability keys before map conversion. Leave unanswered keys absent for core `decideSettled`; core handles answer-kind/distribution checks and turns named refusals into `ContentPolicyError` for `decide`.
+- Use Foundry peer's more tolerant response shape: `confidence` may be absent/null, score probability `label` isn't required, usage and its counts may be absent/null. A refusal with a null name returns `Refusal` for every unanswered decision (PLAN.md, Decision model). Reject duplicate/unknown names and duplicate or out-of-range probability keys before map conversion. Leave unanswered keys absent for core `decideSettled`; core handles answer-kind/distribution checks and turns named refusals into `ContentPolicyError` for `decide`.
 - Errors: input/range/unsupported image → `InvalidUserInputError`; HTTP via OpenAI mapper (404 `LanguageModelNotAvailable` → `InvalidRequestError`, 429 throttle/quota split, 5xx provider error); malformed successful JSON → `InvalidResponseError`, unusable decoded answers → `InvalidOutputError` or core settled outcome. No `finish` or `usage` parts.
 
 ## Foundry specifics
