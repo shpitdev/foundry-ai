@@ -18,6 +18,10 @@ import type * as Redacted from 'effect/Redacted';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
 import * as Errors from './internal/errors.ts';
+// Types this package adds under its own metadata keys. A bare import keeps it in every module's
+// declarations, since each one imports this file.
+// oxlint-disable-next-line import/no-unassigned-import
+import './internal/metadata.ts';
 
 export interface Options {
   /** Foundry stack URL, e.g. `https://example.palantirfoundry.com`. Trailing slashes are ignored. */

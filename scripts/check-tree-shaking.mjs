@@ -1,7 +1,8 @@
 // Proves @shpitdev/foundry-effect-ai tree-shakes per module. Installs the packed tarball beside
 // effect in a scratch project, bundles each public module through the exports map (effect
 // external), and fails when a bundle reaches code owned by another protocol or vendor, exceeds its
-// size budget, when internal modules resolve, or when a consumer cannot typecheck the module.
+// size budget, when internal modules resolve, or when a consumer cannot typecheck each module and
+// all of them together, with this package's metadata keys typed.
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -81,6 +82,21 @@ try {
       `export * as M from '@shpitdev/foundry-effect-ai/${name}';\n`,
     );
   }
+  // Every module together: one declaration per metadata key, typed for the consumer.
+  writeFileSync(
+    join(scratch, 'all.ts'),
+    [
+      "import type * as AiError from 'effect/ai/AiError';",
+      "import type * as Response from 'effect/ai/Response';",
+      ...modules.map((name) => `import * as ${name} from '@shpitdev/foundry-effect-ai/${name}';`),
+      `export const modules = [${modules.join(', ')}];`,
+      'export const reads = [',
+      '  (metadata: AiError.RateLimitErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
+      "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-openai']?.itemId,",
+      '];',
+      '',
+    ].join('\n'),
+  );
   const bundles = await Promise.all(
     modules.map((name) =>
       build({
@@ -153,6 +169,9 @@ try {
         '--ignoreConfig',
         '--noEmit',
         '--strict',
+        // Effect's recommended setting; without it, typed metadata keys conflict with Effect's
+        // JSON index signatures unless the consumer skips library checks.
+        '--exactOptionalPropertyTypes',
         '--skipLibCheck',
         'false',
         '--module',
@@ -164,6 +183,7 @@ try {
         '--lib',
         'es2023,dom',
         ...modules.map((name) => `${name}.ts`),
+        'all.ts',
       ],
       { cwd: scratch, encoding: 'utf8', stdio: 'pipe' },
     );
