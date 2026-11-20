@@ -2,7 +2,7 @@
   {
     "status": 200,
     "contentType": "application/json",
-    "body": "{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795139751,\"status\":\"completed\",\"usage\":{\"input_tokens\":81,\"output_tokens\":42,\"total_tokens\":123,\"output_tokens_details\":{\"reasoning_tokens\":22},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"reasoning\",\"id\":\"redacted-id-2\",\"summary\":[{\"type\":\"summary_text\",\"text\":\"**Identifying Paris for tool use**\\n\\nI need to identify Paris before I call the appropriate tool. It's important to work that out internally first, so I can gather my thoughts before taking action. By doing this, I can ensure everything's set up properly for the task ahead. This step will help me seamlessly transition into retrieving the information I need. Let's get this figured out!\"}],\"content\":[],\"encrypted_content\":\"gAAAAABq_6ireOnGzqdFIrX-fR2yO0r1N1OfsSqNItrVrvk9zWIFOfBUmHyyZL1X6EJ4jkhWqk4GpjkH6NXBKFZrQpUsxWt5_d8OUSXU65RmIQpk8mKyo9VvJ_HiUTx6sr2lM71dSb_mo6VKr5FO_RAUwH58mkPQeyIgMLslzRqrUYOPTApfAPxVbcwMgAjyPaAgOSXlHb9h5VSOpmGetrCgpyV85pCRBok_-eDj5XPnWnQB08TZk-UnkCXQk8PRWlriQT5gI0GYOfLm32GgqZSkxcyKoCWVl9ZU68_3uailv9PBUd865kZGZH_AqdWszp_rTCttW67ebikn2HBO1zKOw4sWAmJk0lp_L_mIx8N5JDo6iI0DFLfDEmKbm5oi2--rMZDN8Kw3LCaN2f4dscIVc0VCkG7Kk-YCr3RNmX50qPGjTI395yEClP6ha4kndSPiAhkAPgoLUmHz6iduwXdxnYOACzpgQHlOdl3Jf-M2EUAnCXE01ClXhXtFjsvqnyCLZt8UkumvbkdMCdUt4usg3DrCq0e_6FqLwQOuucBuoPHmK1ex2149ij6WlXBU1tRzZVHdzUQL5GuaMsH2h6iFQgkfl2JFZ79Y1x_Nt5KBwy8BpO2FZlqoNur26pxknLvobif9nz2lx0EgrHoDhqK49FMjQnocVhoWOKkogvFpuENr8c2Ck0mf0wrJvIv0yz9o7nfVHIbhJAiN7uq7f-7fM_ZbLFzU2u58qc9xvaDzEVl3v0mYbB7PcMMoVQqXTTF9ADMffxhWIj8WLp2w2le4zvKcWIPUp6T9s2Bgsw9GH8WoTyiIfUx9-Jh_Z1uOL9lhfQaZHt9DXCqzDKdN3_Wq8RFlbJwNsfZNnYR5UI4vdXQXvVEIhbVtpNIf8_QhIxMsEW3VXHyDzJO06BH5RcSx-aWVWB7qxzHG3w6HW4c3_jf_FallsOvlc30HoP-E2p_nslobdevD7d3Re4dM9V5xwtdbUNyjISoMKWe9kraJwoq2gbYaLhoLAyzC8DV7p8aJ2uTGtslCUbdbC4TnQURISPIl_gg1TBYC2YdR6tdzGGJUDo6h_vUWaOpARjFy_E_943uXZk2iqqm_cc5vVgUb1HLL_l1rf0OLn3WPlAWqWaZIv7zRQ7hs8kb6vEkY0oYth0C_zDcoTCXB1CG2zsyZ0L6UTyhk5eaC6H5cLoyO9NWNDt87mENFxfVaRGoBDkx-yayJJ2kkTrK5n3lDfuqBDcS2RK7P6Mmtmh5w0dEtehd-yS6pQyYnM3cZwTEAbUOfd3dgAg3E0y4T1Sq1j4NhdBXMe5TGtk_oMWQ2Bsh8KQh4jL4KiOgT_qwBb5eU4DCGM-0ktpIJMTVzJ6s_aB1TASmanv89uA0q_O0kSN9wD8Ezc0CVMu8OyPDAjRNAkNOSW72gHSkAjUiTbCkcyeyiCzpZ1pmdJFbx1Bbs4MHx9ByKxnDJoCad3qz1Rpzw6QHe4GfWJbKi2dy6TAcTYWp7usrVDs3oeXWR3gVvMx3OsN-zsfgc_8__mS4_C9lkjQYuF4c61GarAQxVe4Z6mjCuPjyPMfdHxohB8bm0EU1AE7vdV9urdXkzvW22ueRnxTFtMetEJXy2t2gAnHo8X1Ei4IQaXi2wk9QEhPfJ12eMfFxVBksWZJNmawj7m2JWe_g2PGVqYuCyQfULYks5bbW4uyU4S0mkM3KB-6clEfE34SEL4i9xNqzmwu0KgSnkV9kCnTx16lu927pGeNVn8kyZMvcqcheBVvII_Ak2fzzJ4BiSKn-AMcVbciNnpvQ4XFG9-Z52Rt8SGCx0aptJhkPev5y4aMkqCeCXuPuJiKoAzVEy7RQG2sgdLBiuEk67A6aHJZD513Dwwbw6KFmfO2jvN9wY1okaUVvDfiW3ffBvFZaDzKUe4Cw=\"},{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"call_e3Qbl8Kpe65M5ZwPhrcACwlZ\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"gpt-6-luna\",\"created_at\":1795140743,\"status\":\"completed\",\"usage\":{\"input_tokens\":81,\"output_tokens\":33,\"total_tokens\":114,\"output_tokens_details\":{\"reasoning_tokens\":13},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"reasoning\",\"id\":\"redacted-id-2\",\"summary\":[],\"content\":[],\"encrypted_content\":\"gAAAAABq_6yJH3bvnw81rfTrLB9EOek_U7S2GuMyamIBOpsXpLzLAxqhbm9MmZKdUtC0S1qboPAypwdRzTmP7Mxvjq-9Cb8nm7PK_N5gS5baYhsKGKUrqLrdCpN6ClkdWsUfHO6KGwzIB8ffj_7W0xcgquiYDHfjIYYmqF3AfM0xfZdZrzsocmhvqyZVGpD10kztCMHMBOGOF9wn5f1vMPhVjOvMYvoQ6hI93JA8lUS-kf8pErLhLWWgZ51efalX8zaNtZNOSKRUvEKI6yQUpBfLwO4w1HJu35_mqFUaXEgXMFiJVxtM-IoAjAgMi4whQKPcqd2CPh62xy5it3gIEoLKv-XjpglI9dq-96jWBduQ432H6Nmo50h9R7474M32JdQ1zWrMZl0xG95-BuIjvk6S8jv8hDvSM1flEpWVsjHkE8J2dpuf1ReGdUcVaO-6adyCVWmxshLb26heTc8eWrteeL0HsEpV0gWfLhqrZnulA7IY-WJB_3YYT8D00iR-I27npP-U2U8CufsXmVmMYy5kuXyEPKkHJLDn5_Z0vNkLHUB4wH7ximTFfH56Xmbjwm4Ij5SBaLnTdiitL-7DJKO90AvdxbTQjTpuQ7etmxl84BTzQNX1ybeAx27Du8TxF3CTpQtlsj8YlqASfDM_swqMk1rsbdxazqtBopwmnEQ4KuP9TbvUSCh578wkdEnt6cYFUdmeJcsOdFUimKVCOFnBXaUz84MPxKFFpKSMhg0xbZoA22fKCkyHIjAFNTk1fSlkZKgF3q2yNpbjlhoZlMl4O5EI0vk_hs29FxV9t2ilf6H4JaiWP40dtjVL7TAs__F9o5USRHeXz0fMU-C1RZnpY_gaNuAcPSIWJbexamFfER9nHGCN7P3pui_NxZeqUZgGTTR8aN8tiMV0bIfFS9Rjc7BkKSztIziopu4TojhyyL_TfmO3m3RIyBEJ0fVcmUXs592Wc7O-5KRlqHpbtzjK0jKTFpTn_dIfSPtRyI_NfLe2IYLbwdPyPvqZOCo3XkgJkE7IkKMzmUtHG2Ke4V4OjEmqyQ9RxBfFdH_STJMNtTSjBMsk6t1QbXrkE0HGyp9315Ikqc8CH-3IDtzyL9qFXuS35VBCc-owYW6pobOKG7-XuPLp_kwLhvMasqjuH6ThG1dcVaoEm1TDXu-_ur5u7YM6ZbPspiwrAkO7uLDHrUHKytWO3f57tsqoFo3nnET0n46_UxG4psR3Pc1bYmrf-q1srOhZh4jV-vcMzIDFBEF6cSY6R640uSyz0woDWmoxl0awaxIKEs9--e4Fefg8N2Xr58N2gGrn4DKvEWdD83kVLGDIsDrsDZcSyFCQl6711uE89BGQtOue-vDcq0PL7kF2G3s-eK-6FwJCSzCf8yNvDnCDTYPhjaJJv7ZR7RK_XKVAMOOgSh_YfDxbXIsUCJDvRyZgmiKXeaiFdLmrIhx56uL196RLFrtbhDo3cvipClq9B7nSjwfW1c11yH7KBWaW38yml6SqzeyF0UK2_YqAPsVJIMsPNr92r2BeQrw5vTUSvZ3z2XE1M3_sigtXyp8nRuT6SL0R8kJx6_hS5Ya3dKrPm4w13qYXpVGcwGPDhewS6Xt-jXIXPU4MUNIwVR1TxcRdlgK4f0J5mJNHUPPWPHmvGf40RtRKvebzAv5XGhLDbZdds2tlR8jJILUGf-hoL-Yb98xpTX61qnnYYxncTK8xCcSG_IlbqKj6J2ItwwQmQB0QBCfBR-R2uF99GolXfcnK-Mue5Bc71CHvq7QHHi1s6lA=\"},{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"call_mLV84LX22JJF1NO2L9JEUGX1\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
     "request": {
       "path": "/openai/v1/responses",
       "body": {
@@ -47,13 +47,17 @@
           }
         ],
         "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
       }
     }
   },
   {
     "status": 200,
     "contentType": "application/json",
-    "body": "{\"id\":\"redacted-id-4\",\"model\":\"gpt-6-luna\",\"created_at\":1795139756,\"status\":\"completed\",\"usage\":{\"input_tokens\":145,\"output_tokens\":28,\"total_tokens\":173,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, is currently 21°C and sunny.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
+    "body": "{\"id\":\"redacted-id-4\",\"model\":\"gpt-6-luna\",\"created_at\":1795140746,\"status\":\"completed\",\"usage\":{\"input_tokens\":136,\"output_tokens\":28,\"total_tokens\":164,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, is currently 21°C and sunny.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"}",
     "request": {
       "path": "/openai/v1/responses",
       "body": {
@@ -71,24 +75,19 @@
           {
             "type": "reasoning",
             "id": "redacted-id-2",
-            "summary": [
-              {
-                "type": "summary_text",
-                "text": "**Identifying Paris for tool use**\n\nI need to identify Paris before I call the appropriate tool. It's important to work that out internally first, so I can gather my thoughts before taking action. By doing this, I can ensure everything's set up properly for the task ahead. This step will help me seamlessly transition into retrieving the information I need. Let's get this figured out!"
-              }
-            ],
-            "encrypted_content": "gAAAAABq_6ireOnGzqdFIrX-fR2yO0r1N1OfsSqNItrVrvk9zWIFOfBUmHyyZL1X6EJ4jkhWqk4GpjkH6NXBKFZrQpUsxWt5_d8OUSXU65RmIQpk8mKyo9VvJ_HiUTx6sr2lM71dSb_mo6VKr5FO_RAUwH58mkPQeyIgMLslzRqrUYOPTApfAPxVbcwMgAjyPaAgOSXlHb9h5VSOpmGetrCgpyV85pCRBok_-eDj5XPnWnQB08TZk-UnkCXQk8PRWlriQT5gI0GYOfLm32GgqZSkxcyKoCWVl9ZU68_3uailv9PBUd865kZGZH_AqdWszp_rTCttW67ebikn2HBO1zKOw4sWAmJk0lp_L_mIx8N5JDo6iI0DFLfDEmKbm5oi2--rMZDN8Kw3LCaN2f4dscIVc0VCkG7Kk-YCr3RNmX50qPGjTI395yEClP6ha4kndSPiAhkAPgoLUmHz6iduwXdxnYOACzpgQHlOdl3Jf-M2EUAnCXE01ClXhXtFjsvqnyCLZt8UkumvbkdMCdUt4usg3DrCq0e_6FqLwQOuucBuoPHmK1ex2149ij6WlXBU1tRzZVHdzUQL5GuaMsH2h6iFQgkfl2JFZ79Y1x_Nt5KBwy8BpO2FZlqoNur26pxknLvobif9nz2lx0EgrHoDhqK49FMjQnocVhoWOKkogvFpuENr8c2Ck0mf0wrJvIv0yz9o7nfVHIbhJAiN7uq7f-7fM_ZbLFzU2u58qc9xvaDzEVl3v0mYbB7PcMMoVQqXTTF9ADMffxhWIj8WLp2w2le4zvKcWIPUp6T9s2Bgsw9GH8WoTyiIfUx9-Jh_Z1uOL9lhfQaZHt9DXCqzDKdN3_Wq8RFlbJwNsfZNnYR5UI4vdXQXvVEIhbVtpNIf8_QhIxMsEW3VXHyDzJO06BH5RcSx-aWVWB7qxzHG3w6HW4c3_jf_FallsOvlc30HoP-E2p_nslobdevD7d3Re4dM9V5xwtdbUNyjISoMKWe9kraJwoq2gbYaLhoLAyzC8DV7p8aJ2uTGtslCUbdbC4TnQURISPIl_gg1TBYC2YdR6tdzGGJUDo6h_vUWaOpARjFy_E_943uXZk2iqqm_cc5vVgUb1HLL_l1rf0OLn3WPlAWqWaZIv7zRQ7hs8kb6vEkY0oYth0C_zDcoTCXB1CG2zsyZ0L6UTyhk5eaC6H5cLoyO9NWNDt87mENFxfVaRGoBDkx-yayJJ2kkTrK5n3lDfuqBDcS2RK7P6Mmtmh5w0dEtehd-yS6pQyYnM3cZwTEAbUOfd3dgAg3E0y4T1Sq1j4NhdBXMe5TGtk_oMWQ2Bsh8KQh4jL4KiOgT_qwBb5eU4DCGM-0ktpIJMTVzJ6s_aB1TASmanv89uA0q_O0kSN9wD8Ezc0CVMu8OyPDAjRNAkNOSW72gHSkAjUiTbCkcyeyiCzpZ1pmdJFbx1Bbs4MHx9ByKxnDJoCad3qz1Rpzw6QHe4GfWJbKi2dy6TAcTYWp7usrVDs3oeXWR3gVvMx3OsN-zsfgc_8__mS4_C9lkjQYuF4c61GarAQxVe4Z6mjCuPjyPMfdHxohB8bm0EU1AE7vdV9urdXkzvW22ueRnxTFtMetEJXy2t2gAnHo8X1Ei4IQaXi2wk9QEhPfJ12eMfFxVBksWZJNmawj7m2JWe_g2PGVqYuCyQfULYks5bbW4uyU4S0mkM3KB-6clEfE34SEL4i9xNqzmwu0KgSnkV9kCnTx16lu927pGeNVn8kyZMvcqcheBVvII_Ak2fzzJ4BiSKn-AMcVbciNnpvQ4XFG9-Z52Rt8SGCx0aptJhkPev5y4aMkqCeCXuPuJiKoAzVEy7RQG2sgdLBiuEk67A6aHJZD513Dwwbw6KFmfO2jvN9wY1okaUVvDfiW3ffBvFZaDzKUe4Cw="
+            "summary": [],
+            "encrypted_content": "gAAAAABq_6yJH3bvnw81rfTrLB9EOek_U7S2GuMyamIBOpsXpLzLAxqhbm9MmZKdUtC0S1qboPAypwdRzTmP7Mxvjq-9Cb8nm7PK_N5gS5baYhsKGKUrqLrdCpN6ClkdWsUfHO6KGwzIB8ffj_7W0xcgquiYDHfjIYYmqF3AfM0xfZdZrzsocmhvqyZVGpD10kztCMHMBOGOF9wn5f1vMPhVjOvMYvoQ6hI93JA8lUS-kf8pErLhLWWgZ51efalX8zaNtZNOSKRUvEKI6yQUpBfLwO4w1HJu35_mqFUaXEgXMFiJVxtM-IoAjAgMi4whQKPcqd2CPh62xy5it3gIEoLKv-XjpglI9dq-96jWBduQ432H6Nmo50h9R7474M32JdQ1zWrMZl0xG95-BuIjvk6S8jv8hDvSM1flEpWVsjHkE8J2dpuf1ReGdUcVaO-6adyCVWmxshLb26heTc8eWrteeL0HsEpV0gWfLhqrZnulA7IY-WJB_3YYT8D00iR-I27npP-U2U8CufsXmVmMYy5kuXyEPKkHJLDn5_Z0vNkLHUB4wH7ximTFfH56Xmbjwm4Ij5SBaLnTdiitL-7DJKO90AvdxbTQjTpuQ7etmxl84BTzQNX1ybeAx27Du8TxF3CTpQtlsj8YlqASfDM_swqMk1rsbdxazqtBopwmnEQ4KuP9TbvUSCh578wkdEnt6cYFUdmeJcsOdFUimKVCOFnBXaUz84MPxKFFpKSMhg0xbZoA22fKCkyHIjAFNTk1fSlkZKgF3q2yNpbjlhoZlMl4O5EI0vk_hs29FxV9t2ilf6H4JaiWP40dtjVL7TAs__F9o5USRHeXz0fMU-C1RZnpY_gaNuAcPSIWJbexamFfER9nHGCN7P3pui_NxZeqUZgGTTR8aN8tiMV0bIfFS9Rjc7BkKSztIziopu4TojhyyL_TfmO3m3RIyBEJ0fVcmUXs592Wc7O-5KRlqHpbtzjK0jKTFpTn_dIfSPtRyI_NfLe2IYLbwdPyPvqZOCo3XkgJkE7IkKMzmUtHG2Ke4V4OjEmqyQ9RxBfFdH_STJMNtTSjBMsk6t1QbXrkE0HGyp9315Ikqc8CH-3IDtzyL9qFXuS35VBCc-owYW6pobOKG7-XuPLp_kwLhvMasqjuH6ThG1dcVaoEm1TDXu-_ur5u7YM6ZbPspiwrAkO7uLDHrUHKytWO3f57tsqoFo3nnET0n46_UxG4psR3Pc1bYmrf-q1srOhZh4jV-vcMzIDFBEF6cSY6R640uSyz0woDWmoxl0awaxIKEs9--e4Fefg8N2Xr58N2gGrn4DKvEWdD83kVLGDIsDrsDZcSyFCQl6711uE89BGQtOue-vDcq0PL7kF2G3s-eK-6FwJCSzCf8yNvDnCDTYPhjaJJv7ZR7RK_XKVAMOOgSh_YfDxbXIsUCJDvRyZgmiKXeaiFdLmrIhx56uL196RLFrtbhDo3cvipClq9B7nSjwfW1c11yH7KBWaW38yml6SqzeyF0UK2_YqAPsVJIMsPNr92r2BeQrw5vTUSvZ3z2XE1M3_sigtXyp8nRuT6SL0R8kJx6_hS5Ya3dKrPm4w13qYXpVGcwGPDhewS6Xt-jXIXPU4MUNIwVR1TxcRdlgK4f0J5mJNHUPPWPHmvGf40RtRKvebzAv5XGhLDbZdds2tlR8jJILUGf-hoL-Yb98xpTX61qnnYYxncTK8xCcSG_IlbqKj6J2ItwwQmQB0QBCfBR-R2uF99GolXfcnK-Mue5Bc71CHvq7QHHi1s6lA="
           },
           {
             "type": "function_call",
-            "call_id": "call_e3Qbl8Kpe65M5ZwPhrcACwlZ",
+            "call_id": "call_mLV84LX22JJF1NO2L9JEUGX1",
             "name": "GetWeather",
             "arguments": "{\"city\":\"Paris\"}",
             "id": "redacted-id-3"
           },
           {
             "type": "function_call_output",
-            "call_id": "call_e3Qbl8Kpe65M5ZwPhrcACwlZ",
+            "call_id": "call_mLV84LX22JJF1NO2L9JEUGX1",
             "output": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
           }
         ],
@@ -121,6 +120,10 @@
           }
         ],
         "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
       }
     }
   }
