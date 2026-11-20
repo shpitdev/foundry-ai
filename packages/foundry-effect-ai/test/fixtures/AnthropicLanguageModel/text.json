@@ -1,0 +1,30 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"anthropic.claude-haiku-4-5-20251001-v1:0\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"text\":\"Hello\",\"type\":\"text\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":14,\"output_tokens\":4,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":null}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

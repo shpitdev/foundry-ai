@@ -1,0 +1,54 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"model\":\"claude-sonnet-5-5\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[{\"text\":\"{\\\"city\\\":\\\"Paris\\\",\\\"country\\\":\\\"France\\\"}\",\"type\":\"text\"}],\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":225,\"output_tokens\":17,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":null}}",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-5-5-sonnet",
+        "max_tokens": 128000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Name the capital of France and its country."
+              }
+            ]
+          }
+        ],
+        "thinking": {
+          "type": "adaptive"
+        },
+        "output_config": {
+          "format": {
+            "type": "json_schema",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city",
+                "country"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

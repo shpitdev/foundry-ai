@@ -1,0 +1,31 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: message_start\ndata: {\"message\":{\"id\":\"redacted-id-1\",\"model\":\"claude-haiku-4-5-20251001\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":14,\"output_tokens\":1,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":\"standard\"}},\"type\":\"message_start\"}\n\nevent: ping\ndata: {\"type\":\"ping\"}\n\nevent: content_block_start\ndata: {\"index\":0,\"content_block\":{\"text\":\"\",\"type\":\"text\"},\"type\":\"content_block_start\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\"Hello\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_stop\ndata: {\"index\":0,\"type\":\"content_block_stop\"}\n\nevent: message_delta\ndata: {\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null},\"usage\":{\"output_tokens\":4,\"input_tokens\":14,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"server_tool_use\":null},\"type\":\"message_delta\"}\n\n",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

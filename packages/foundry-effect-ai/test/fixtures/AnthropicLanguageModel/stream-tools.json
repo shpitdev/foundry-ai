@@ -1,0 +1,143 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: message_start\ndata: {\"message\":{\"id\":\"redacted-id-1\",\"model\":\"anthropic.claude-haiku-4-5-20251001-v1:0\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":634,\"output_tokens\":7,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":null}},\"type\":\"message_start\"}\n\nevent: content_block_start\ndata: {\"index\":0,\"content_block\":{\"thinking\":\"\",\"type\":\"thinking\"},\"type\":\"content_block_start\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\"The user is asking me to first\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" figure\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" out which European capital hosted the Summer Olympics\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" in both\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" 1900 and 1924\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\", then\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" call the GetWeather tool for that\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" city.\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\"\\n\\nLet me think\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" about this:\\n-\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" 1900 Summer Olympics:\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" Paris, France\\n- 1924\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" Summer Olympics: Paris\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\", France\\n\\nSo Paris\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" is\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" the European\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" capital that hosted the Summer Olympics in both\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" 1900 and 1924\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\".\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\"\\n\\nNow\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\" I need to call Get\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"thinking\":\"Weather for Paris.\",\"type\":\"thinking_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"signature\":\"EogFCpwBCBQQARgCKkBRhMCZj4bMBMbmbI4SIVTPdqLeEV8PdQNRap+03cT2BIy2MRbsR5vajVfn7NyYuoncGma6WYOTRz8Z3I50KGncMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nWgwxOTY3MzM3OTYwMjlyENzLeG9s7AgIhP8RRMel8tCIAQGoAb7i/tcGsAECEgymF5QUyc+Vzm25IM8aDHBp9s1e4OOIdXvQkyIwZl/0hR1xCnV0/KeOVP8UyVHljvJDinmqXaGTvwZrTRrgWkjfX2/Vxps4QOekFYj1KpgD1GSbA89oGXzptZkdnrdFjq/8P10ec5VCxrVZb74HvomKjJqiTbub70XwhWZE8NEU9Im/4ZshbkczdpgYSfvUsB671YKvybsFm7x7a1cvlw3EU0RWbIGxijRWSDtqvaOoPQNF98moRR8T5iPguvzS7fPelrCB3GO+/1Jbw9YEfcZCTO1a/iALmFnYsfwsAvRisi9AqioHcjARQLsK25HZ899FyA3ApWF2v8O8ODfAxMJM4s8A76EXccxs9DE8APQbeQzxEuv2GX04uXV6LdftUjuQn97DqssxuSx0vqc0jxxQT7ED+fEbHSN+0/k1A2NPLzXEc6ALS0Gv2FlXyWzAZTJTtjuXK1n/AWMqiu+9lWYcsFLhz7mXkBzHhqEN2DBCkuHWQ1Xmrs1qgxM3HmyhWC/SXYJQwfxLPQ1or45xnTRHS6IcJH1kT4ogumDMzUQ3lD8KXo5gYoOqHiRIelq5LO1Y3IfBQ45dpS3fHZsgLc0UiPbuTzIa+iC/+NTiToMqJipujUDvtUsTOwp7xzILgt7kU6qlHaAJGAE=\",\"type\":\"signature_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_stop\ndata: {\"index\":0,\"type\":\"content_block_stop\"}\n\nevent: content_block_start\ndata: {\"index\":1,\"content_block\":{\"text\":\"\",\"type\":\"text\"},\"type\":\"content_block_start\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\"The\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" European capital that hosted the Summer Olympics in\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" both\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" 1900 and 1924\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" is\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" **Paris, France**.\\n\\nNow\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" let\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" me get\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" the current\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" weather for\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":1,\"delta\":{\"text\":\" Paris:\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_stop\ndata: {\"index\":1,\"type\":\"content_block_stop\"}\n\nevent: content_block_start\ndata: {\"index\":2,\"content_block\":{\"id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"input\":{},\"type\":\"tool_use\"},\"type\":\"content_block_start\"}\n\nevent: content_block_delta\ndata: {\"index\":2,\"delta\":{\"partial_json\":\"\",\"type\":\"input_json_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":2,\"delta\":{\"partial_json\":\"{\\\"city\\\"\",\"type\":\"input_json_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":2,\"delta\":{\"partial_json\":\": \\\"Pari\",\"type\":\"input_json_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":2,\"delta\":{\"partial_json\":\"s\\\"}\",\"type\":\"input_json_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_stop\ndata: {\"index\":2,\"type\":\"content_block_stop\"}\n\nevent: message_delta\ndata: {\"delta\":{\"stop_reason\":\"tool_use\",\"stop_sequence\":null,\"stop_details\":null},\"usage\":{\"output_tokens\":202,\"input_tokens\":634,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"server_tool_use\":null},\"type\":\"message_delta\"}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 1024
+        },
+        "tools": [
+          {
+            "name": "GetWeather",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": true
+            },
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": {
+          "type": "auto"
+        },
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: message_start\ndata: {\"message\":{\"id\":\"redacted-id-3\",\"model\":\"anthropic.claude-haiku-4-5-20251001-v1:0\",\"type\":\"message\",\"role\":\"assistant\",\"content\":[],\"stop_reason\":null,\"stop_sequence\":null,\"stop_details\":null,\"usage\":{\"input_tokens\":859,\"output_tokens\":1,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"cache_creation\":{\"ephemeral_5m_input_tokens\":0,\"ephemeral_1h_input_tokens\":0},\"speed\":null}},\"type\":\"message_start\"}\n\nevent: content_block_start\ndata: {\"index\":0,\"content_block\":{\"text\":\"\",\"type\":\"text\"},\"type\":\"content_block_start\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\"Paris\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\", the\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" city\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" that hosted the 1900 and\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" 1924 Summer Olympics, is\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" currently experiencing sunny\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" weather\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\" with a temperature of 21°C\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_delta\ndata: {\"index\":0,\"delta\":{\"text\":\".\",\"type\":\"text_delta\"},\"type\":\"content_block_delta\"}\n\nevent: content_block_stop\ndata: {\"index\":0,\"type\":\"content_block_stop\"}\n\nevent: message_delta\ndata: {\"delta\":{\"stop_reason\":\"end_turn\",\"stop_sequence\":null,\"stop_details\":null},\"usage\":{\"output_tokens\":36,\"input_tokens\":859,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"server_tool_use\":null},\"type\":\"message_delta\"}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
+    "request": {
+      "path": "/anthropic/v1/messages",
+      "body": {
+        "model": "ri.language-model-service..language-model.anthropic-claude-4-5-haiku",
+        "max_tokens": 64000,
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "thinking",
+                "thinking": "The user is asking me to first figure out which European capital hosted the Summer Olympics in both 1900 and 1924, then call the GetWeather tool for that city.\n\nLet me think about this:\n- 1900 Summer Olympics: Paris, France\n- 1924 Summer Olympics: Paris, France\n\nSo Paris is the European capital that hosted the Summer Olympics in both 1900 and 1924.\n\nNow I need to call GetWeather for Paris.",
+                "signature": "EogFCpwBCBQQARgCKkBRhMCZj4bMBMbmbI4SIVTPdqLeEV8PdQNRap+03cT2BIy2MRbsR5vajVfn7NyYuoncGma6WYOTRz8Z3I50KGncMhljbGF1ZGUtaGFpa3UtNC01LTIwMjUxMDAxOABCCHRoaW5raW5nWgwxOTY3MzM3OTYwMjlyENzLeG9s7AgIhP8RRMel8tCIAQGoAb7i/tcGsAECEgymF5QUyc+Vzm25IM8aDHBp9s1e4OOIdXvQkyIwZl/0hR1xCnV0/KeOVP8UyVHljvJDinmqXaGTvwZrTRrgWkjfX2/Vxps4QOekFYj1KpgD1GSbA89oGXzptZkdnrdFjq/8P10ec5VCxrVZb74HvomKjJqiTbub70XwhWZE8NEU9Im/4ZshbkczdpgYSfvUsB671YKvybsFm7x7a1cvlw3EU0RWbIGxijRWSDtqvaOoPQNF98moRR8T5iPguvzS7fPelrCB3GO+/1Jbw9YEfcZCTO1a/iALmFnYsfwsAvRisi9AqioHcjARQLsK25HZ899FyA3ApWF2v8O8ODfAxMJM4s8A76EXccxs9DE8APQbeQzxEuv2GX04uXV6LdftUjuQn97DqssxuSx0vqc0jxxQT7ED+fEbHSN+0/k1A2NPLzXEc6ALS0Gv2FlXyWzAZTJTtjuXK1n/AWMqiu+9lWYcsFLhz7mXkBzHhqEN2DBCkuHWQ1Xmrs1qgxM3HmyhWC/SXYJQwfxLPQ1or45xnTRHS6IcJH1kT4ogumDMzUQ3lD8KXo5gYoOqHiRIelq5LO1Y3IfBQ45dpS3fHZsgLc0UiPbuTzIa+iC/+NTiToMqJipujUDvtUsTOwp7xzILgt7kU6qlHaAJGAE="
+              },
+              {
+                "type": "text",
+                "text": "The European capital that hosted the Summer Olympics in both 1900 and 1924 is **Paris, France**.\n\nNow let me get the current weather for Paris:"
+              },
+              {
+                "type": "tool_use",
+                "id": "redacted-id-2",
+                "name": "GetWeather",
+                "input": {
+                  "city": "Paris"
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "redacted-id-2",
+                "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}",
+                "is_error": false
+              }
+            ]
+          }
+        ],
+        "thinking": {
+          "type": "enabled",
+          "budget_tokens": 1024
+        },
+        "tools": [
+          {
+            "name": "GetWeather",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": true
+            },
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": {
+          "type": "auto"
+        },
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
