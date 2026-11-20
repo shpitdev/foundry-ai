@@ -13,24 +13,21 @@ const distRoot = join(packageRoot, 'dist/foundry-effect-ai/src');
 
 // Internal protocol folders and the public modules allowed to reach them.
 const owners = {
-  'src/internal/responses/': ['OpenAiLanguageModel', 'XaiLanguageModel'],
-  'src/internal/chat/': ['OpenAiChatLanguageModel', 'XaiLanguageModel'],
-  'src/internal/decisions/': ['OpenAiDecisionModel'],
-  'src/internal/embeddings/': ['OpenAiEmbeddingModel'],
-  'src/internal/messages/': ['AnthropicLanguageModel'],
-  'src/internal/gemini/': ['GoogleLanguageModel'],
-  // Phase 0a: per-vendor catalog files from the shared workspace source.
+  'src/internal/openai-responses/': ['OpenAiLanguageModel', 'XaiLanguageModel'],
+  'src/internal/openai-decisions/': ['OpenAiDecisionModel'],
+  'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
+  'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
+  'src/internal/google-gemini/': ['GoogleLanguageModel'],
+  // Phase 0a: per-vendor catalog files from the shared workspace source. The all-vendor
+  // catalog.ts stays in packages/foundry-ai, where lint already blocks it.
   'foundry-catalog/src/openai-models': [
     'OpenAiLanguageModel',
     'OpenAiDecisionModel',
     'OpenAiEmbeddingModel',
-    'OpenAiChatLanguageModel',
   ],
   'foundry-catalog/src/anthropic-models': ['AnthropicLanguageModel'],
   'foundry-catalog/src/google-models': ['GoogleLanguageModel'],
   'foundry-catalog/src/xai-models': ['XaiLanguageModel'],
-  // The all-vendor catalog would put every vendor's models in every bundle.
-  'foundry-catalog/src/catalog': [],
 };
 
 // Minified bytes with effect external. Set each module's real budget when its phase lands.
