@@ -50,6 +50,9 @@ export const cells: Readonly<Record<string, Cell>> = {
       expect(response.answers.damaged.probability).toBeGreaterThan(0.8);
       expect(response.modelId).toBe('gpt-6-luna');
       expect(response.usage.inputTokens).toBeGreaterThan(0);
+      expect(response.metadata).toMatchObject({
+        'foundry-openai': { usage: { total_tokens: expect.any(Number) } },
+      });
       expectRequest(env, {
         input: ticket,
         questions: [
@@ -124,6 +127,20 @@ export const cells: Readonly<Record<string, Cell>> = {
       const { answers } = yield* withLuna(env)(DecisionModel.decide(definition, { input: ticket }));
       expect(answers.category.label).toBe('c7');
       expect(Object.keys(answers.category.probabilities)).toHaveLength(20);
+      expectRequest(env, {
+        input: ticket,
+        questions: [
+          {
+            type: 'choice',
+            name: 'category',
+            instructions: 'Which category fits the ticket?',
+            choices: Object.entries(criteria).map(([value, description]) => ({
+              value,
+              description,
+            })),
+          },
+        ],
+      });
     }),
 
   score: (env) =>
@@ -256,5 +273,7 @@ export const cells: Readonly<Record<string, Cell>> = {
         expect(outcomes.damaged).toMatchObject({ _tag: 'Failure', failure: { reason: 'Refused' } });
         expect(outcomes.urgent).toMatchObject({ _tag: 'Success', success: { probability: 0.9 } });
       }
+      // A second answer for a refused decision must not replace the refusal.
+      expect((yield* failure(decide)).reason._tag).toBe('InvalidResponseError');
     }),
 };

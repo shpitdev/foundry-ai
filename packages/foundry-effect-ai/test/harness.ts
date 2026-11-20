@@ -59,18 +59,33 @@ export const writeFixtures = (
 };
 
 const modelRid = 'ri.language-model-service..language-model.';
+// An ID key, possibly inside JSON that is itself a string, then its value of 8+ characters.
+const idValue =
+  /\\*"(?:errorInstanceId|id|responseId|response_id|request_id|requestId|trace_id|traceId)\\*"\s*:\s*\\*"([^"\\]{8,})/gu;
 
 /**
- * Recordings are committed, so they keep only status, content type and body, and drop the stack
- * host, RIDs that are not model RIDs, and request, trace and error-instance IDs.
+ * A scrubber for one cell's recordings, which are committed. It replaces the token, any bearer
+ * credential, the stack host, RIDs that are not model RIDs, and ID values. Each ID gets the
+ * same placeholder everywhere in the cell, so stream events and replayed tool turns that
+ * mention it still agree.
  */
-export const scrub = (body: string, host: string): string =>
-  body
-    .replaceAll(host, 'example.palantirfoundry.com')
-    .replaceAll(/ri\.[a-z0-9-]+\.[\w.-]*/gu, (rid) =>
-      rid.startsWith(modelRid) ? rid : 'ri.redacted',
+export const scrubber = (secrets: { readonly host: string; readonly token: string }) => {
+  const host = new RegExp(secrets.host.replaceAll(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'giu');
+  const ids = new Map<string, string>();
+  return (body: string): string => {
+    const scrubbed = (
+      secrets.token === '' ? body : body.replaceAll(secrets.token, 'redacted-token')
     )
-    .replaceAll(
-      /"(errorInstanceId|request_id|requestId|trace_id|traceId)":"[^"]*"/gu,
-      '"$1":"00000000-0000-0000-0000-000000000000"',
-    );
+      .replaceAll(/Bearer\s+[\w.~+/=-]+/gu, 'Bearer redacted-token')
+      .replaceAll(host, 'example.palantirfoundry.com')
+      .replaceAll(/ri\.[a-z0-9-]+\.[\w.-]*/gu, (rid) =>
+        rid.startsWith(modelRid) ? rid : 'ri.redacted',
+      );
+    for (const [, id = ''] of scrubbed.matchAll(idValue)) {
+      if (!ids.has(id)) {
+        ids.set(id, `redacted-id-${ids.size + 1}`);
+      }
+    }
+    return [...ids].reduce((text, [id, placeholder]) => text.replaceAll(id, placeholder), scrubbed);
+  };
+};

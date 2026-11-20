@@ -2,7 +2,9 @@
   {
     "status": 429,
     "contentType": "application/json",
-    "headers": { "retry-after": "7" },
+    "headers": {
+      "retry-after": "7"
+    },
     "body": "{\"error\":{\"message\":\"Rate limit reached\",\"type\":\"requests\",\"code\":\"rate_limit_exceeded\"}}"
   },
   {
@@ -10,6 +12,24 @@
     "contentType": "application/json",
     "body": "{\"errorCode\":\"INTERNAL\",\"errorName\":\"Default:Internal\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
   },
-  { "status": 200, "contentType": "application/json", "body": "{\"id\":" },
-  { "status": 200, "contentType": "application/json", "body": null }
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":"
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": null
+  },
+  {
+    "status": 429,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"CUSTOM_CLIENT\",\"errorName\":\"LanguageModelService:LlmHttpClientError\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"responseBody\":\"Optional[{\\\"error\\\":{\\\"message\\\":null,\\\"code\\\":\\\"insufficient_quota\\\"}}]\",\"statusCode\":\"429\"}}"
+  },
+  {
+    "status": 400,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"INVALID_ARGUMENT\",\"errorName\":\"LanguageModelService:InvalidRequest\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"unsafeParams\":\"{token=unsafe-secret}\",\"message\":\"Invalid input\"}}"
+  }
 ]

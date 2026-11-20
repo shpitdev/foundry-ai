@@ -43,7 +43,7 @@ const fail = (
   body: unknown,
 ): Effect.Effect<AiError.AiErrorReason> =>
   FoundryClient.FoundryClient.use((client) =>
-    client.json({ path, body, schema: Schema.Struct({ id: Schema.String }) }),
+    client.json({ path, body, schema: Schema.Unknown }),
   ).pipe(
     Effect.provide(layer),
     Effect.flip,
@@ -60,6 +60,8 @@ export const cells: Readonly<Record<string, Cell>> = {
           route.path(route.model),
           route.body(route.model),
         );
+        // Error messages carry parsed fields, never the raw body.
+        expect(unauthorized.message).not.toContain('"errorCode"');
         expect(unauthorized).toMatchObject({
           _tag: 'AuthenticationError',
           kind: 'InvalidKey',
@@ -106,7 +108,21 @@ export const cells: Readonly<Record<string, Cell>> = {
         retryAfter: Duration.seconds(7),
       });
       expect(yield* fail(client, path, {})).toMatchObject({ _tag: 'InternalProviderError' });
+      // Malformed JSON, then an empty body, which `Schema.Unknown` would otherwise read as null.
       expect(yield* fail(client, path, {})).toMatchObject({ _tag: 'InvalidResponseError' });
       expect(yield* fail(client, path, {})).toMatchObject({ _tag: 'InvalidResponseError' });
+      // Quota exhaustion wrapped by Foundry, with an ill-typed field beside the code.
+      expect(yield* fail(client, path, {})).toMatchObject({ _tag: 'QuotaExhaustedError' });
+      const rejected = yield* fail(client, `${path}?X-Amz-Signature=signature-secret`, {});
+      expect(rejected).toMatchObject({ _tag: 'InvalidRequestError' });
+      expect(rejected.message).toContain('Invalid input');
+      expect(rejected.message).not.toMatch(/signature-secret|unsafe-secret/u);
+
+      const sent = env.requests.length;
+      expect(yield* fail(client, path, { tokens: 1n })).toMatchObject({
+        _tag: 'NetworkError',
+        reason: 'EncodeError',
+      });
+      expect(env.requests).toHaveLength(sent);
     }),
 };
