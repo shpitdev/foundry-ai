@@ -1,0 +1,153 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thought\":true,\"text\":\"**My Thought Process for Identifying the Olympic Host City and Preparing to Retrieve Weather Information**\\n\\nMy primary objective here is to pinpoint the European capital that served as the host for both the 1900 and 1924 Summer Olympic Games. A crucial condition is that I must only invoke the `GetWeather` tool for this identified city *after* I've successfully identified it. Furthermore, the final answer needs to be a single, concise sentence.\\n\\nLet's break down the identification process:\\n\\nFirst, I need to recall or deduce which city hosted the 1900 Summer Olympics. My knowledge base indicates this was Paris, France.\\nNext, I must do the same for the 1924 Summer Olympics. Again, my information points to Paris, France.\\n\\nTherefore, the city that hosted both events is Paris.\\n\\nNow, I need to consider the tool invocation. The instructions explicitly state to call the `GetWeather` tool for the identified city *before* answering. This means my immediate next step should be to execute `GetWeather(city='Paris')`.\\n\\nI understand that I must wait for the output from this tool call. Once I have the weather data, I will then synthesize all the information – the Olympic host city and the retrieved weather – into a single, well-formed sentence as the final answer.\\n\\nUpon reflection, I initially considered a slightly different interpretation of the prompt's sequence. However, re-reading the instruction \\\"Then call the GetWeather tool for it and answer in one sentence\\\" clarifies that the tool call should happen *now*, as part of this current turn, and the answering will follow in a subsequent turn after the tool's execution.\\n\\nA quick check confirms that Paris is indeed a European capital, so it meets that implicit requirement.\\n\\nMy intended action is therefore to proceed with calling the `GetWeather` tool for Paris.\\n\\n\"},{\"thoughtSignature\":\"AY89a1/lVuJuuOUTfTM3++Erg65dtubk0jGLSuaCDdPPrkFMESczkDaS4wrcnglvKA6zf75A/zzRrXIsONFEm1CUccSzhg5gEdepNTd7XUapZWtulEXs+VJMFGxvWE3Zbqsn0FPR6NdHgKOHaPCDLhovUrCyulMKK2ZMi9QSQlhct4W2jBI3XNa3nRA0wXrUBpbkJQDal3Lh2Be5zUmbA2q+JRgbnOZkDTwMmyDBM9QCtC5XwX8E+DOOadE17TPBJiDdVOGpAqVJeZ8gZnoJy8PJB75eeOUzHpVBuy2EwcpcPMz04hA6Is2artOFsR4spIisRTGZBcJ4QDWLpV8dgc1nsIQLYSPCjWsYX0qIrAGn05nXt8n1F5BQEIVUOVeQ8HIVCqliQE3oJVae6Vz9l/MU56PcQrin3wyZnv+fY9DipXR2dYG3KAE1H9fAsdCY6q6TKyLd1O7rcVZ9GEpYdlH6MUflMLX+3ZUrVnmdoJqf8qgiqksBOSOtAcGitS5xT7VGGJtYA0qjENHRKzFGJV6ju8rmzJLuHbLSOhXgvOt+bbuPaitSTjXwtNDZLkOarkzoL8PS1KiFQYbPK1U4rlVjOxdimNOwwuHHg5pEP0SKPYe/7Gnihlrvi/jWiAe20Tx22SbPGl/X1PNmgtBAot9Bvu8g/IrgWIF+qRGhXodv0nbwxbVnstFeVcDTX5hF3u4yFdhKDVd6Ns/ud9Zx7lfXwiQcx8pWLaUDCogRrs1MzIdIQnTnZb/SdydVwpbkF64M/7wrl0SMH3X22v3j+GClugMtjv0iQadE+dnwtDqZpdHza0x3nJp65mFXXo+3D5sRb6oUBoKqCtm6Vtsui+X9li7gDeOF3pVmSxRTqOsxz9sZ5j13WgTSSg/a9L3jKbKSNcO8nblT1hkan9blkiy1ZMoN9lf5mbgfAVLsmv4A61f4k0NWpnRkVT+JJwXDX61gwpRnz160wlzcg7SCpGOQ2CQHGfJvrUJXY6dcR+vsLiKk1xXDxJsopFlAAycSyGkNKdgvH74tDLZ2JOjQI3G4wmc75H59ti3PEw+tD6I8wCK8UIyQXshdg1o4MdAISQ9bDu6VvvFSvxbk6qzL+DcmTNTuiTBUesWPQlVxPJHRroR3UMLUdOZo+d7jp+HtRqgJU5QNpWbHZz2Q230Ovyh7L2lfaphHc4XrR1YCrpFjRcZN1+fQKysbBJJGGmMFXvUqNQUoHQKOj0+cDx1Alixf8MrK8v3QoTLfVnv6O82VAxe4i4ZS8EwXmVjf4BoqnB4rtO1eNbx8y+5ZOwf4+cIxFlf3/ZTxURLSB2bCJxAFPt4p47lkORVk5HcaxmBNBuYwKwARqdqTlzT3yhBeSSXtFduU33GCf/DokmKaYEOJmrTJVyPcc8hnzUiNJYDSwpOp1NKU+e28h6sKfoeNpqMpJJTrUdltGbyECzG80W4JfT9M37f7WcQi/gpzgRbR\",\"functionCall\":{\"id\":\"redacted-id-1\",\"name\":\"GetWeather\",\"args\":{\"city\":\"Paris\"}}}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":67,\"candidatesTokenCount\":15,\"thoughtsTokenCount\":262,\"totalTokenCount\":344,\"promptTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":67}],\"candidatesTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":15}]},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:39.242122Z\",\"responseId\":\"redacted-id-2\"}",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:generateContent",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "name": "GetWeather",
+                "parametersJsonSchema": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "city"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Get the current weather in a city"
+              }
+            ]
+          }
+        ],
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "AUTO"
+          }
+        },
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thought\":true,\"text\":\"**My Train of Thought**\\n\\nAh, I see I need to summarize this information about Paris. First, I'll note the core facts: the city is Paris, and it's famous for hosting the Summer Olympics twice, in 1900 and 1924. Then, I'll add the current weather conditions: it's sunny, and the temperature is 21°C. Now, the crucial constraint: I must present this as a single, cohesive sentence. So, I'll weave these elements together logically. I'll start by identifying Paris and its Olympic history, then transition to the present-day weather. Combining these, I arrive at: \\\"Paris, which hosted the Summer Olympics in 1900 and 1924, currently has sunny weather with a temperature of 21°C.\\\"\\n\\n\"},{\"thoughtSignature\":\"AY89a18zhD+6PmYrX4LIwSubZOVYnhYVOrq/U64DClDiRcSRlaI/BT9SWP/HHOrn2cVRtefYMIZKp5cS4D+8lBXTBJdsI2fS8CRMV4j2HNGFOS++lYwHcUQJgPuFQKoRrNi1YImSrSqC8L9/0lZMac1pHLb0CxmqDX+VZjKnYGyL0BVowuQvd9RISPK9pcBbnN1II19WUMt18JJAJPT6+3WV1sCEGUHUV0paiAB/jYF4aiCNhb0hqy/1t8WrBdloEDuCx2Xo82gxrHdeM9ZnbHpYO0HCsv8L6pKiKSj6GbgpfbB3NI2NzvAAeW6MO3xX6/ODJ1FL1136/ljGt+OSaC9tZFJVqVmUFPAQpDJTLqethelCaQAGgOu9GBlqPjlQ1uHsMlzqT0kYXIjv7SvKKteQK0B/4o0URCqswUBLJqw1PmABY8WokBhin2b31sjW++2G6stEIh6s5PnDu3rDCS2gljXMhbP+UYDDt3o0tBclNdXZLuCsqJ5spe+lzK/9D54vaZXjLqLYpATM1DwuqaarxBvYzrtpVria\",\"text\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, currently has sunny weather with a temperature of 21°C.\"}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":353,\"candidatesTokenCount\":34,\"thoughtsTokenCount\":88,\"totalTokenCount\":475,\"promptTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":353}],\"candidatesTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":34}]},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:42.106413Z\",\"responseId\":\"redacted-id-3\"}",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:generateContent",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "role": "model",
+            "parts": [
+              {
+                "text": "**My Thought Process for Identifying the Olympic Host City and Preparing to Retrieve Weather Information**\n\nMy primary objective here is to pinpoint the European capital that served as the host for both the 1900 and 1924 Summer Olympic Games. A crucial condition is that I must only invoke the `GetWeather` tool for this identified city *after* I've successfully identified it. Furthermore, the final answer needs to be a single, concise sentence.\n\nLet's break down the identification process:\n\nFirst, I need to recall or deduce which city hosted the 1900 Summer Olympics. My knowledge base indicates this was Paris, France.\nNext, I must do the same for the 1924 Summer Olympics. Again, my information points to Paris, France.\n\nTherefore, the city that hosted both events is Paris.\n\nNow, I need to consider the tool invocation. The instructions explicitly state to call the `GetWeather` tool for the identified city *before* answering. This means my immediate next step should be to execute `GetWeather(city='Paris')`.\n\nI understand that I must wait for the output from this tool call. Once I have the weather data, I will then synthesize all the information – the Olympic host city and the retrieved weather – into a single, well-formed sentence as the final answer.\n\nUpon reflection, I initially considered a slightly different interpretation of the prompt's sequence. However, re-reading the instruction \"Then call the GetWeather tool for it and answer in one sentence\" clarifies that the tool call should happen *now*, as part of this current turn, and the answering will follow in a subsequent turn after the tool's execution.\n\nA quick check confirms that Paris is indeed a European capital, so it meets that implicit requirement.\n\nMy intended action is therefore to proceed with calling the `GetWeather` tool for Paris.\n\n",
+                "thought": true
+              },
+              {
+                "functionCall": {
+                  "id": "redacted-id-1",
+                  "name": "GetWeather",
+                  "args": {
+                    "city": "Paris"
+                  }
+                },
+                "thoughtSignature": "AY89a1/lVuJuuOUTfTM3++Erg65dtubk0jGLSuaCDdPPrkFMESczkDaS4wrcnglvKA6zf75A/zzRrXIsONFEm1CUccSzhg5gEdepNTd7XUapZWtulEXs+VJMFGxvWE3Zbqsn0FPR6NdHgKOHaPCDLhovUrCyulMKK2ZMi9QSQlhct4W2jBI3XNa3nRA0wXrUBpbkJQDal3Lh2Be5zUmbA2q+JRgbnOZkDTwMmyDBM9QCtC5XwX8E+DOOadE17TPBJiDdVOGpAqVJeZ8gZnoJy8PJB75eeOUzHpVBuy2EwcpcPMz04hA6Is2artOFsR4spIisRTGZBcJ4QDWLpV8dgc1nsIQLYSPCjWsYX0qIrAGn05nXt8n1F5BQEIVUOVeQ8HIVCqliQE3oJVae6Vz9l/MU56PcQrin3wyZnv+fY9DipXR2dYG3KAE1H9fAsdCY6q6TKyLd1O7rcVZ9GEpYdlH6MUflMLX+3ZUrVnmdoJqf8qgiqksBOSOtAcGitS5xT7VGGJtYA0qjENHRKzFGJV6ju8rmzJLuHbLSOhXgvOt+bbuPaitSTjXwtNDZLkOarkzoL8PS1KiFQYbPK1U4rlVjOxdimNOwwuHHg5pEP0SKPYe/7Gnihlrvi/jWiAe20Tx22SbPGl/X1PNmgtBAot9Bvu8g/IrgWIF+qRGhXodv0nbwxbVnstFeVcDTX5hF3u4yFdhKDVd6Ns/ud9Zx7lfXwiQcx8pWLaUDCogRrs1MzIdIQnTnZb/SdydVwpbkF64M/7wrl0SMH3X22v3j+GClugMtjv0iQadE+dnwtDqZpdHza0x3nJp65mFXXo+3D5sRb6oUBoKqCtm6Vtsui+X9li7gDeOF3pVmSxRTqOsxz9sZ5j13WgTSSg/a9L3jKbKSNcO8nblT1hkan9blkiy1ZMoN9lf5mbgfAVLsmv4A61f4k0NWpnRkVT+JJwXDX61gwpRnz160wlzcg7SCpGOQ2CQHGfJvrUJXY6dcR+vsLiKk1xXDxJsopFlAAycSyGkNKdgvH74tDLZ2JOjQI3G4wmc75H59ti3PEw+tD6I8wCK8UIyQXshdg1o4MdAISQ9bDu6VvvFSvxbk6qzL+DcmTNTuiTBUesWPQlVxPJHRroR3UMLUdOZo+d7jp+HtRqgJU5QNpWbHZz2Q230Ovyh7L2lfaphHc4XrR1YCrpFjRcZN1+fQKysbBJJGGmMFXvUqNQUoHQKOj0+cDx1Alixf8MrK8v3QoTLfVnv6O82VAxe4i4ZS8EwXmVjf4BoqnB4rtO1eNbx8y+5ZOwf4+cIxFlf3/ZTxURLSB2bCJxAFPt4p47lkORVk5HcaxmBNBuYwKwARqdqTlzT3yhBeSSXtFduU33GCf/DokmKaYEOJmrTJVyPcc8hnzUiNJYDSwpOp1NKU+e28h6sKfoeNpqMpJJTrUdltGbyECzG80W4JfT9M37f7WcQi/gpzgRbR"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "id": "redacted-id-1",
+                  "name": "GetWeather",
+                  "response": {
+                    "name": "GetWeather",
+                    "content": {
+                      "temperatureC": 21,
+                      "conditions": "sunny"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "name": "GetWeather",
+                "parametersJsonSchema": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "city"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Get the current weather in a city"
+              }
+            ]
+          }
+        ],
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "AUTO"
+          }
+        },
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

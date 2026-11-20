@@ -1,0 +1,153 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thought\":true,\"text\":\"**Recalling Olympic Host Cities**\\n\\nI've successfully identified Paris as the European capital that hosted the Summer Olympics in both 1900 and 1924. The next step involves calling the `GetWeather` function for Paris to retrieve the necessary meteorological data for my response.\\n\\n\"}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:43.896225Z\",\"responseId\":\"redacted-id-1\"}\n\ndata: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thoughtSignature\":\"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\",\"functionCall\":{\"id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"args\":{\"city\":\"Paris\"}}}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:43.896225Z\",\"responseId\":\"redacted-id-1\"}\n\ndata: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"\"}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":67,\"candidatesTokenCount\":15,\"thoughtsTokenCount\":372,\"totalTokenCount\":454,\"promptTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":67}],\"candidatesTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":15}]},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:43.896225Z\",\"responseId\":\"redacted-id-1\"}\n\n",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:streamGenerateContent?alt=sse",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "name": "GetWeather",
+                "parametersJsonSchema": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "city"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Get the current weather in a city"
+              }
+            ]
+          }
+        ],
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "AUTO"
+          }
+        },
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"Paris, which hosted the Summer Olympics in\"}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:45.437408Z\",\"responseId\":\"redacted-id-3\"}\n\ndata: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\" 1900 and 1924, is currently experiencing sunny conditions with a temperature of 21°\"}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:45.437408Z\",\"responseId\":\"redacted-id-3\"}\n\ndata: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"C.\"}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:45.437408Z\",\"responseId\":\"redacted-id-3\"}\n\ndata: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thoughtSignature\":\"AY89a194c+YfmGVe5F9Bf4kMZHKBux36++ilN6wOm07LSSkXpLHqZVNoESbocNeVNBDIolyLs6D2wPYyUcGfwzELg9bS2Mo2B19sUiP3u7FrregXfFZE2TOtBaQgVaShRYGfHED0DpCXW5qFeI8O4AWxa9o0XRod8LirH8ZIgXw1u5tUELqQuOUFPcWJDQS2UVvLXziHOar6ov3YFp6dGvC2XicZx24z6EBB1fzZGvmUD9Y5uQ2BHbUm1mwWIrv5vLNlmFnu2Z0WCCPMPOOr1CGlRp7wbE9TRWsBmqGcclvSl7eb9SnGqznnsc7Iv1930DcGFDp5waJatn2EUt/1tmb/XAsx3gbtcg54cd12YqBGwIuIiep0QjxUXogKFyJnttsNwBbA3pgARFEoaJzLXVaVpd9nXUfjWIjGrvPJ5j1ElI8+M5+IKN4orphERm8mm3eU/vFRp1biiWISNyfOmm97V1Bhfdzb4KkHYPD1TfsYZIvfmtzccO6uwesCZzdYKS3TvgV/cCccBJdZjfx/y4f8HaEVxxIGxQz4T+9biev/AR6Lrhb+60Vq3w92QQt3N/Lsp47osmf8R8yTTJm4WwqYucEXPxAZKeHbhv+jmtFAemAXQn/J7Z25l2T5Hj5ohB95hQ==\",\"text\":\"\"}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":463,\"candidatesTokenCount\":35,\"thoughtsTokenCount\":93,\"totalTokenCount\":591,\"promptTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":463}],\"candidatesTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":35}]},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:45.437408Z\",\"responseId\":\"redacted-id-3\"}\n\n",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:streamGenerateContent?alt=sse",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "role": "model",
+            "parts": [
+              {
+                "text": "**Recalling Olympic Host Cities**\n\nI've successfully identified Paris as the European capital that hosted the Summer Olympics in both 1900 and 1924. The next step involves calling the `GetWeather` function for Paris to retrieve the necessary meteorological data for my response.\n\n",
+                "thought": true
+              },
+              {
+                "functionCall": {
+                  "id": "redacted-id-2",
+                  "name": "GetWeather",
+                  "args": {
+                    "city": "Paris"
+                  }
+                },
+                "thoughtSignature": "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"
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "parts": [
+              {
+                "functionResponse": {
+                  "id": "redacted-id-2",
+                  "name": "GetWeather",
+                  "response": {
+                    "name": "GetWeather",
+                    "content": {
+                      "temperatureC": 21,
+                      "conditions": "sunny"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "functionDeclarations": [
+              {
+                "name": "GetWeather",
+                "parametersJsonSchema": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "city"
+                  ],
+                  "additionalProperties": true
+                },
+                "description": "Get the current weather in a city"
+              }
+            ]
+          }
+        ],
+        "toolConfig": {
+          "functionCallingConfig": {
+            "mode": "AUTO"
+          }
+        },
+        "generationConfig": {
+          "thinkingConfig": {
+            "includeThoughts": true,
+            "thinkingLevel": "HIGH"
+          }
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

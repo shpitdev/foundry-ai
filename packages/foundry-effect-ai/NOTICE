@@ -27,3 +27,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+The Gemini adapter (src/internal/google-gemini/) adapts code from the Vercel AI SDK's
+@ai-sdk/google 4.0.122 (https://github.com/vercel/ai), Copyright 2023 Vercel, Inc., under the
+Apache License, Version 2.0.
