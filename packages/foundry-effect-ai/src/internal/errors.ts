@@ -3,73 +3,63 @@
  * Maps Foundry proxy failures to `AiError`. Foundry reports its own failures in a Conjure
  * envelope (`errorCode`, `errorName`, `errorInstanceId`, `parameters`) and nests a vendor's
  * rejection in `parameters.responseBody`. Vendor bodies are read leniently as
- * `error.{message,type,code,status}`, which covers OpenAI, Anthropic and Gemini.
+ * `error.{message,type,code,status}`, which covers OpenAI, Anthropic and Gemini. Descriptions
+ * carry parsed messages, codes and redacted URLs; the raw body stays in `http.body`.
  */
 import * as AiError from 'effect/ai/AiError';
 import * as Clock from 'effect/Clock';
 import * as Effect from 'effect/Effect';
 import * as Headers from 'effect/http/Headers';
+import type * as HttpBody from 'effect/http/HttpBody';
 import type * as HttpClientError from 'effect/http/HttpClientError';
+import type * as HttpClientRequest from 'effect/http/HttpClientRequest';
 import type * as HttpClientResponse from 'effect/http/HttpClientResponse';
-import * as Option from 'effect/Option';
+import * as UrlParams from 'effect/http/UrlParams';
+import * as Predicate from 'effect/Predicate';
 import * as Result from 'effect/Result';
-import * as Schema from 'effect/Schema';
+import type * as Schema from 'effect/Schema';
 
 const module = 'FoundryClient';
-
-const ProxyError = Schema.Struct({
-  errorName: Schema.optional(Schema.String),
-  errorInstanceId: Schema.optional(Schema.String),
-  parameters: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
-});
-
-const VendorError = Schema.Struct({
-  error: Schema.Struct({
-    message: Schema.optional(Schema.String),
-    type: Schema.optional(Schema.NullOr(Schema.String)),
-    code: Schema.optional(Schema.NullOr(Schema.Union([Schema.String, Schema.Finite]))),
-    status: Schema.optional(Schema.NullOr(Schema.String)),
-  }),
-});
-
-const decodeJson = Schema.decodeUnknownOption(Schema.fromJsonString(Schema.Unknown));
-const decodeProxyError = Schema.decodeUnknownOption(ProxyError);
-const decodeVendorError = Schema.decodeUnknownOption(VendorError);
 
 const redactedHeaders = ['authorization', 'cookie', 'set-cookie', 'x-api-key'];
 
 // Quota exhaustion arrives as 429 with one of these codes; plain throttling does not.
 const quotaCodes = new Set(['insufficient_quota', 'billing_insufficient_balance']);
 
-interface Details {
-  readonly message: string | undefined;
-  readonly code: string | undefined;
-  readonly type: string | undefined;
-  readonly errorName: string | undefined;
-  readonly errorInstanceId: string | undefined;
-}
+const parseJson = (body: string): unknown => {
+  try {
+    return JSON.parse(body);
+  } catch {
+    return undefined;
+  }
+};
 
-const readDetails = (body: string): Details => {
-  const json = decodeJson(body);
-  const proxy = Option.getOrUndefined(Option.flatMap(json, decodeProxyError));
-  const nested = proxy?.parameters?.['responseBody'];
+/** `value[key]` as text when it is a string or number; each field is read on its own. */
+const field = (value: unknown, key: string): string | undefined => {
+  const raw = Predicate.isObject(value) ? value[key] : undefined;
+  return typeof raw === 'string' || typeof raw === 'number' ? String(raw) : undefined;
+};
+
+const readDetails = (body: string) => {
+  const proxy = parseJson(body);
+  const parameters = Predicate.isObject(proxy) ? proxy['parameters'] : undefined;
   // Foundry prints the vendor body as a Java Optional: `Optional[{...}]`.
-  const vendorJson =
-    typeof nested === 'string' ? decodeJson(nested.replace(/^Optional\[(.*)\]$/su, '$1')) : json;
-  const vendor = Option.getOrUndefined(Option.flatMap(vendorJson, decodeVendorError))?.error;
-  const proxyMessage = proxy?.parameters?.['message'];
+  const nested = field(parameters, 'responseBody');
+  const vendorBody =
+    nested === undefined ? proxy : parseJson(nested.replace(/^Optional\[(.*)\]$/su, '$1'));
+  const vendor = Predicate.isObject(vendorBody) ? vendorBody['error'] : undefined;
   return {
-    message: vendor?.message ?? (typeof proxyMessage === 'string' ? proxyMessage : undefined),
-    code: vendor?.code == null ? proxy?.errorName : String(vendor.code),
-    type: vendor?.type ?? vendor?.status ?? undefined,
-    errorName: proxy?.errorName,
-    errorInstanceId: proxy?.errorInstanceId,
+    message: field(vendor, 'message') ?? field(parameters, 'message'),
+    code: field(vendor, 'code') ?? field(proxy, 'errorName'),
+    type: field(vendor, 'type') ?? field(vendor, 'status'),
+    errorName: field(proxy, 'errorName'),
+    errorInstanceId: field(proxy, 'errorInstanceId'),
   };
 };
 
 const statusReason = (
   status: number,
-  details: Details,
+  details: ReturnType<typeof readDetails>,
   common: {
     readonly description: string;
     readonly metadata: AiError.ProviderMetadata;
@@ -118,6 +108,7 @@ export const fromResponse = Effect.fnUntraced(function* (
 ) {
   const body = yield* Effect.orElseSucceed(response.text, () => '');
   const now = yield* Clock.currentTimeMillis;
+  const redactedNames = yield* UrlParams.CurrentRedactedNames;
   const details = readDetails(body);
   const reason = statusReason(
     response.status,
@@ -127,11 +118,11 @@ export const fromResponse = Effect.fnUntraced(function* (
         status: response.status,
         message: details.message,
         method: response.request.method,
-        url: response.request.url,
+        url: UrlParams.redactUrl(response.request.url, redactedNames),
         errorCode: details.code,
         errorType: details.type,
         requestId: details.errorInstanceId,
-        body,
+        body: undefined,
       }),
       metadata: {
         foundry: {
@@ -155,7 +146,28 @@ export const fromResponse = Effect.fnUntraced(function* (
   return yield* AiError.make({ module, method, reason });
 });
 
-/** Maps transport, status and body-read failures. */
+const networkError = Effect.fnUntraced(function* (
+  method: string,
+  reason: AiError.NetworkError['reason'],
+  request: HttpClientRequest.HttpClientRequest,
+  description: string | undefined,
+  cause: unknown,
+) {
+  const redactedNames = yield* UrlParams.CurrentRedactedNames;
+  return yield* AiError.make({
+    module,
+    method,
+    reason: new AiError.NetworkError({
+      reason,
+      method: request.method,
+      url: UrlParams.redactUrl(request.url, redactedNames),
+      description,
+      cause,
+    }),
+  });
+});
+
+/** Maps transport and status failures; a failed body read is a network failure. */
 export const fromHttpClientError = (
   method: string,
   error: HttpClientError.HttpClientError,
@@ -165,31 +177,28 @@ export const fromHttpClientError = (
     return fromResponse(method, reason.response);
   }
   if (reason._tag === 'DecodeError' || reason._tag === 'EmptyBodyError') {
-    return Effect.fail(
-      AiError.make({
-        module,
-        method,
-        reason: new AiError.InvalidResponseError({
-          description: `HTTP ${reason.response.status} body is not valid JSON`,
-        }),
-      }),
+    return networkError(
+      method,
+      'TransportError',
+      reason.request,
+      'Failed to read the response body',
+      error,
     );
   }
-  return Effect.fail(
-    AiError.make({
-      module,
-      method,
-      reason: new AiError.NetworkError({
-        reason: reason._tag,
-        method: reason.request.method,
-        url: reason.request.url,
-        description: reason.description,
-        cause: error,
-      }),
-    }),
-  );
+  return networkError(method, reason._tag, reason.request, reason.description, error);
 };
 
-/** A 2xx body that does not match the protocol schema. */
+/** The request body could not be encoded as JSON; retrying cannot help. */
+export const fromBodyError = (
+  method: string,
+  request: HttpClientRequest.HttpClientRequest,
+  error: HttpBody.HttpBodyError,
+): Effect.Effect<never, AiError.AiError> =>
+  networkError(method, 'EncodeError', request, 'Request body is not JSON-serializable', error);
+
+export const invalidResponse = (method: string, description: string): AiError.AiError =>
+  AiError.make({ module, method, reason: new AiError.InvalidResponseError({ description }) });
+
+/** A 2xx body that is not JSON or does not match the protocol schema. */
 export const fromSchemaError = (method: string, error: Schema.SchemaError): AiError.AiError =>
   AiError.make({ module, method, reason: AiError.InvalidResponseError.fromSchemaError(error) });

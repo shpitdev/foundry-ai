@@ -10,9 +10,7 @@ import * as Config from 'effect/Config';
 import * as Context from 'effect/Context';
 import * as Effect from 'effect/Effect';
 import * as HttpClient from 'effect/http/HttpClient';
-import type * as HttpClientError from 'effect/http/HttpClientError';
 import * as HttpClientRequest from 'effect/http/HttpClientRequest';
-import * as HttpClientResponse from 'effect/http/HttpClientResponse';
 import * as Layer from 'effect/Layer';
 import * as Option from 'effect/Option';
 import type * as Redacted from 'effect/Redacted';
@@ -77,19 +75,12 @@ export const make = Effect.fnUntraced(function* (options: Options) {
         HttpClientRequest.prependUrl(baseUrl),
         HttpClientRequest.bearerToken(options.token),
         HttpClientRequest.setHeaders(headers),
-        HttpClientRequest.acceptJson,
       ),
   );
   const client = options.transformClient?.(authorized) ?? authorized;
 
-  const execute = (request: ProxyRequest) => {
-    const sent = client.execute(
-      HttpClientRequest.post(request.path).pipe(
-        HttpClientRequest.setUrlParams(request.urlParams ?? {}),
-        HttpClientRequest.setHeaders(request.headers ?? {}),
-        HttpClientRequest.bodyJsonUnsafe(request.body),
-      ),
-    );
+  const execute = (request: HttpClientRequest.HttpClientRequest) => {
+    const sent = client.execute(request);
     return options.traceParent === undefined
       ? sent
       : Effect.provideService(sent, HttpClient.TracerPropagationEnabled, false);
@@ -98,22 +89,32 @@ export const make = Effect.fnUntraced(function* (options: Options) {
   const json = <S extends Schema.Constraint>(
     request: ProxyRequest & { readonly schema: S },
   ): Effect.Effect<S['Type'], AiError.AiError, S['DecodingServices']> => {
-    const decode = (
-      response: HttpClientResponse.HttpClientResponse,
-    ): Effect.Effect<
-      S['Type'],
-      AiError.AiError | HttpClientError.HttpClientError | Schema.SchemaError,
-      S['DecodingServices']
-    > =>
-      response.status >= 200 && response.status < 300
-        ? HttpClientResponse.schemaBodyJson(request.schema)(response)
-        : Errors.fromResponse('json', response);
-    const decoded = Effect.flatMap(execute(request), decode);
-    return decoded.pipe(
-      Effect.catchTags({
-        HttpClientError: (error) => Errors.fromHttpClientError('json', error),
-        SchemaError: (error) => Effect.fail(Errors.fromSchemaError('json', error)),
-      }),
+    const decode = Schema.decodeEffect(Schema.fromJsonString(Schema.toCodecJson(request.schema)));
+    const unsent = HttpClientRequest.post(request.path).pipe(
+      HttpClientRequest.setUrlParams(request.urlParams ?? {}),
+      HttpClientRequest.acceptJson,
+      HttpClientRequest.setHeaders(request.headers ?? {}),
+    );
+    return Effect.gen(function* () {
+      const sendable = yield* Effect.catchTag(
+        HttpClientRequest.bodyJson(unsent, request.body),
+        'HttpBodyError',
+        (error) => Errors.fromBodyError('json', unsent, error),
+      );
+      const response = yield* execute(sendable);
+      if (response.status < 200 || response.status >= 300) {
+        return yield* Errors.fromResponse('json', response);
+      }
+      const body = yield* response.text;
+      if (body === '') {
+        return yield* Errors.invalidResponse(
+          'json',
+          `HTTP ${response.status} response has no body`,
+        );
+      }
+      return yield* Effect.mapError(decode(body), (error) => Errors.fromSchemaError('json', error));
+    }).pipe(
+      Effect.catchTag('HttpClientError', (error) => Errors.fromHttpClientError('json', error)),
     );
   };
 
@@ -123,11 +124,26 @@ export const make = Effect.fnUntraced(function* (options: Options) {
 export const layer = (options: Options): Layer.Layer<FoundryClient, never, HttpClient.HttpClient> =>
   Layer.effect(FoundryClient, make(options));
 
-const TraceParent = Schema.String.check(
-  Schema.isPattern(/^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/u),
+/** A trimmed string; blank counts as unset. */
+const optional = (name: string, schema: Schema.Codec<string, string>) =>
+  Config.option(Config.schema(schema, name)).pipe(
+    Config.map((value) => Option.getOrUndefined(Option.filter(value, (text) => text !== ''))),
+  );
+
+const TraceParent = Schema.Trim.pipe(
+  Schema.decodeTo(
+    Schema.Union([
+      Schema.Literal(''),
+      Schema.String.check(Schema.isPattern(/^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/u)),
+    ]),
+  ),
 );
 
-/** Reads `FOUNDRY_URL`, `FOUNDRY_TOKEN`, and optional `FOUNDRY_ATTRIBUTION_RID`, `FOUNDRY_TRACE_PARENT`, `FOUNDRY_TRACE_STATE`. */
+/**
+ * Reads `FOUNDRY_URL`, `FOUNDRY_TOKEN`, and optional `FOUNDRY_ATTRIBUTION_RID`,
+ * `FOUNDRY_TRACE_PARENT`, `FOUNDRY_TRACE_STATE`. Values are trimmed, blank optional values are
+ * unset, and a blank token fails.
+ */
 export const layerConfig = (
   options?: Pick<Options, 'transformClient'>,
 ): Layer.Layer<FoundryClient, Config.ConfigError, HttpClient.HttpClient> =>
@@ -135,19 +151,18 @@ export const layerConfig = (
     FoundryClient,
     Effect.gen(function* () {
       const config = yield* Config.all({
-        foundryUrl: Config.String('FOUNDRY_URL'),
-        token: Config.Redacted('FOUNDRY_TOKEN'),
-        attributionRid: Config.option(Config.String('FOUNDRY_ATTRIBUTION_RID')),
-        traceParent: Config.option(Config.schema(TraceParent, 'FOUNDRY_TRACE_PARENT')),
-        traceState: Config.option(Config.String('FOUNDRY_TRACE_STATE')),
+        foundryUrl: Config.schema(
+          Schema.Trim.pipe(Schema.decodeTo(Schema.NonEmptyString)),
+          'FOUNDRY_URL',
+        ),
+        token: Config.schema(
+          Schema.Redacted(Schema.Trim.pipe(Schema.decodeTo(Schema.NonEmptyString))),
+          'FOUNDRY_TOKEN',
+        ),
+        attributionRid: optional('FOUNDRY_ATTRIBUTION_RID', Schema.Trim),
+        traceParent: optional('FOUNDRY_TRACE_PARENT', TraceParent),
+        traceState: optional('FOUNDRY_TRACE_STATE', Schema.Trim),
       });
-      return yield* make({
-        foundryUrl: config.foundryUrl,
-        token: config.token,
-        attributionRid: Option.getOrUndefined(config.attributionRid),
-        traceParent: Option.getOrUndefined(config.traceParent),
-        traceState: Option.getOrUndefined(config.traceState),
-        transformClient: options?.transformClient,
-      });
+      return yield* make({ ...config, transformClient: options?.transformClient });
     }),
   );

@@ -46,7 +46,8 @@
           "effect/http/HttpClient",
           "effect/http/HttpClientError",
           "effect/http/HttpClientRequest",
-          "effect/http/HttpClientResponse"
+          "effect/http/HttpClientResponse",
+          "effect/http/UrlParams"
         ],
         "diagnosticSeverity": {
           "anyUnknownInErrorContext": "error",
