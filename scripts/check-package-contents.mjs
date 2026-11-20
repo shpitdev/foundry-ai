@@ -37,8 +37,8 @@ const audits = {
       'LICENSE',
       'NOTICE',
       'package.json',
-      'dist/foundry-effect-ai/src/FoundryClient.js',
-      'dist/foundry-effect-ai/src/FoundryClient.d.ts',
+      'dist/src/FoundryClient.js',
+      'dist/src/FoundryClient.d.ts',
     ],
     checkManifest: checkEffectPackage,
   },
@@ -123,8 +123,8 @@ function checkEffectPackage(packedFiles) {
     './package.json': './package.json',
     './internal/*': null,
     './*': {
-      types: './dist/foundry-effect-ai/src/*.d.ts',
-      default: './dist/foundry-effect-ai/src/*.js',
+      types: './dist/src/*.d.ts',
+      default: './dist/src/*.js',
     },
   };
   if (JSON.stringify(manifest.exports) !== JSON.stringify(expectedExports)) {

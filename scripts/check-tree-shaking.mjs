@@ -9,7 +9,7 @@ import { join, relative, resolve } from 'node:path';
 import { build } from 'esbuild';
 
 const packageRoot = resolve('packages/foundry-effect-ai');
-const distRoot = join(packageRoot, 'dist/foundry-effect-ai/src');
+const distRoot = join(packageRoot, 'dist/src');
 
 // Internal protocol folders and the public modules allowed to reach them.
 const owners = {
@@ -18,16 +18,15 @@ const owners = {
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
   'src/internal/google-gemini/': ['GoogleLanguageModel'],
-  // Phase 0a: per-vendor catalog files from the shared workspace source. The all-vendor
-  // catalog.ts stays in packages/foundry-ai, where lint already blocks it.
-  'foundry-catalog/src/openai-models': [
+  // Per-vendor model lists.
+  'src/internal/models/openai.js': [
     'OpenAiLanguageModel',
     'OpenAiDecisionModel',
     'OpenAiEmbeddingModel',
   ],
-  'foundry-catalog/src/anthropic-models': ['AnthropicLanguageModel'],
-  'foundry-catalog/src/google-models': ['GoogleLanguageModel'],
-  'foundry-catalog/src/xai-models': ['XaiLanguageModel'],
+  'src/internal/models/anthropic.js': ['AnthropicLanguageModel'],
+  'src/internal/models/google.js': ['GoogleLanguageModel'],
+  'src/internal/models/xai.js': ['XaiLanguageModel'],
 };
 
 // Minified bytes with effect external. Set each module's real budget when its phase lands.
