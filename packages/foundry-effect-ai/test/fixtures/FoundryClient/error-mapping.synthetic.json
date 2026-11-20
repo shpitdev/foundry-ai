@@ -1,0 +1,15 @@
+[
+  {
+    "status": 429,
+    "contentType": "application/json",
+    "headers": { "retry-after": "7" },
+    "body": "{\"error\":{\"message\":\"Rate limit reached\",\"type\":\"requests\",\"code\":\"rate_limit_exceeded\"}}"
+  },
+  {
+    "status": 503,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"INTERNAL\",\"errorName\":\"Default:Internal\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  { "status": 200, "contentType": "application/json", "body": "{\"id\":" },
+  { "status": 200, "contentType": "application/json", "body": null }
+]

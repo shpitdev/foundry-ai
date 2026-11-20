@@ -1,0 +1,7 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"answers\":[{\"confidence\":1.0,\"name\":\"urgency\",\"probabilities\":[{\"label\":\"low\",\"probability\":0.0,\"value\":0},{\"label\":\"medium\",\"probability\":0.0,\"value\":1},{\"label\":\"high\",\"probability\":1.0,\"value\":2}],\"score\":2.0,\"type\":\"score\"}],\"model\":\"gpt-6-luna\",\"usage\":{\"input_tokens\":147,\"input_tokens_details\":{\"cache_write_tokens\":0,\"cached_tokens\":0},\"output_tokens\":0,\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":147}}"
+  }
+]

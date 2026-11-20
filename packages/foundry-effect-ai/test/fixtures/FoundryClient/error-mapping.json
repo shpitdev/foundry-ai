@@ -1,0 +1,42 @@
+[
+  {
+    "status": 401,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  {
+    "status": 404,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+  },
+  {
+    "status": 401,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  {
+    "status": 404,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+  },
+  {
+    "status": 401,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  {
+    "status": 404,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+  },
+  {
+    "status": 401,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"UNAUTHORIZED\",\"errorName\":\"Default:Unauthorized\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{}}"
+  },
+  {
+    "status": 404,
+    "contentType": "application/json",
+    "body": "{\"errorCode\":\"NOT_FOUND\",\"errorName\":\"LanguageModelService:LanguageModelNotAvailable\",\"errorInstanceId\":\"00000000-0000-0000-0000-000000000000\",\"parameters\":{\"apiName\":\"Optional.empty\",\"unsafeParams\":\"{}\",\"safeParams\":\"{languageModelRid=ri.language-model-service..language-model.does-not-exist}\",\"message\":\"Unable to use model: unknown language model\"}}"
+  }
+]

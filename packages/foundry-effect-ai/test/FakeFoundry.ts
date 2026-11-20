@@ -16,6 +16,8 @@ export interface Fixture {
   readonly status?: number;
   /** `application/json` or `text/event-stream`. */
   readonly contentType: string;
+  /** Synthetic fixtures only: recordings keep status, content type and body. */
+  readonly headers?: Readonly<Record<string, string>>;
   /** `null` for bodyless responses such as 204. */
   readonly body: string | null;
 }
@@ -28,12 +30,13 @@ export interface CapturedRequest {
 }
 
 /**
- * A FoundryClient over an HttpClient that answers each request with the next fixture and
- * records what was sent, so tests assert the golden request and the decoded result.
+ * An HttpClient that answers each request with the next fixture and records what was sent, so
+ * tests assert the golden request and the decoded result. `client` builds a FoundryClient over
+ * it from `options` and any overrides.
  */
 export const replay = (...fixtures: ReadonlyArray<Fixture>) => {
   const requests: Array<CapturedRequest> = [];
-  const client = HttpClient.make((request, url) => {
+  const http = HttpClient.make((request, url) => {
     const fixture = fixtures[requests.length];
     requests.push({
       method: request.method,
@@ -49,15 +52,16 @@ export const replay = (...fixtures: ReadonlyArray<Fixture>) => {
         request,
         new Response(fixture.body, {
           status: fixture.status ?? 200,
-          headers: { 'content-type': fixture.contentType },
+          headers: { ...fixture.headers, 'content-type': fixture.contentType },
         }),
       ),
     );
   });
-  const layer = FoundryClient.layer(options).pipe(
-    Layer.provide(Layer.succeed(HttpClient.HttpClient, client)),
-  );
-  return { requests, layer } as const;
+  const client = (overrides?: Partial<FoundryClient.Options>) =>
+    FoundryClient.layer({ ...options, ...overrides }).pipe(
+      Layer.provide(Layer.succeed(HttpClient.HttpClient, http)),
+    );
+  return { requests, client } as const;
 };
 
 const decodeJson = (bytes: Uint8Array): unknown => JSON.parse(new TextDecoder().decode(bytes));
