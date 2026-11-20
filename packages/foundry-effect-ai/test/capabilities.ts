@@ -24,6 +24,12 @@ export interface LanguageTarget {
   readonly model: (options: {
     readonly reasoning: boolean;
   }) => Layer.Layer<LanguageModel.LanguageModel, never, FoundryClient.FoundryClient>;
+  /**
+   * Asserts that a reasoning first turn ending in a tool call carries what the vendor needs
+   * replayed (encrypted reasoning, signatures, item IDs), so a recording without it fails
+   * instead of replacing the replay fixture.
+   */
+  readonly replay: (parts: ReadonlyArray<Response.AnyPart>) => void;
 }
 
 const GetWeather = Tool.make('GetWeather', {
@@ -67,9 +73,34 @@ const textOf = (parts: ReadonlyArray<Response.AnyPart>) =>
 const finishOf = (parts: ReadonlyArray<Response.AnyPart>) =>
   parts.flatMap((part) => (part.type === 'finish' ? [part.reason] : []));
 
-/** The error a stream must fail with; finishing is a defect. */
-const streamFailure = <R>(stream: Stream.Stream<Response.AnyPart, AiError.AiError, R>) =>
-  Effect.orDie(Effect.flip(Stream.runDrain(stream)));
+/** The error a stream must fail with, after no finish part; finishing is a defect. */
+const streamFailure = <R>(stream: Stream.Stream<Response.AnyPart, AiError.AiError, R>) => {
+  const parts: Array<Response.AnyPart> = [];
+  const failure = stream.pipe(
+    Stream.runForEach((part) =>
+      Effect.sync(() => {
+        parts.push(part);
+      }),
+    ),
+    Effect.flip,
+    Effect.orDie,
+  );
+  return Effect.tap(failure, () =>
+    Effect.sync(() => {
+      expect(finishOf(parts)).toEqual([]);
+    }),
+  );
+};
+
+/** One tool call streamed in order: params start, deltas, end, then the call and its result. */
+const expectStreamedCall = (parts: ReadonlyArray<Response.AnyPart>) => {
+  const call = parts.find((part) => part.type === 'tool-call');
+  expect(call?.name).toBe('GetWeather');
+  const order = parts.flatMap((part) =>
+    'id' in part && part.id === call?.id && part.type !== 'tool-params-delta' ? [part.type] : [],
+  );
+  expect(order).toEqual(['tool-params-start', 'tool-params-end', 'tool-call', 'tool-result']);
+};
 
 export const languageCells = (target: LanguageTarget): Readonly<Record<string, Cell>> => ({
   text: (env) =>
@@ -108,24 +139,29 @@ export const languageCells = (target: LanguageTarget): Readonly<Record<string, C
       const run = using(target, env, true);
       const first = yield* run(LanguageModel.generateText({ prompt: weather, toolkit }));
       expect(first.toolCalls.map((call) => call.name)).toEqual(['GetWeather']);
-      expect(first.toolResults).toHaveLength(1);
+      expect(first.toolResults.map((result) => result.id)).toEqual(
+        first.toolCalls.map((call) => call.id),
+      );
       expect(first.finishReason).toBe('tool-calls');
+      target.replay(first.content);
       const prompt = Prompt.concat(Prompt.make(weather), Prompt.fromResponseParts(first.content));
       const second = yield* run(LanguageModel.generateText({ prompt, toolkit }));
       expect(second.text).toMatch(/21/u);
       expect(second.finishReason).toBe('stop');
     }),
 
+  // The streamed first turn is replayed as the second request.
   'stream-tools': (env) =>
     Effect.gen(function* () {
-      const parts = yield* using(
-        target,
-        env,
-      )(collect(LanguageModel.streamText({ prompt: weather, toolkit })));
-      const calls = parts.flatMap((part) => (part.type === 'tool-call' ? [String(part.name)] : []));
-      expect(calls).toEqual(['GetWeather']);
-      expect(parts.some((part) => part.type === 'tool-result')).toBe(true);
-      expect(finishOf(parts)).toEqual(['tool-calls']);
+      const run = using(target, env, true);
+      const first = yield* run(collect(LanguageModel.streamText({ prompt: weather, toolkit })));
+      expectStreamedCall(first);
+      expect(finishOf(first)).toEqual(['tool-calls']);
+      target.replay(first);
+      const prompt = Prompt.concat(Prompt.make(weather), Prompt.fromResponseParts(first));
+      const second = yield* run(collect(LanguageModel.streamText({ prompt, toolkit })));
+      expect(textOf(second)).toMatch(/21/u);
+      expect(finishOf(second)).toEqual(['stop']);
     }),
 
   // JSON output with a tool, over two requests as an AI SDK `stopWhen` loop would make them.

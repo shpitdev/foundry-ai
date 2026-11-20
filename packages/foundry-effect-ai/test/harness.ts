@@ -49,15 +49,21 @@ export const readFixtures = (module: string, cell: string): ReadonlyArray<Fixtur
   ...readFile(fixtureFile(module, cell, 'synthetic.json')),
 ];
 
-/** Each request a replay sent matches the one recorded with its fixture. */
+/**
+ * A replay sends one request per fixture, each matching the request recorded with it: path and
+ * body exactly, and any pinned headers.
+ */
 export const expectGoldenRequests = (
   fixtures: ReadonlyArray<Fixture>,
   requests: ReadonlyArray<CapturedRequest>,
 ): void => {
+  expect(requests).toHaveLength(fixtures.length);
   for (const [index, fixture] of fixtures.entries()) {
     const sent = requests[index];
     if (fixture.request !== undefined && sent !== undefined) {
-      expect({ path: proxyPath(sent.url), body: sent.body }).toEqual(fixture.request);
+      const { headers, ...golden } = fixture.request;
+      expect({ path: proxyPath(sent.url), body: sent.body }).toEqual(golden);
+      expect(sent.headers).toMatchObject(headers ?? {});
     }
   }
 };

@@ -8,7 +8,7 @@ import * as Layer from 'effect/Layer';
 import * as Option from 'effect/Option';
 import * as Redacted from 'effect/Redacted';
 import * as FoundryClient from '../src/FoundryClient.ts';
-import { type Fixture, proxyPath } from './FakeFoundry.ts';
+import { type Fixture, proxyPath, unpinnedHeaders } from './FakeFoundry.ts';
 import { loadCells, scrubber, writeFixtures } from './harness.ts';
 import { contractOnly, rows } from './matrix.ts';
 
@@ -34,7 +34,12 @@ for (const { module, liveModels, cells } of rows) {
         Effect.gen(function* () {
           const { foundryUrl, token, record } = yield* settings;
           const recordings: Array<
-            Promise<{ readonly path: string; readonly sent: string; readonly response: Fixture }>
+            Promise<{
+              readonly path: string;
+              readonly headers: Record<string, string>;
+              readonly sent: string;
+              readonly response: Fixture;
+            }>
           > = [];
           // Records each exchange from a clone of the Web response; the clone tees the body, so the
           // model reads its copy as it arrives. Cancelling a stream early waits for the copy.
@@ -45,6 +50,11 @@ for (const { module, liveModels, cells } of rows) {
                 onSome: (web) => {
                   const { body } = response.request;
                   const path = proxyPath(web.url);
+                  const headers = Object.fromEntries(
+                    Object.entries(response.request.headers).filter(
+                      ([name]) => !unpinnedHeaders.has(name),
+                    ),
+                  );
                   const sent =
                     body._tag === 'Uint8Array' ? new TextDecoder().decode(body.body) : '';
                   recordings.push(
@@ -53,6 +63,7 @@ for (const { module, liveModels, cells } of rows) {
                       .text()
                       .then((text) => ({
                         path,
+                        headers,
                         sent,
                         response: {
                           status: web.status,
@@ -84,11 +95,15 @@ for (const { module, liveModels, cells } of rows) {
             writeFixtures(
               module,
               cell,
-              exchanges.map(({ path, sent, response }) => {
+              exchanges.map(({ path, headers, sent, response }) => {
                 const request = scrub(sent);
                 return {
                   ...response,
-                  request: { path, body: request === '' ? undefined : JSON.parse(request) },
+                  request: {
+                    path,
+                    body: request === '' ? undefined : JSON.parse(request),
+                    headers,
+                  },
                   body: scrub(response.body ?? ''),
                 };
               }),

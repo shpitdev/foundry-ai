@@ -28,7 +28,22 @@ export interface Fixture {
 export interface SentRequest {
   readonly path: string;
   readonly body: unknown;
+  /** Non-secret headers the route depends on, such as `accept` or `anthropic-version`. */
+  readonly headers?: Readonly<Record<string, string>>;
 }
+
+/** Headers a recording leaves out: credentials, and values that vary per run or per client. */
+export const unpinnedHeaders: ReadonlySet<string> = new Set([
+  'authorization',
+  'cookie',
+  'x-api-key',
+  'attribution',
+  'traceparent',
+  'tracestate',
+  'b3',
+  'user-agent',
+  'content-length',
+]);
 
 /** The proxy path of a full request URL. */
 export const proxyPath = (url: string): string => {
