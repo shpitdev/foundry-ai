@@ -1,0 +1,119 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":null,\"function\":{\"name\":null,\"arguments\":\"{\\\"\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":null,\"function\":{\"name\":null,\"arguments\":\"city\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":null,\"function\":{\"name\":null,\"arguments\":\"\\\":\\\"\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":null,\"function\":{\"name\":null,\"arguments\":\"Paris\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":null,\"function\":{\"name\":null,\"arguments\":\"\\\"}\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"tool_calls\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141936,\"model\":\"gpt-6-luna\",\"choices\":[],\"usage\":{\"prompt_tokens\":163,\"completion_tokens\":17,\"total_tokens\":180,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "reasoning_effort": "none",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"Paris\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" hosted\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" the\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" Summer\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" Olympics\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" in\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" \",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"190\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"0\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" and\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" \",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"192\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"4\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\";\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" the\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" weather\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" there\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" is\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" \",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"21\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"°C\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" and\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" sunny\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\".\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795141937,\"model\":\"gpt-6-luna\",\"choices\":[],\"usage\":{\"prompt_tokens\":202,\"completion_tokens\":27,\"total_tokens\":229,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\":\"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "reasoning_effort": "none",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

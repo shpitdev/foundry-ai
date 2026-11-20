@@ -1,0 +1,52 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141933,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141933,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"hello\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with exactly one word: hello"
+          }
+        ],
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141933,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141933,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"hello\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795141933,\"model\":\"gpt-6-luna\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.gpt-6-luna",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with exactly one word: hello"
+          }
+        ],
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
