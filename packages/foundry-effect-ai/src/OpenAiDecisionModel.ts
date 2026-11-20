@@ -13,8 +13,10 @@ import * as Wire from './internal/openai-decisions/schema.ts';
 
 export const providerName = 'foundry-openai';
 
-/** A catalog alias of a model that serves Decisions. */
-export type ModelId = keyof typeof models;
+/** A catalog alias of a model that serves Decisions, or a raw Foundry model RID. */
+export type ModelId = keyof typeof models | (string & Record<never, never>);
+
+const known: Readonly<Record<string, { readonly rid: string } | undefined>> = models;
 
 export const model = (
   modelId: ModelId,
@@ -30,7 +32,7 @@ export const model = (
  */
 export const make = Effect.fnUntraced(function* (options: { readonly model: ModelId }) {
   const client = yield* FoundryClient;
-  const rid = models[options.model].rid;
+  const rid = known[options.model]?.rid ?? options.model;
   return yield* DecisionModel.make({
     probabilityPrecision: 2,
     supportsImages: true,
