@@ -1,0 +1,26 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"Hello\"}]}}],\"usageMetadata\":{},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:37.446350Z\",\"responseId\":\"redacted-id-1\"}\n\n",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:streamGenerateContent?alt=sse",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

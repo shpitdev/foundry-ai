@@ -1,0 +1,32 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"thoughtSignature\":\"AY89a1924QIUJ6PlQ7Nwpx0O32aCWSM6fAyLtb0txxgcVx8YT9gdGYeSBW4YAfcOwxWYm4mKf8z4eJiEnruSrDA/y274tngyWV6kwLs4mzPsMdF5Le11SDiNtq1QYP3M/4ZYzX00WVBFRxhdLQfX5aw7z2B6gR93euRTnTpZKWAAWod7\",\"text\":\"Red\"}]},\"finishReason\":\"STOP\"}],\"usageMetadata\":{\"promptTokenCount\":1100,\"candidatesTokenCount\":1,\"totalTokenCount\":1101,\"promptTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":11},{\"modality\":\"IMAGE\",\"tokenCount\":1089}],\"candidatesTokensDetails\":[{\"modality\":\"TEXT\",\"tokenCount\":1}]},\"modelVersion\":\"gemini-3.1-flash-lite\",\"createTime\":\"2026-11-20T02:35:47.808325Z\",\"responseId\":\"redacted-id-1\"}",
+    "request": {
+      "path": "/google/v1/models/ri.language-model-service..language-model.gemini-3-1-flash-lite:generateContent",
+      "body": {
+        "contents": [
+          {
+            "role": "user",
+            "parts": [
+              {
+                "text": "What color fills this image? Answer with one word."
+              },
+              {
+                "inlineData": {
+                  "mimeType": "image/png",
+                  "data": "iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAABMXPacAAAAxElEQVR42u3RMQ0AAAjAsPk3DTLgaDIFa1M6zAIAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABACAAAAQAgAAAEAAAAgBAAAAIAAABAADAAgAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAgAAAEAIAAABACAAAAQAAACAEAAAAjAixYgaMOy89oM6gAAAABJRU5ErkJggg=="
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
