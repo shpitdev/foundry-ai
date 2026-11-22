@@ -1,0 +1,111 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795314133,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"<reasoning>We need to determine which European capital hosted the Summer Olympics in 1900 and 1924. The 1900 Summer Olympics were held in Paris, France (city). The 1924 Summer Olympics were also held in Paris, France. Both were hosted by Paris. So the European capital is Paris. So we call GetWeather for Paris. Then answer in one sentence: likely the current weather in Paris. So we need to call the tool with city: \\\"Paris\\\". Then after we get result, we answer in one sentence describing the weather.\\n\\nLet's call GetWeather.\\n</reasoning>\\n\",\"tool_calls\":[{\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"}}]},\"finish_reason\":\"tool_calls\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":151,\"prompt_tokens\":325,\"total_tokens\":476,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.nemotron-3-super-120b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "reasoning_effort": "high",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"object\":\"chat.completion\",\"created\":1795314134,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"<reasoning>We have to answer in one sentence: The current weather in Paris is 21°C and sunny. We need to state the European capital that hosted the Summer Olympics in 1900 and 1924 before calling tool. That is Paris. Provide answer in one sentence: maybe \\\"Paris is currently sunny with a temperature of 21°C.\\\" So answer.\\n\\n</reasoning>\\n\\nParis is currently sunny with a temperature of 21°C.\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":93,\"prompt_tokens\":378,\"total_tokens\":471,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.nemotron-3-super-120b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "reasoning_effort": "high",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

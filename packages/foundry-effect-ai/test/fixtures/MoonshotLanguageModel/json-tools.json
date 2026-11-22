@@ -1,0 +1,155 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795314161,\"model\":\"global.moonshotai.kimi-k3.1\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"reasoning_content\":\"I need respond needs first work out Paris, capital France hosted Summer Olympics 1900 and 1924. Should call GetWeather before responding. Perhaps obey one sentence conflicting response JSON raw schema. Should have tool weather returns data. Should call Paris. Then respond raw JSON with city and temp. Should have no prose likely. I can internally work out before tool. Call now.\",\"tool_calls\":[{\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"}}]},\"finish_reason\":\"tool_calls\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":127,\"prompt_tokens\":304,\"total_tokens\":431,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":76,\"rejected_prediction_tokens\":0}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.kimi-k3-1-pro-highspeed",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence. Report the city and temperature."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "generateObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "temperatureC": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "city",
+                "temperatureC"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"object\":\"chat.completion\",\"created\":1795314162,\"model\":\"global.moonshotai.kimi-k3.1\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"city\\\":\\\"Paris\\\",\\\"temperatureC\\\":21}\",\"reasoning_content\":\"I need respond JSON schema. User requested before calling tool work out capital hosted Olympics 1900 and 1924 Paris, call done, answer one sentence report city temp. But system now response_format raw JSON data schema {\\\"city\\\": string, \\\"temperatureC\\\": number}. Should comply JSON no extra. city Paris temperatureC 21. No sentence possible except schema. Return {\\\"city\\\":\\\"Paris\\\",\\\"temperatureC\\\":21}. Should have no conditions.\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":115,\"prompt_tokens\":394,\"total_tokens\":509,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":90,\"rejected_prediction_tokens\":0}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.kimi-k3-1-pro-highspeed",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence. Report the city and temperature."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "generateObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                },
+                "temperatureC": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "city",
+                "temperatureC"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

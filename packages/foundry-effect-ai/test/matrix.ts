@@ -5,8 +5,13 @@
  * A phase is done when its row has no todos left. See docs/PLAN.md.
  */
 import * as Anthropic from '../src/internal/models/anthropic.ts';
+import * as DeepSeek from '../src/internal/models/deepseek.ts';
+import * as Gemma from '../src/internal/models/gemma.ts';
 import * as Google from '../src/internal/models/google.ts';
+import * as Moonshot from '../src/internal/models/moonshot.ts';
+import * as Nvidia from '../src/internal/models/nvidia.ts';
 import * as OpenAi from '../src/internal/models/openai.ts';
+import * as Qwen from '../src/internal/models/qwen.ts';
 import * as Realtime from '../src/internal/models/realtime.ts';
 import * as Xai from '../src/internal/models/xai.ts';
 
@@ -18,6 +23,11 @@ export interface Row {
   /** Catalog models a `LIVE_MODELS` sweep can select for this row. */
   readonly sweep: ReadonlyArray<string>;
   readonly cells: ReadonlyArray<string>;
+  /**
+   * Cells a `LIVE_MODELS` sweep also runs for the docs tables, though the row does not claim
+   * them: the default model fails them, so they have no fixture and no contract test.
+   */
+  readonly sweepOnly?: ReadonlyArray<string>;
 }
 
 const vendors = {
@@ -29,6 +39,11 @@ const vendors = {
   anthropic: Object.keys(Anthropic.models),
   google: Object.keys(Google.models),
   xai: Object.keys(Xai.models),
+  deepseek: Object.keys(DeepSeek.models),
+  nvidia: Object.keys(Nvidia.models),
+  qwen: Object.keys(Qwen.models),
+  moonshot: Object.keys(Moonshot.models),
+  gemma: Object.keys(Gemma.models),
 };
 
 /** Each catalog model's vendor, the provider name `LIVE_MODELS` accepts for it. */
@@ -43,13 +58,14 @@ const decisionModels = Object.entries(OpenAi.models).flatMap(([id, entry]) =>
 /**
  * Proven offline only, from fixtures Foundry cannot produce on demand: a recorded `.sse` cut short
  * (must fail with `InvalidResponseError`, never finish as `stop`), an in-band stream error event,
- * a synthetic decision refusal, `transformClient` checks (a retry that recovers from a 503, and
+ * `<reasoning>` tags split across stream deltas, a synthetic decision refusal, `transformClient` checks (a retry that recovers from a 503, and
  * a failed response a transform hands back), and realtime sessions: tool calls `handleToolCalls`
  * must not run, socket lifecycle failures, input transcription failures, and malformed frames.
  */
 export const contractOnly: ReadonlySet<string> = new Set([
   'stream-truncated',
   'stream-error',
+  'reasoning-tags',
   'refusal',
   'transform-client',
   'tool-policy',
@@ -72,6 +88,11 @@ const languageCells = [
   'stream-truncated',
   'stream-error',
 ];
+
+// DeepSeek, Nemotron and Qwen: Foundry rejects their image input (HTTP 404), and with a tool they
+// usually answer without calling it, so a sweep probes those cells without the row claiming them.
+const taggedChatCells = languageCells.filter((cell) => cell !== 'image' && cell !== 'json-tools');
+const taggedChatSweepOnly = ['json-tools', 'image'];
 
 export const rows: ReadonlyArray<Row> = [
   {
@@ -127,6 +148,49 @@ export const rows: ReadonlyArray<Row> = [
     liveModels: ['gpt-6-luna'],
     sweep: Object.keys(OpenAi.models),
     cells: languageCells,
+  },
+  {
+    module: 'DeepSeekLanguageModel',
+    phase: 10,
+    liveModels: ['deepseek-v3.2'],
+    sweep: vendors.deepseek,
+    // `reasoning-tags` replays `<reasoning>` spans split mid-tag across deltas; the parser is shared
+    // by the three tagged makers, so one row pins it.
+    cells: [...taggedChatCells, 'reasoning-tags'],
+    sweepOnly: taggedChatSweepOnly,
+  },
+  {
+    module: 'NvidiaLanguageModel',
+    phase: 10,
+    liveModels: ['nemotron-3-super-120b'],
+    sweep: vendors.nvidia,
+    cells: taggedChatCells,
+    sweepOnly: taggedChatSweepOnly,
+  },
+  {
+    module: 'QwenLanguageModel',
+    phase: 10,
+    liveModels: ['qwen3-32b'],
+    sweep: vendors.qwen,
+    cells: taggedChatCells,
+    sweepOnly: taggedChatSweepOnly,
+  },
+  {
+    module: 'MoonshotLanguageModel',
+    phase: 10,
+    liveModels: ['kimi-k3.1-pro-highspeed'],
+    sweep: vendors.moonshot,
+    // `tools` and `stream-tools` also check that the replay leaves out `reasoning_content`.
+    cells: languageCells,
+  },
+  {
+    module: 'GemmaLanguageModel',
+    phase: 10,
+    liveModels: ['gemma-4-31b'],
+    sweep: vendors.gemma,
+    // Gemma has no reasoning control; after a tool result it answers in prose, not JSON.
+    cells: languageCells.filter((cell) => cell !== 'reasoning' && cell !== 'json-tools'),
+    sweepOnly: ['json-tools'],
   },
   {
     module: 'OpenAiEmbeddingModel',

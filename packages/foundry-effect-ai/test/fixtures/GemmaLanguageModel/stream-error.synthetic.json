@@ -1,0 +1,30 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314169,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.created\"}\n\nevent: error\ndata: {\"type\":\"error\",\"code\":\"internal_error\",\"message\":\"The server had an error while processing your request.\",\"sequence_number\":1}\n\n",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gemma-4-31b",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

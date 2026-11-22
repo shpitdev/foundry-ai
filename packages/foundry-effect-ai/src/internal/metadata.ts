@@ -21,12 +21,15 @@ export type FoundryError = {
   readonly type: string | null;
 };
 
-/** An OpenAI or xAI error reported inside a successful response or stream. */
+/**
+ * An error reported inside a successful response or stream by a Responses or Chat Completions
+ * route: OpenAI, xAI, DeepSeek, NVIDIA, Qwen, Moonshot and Gemma.
+ */
 export type ResponsesError = { readonly code: string | null; readonly type: string | null };
 export type AnthropicError = { readonly type: string | null };
 export type GoogleError = { readonly code: number | null; readonly status: string | null };
 
-/** Responses (OpenAI and xAI) and Chat Completions parts. */
+/** Responses (OpenAI, xAI and Gemma) and Chat Completions parts. */
 export type ResponsesPart = {
   /** Responses item ID, sent back on replay. */
   readonly itemId?: string;
@@ -87,6 +90,11 @@ type FoundryErrorKeys = {
   readonly foundry?: FoundryError | null;
   readonly 'foundry-openai'?: ResponsesError | null;
   readonly 'foundry-xai'?: ResponsesError | null;
+  readonly 'foundry-deepseek'?: ResponsesError | null;
+  readonly 'foundry-nvidia'?: ResponsesError | null;
+  readonly 'foundry-qwen'?: ResponsesError | null;
+  readonly 'foundry-moonshot'?: ResponsesError | null;
+  readonly 'foundry-gemma'?: ResponsesError | null;
   readonly 'foundry-anthropic'?: AnthropicError | null;
   readonly 'foundry-google'?: GoogleError | null;
 };
@@ -95,6 +103,11 @@ type FoundryErrorKeys = {
 type FoundryPartKeys = {
   readonly 'foundry-openai'?: ResponsesPart | null;
   readonly 'foundry-xai'?: ResponsesPart | null;
+  readonly 'foundry-deepseek'?: ResponsesPart | null;
+  readonly 'foundry-nvidia'?: ResponsesPart | null;
+  readonly 'foundry-qwen'?: ResponsesPart | null;
+  readonly 'foundry-moonshot'?: ResponsesPart | null;
+  readonly 'foundry-gemma'?: ResponsesPart | null;
   readonly 'foundry-anthropic'?: AnthropicPart | null;
   readonly 'foundry-google'?: GooglePart | null;
 };

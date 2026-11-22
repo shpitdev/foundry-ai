@@ -15,8 +15,18 @@ const distRoot = join(packageRoot, 'dist/src');
 
 // Internal protocol folders and the public modules allowed to reach them.
 const owners = {
-  'src/internal/openai-responses/': ['OpenAiLanguageModel', 'XaiLanguageModel'],
-  'src/internal/openai-chat-completions/': ['OpenAiChatLanguageModel'],
+  'src/internal/openai-responses/': [
+    'OpenAiLanguageModel',
+    'XaiLanguageModel',
+    'GemmaLanguageModel',
+  ],
+  'src/internal/openai-chat-completions/': [
+    'OpenAiChatLanguageModel',
+    'DeepSeekLanguageModel',
+    'NvidiaLanguageModel',
+    'QwenLanguageModel',
+    'MoonshotLanguageModel',
+  ],
   'src/internal/openai-decisions/': ['OpenAiDecisionModel'],
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
@@ -32,20 +42,30 @@ const owners = {
   'src/internal/models/anthropic.js': ['AnthropicLanguageModel'],
   'src/internal/models/google.js': ['GoogleLanguageModel'],
   'src/internal/models/xai.js': ['XaiLanguageModel'],
+  'src/internal/models/deepseek.js': ['DeepSeekLanguageModel'],
+  'src/internal/models/nvidia.js': ['NvidiaLanguageModel'],
+  'src/internal/models/qwen.js': ['QwenLanguageModel'],
+  'src/internal/models/moonshot.js': ['MoonshotLanguageModel'],
+  'src/internal/models/gemma.js': ['GemmaLanguageModel'],
   'src/internal/models/realtime.js': ['OpenAiRealtime'],
 };
 
 // Minified bytes with effect external: each module's measured size plus about 20%, re-measured
-// in phase 8. A new module needs its own line.
+// in phase 8; the phase 10 modules were measured when added. A new module needs its own line.
 const budgets = {
   AnthropicLanguageModel: 25_500,
+  DeepSeekLanguageModel: 21_200,
   FoundryClient: 6_800,
+  GemmaLanguageModel: 25_000,
   GoogleLanguageModel: 21_000,
+  MoonshotLanguageModel: 21_400,
+  NvidiaLanguageModel: 21_500,
   OpenAiChatLanguageModel: 21_700,
   OpenAiDecisionModel: 13_700,
   OpenAiEmbeddingModel: 8_300,
   OpenAiLanguageModel: 27_400,
   OpenAiRealtime: 12_600,
+  QwenLanguageModel: 21_300,
   XaiLanguageModel: 25_400,
 };
 

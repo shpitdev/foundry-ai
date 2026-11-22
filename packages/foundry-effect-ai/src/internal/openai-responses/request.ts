@@ -16,7 +16,7 @@ import type * as Wire from './schema.ts';
 
 /**
  * What one vendor's Responses route needs, passed in by its public module so this folder holds
- * no vendor branches. OpenAI and xAI differ only in these values.
+ * no vendor branches. OpenAI, xAI and Gemma differ only in these values.
  */
 export interface Dialect {
   /** The public module, named in errors. */

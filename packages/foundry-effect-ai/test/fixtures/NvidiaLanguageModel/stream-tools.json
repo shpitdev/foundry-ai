@@ -1,0 +1,119 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning>We need to find which European capital hosted the Summer Olympics in 1900 and 1924. The 1900 Summer Olympics</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning> were in Paris. The 1924 Summer Olympics were also in Paris. Both were in Paris. So the European capital is Paris. Then we need</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning> to call GetWeather for Paris and answer in one sentence: presumably the current weather in Paris. So we need to call GetWeather with city: \\\"Paris\\\".</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning> Then answer with something like \\\"The current weather in Paris is ...\\\". Let's do that.\\n\\n</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\\n\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"{\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":\"function\",\"function\":{\"name\":null,\"arguments\":\"\\\"city\\\": \\\"Paris\\\"\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":\"function\",\"function\":{\"name\":null,\"arguments\":\"}\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"tool_calls\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314135,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[],\"usage\":{\"prompt_tokens\":325,\"completion_tokens\":141,\"total_tokens\":466,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.nemotron-3-super-120b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "reasoning_effort": "high",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning>We need to answer: Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning> GetWeather tool for it and answer in one sentence.\\n\\nWe called GetWeather for Paris. The temperature is 21C, conditions sunny.\\n\\nNow produce answer in one</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning> sentence: Something like \\\"The current weather in Paris, which hosted the Summer Olympics in 1900 and 1924, is sunny with a temperature of </reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning>21°C.\\\"\\n\\nMake sure it's one sentence.\\n\\n</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\\n\\nThe current weather in Paris—the European capital that hosted the Summer Olympics in 1900 and 19\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"24—is sunny with a temperature of 21 °C.\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795314136,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[],\"usage\":{\"prompt_tokens\":378,\"completion_tokens\":157,\"total_tokens\":535,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.nemotron-3-super-120b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "reasoning_effort": "high",
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

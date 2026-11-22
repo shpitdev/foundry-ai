@@ -1,0 +1,109 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795314153,\"model\":\"global.moonshotai.kimi-k3.1\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"reasoning_content\":\"I need respond to the user request. Should think through before tool: European capital hosted Summer Olympics in 1900 and 1924 = Paris, France. Should call GetWeather for Paris. Then answer in one sentence. I need ensure one sentence likely including weather. Must call the tool. Perhaps current weather unknown. Call the tool.\",\"tool_calls\":[{\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"}}]},\"finish_reason\":\"tool_calls\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":119,\"prompt_tokens\":205,\"total_tokens\":324,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":68,\"rejected_prediction_tokens\":0}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.kimi-k3-1-pro-highspeed",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"object\":\"chat.completion\",\"created\":1795314155,\"model\":\"global.moonshotai.kimi-k3.1\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Paris, which hosted the Summer Olympics in 1900 and 1924, currently has sunny weather and a temperature of 21°C.\",\"reasoning_content\":\"Kimi needs to respond with one sentence including the identification Paris hosted 1900 and 1924 and weather 21 sunny. I'll heed user \\\"Before calling any tool, work out which European capital hosted... Then call... and answer in one sentence.\\\" Tool called, now respond one sentence. Could say \\\"Paris, which hosted the Summer Olympics in 1900 and 1924, currently has sunny weather with a temperature of 21°C.\\\" Should have no more. Ensure city capital Paris. Good.\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":145,\"prompt_tokens\":295,\"total_tokens\":440,\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0,\"cache_write_tokens\":0},\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":102,\"rejected_prediction_tokens\":0}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.kimi-k3-1-pro-highspeed",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": null,
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]
