@@ -1,6 +1,6 @@
 # @shpitdev/foundry-effect-ai
 
-[Effect AI](https://effect.website) providers for Palantir Foundry's LLM proxy: OpenAI, Anthropic, Google and xAI language models, GPT-6 Luna decisions and OpenAI embeddings, addressed by catalog alias or model RID. The package speaks each vendor's wire protocol itself; `effect` is its only peer dependency.
+[Effect AI](https://effect.website) providers for Palantir Foundry's LLM proxy: OpenAI, Anthropic, Google and xAI language models, GPT-6 Luna decisions, OpenAI embeddings and OpenAI realtime sessions, addressed by catalog alias or model RID. The package speaks each vendor's wire protocol itself; `effect` is its only peer dependency.
 
 ## Install
 
@@ -24,8 +24,9 @@ Import each module by its subpath. There is no root entry, so a program that use
 | `XaiLanguageModel`        | `/xai/v1/responses`                                                       | `LanguageModel`   |
 | `OpenAiDecisionModel`     | `/openai/v1/decisions`                                                    | `DecisionModel`   |
 | `OpenAiEmbeddingModel`    | `/openai/v1/embeddings`                                                   | `EmbeddingModel`  |
+| `OpenAiRealtime`          | WebSocket `/language-model-service/ws/v1/open-ai/realtime`                | none: a session   |
 
-Each model module exports `model(id, config?)`, `make` and `layer`, like Effect's own providers. Known aliases resolve to RIDs; any other string is sent unchanged, so enrollment-specific RIDs work.
+Each model module exports `model(id, config?)`, `make` and `layer`, like Effect's own providers. Known aliases resolve to RIDs; any other string is sent unchanged, so enrollment-specific RIDs work. Effect AI has no realtime service, so `OpenAiRealtime` opens a session instead; see [Realtime](#realtime).
 
 ## Configure
 
@@ -170,6 +171,44 @@ const vectors = EmbeddingModel.EmbeddingModel.use((model) =>
 ```
 
 `text-embedding-3-*` can shorten vectors with `dimensions`; `text-embedding-ada-002` cannot.
+
+### Realtime
+
+`OpenAiRealtime.connect` opens a scoped WebSocket session on `gpt-realtime`, `gpt-realtime-1.5`, `gpt-realtime-2`, `gpt-realtime-2.1` or `gpt-realtime-2.1-mini`. It does not use `FoundryClient`: pass the current user's own Foundry token, never a shared server token in a browser. Provide a `Socket.WebSocketConstructor`; `Socket.layerWebSocketConstructorGlobal` works in browsers, Node 22 and later, Deno and Bun.
+
+```ts
+import * as OpenAiRealtime from '@shpitdev/foundry-effect-ai/OpenAiRealtime';
+import * as Redacted from 'effect/Redacted';
+import * as Socket from 'effect/socket/Socket';
+
+const reply = Effect.gen(function* () {
+  const session = yield* OpenAiRealtime.connect({
+    model: 'gpt-realtime-2.1',
+    foundryUrl: 'https://example.palantirfoundry.com',
+    token: Redacted.make(userToken), // the signed-in user's Foundry token
+  });
+  yield* session.send({
+    type: 'session.update',
+    session: { type: 'realtime', output_modalities: ['text'] },
+  });
+  yield* session.send({
+    type: 'conversation.item.create',
+    item: { type: 'message', role: 'user', content: [{ type: 'input_text', text: 'Say hello.' }] },
+  });
+  yield* session.send({ type: 'response.create' });
+  yield* session.events.pipe(
+    OpenAiRealtime.failOnError,
+    Stream.takeUntil((event) => event.type === 'response.done'),
+    Stream.runForEach((event) =>
+      event.type === 'response.output_text.delta'
+        ? Effect.sync(() => process.stdout.write(event.delta))
+        : Effect.void,
+    ),
+  );
+}).pipe(Effect.scoped, Effect.provide(Socket.layerWebSocketConstructorGlobal));
+```
+
+`send` takes OpenAI's realtime client events under their wire names, and `events` streams the decoded server events, starting with `session.created`. Audio goes in as base64 with `input_audio_buffer.append` and comes out in `response.output_audio.delta` events, 24 kHz PCM by default. For tools, put `yield* OpenAiRealtime.tools(toolkit)` in the session's `tools` and pipe `events` through `OpenAiRealtime.handleToolCalls(session, yield* toolkit)`: after each response with function calls, it runs the handlers, sends their results and asks for the next response. `error` events leave the session open, so they arrive as events unless you add `failOnError`.
 
 ## Provider metadata
 

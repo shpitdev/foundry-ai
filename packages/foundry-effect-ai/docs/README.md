@@ -1,6 +1,6 @@
 # Models and live test status
 
-**Catalog as of November 21, 2026 (UTC):** 57 entries — 54 language aliases and three OpenAI embeddings.
+**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings and five realtime models.
 
 **Sweep of November 20, 2026 (UTC):** `effect` 4.1.4, every model then in the package's lists (52 language aliases and three embeddings) through `LIVE_MODELS=all pnpm run test:live:effect`: 600 cases, run serially, followed by isolated reruns of each failure. Anthropic was then swept again, and the Grok 4.20 reasoning cells rerun, with the final settings described below. **539 of 600 cases pass.** Of the 61 failures, 42 are routes or models Foundry refused and 19 are model behavior that failed the same way on rerun; none is an adapter bug. The sweep also found three adapter issues, fixed before these results: xAI error messages were dropped, Grok 4.20 needed `effort` left out, and Anthropic's adaptive thinking needed its `display` option.
 
@@ -152,9 +152,33 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 `OpenAiDecisionModel` on `gpt-6-luna`, the only catalog model that serves decisions. Direct requests for GPT-6.2 Sol and GPT-6.2 Astra returned HTTP 404 in the November 22 follow-up. All six live cells pass: a probability, a three-way classification, a 20-way classification that returns every label's probability, a rating, JSON state, and image state (a base64 image is accepted and a URL image fails before sending).
 
+### Realtime
+
+`OpenAiRealtime`, swept on November 22, 2026 (UTC) with `LIVE_MODELS` set to all five models.
+
+| Model                   | Connect | Text | Tool result round-trip | Audio output | Audio input |
+| ----------------------- | ------- | ---- | ---------------------- | ------------ | ----------- |
+| `gpt-realtime`          | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-1.5`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2`        | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2.1`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2.1-mini` | ✓       | ✓    | ✓                      | ✓            | ✓           |
+
+The cells are the AI SDK realtime suite's probes, one session each. **Connect** waits for `session.created`. **Text** asks for `READY`. **Tool result round-trip** has the model call `lookupCode`; `handleToolCalls` runs the toolkit handler and asks for the answer, which must quote the code. **Audio output** asks for a spoken sentence as 24 kHz PCM and checks the audio and its transcript. **Audio input** sends that audio to a fresh session, which must repeat the phrase. Voice activity detection, microphone capture, playback, interruptions and long sessions are not tested. See [realtime setup](#realtime-setup).
+
 ### Transport
 
-`FoundryClient`: a bad token returns `AuthenticationError` and an unknown model `InvalidRequestError` with Foundry's `LanguageModelNotAvailable`, from each vendor route.
+`FoundryClient`: a bad token returns `AuthenticationError` and an unknown model `InvalidRequestError` with Foundry's `LanguageModelNotAvailable`, from each vendor route. On the realtime route, a bad token fails `OpenAiRealtime.connect` with `AuthenticationError` (Foundry's `PermissionDenied`) and an unknown model with `InvalidRequestError` (`ProxyModelNotFound`).
+
+## Realtime setup
+
+Foundry serves realtime at `wss://<foundry-host>/language-model-service/ws/v1/open-ai/realtime?model=<api-name>` and authenticates with a `Bearer-<token>` WebSocket subprotocol. `OpenAiRealtime.connect` builds both from `foundryUrl`, `model` and `token`. Models are addressed by API name, including the dot in `gpt-realtime-1.5`, not by RID.
+
+The token must be the current user's own Foundry OAuth token with the `language-model-service:use-model` scope; see [Palantir's authentication instructions](https://www.palantir.com/docs/foundry/realtime-audio/build-a-voice-enabled-osdk-application). Never return a shared server token to a browser. `connect` takes the token per session, separately from `FoundryClient`, so a server can hold its own token for HTTP models while each browser session uses its user's token. Foundry does not mint short-lived or restricted client secrets.
+
+Provide a `Socket.WebSocketConstructor`: `Socket.layerWebSocketConstructorGlobal` from `effect/socket/Socket` works in browsers, Node 22 and later, Deno and Bun. The [package README](../README.md#realtime) has an example.
+
+These tests are manual and excluded from CI. The default live run covers `gpt-realtime-2.1`; `LIVE_MODELS=openai` includes all five realtime models.
 
 ## Foundry quirks the adapters handle
 
@@ -167,11 +191,13 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 - **Chat Completions.** The route takes `max_completion_tokens`, not `max_tokens`; streams end without `[DONE]`; OpenAI models return no reasoning text, only reasoning token counts. GPT-6 Luna, GPT-6 Sol and GPT-6.1 Terra accept tools only with `reasoning_effort: 'none'`, which the adapter sends with tools unless `config` sets an effort.
 - **Decisions.** Foundry rejects image URLs, so URL images fail with `InvalidUserInputError` before sending; base64 and data URLs work. A refusal without a decision name refuses every decision it left unanswered.
 - **Embeddings.** Foundry rejects `dimensions` for `text-embedding-ada-002`, even at its native size, so a catalog model's native size is never sent.
+- **Realtime.** Foundry speaks OpenAI's GA realtime events. It opens the WebSocket for a bad token or an unknown model, then closes it with code 1008 and a reason naming the error, so `connect` waits for `session.created` and maps that close. Unknown events and output items are skipped. `error` events leave the session open; `failOnError` turns them into failures.
 - **Errors.** Foundry wraps vendor errors in its own envelope, with the vendor body in `parameters.responseBody` as `Optional[...]`. The adapters map status and codes to `AiError` reasons, read `retry-after` on 429, and keep Foundry's `errorName` and `errorInstanceId` under `foundry` in the error metadata.
 
 ## Out of scope
 
-- Realtime audio, speech, transcription, image generation and reranking. `@shpitdev/foundry-ai` covers realtime for the AI SDK.
+- Standalone speech, transcription, image generation and reranking.
+- Realtime events outside the probes, such as voice activity detection, input transcription and conversation item events; `events` skips them.
 - Provider-defined tools (web search, code execution, MCP); they fail with `InvalidRequestError`.
 - Prompt caching controls: Anthropic `cache_control` is not forwarded, and Foundry rejects OpenAI's `prompt_cache_key`.
 - Anthropic `output_config.effort`, and PDF or plain-text documents.
@@ -191,7 +217,7 @@ LIVE_MODELS=all pnpm run test:live:effect                   # catalog sweep
 FOUNDRY_RECORD=1 pnpm run test:live:effect                  # re-record the default fixtures
 ```
 
-The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, all three embeddings, and one bad-token and one unknown-model request per vendor route. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
+The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, all three embeddings, `gpt-realtime-2.1`, and one bad-token and one unknown-model request per vendor route and for realtime. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
 
 Test names are `<Module> live (<model>) > <cell>`. To run one cell, call Vitest directly so the pattern reaches it unchanged, and match the `>` separator:
 
