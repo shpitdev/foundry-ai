@@ -10,5 +10,4 @@ export const models = {
   'grok-420-reasoning-latest': {
     rid: 'ri.language-model-service..language-model.grok-420-reasoning-latest',
   },
-  'grok-build-0-1': { rid: 'ri.language-model-service..language-model.grok-build-0-1' },
 } as const;

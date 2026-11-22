@@ -310,6 +310,21 @@
     "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-hydrogen"
   },
   {
+    "rid": "ri.language-model-service..language-model.gemini-4-neon",
+    "modelIdentifier": "GEMINI_4_NEON",
+    "displayName": "Gemini 4 Neon",
+    "lifecycle": "experimental",
+    "contextWindow": 1048576,
+    "maxOutputTokens": 65536,
+    "trainingCutoffDate": "2026-03-01T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon"
+  },
+  {
     "rid": "ri.language-model-service..language-model.llama-3-3-nemotron-super-49b-v1-5",
     "modelIdentifier": "LLAMA_3_3_NEMOTRON_SUPER_49B_V1_5",
     "displayName": "Llama 3.3 Nemotron Super 49b v1.5",
@@ -622,7 +637,7 @@
     "rid": "ri.language-model-service..language-model.gpt-6-1-terra",
     "modelIdentifier": "GPT_6_1_TERRA",
     "displayName": "GPT-6.1 Terra",
-    "lifecycle": "experimental",
+    "lifecycle": "ga",
     "trainingCutoffDate": "2026-06-01T00:00:00Z",
     "performance": {
       "cost": "LOW",
@@ -630,6 +645,33 @@
       "speed": "HIGH"
     },
     "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6.1-terra"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-2-astra",
+    "modelIdentifier": "GPT_6_2_ASTRA",
+    "displayName": "GPT-6.2 Astra",
+    "lifecycle": "experimental",
+    "contextWindow": 1050000,
+    "maxOutputTokens": 128000,
+    "trainingCutoffDate": "2026-05-18T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6.2-astra"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-6-2-sol",
+    "modelIdentifier": "GPT_6_2_SOL",
+    "displayName": "GPT-6.2 Sol",
+    "lifecycle": "experimental",
+    "contextWindow": 1050000,
+    "maxOutputTokens": 128000,
+    "trainingCutoffDate": "2026-06-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-6.2-sol"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-6-astra",
@@ -737,18 +779,6 @@
       "cost": "MEDIUM",
       "modelClass": "REASONING"
     }
-  },
-  {
-    "rid": "ri.language-model-service..language-model.grok-build-0-1",
-    "modelIdentifier": "GROK_BUILD_0_1",
-    "displayName": "Grok Build 0.1",
-    "lifecycle": "ga",
-    "trainingCutoffDate": "2025-03-17T00:00:00Z",
-    "performance": {
-      "cost": "MEDIUM",
-      "modelClass": "LIGHTWEIGHT"
-    },
-    "externalUrl": "https://x.ai/news/grok-build-0-1"
   },
   {
     "rid": "ri.language-model-service..language-model.llama-3-2-nv-embedqa-1b-v2",
@@ -891,6 +921,21 @@
       "speed": "HIGH"
     },
     "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-1.5"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.gpt-realtime-2",
+    "modelIdentifier": "GPT_REALTIME_2",
+    "displayName": "GPT Realtime 2",
+    "lifecycle": "experimental",
+    "contextWindow": 128000,
+    "maxOutputTokens": 32000,
+    "trainingCutoffDate": "2024-09-30T00:00:00Z",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "HEAVYWEIGHT",
+      "speed": "HIGH"
+    },
+    "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-2"
   },
   {
     "rid": "ri.language-model-service..language-model.gpt-realtime-2-1",

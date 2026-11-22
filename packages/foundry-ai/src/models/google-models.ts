@@ -35,6 +35,19 @@ const GOOGLE_MODEL_DEFINITIONS = {
     externalUrl:
       'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-hydrogen',
   },
+  'gemini-4-neon': {
+    rid: 'ri.language-model-service..language-model.gemini-4-neon',
+    modelIdentifier: 'GEMINI_4_NEON',
+    displayName: 'Gemini 4 Neon',
+    lifecycle: 'experimental',
+    inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
+    contextWindow: 1_048_576,
+    maxOutputTokens: 65_536,
+    trainingCutoffDate: '2026-03-01T00:00:00Z',
+    performance: { cost: 'HIGH', modelClass: 'REASONING', speed: 'MEDIUM' },
+    externalUrl:
+      'https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon',
+  },
   'gemini-3.8-flash': {
     rid: 'ri.language-model-service..language-model.gemini-3-8-flash',
     modelIdentifier: 'GEMINI_3_8_FLASH',
