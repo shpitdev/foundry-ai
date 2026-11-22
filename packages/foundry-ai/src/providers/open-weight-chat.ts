@@ -1,5 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import { extractReasoningMiddleware, wrapLanguageModel } from 'ai';
+import { extractReasoningMiddleware, type LanguageModelMiddleware, wrapLanguageModel } from 'ai';
 import { foundryHeaders, resolveFoundryConfig } from '../config.js';
 import { wrapFoundryLanguageModel } from '../middleware.js';
 import { ZAI_MODELS } from '../models/zai-models.js';
@@ -39,12 +39,7 @@ export function createOpenWeightChat<Id extends string>(
     // Kimi's reasoning_content is already decoded by the compatible SDK. Of the GLMs,
     // only GLM-5 exposes reasoning spans; GLM-5.3 reports reasoning token counts.
     const tagged = maker === 'zai' ? rid === ZAI_MODELS['glm-5'].rid : maker !== 'moonshot';
-    return tagged
-      ? wrapLanguageModel({
-          model,
-          middleware: extractReasoningMiddleware({ tagName: 'reasoning' }),
-        })
-      : model;
+    return tagged ? wrapLanguageModel({ model, middleware: taggedReasoning }) : model;
   };
 
   return Object.assign(chat, {
@@ -53,6 +48,32 @@ export function createOpenWeightChat<Id extends string>(
     languageModel: chat,
     chat,
   });
+}
+
+const extractReasoning = extractReasoningMiddleware({ tagName: 'reasoning' });
+
+const taggedReasoning: LanguageModelMiddleware = {
+  ...extractReasoning,
+  async wrapGenerate(context) {
+    const result = await context.doGenerate();
+    return sentActiveReasoningEffort(result.request?.body) && extractReasoning.wrapGenerate
+      ? extractReasoning.wrapGenerate({ ...context, doGenerate: () => Promise.resolve(result) })
+      : result;
+  },
+  async wrapStream(context) {
+    const result = await context.doStream();
+    return sentActiveReasoningEffort(result.request?.body) && extractReasoning.wrapStream
+      ? extractReasoning.wrapStream({ ...context, doStream: () => Promise.resolve(result) })
+      : result;
+  },
+};
+
+function sentActiveReasoningEffort(body: unknown): boolean {
+  // The compatible provider returns the final request body, sometimes as JSON text. Use it
+  // instead of re-resolving provider options, top-level reasoning and unsupported GLM efforts.
+  const request: unknown = typeof body === 'string' ? JSON.parse(body) : body;
+  const effort = isRecord(request) ? request.reasoning_effort : undefined;
+  return typeof effort === 'string' && effort !== '' && effort !== 'none';
 }
 
 function shapeChatRequest(

@@ -53,6 +53,20 @@ function simpleChatOutput() {
   return chatOutput({ content: 'OK' });
 }
 
+function chatStreamOutput(chunks: ReadonlyArray<string>) {
+  const responses = [
+    ...chunks.map((content) => ({ choices: [{ delta: { content } }] })),
+    { choices: [{ delta: {}, finish_reason: 'stop' }] },
+    { choices: [], usage },
+  ];
+  return new Response(
+    responses.map((response) => `data: ${JSON.stringify(response)}\n\n`).join(''),
+    {
+      headers: { 'content-type': 'text/event-stream' },
+    },
+  );
+}
+
 function responsesOutput() {
   return Response.json({
     id: 'response-1',
@@ -154,6 +168,51 @@ it('extracts tagged reasoning before parsing structured output', async () => {
   });
 });
 
+const taggedText = '<reasoning>details</reasoning>answer';
+const intact = { text: taggedText, reasoningText: undefined };
+const extracted = { text: 'answer', reasoningText: 'details' };
+
+it.each([
+  ['default effort', {}, undefined, intact],
+  ['provider default', { reasoning: 'provider-default' }, undefined, intact],
+  ['explicit none', { reasoning: 'none' }, 'none', intact],
+  ['standardized high', { reasoning: 'high' }, 'high', extracted],
+  ['provider high', { providerOptions: { zai: { reasoningEffort: 'high' } } }, 'high', extracted],
+  [
+    'provider override',
+    { reasoning: 'high', providerOptions: { zai: { reasoningEffort: 'none' } } },
+    'none',
+    intact,
+  ],
+  ['unsupported effort', { reasoning: 'max' }, undefined, intact],
+] as const)(
+  'GLM-5 only extracts tags when reasoning is requested: %s',
+  async (_name, options, effort, { text, reasoningText }) => {
+    const responses = [chatOutput({ content: taggedText }), chatStreamOutput([taggedText])];
+    const requests = stubFetch((index) => responses[index]);
+    const call = { model: createFoundryZai(config)('glm-5'), prompt: 'Reply.', ...options };
+    const generated = await generateText(call);
+    const streamed = streamText(call);
+    for (const step of [generated.finalStep, await streamed.finalStep]) {
+      expect(step.text).toBe(text);
+      expect(step.reasoningText).toBe(reasoningText);
+    }
+    expect(requests.map(({ body }) => body.reasoning_effort)).toEqual([effort, effort]);
+  },
+);
+
+it('keeps literal reasoning tags inside JSON when reasoning is off', async () => {
+  const value = '<reasoning>literal text</reasoning>';
+  stubFetch(() => chatOutput({ content: JSON.stringify({ value }) }));
+  const result = await generateText({
+    model: createFoundryDeepSeek(config)('deepseek-v3.2'),
+    prompt: 'Return JSON containing the literal tag.',
+    output: Output.object({ schema: z.object({ value: z.string() }) }),
+  });
+  expect(result.output).toEqual({ value });
+  expect(result.finalStep.reasoning).toEqual([]);
+});
+
 it.each([
   ['Qwen', () => createFoundryQwen(config).chat('qwen3-32b'), 'qwen'],
   ['GLM-5', () => createFoundryZai(config).chat('glm-5'), 'zai'],
@@ -168,20 +227,7 @@ it.each([
       'ing>{"ok":',
       'true}',
     ];
-    const responses = [
-      ...chunks.map((content) => ({ choices: [{ delta: { content } }] })),
-      { choices: [{ delta: {}, finish_reason: 'stop' }] },
-      { choices: [], usage },
-    ];
-    const requests = stubFetch(
-      () =>
-        new Response(
-          responses.map((response) => `data: ${JSON.stringify(response)}\n\n`).join(''),
-          {
-            headers: { 'content-type': 'text/event-stream' },
-          },
-        ),
-    );
+    const requests = stubFetch(() => chatStreamOutput(chunks));
     const result = streamText({
       model: model(),
       prompt: 'Think first, then output JSON.',
