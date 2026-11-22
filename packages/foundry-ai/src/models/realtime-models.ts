@@ -22,6 +22,16 @@ const definitions = {
     performance: { cost: 'HIGH', modelClass: 'HEAVYWEIGHT', speed: 'HIGH' },
     externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-1.5',
   },
+  'gpt-realtime-2': {
+    rid: 'ri.language-model-service..language-model.gpt-realtime-2',
+    modelIdentifier: 'GPT_REALTIME_2',
+    displayName: 'GPT Realtime 2',
+    lifecycle: 'experimental',
+    inputTypes: ['OPEN_AI_REALTIME'],
+    trainingCutoffDate: '2024-09-30T00:00:00Z',
+    performance: { cost: 'HIGH', modelClass: 'HEAVYWEIGHT', speed: 'HIGH' },
+    externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-2',
+  },
   'gpt-realtime-2.1': {
     rid: 'ri.language-model-service..language-model.gpt-realtime-2-1',
     modelIdentifier: 'GPT_REALTIME_2_1',

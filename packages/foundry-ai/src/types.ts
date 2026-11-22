@@ -28,7 +28,7 @@ export type ModelSpeed = 'LOW' | 'MEDIUM' | 'HIGH';
 /** Mirrors the Foundry listing, which omits attributes it does not publish for a model. */
 export interface ModelPerformance {
   cost?: ModelCost;
-  modelClass: ModelClass;
+  modelClass?: ModelClass;
   speed?: ModelSpeed;
 }
 

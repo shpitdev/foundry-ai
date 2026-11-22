@@ -84,20 +84,6 @@ const XAI_MODEL_DEFINITIONS = {
     trainingCutoffDate: '2026-01-01T00:00:00Z',
     modelCreator: 'X_AI',
   },
-  'grok-build-0-1': {
-    rid: 'ri.language-model-service..language-model.grok-build-0-1',
-    modelIdentifier: 'GROK_BUILD_0_1',
-    displayName: 'Grok Build 0.1',
-    lifecycle: 'ga',
-    inputTypes: ['X_AI_RESPONSES', 'GENERIC_VISION_COMPLETION'],
-    performance: {
-      cost: 'MEDIUM',
-      modelClass: 'LIGHTWEIGHT',
-    },
-    trainingCutoffDate: '2025-03-17T00:00:00Z',
-    externalUrl: 'https://x.ai/news/grok-build-0-1',
-    modelCreator: 'X_AI',
-  },
 } as const satisfies Record<string, ModelDefinition>;
 
 export const XAI_MODELS = createProviderModelCatalog('xai', XAI_MODEL_DEFINITIONS);

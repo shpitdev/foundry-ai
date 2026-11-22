@@ -1,6 +1,10 @@
 # Models and live test status
 
-**Sweep of November 20, 2026 (UTC):** `effect` 4.1.4, every model in the package's lists (52 language aliases and three embeddings) through `LIVE_MODELS=all pnpm run test:live:effect`: 600 cases, run serially, followed by isolated reruns of each failure. Anthropic was then swept again, and the Grok 4.20 reasoning cells rerun, with the final settings described below. **539 of 600 cases pass.** Of the 61 failures, 42 are routes or models Foundry refused and 19 are model behavior that failed the same way on rerun; none is an adapter bug. The sweep also found three adapter issues, fixed before these results: xAI error messages were dropped, Grok 4.20 needed `effort` left out, and Anthropic's adaptive thinking needed its `display` option.
+**Catalog as of November 21, 2026 (UTC):** 57 entries — 54 language aliases and three OpenAI embeddings.
+
+**Sweep of November 20, 2026 (UTC):** `effect` 4.1.4, every model then in the package's lists (52 language aliases and three embeddings) through `LIVE_MODELS=all pnpm run test:live:effect`: 600 cases, run serially, followed by isolated reruns of each failure. Anthropic was then swept again, and the Grok 4.20 reasoning cells rerun, with the final settings described below. **539 of 600 cases pass.** Of the 61 failures, 42 are routes or models Foundry refused and 19 are model behavior that failed the same way on rerun; none is an adapter bug. The sweep also found three adapter issues, fixed before these results: xAI error messages were dropped, Grok 4.20 needed `effort` left out, and Anthropic's adaptive thinking needed its `display` option.
+
+**November 22, 2026 follow-up (UTC):** Tested only GPT-6.2 Sol, GPT-6.2 Astra, and Gemini 4 Neon on `effect` 4.1.4.
 
 [Install and use the package](../README.md). Results apply to the tested Foundry enrollment, not to every stack. Each cell is one probe run or its isolated rerun: a pass shows the request worked then, not that it is reliable. Live checks run manually; CI replays recorded fixtures and never calls Foundry.
 
@@ -16,6 +20,8 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 | Model                | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | -------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gpt-6.2-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-6.2-astra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
 | `gpt-6.1-terra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gpt-6.1-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
 | `gpt-6-sol`          | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
@@ -42,7 +48,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 | `gpt-4.1`            | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | —         |
 
 - GPT-4.1 mini answers "Hi" to the one-word `hello` prompt. GPT-4.1 nano calls the tool twice where the cell expects one call. GPT-4.1 and GPT-5.1 sometimes answer without calling the tool.
-- GPT-6 Astra and GPT-6.1 Sol reason briefly on this puzzle (27 and 14 reasoning tokens in a direct check) and return empty summaries, so the cell sees no reasoning text.
+- GPT-6 Astra and GPT-6.1 Sol reason briefly on this puzzle (27 and 14 reasoning tokens in a direct check) and return empty summaries, so the cell sees no reasoning text. GPT-6.2 Sol and GPT-6.2 Astra also returned no visible reasoning text.
 
 ### OpenAI Chat Completions
 
@@ -50,6 +56,8 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 | Model                | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | -------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gpt-6.2-sol`        | ✓    | ✓      | ✓    | R     | R            | R            | ✓     | ✓         |
+| `gpt-6.2-astra`      | ✓    | ✓      | ✓    | R     | R            | R            | ✓     | ✓         |
 | `gpt-6.1-terra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gpt-6.1-sol`        | ✓    | ✓      | ✓    | R     | R            | R            | ✓     | ✓         |
 | `gpt-6-sol`          | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
@@ -77,6 +85,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 - The Codex models have no Chat Completions backend ("model backends are not available"); use `OpenAiLanguageModel`.
 - GPT-6 Astra and GPT-6.1 Sol reject function tools while reasoning, and reject `reasoning_effort: 'none'`, so they cannot take tools on this route. GPT-6 Luna, GPT-6 Sol and GPT-6.1 Terra accept tools with `reasoning_effort: 'none'`, which the adapter sends for them.
+- GPT-6.2 Sol and Astra reject Chat function tools (HTTP 400), including when the request sets `reasoning_effort: 'none'`. Their Responses tool probes pass.
 - The GPT-4.1 failures match the Responses route: "Hi" for `hello` (GPT-4.1 too, here), a skipped or doubled tool call, and, for GPT-4.1 mini, the JSON answer in the same turn as the tool call.
 
 ### Anthropic
@@ -107,6 +116,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 | Model                   | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | ----------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gemini-4-neon`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gemini-4-argon`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gemini-4-carbon`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gemini-4-hydrogen`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
@@ -131,9 +141,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 | `grok-4-3`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-420-reasoning-latest`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-420-non-reasoning-latest` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
-| `grok-build-0-1`                | A    | A      | A    | A     | A            | A            | A     | A         |
 
-- Grok Build 0.1 is in the catalog, but xAI answers that the model "does not exist or your team does not have access to it" (HTTP 404).
 - Grok 4.20 reasoning rejects `reasoning.effort`; its cells ask only for `summary`. Grok 4.20 non-reasoning gets no reasoning settings.
 
 ### Embeddings
@@ -142,7 +150,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 ### Decisions
 
-`OpenAiDecisionModel` on `gpt-6-luna`, the only catalog model that serves decisions. All six live cells pass: a probability, a three-way classification, a 20-way classification that returns every label's probability, a rating, JSON state, and image state (a base64 image is accepted and a URL image fails before sending).
+`OpenAiDecisionModel` on `gpt-6-luna`, the only catalog model that serves decisions. Direct requests for GPT-6.2 Sol and GPT-6.2 Astra returned HTTP 404 in the November 22 follow-up. All six live cells pass: a probability, a three-way classification, a 20-way classification that returns every label's probability, a rating, JSON state, and image state (a base64 image is accepted and a URL image fails before sending).
 
 ### Transport
 

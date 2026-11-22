@@ -47,6 +47,11 @@ export const models = {
     reasoning: true,
     chatToolsNeedNoReasoning: true,
   },
+  'gpt-6.2-sol': { rid: 'ri.language-model-service..language-model.gpt-6-2-sol', reasoning: true },
+  'gpt-6.2-astra': {
+    rid: 'ri.language-model-service..language-model.gpt-6-2-astra',
+    reasoning: true,
+  },
   'gpt-5.4-mini': {
     rid: 'ri.language-model-service..language-model.gpt-5-4-mini',
     reasoning: true,

@@ -341,11 +341,14 @@ describe('model catalog', () => {
   it.each([
     ['gpt-6.1-sol', 'gpt-6-1-sol', 'openai', 'GPT_CHAT_COMPLETION'],
     ['gpt-6.1-terra', 'gpt-6-1-terra', 'openai', 'GPT_CHAT_COMPLETION'],
+    ['gpt-6.2-sol', 'gpt-6-2-sol', 'openai', 'GPT_CHAT_COMPLETION'],
+    ['gpt-6.2-astra', 'gpt-6-2-astra', 'openai', 'GPT_CHAT_COMPLETION'],
     ['claude-haiku-5.5', 'anthropic-claude-5-5-haiku', 'anthropic', 'CLAUDE_CHAT'],
     ['claude-sonnet-5.5', 'anthropic-claude-5-5-sonnet', 'anthropic', 'CLAUDE_CHAT'],
     ['gemini-4-argon', 'gemini-4-argon', 'google', 'GEMINI_CHAT'],
     ['gemini-4-carbon', 'gemini-4-carbon', 'google', 'GEMINI_CHAT'],
     ['gemini-4-hydrogen', 'gemini-4-hydrogen', 'google', 'GEMINI_CHAT'],
+    ['gemini-4-neon', 'gemini-4-neon', 'google', 'GEMINI_CHAT'],
   ])('resolves %s through its provider route', (alias, modelRid, provider, inputType) => {
     const rid = `ri.language-model-service..language-model.${modelRid}`;
     expect(resolveModelRid(alias)).toBe(rid);

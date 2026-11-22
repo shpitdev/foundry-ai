@@ -1,10 +1,12 @@
 # Models and live test status
 
-**Catalog as of November 19, 2026 (UTC):** 59 entries — 52 language aliases, three OpenAI embeddings, and four realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Transcription is not exposed.
+**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings, and five realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Transcription is not exposed.
 
 Both Gemma 4 variants and Llama Nemotron Super appear in Foundry’s listing but are excluded because the package does not provide a dedicated adapter for them.
 
-**November 19, 2026 sweep:** AI SDK 7.0.176 with `@ai-sdk/openai` 4.0.121, `@ai-sdk/anthropic` 4.0.106, `@ai-sdk/google` 4.0.122, and `@ai-sdk/xai` 4.0.59, run serially over the full catalog, plus isolated reruns of unexpected outcomes. Basic text passed on all 52 retained language aliases. All three embeddings passed.
+**November 19, 2026 sweep:** AI SDK 7.0.176 with `@ai-sdk/openai` 4.0.121, `@ai-sdk/anthropic` 4.0.106, `@ai-sdk/google` 4.0.122, and `@ai-sdk/xai` 4.0.59, run serially over the full catalog, plus isolated reruns of unexpected outcomes. Basic text passed on all 52 language aliases in that sweep. All three embeddings passed.
+
+**November 22, 2026 follow-up (UTC):** Tested only GPT-6.2 Sol, GPT-6.2 Astra, Gemini 4 Neon, and GPT Realtime 2 on AI SDK 7.0.177, with the same provider versions.
 
 [Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Each cell is one probe run, or its isolated rerun; a pass shows the request worked then, not that it is reliable. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling. Raw reports stay locally under `.memory/`.
 
@@ -19,6 +21,8 @@ JSON means schema-valid output was observed; it does not establish strict server
 | Model                | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | -------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
 | `gpt-5-nano`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
+| `gpt-6.2-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `gpt-6.2-astra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gpt-6.1-terra`      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gpt-6.1-sol`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `gpt-6-sol`          | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
@@ -65,6 +69,7 @@ JSON means schema-valid output was observed; it does not establish strict server
 | Model                   | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | ----------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
 | `gemini-3.1-flash-lite` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
+| `gemini-4-neon`         | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
 | `gemini-4-hydrogen`     | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
 | `gemini-4-carbon`       | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
 | `gemini-4-argon`        | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | —         |
@@ -76,7 +81,7 @@ JSON means schema-valid output was observed; it does not establish strict server
 
 ### xAI
 
-Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compatibility adapter. These columns use Responses; all seven explicit Chat Completions text probes were proxy-rejected (HTTP 400). See [xAI setup](./xai.md).
+Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compatibility adapter. These columns use Responses; explicit Chat Completions text probes for the six current aliases were proxy-rejected (HTTP 400). See [xAI setup](./xai.md).
 
 | Model                           | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | ------------------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
@@ -86,7 +91,6 @@ Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compati
 | `grok-4-7`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-4-5`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-4-3`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
-| `grok-build-0-1`                | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 
 ### Realtime
 
@@ -96,10 +100,11 @@ Requires `ai@7` and `@ai-sdk/openai@4`. The SDK realtime interface remains exper
 | ----------------------- | ------- | ---- | ---------------------- | ------------ | ----------- |
 | `gpt-realtime`          | ✓       | ✓    | ✓                      | ✓            | ✓           |
 | `gpt-realtime-1.5`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
+| `gpt-realtime-2`        | ✓       | ✓    | ✓                      | ✓            | ✓           |
 | `gpt-realtime-2.1`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
 | `gpt-realtime-2.1-mini` | ✓       | ✓    | ✓                      | ✓            | ✓           |
 
-Live probes use SDK 7.0.176 / OpenAI 4.0.121 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested.
+Live probes use SDK 7.0.176 (7.0.177 for GPT Realtime 2) and OpenAI 4.0.121 event serialization and parsing over Foundry WebSockets. Audio is generated 24 kHz PCM, then sent to a fresh session which must recognize the spoken phrase without its text history. Browser microphone capture, speaker playback, interruptions, and long-running sessions were not tested.
 
 See [realtime setup](#realtime-setup) for authentication, examples, and the manual test command.
 
@@ -113,7 +118,7 @@ See [realtime setup](#realtime-setup) for authentication, examples, and the manu
 
 ### Decisions
 
-November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. GPT-6 Luna serves Foundry's `/decisions` route by RID or the `gpt-6-luna` alias. GPT-6 Sol, GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra, and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts.
+November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `experimental_decide`. GPT-6 Luna serves Foundry's `/decisions` route by RID or the `gpt-6-luna` alias. GPT-6 Sol, GPT-6 Astra, GPT-6.1 Sol, GPT-6.1 Terra, and GPT-5.6 Luna return `LanguageModelNotAvailable` (HTTP 404). Refusals were observed once, on a CBRN prompt, and surface as `Experimental_DecisionRefusalError`; the repeatable suite does not send such prompts. In the November 22 follow-up, direct requests to `/decisions` also returned HTTP 404 for GPT-6.2 Sol and GPT-6.2 Astra.
 
 | Probe                                            | Result         |
 | ------------------------------------------------ | -------------- |
@@ -193,7 +198,8 @@ For server-side use, [the realtime example](https://github.com/shpitdev/foundry-
 ```sh
 pnpm run example realtime gpt-realtime-2.1
 pnpm run test:live -- realtime
-# All four realtime models:
+LIVE_MODELS=gpt-realtime-2 pnpm run test:live -- realtime
+# All five realtime models:
 LIVE_MODELS=openai pnpm run test:live -- realtime
 ```
 
