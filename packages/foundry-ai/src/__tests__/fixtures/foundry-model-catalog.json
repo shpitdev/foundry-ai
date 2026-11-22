@@ -314,8 +314,6 @@
     "modelIdentifier": "GEMINI_4_NEON",
     "displayName": "Gemini 4 Neon",
     "lifecycle": "experimental",
-    "contextWindow": 1048576,
-    "maxOutputTokens": 65536,
     "trainingCutoffDate": "2026-03-01T00:00:00Z",
     "performance": {
       "cost": "HIGH",
@@ -651,8 +649,6 @@
     "modelIdentifier": "GPT_6_2_ASTRA",
     "displayName": "GPT-6.2 Astra",
     "lifecycle": "experimental",
-    "contextWindow": 1050000,
-    "maxOutputTokens": 128000,
     "trainingCutoffDate": "2026-05-18T00:00:00Z",
     "performance": {
       "cost": "HIGH",
@@ -665,8 +661,6 @@
     "modelIdentifier": "GPT_6_2_SOL",
     "displayName": "GPT-6.2 Sol",
     "lifecycle": "experimental",
-    "contextWindow": 1050000,
-    "maxOutputTokens": 128000,
     "trainingCutoffDate": "2026-06-01T00:00:00Z",
     "performance": {
       "cost": "MEDIUM"
@@ -927,8 +921,6 @@
     "modelIdentifier": "GPT_REALTIME_2",
     "displayName": "GPT Realtime 2",
     "lifecycle": "experimental",
-    "contextWindow": 128000,
-    "maxOutputTokens": 32000,
     "trainingCutoffDate": "2024-09-30T00:00:00Z",
     "performance": {
       "cost": "HIGH",

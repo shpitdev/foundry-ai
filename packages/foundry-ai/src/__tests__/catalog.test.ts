@@ -30,8 +30,6 @@ const enrollments = JSON.parse(
   modelIdentifier: string;
   displayName: string;
   lifecycle: string;
-  contextWindow?: number;
-  maxOutputTokens?: number;
   trainingCutoffDate?: string;
   performance: { cost?: string; modelClass?: string; speed?: string };
   externalUrl?: string;
@@ -59,12 +57,6 @@ describe('model catalog', () => {
       // Catch metadata drift, not just enrollment and lifecycle drift.
       expect(model.displayName, `${id} displayName must match Foundry`).toBe(
         enrollment?.displayName,
-      );
-      expect(model.contextWindow, `${id} contextWindow must match Foundry`).toBe(
-        enrollment?.contextWindow,
-      );
-      expect(model.maxOutputTokens, `${id} maxOutputTokens must match Foundry`).toBe(
-        enrollment?.maxOutputTokens,
       );
       expect(model.trainingCutoffDate, `${id} trainingCutoffDate must match Foundry`).toBe(
         enrollment?.trainingCutoffDate,

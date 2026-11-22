@@ -28,8 +28,6 @@ const definitions = {
     displayName: 'GPT Realtime 2',
     lifecycle: 'experimental',
     inputTypes: ['OPEN_AI_REALTIME'],
-    contextWindow: 128_000,
-    maxOutputTokens: 32_000,
     trainingCutoffDate: '2024-09-30T00:00:00Z',
     performance: { cost: 'HIGH', modelClass: 'HEAVYWEIGHT', speed: 'HIGH' },
     externalUrl: 'https://developers.openai.com/api/docs/models/gpt-realtime-2',

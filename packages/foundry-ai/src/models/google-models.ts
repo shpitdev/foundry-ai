@@ -41,8 +41,6 @@ const GOOGLE_MODEL_DEFINITIONS = {
     displayName: 'Gemini 4 Neon',
     lifecycle: 'experimental',
     inputTypes: ['GEMINI_CHAT', 'GENERIC_VISION_COMPLETION'],
-    contextWindow: 1_048_576,
-    maxOutputTokens: 65_536,
     trainingCutoffDate: '2026-03-01T00:00:00Z',
     performance: { cost: 'HIGH', modelClass: 'REASONING', speed: 'MEDIUM' },
     externalUrl:
