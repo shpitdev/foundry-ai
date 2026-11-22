@@ -439,6 +439,37 @@ export const cells: Readonly<Record<string, Cell>> = {
       expect(thrown).toMatchObject({ _tag: 'NetworkError', reason: 'TransportError' });
     }),
 
+  'input-transcription-failed': (env) =>
+    Effect.scoped(
+      Effect.gen(function* () {
+        const session = yield* connect(env, defaultModel);
+        const events = yield* session.events.pipe(OpenAiRealtime.failOnError, Stream.runCollect);
+        expect(events.slice(1)).toEqual([
+          {
+            type: 'conversation.item.input_audio_transcription.failed',
+            item_id: 'item_1',
+            content_index: 0,
+            error: {
+              type: 'server_error',
+              code: 'transcription_failed',
+              message: 'Could not transcribe audio.',
+            },
+          },
+          {
+            type: 'conversation.item.input_audio_transcription.failed',
+            item_id: 'item_2',
+            error: { code: null },
+          },
+          {
+            type: 'conversation.item.input_audio_transcription.completed',
+            item_id: 'item_3',
+            content_index: 0,
+            transcript: 'Hello world.',
+          },
+        ]);
+      }),
+    ),
+
   // Synthetic: a frame without a string `type` is malformed, before or after `session.created`;
   // only unknown string types are skipped.
   'malformed-frames': (env) =>

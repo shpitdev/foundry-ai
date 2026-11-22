@@ -45,7 +45,7 @@ const decisionModels = Object.entries(OpenAi.models).flatMap(([id, entry]) =>
  * (must fail with `InvalidResponseError`, never finish as `stop`), an in-band stream error event,
  * a synthetic decision refusal, `transformClient` checks (a retry that recovers from a 503, and
  * a failed response a transform hands back), and realtime sessions: tool calls `handleToolCalls`
- * must not run, socket lifecycle failures, and malformed frames.
+ * must not run, socket lifecycle failures, input transcription failures, and malformed frames.
  */
 export const contractOnly: ReadonlySet<string> = new Set([
   'stream-truncated',
@@ -54,6 +54,7 @@ export const contractOnly: ReadonlySet<string> = new Set([
   'transform-client',
   'tool-policy',
   'socket-lifecycle',
+  'input-transcription-failed',
   'malformed-frames',
 ]);
 
@@ -142,7 +143,7 @@ export const rows: ReadonlyArray<Row> = [
     // The AI SDK realtime suite's probes, one session each (`audio-input` opens two: the speech
     // comes from the `audio-output` prompt), plus inline transcription of fixed speech.
     // `error-mapping` adds a refused token and model live,
-    // and synthetic closes and error events offline. The last three are contract-only.
+    // and synthetic closes and error events offline. The last four are contract-only.
     cells: [
       'connect',
       'text',
@@ -153,6 +154,7 @@ export const rows: ReadonlyArray<Row> = [
       'error-mapping',
       'tool-policy',
       'socket-lifecycle',
+      'input-transcription-failed',
       'malformed-frames',
     ],
   },

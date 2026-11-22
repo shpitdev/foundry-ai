@@ -210,7 +210,7 @@ const reply = Effect.gen(function* () {
 
 `send` takes OpenAI's realtime client events under their wire names, and `events` streams the decoded server events, starting with `session.created`. Audio goes in as base64 with `input_audio_buffer.append` and comes out in `response.output_audio.delta` events, 24 kHz PCM by default. For tools, put `yield* OpenAiRealtime.tools(toolkit)` in the session's `tools` and pipe `events` through `OpenAiRealtime.handleToolCalls(session, yield* toolkit)`: after each response with function calls, it runs the handlers, sends their results (a tool's `toModelOutput` text when it has one) and asks for the next response. It never runs client-executed tools or tools with `needsApproval`: a response that calls one gets no `response.create`, so send those outputs and `response.create` yourself. `error` events leave the session open, so they arrive as events unless you add `failOnError`.
 
-To transcribe the user's speech, set `audio.input.transcription: { model: 'whisper-1' }` in `session.update`. Read partial text from `conversation.item.input_audio_transcription.delta` and the final text from `conversation.item.input_audio_transcription.completed`. These are separate from the assistant's audio transcript.
+To transcribe the user's speech, set `audio.input.transcription: { model: 'whisper-1' }` in `session.update`. Read partial text from `conversation.item.input_audio_transcription.delta` and the final text from `conversation.item.input_audio_transcription.completed`. If transcription fails, `conversation.item.input_audio_transcription.failed` reports the error for that audio item instead. These events are separate from the assistant's audio transcript.
 
 ## Provider metadata
 

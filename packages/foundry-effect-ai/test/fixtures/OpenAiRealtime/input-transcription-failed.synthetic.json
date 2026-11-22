@@ -1,0 +1,42 @@
+[
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "session": { "id": "sess_1", "model": "gpt-realtime-2.1" }
+        }
+      },
+      {
+        "received": {
+          "type": "conversation.item.input_audio_transcription.failed",
+          "event_id": "event_2",
+          "item_id": "item_1",
+          "content_index": 0,
+          "error": {
+            "type": "server_error",
+            "code": "transcription_failed",
+            "message": "Could not transcribe audio."
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "conversation.item.input_audio_transcription.failed",
+          "item_id": "item_2",
+          "error": { "code": null }
+        }
+      },
+      {
+        "received": {
+          "type": "conversation.item.input_audio_transcription.completed",
+          "item_id": "item_3",
+          "content_index": 0,
+          "transcript": "Hello world."
+        }
+      }
+    ],
+    "close": { "code": 1000, "reason": "" }
+  }
+]

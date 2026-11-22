@@ -191,6 +191,11 @@ export const ServerEvent = Schema.Union([
     transcript: Schema.String,
   }),
   Schema.Struct({
+    type: Schema.Literal('conversation.item.input_audio_transcription.failed'),
+    ...InputTranscription,
+    error: Schema.optional(Schema.NullOr(Schema.Struct({ type: Text, code: Text, message: Text }))),
+  }),
+  Schema.Struct({
     type: Schema.Literal('response.created'),
     response: Schema.Struct({ id: Id, status: Text }),
   }),
@@ -257,6 +262,7 @@ export const eventTypes: ReadonlySet<string> = new Set([
   'input_audio_buffer.committed',
   'conversation.item.input_audio_transcription.delta',
   'conversation.item.input_audio_transcription.completed',
+  'conversation.item.input_audio_transcription.failed',
   'response.created',
   'response.done',
   'response.output_text.delta',
