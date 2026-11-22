@@ -208,7 +208,7 @@ const reply = Effect.gen(function* () {
 }).pipe(Effect.scoped, Effect.provide(Socket.layerWebSocketConstructorGlobal));
 ```
 
-`send` takes OpenAI's realtime client events under their wire names, and `events` streams the decoded server events, starting with `session.created`. Audio goes in as base64 with `input_audio_buffer.append` and comes out in `response.output_audio.delta` events, 24 kHz PCM by default. For tools, put `yield* OpenAiRealtime.tools(toolkit)` in the session's `tools` and pipe `events` through `OpenAiRealtime.handleToolCalls(session, yield* toolkit)`: after each response with function calls, it runs the handlers, sends their results and asks for the next response. `error` events leave the session open, so they arrive as events unless you add `failOnError`.
+`send` takes OpenAI's realtime client events under their wire names, and `events` streams the decoded server events, starting with `session.created`. Audio goes in as base64 with `input_audio_buffer.append` and comes out in `response.output_audio.delta` events, 24 kHz PCM by default. For tools, put `yield* OpenAiRealtime.tools(toolkit)` in the session's `tools` and pipe `events` through `OpenAiRealtime.handleToolCalls(session, yield* toolkit)`: after each response with function calls, it runs the handlers, sends their results (a tool's `toModelOutput` text when it has one) and asks for the next response. It never runs client-executed tools or tools with `needsApproval`: a response that calls one gets no `response.create`, so send those outputs and `response.create` yourself. `error` events leave the session open, so they arrive as events unless you add `failOnError`.
 
 ## Provider metadata
 
