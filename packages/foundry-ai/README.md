@@ -12,7 +12,7 @@ Install only the provider peers you use:
 pnpm add @shpitdev/foundry-ai ai@7 @ai-sdk/openai@4
 ```
 
-Use `@ai-sdk/anthropic` for Claude and `@ai-sdk/google` for Gemini. Use `@ai-sdk/xai@4` for Grok. Use stable AI SDK 7 with provider v4 for new integrations. AI SDK 6/provider v3 and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
+Use `@ai-sdk/anthropic` for Claude, `@ai-sdk/google` for Gemini, `@ai-sdk/xai` for Grok, and `@ai-sdk/openai` for Gemma. Use stable AI SDK 7 with provider v4 (OpenAI Compatible v3) for new integrations. AI SDK 6/provider v3 (OpenAI Compatible v2) and the late SDK 7 beta line from `7.0.0-beta.187` remain compatible, but the current live survey uses stable SDK 7.
 
 ## Configure and call a model
 
@@ -43,11 +43,23 @@ Install `@ai-sdk/xai@4` with AI SDK 7 (or `@ai-sdk/xai@3` with SDK 6). The xAI s
 import { createFoundryXai } from '@shpitdev/foundry-ai/xai';
 
 const xai = createFoundryXai(loadFoundryConfig());
-const model = xai('grok-4-6'); // Defaults to the xAI Responses route.
-// Explicit routes: xai.responses('grok-4-6') or xai.chat('grok-4-6').
+const model = xai('grok-4-6'); // Uses the xAI Responses route.
 ```
 
-Grok uses model identity `foundry-xai`, catalog provider `xai`, registry prefix `xai:`, and `providerOptions.xai`. Both endpoints are beta. See [xAI setup and migration](./docs/xai.md) and the [current Grok results](./docs/README.md#xai) for verified capabilities and remaining gaps.
+Grok uses model identity `foundry-xai`, catalog provider `xai`, registry prefix `xai:`, and `providerOptions.xai`. See [xAI setup](./docs/xai.md) and the [current Grok results](./docs/README.md#xai) for verified capabilities and remaining gaps.
+
+## Open-weight models
+
+Install `@ai-sdk/openai-compatible@3` with AI SDK 7 for DeepSeek, NVIDIA Nemotron, Qwen, and Moonshot Kimi (use `@ai-sdk/openai-compatible@2` with AI SDK 6). For Gemma, install `@ai-sdk/openai` instead.
+
+```ts
+import { createFoundryDeepSeek } from '@shpitdev/foundry-ai/deepseek';
+
+const deepseek = createFoundryDeepSeek(loadFoundryConfig());
+const model = deepseek('deepseek-v3.2');
+```
+
+The other factories are `createFoundryNvidia`, `createFoundryQwen`, `createFoundryMoonshot`, and `createFoundryGemma`, on the `nvidia`, `qwen`, `moonshot`, and `gemma` subpaths. See [model routing and live results](./docs/README.md#model-routing) for aliases and feature limits.
 
 ## Embeddings and multiple providers
 

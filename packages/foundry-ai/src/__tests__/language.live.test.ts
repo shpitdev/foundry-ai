@@ -1,28 +1,24 @@
 import type { OpenAILanguageModelResponsesOptions } from '@ai-sdk/openai';
-import {
-  APICallError,
-  embed,
-  generateText,
-  Output,
-  stepCountIs,
-  streamText,
-  ToolLoopAgent,
-  tool,
-} from 'ai';
+import { embed, generateText, Output, stepCountIs, streamText, ToolLoopAgent, tool } from 'ai';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import type { FoundryCallOptions } from '../middleware.js';
 import { resolveKnownModelMetadata } from '../models/catalog.js';
 import { isKnownOpenAIReasoningTarget } from '../models/openai-models.js';
 import { createFoundryAnthropic } from '../providers/anthropic.js';
+import { createFoundryDeepSeek } from '../providers/deepseek.js';
+import { createFoundryGemma } from '../providers/gemma.js';
 import { createFoundryGoogle } from '../providers/google.js';
+import { createFoundryMoonshot } from '../providers/moonshot.js';
+import { createFoundryNvidia } from '../providers/nvidia.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
+import { createFoundryQwen } from '../providers/qwen.js';
 import { createFoundryXai } from '../providers/xai.js';
 import type { ModelProvider } from '../types.js';
 import {
   EMBEDDING_DIMENSIONS,
   expectedSignal,
-  LIVE_MAX_OUTPUT_TOKENS,
+  liveMaxOutputTokens,
   liveModels,
   loadLiveFoundryConfig,
   prompts,
@@ -41,6 +37,11 @@ const providers = {
   anthropic: createFoundryAnthropic(config),
   google: createFoundryGoogle(config),
   xai: createFoundryXai(config),
+  deepseek: createFoundryDeepSeek(config),
+  gemma: createFoundryGemma(config),
+  moonshot: createFoundryMoonshot(config),
+  nvidia: createFoundryNvidia(config),
+  qwen: createFoundryQwen(config),
 };
 
 const signalSchema = z.object({
@@ -71,6 +72,12 @@ const executedTool = expect.arrayContaining([
 describe.skipIf(languageModels.length === 0)('language', () => {
   for (const modelId of languageModels) {
     const { provider, supportsVision } = resolveKnownModelMetadata(modelId);
+    const maxOutputTokens = liveMaxOutputTokens(modelId);
+    const chatOpenWeight =
+      provider === 'deepseek' ||
+      provider === 'nvidia' ||
+      provider === 'qwen' ||
+      provider === 'moonshot';
     const model = () => providers[provider](modelId);
     const options = (mode: ProviderOptionMode) => getProviderOptions(provider, modelId, mode);
 
@@ -78,7 +85,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       const result = await generateText({
         model: model(),
         prompt: prompts.text(provider),
-        maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+        maxOutputTokens,
         providerOptions: options('baseline'),
       });
 
@@ -90,7 +97,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
         streamText({
           model: model(),
           prompt: prompts.stream(provider),
-          maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+          maxOutputTokens,
           providerOptions: options('baseline'),
         }),
       );
@@ -107,7 +114,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
           description: 'A concise clinical signal summary for regulated AI review workflows.',
         }),
         prompt: prompts.json,
-        maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+        maxOutputTokens,
         providerOptions: options('baseline'),
       });
 
@@ -117,7 +124,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
     it(`${provider}:${modelId}: Tools`, async () => {
       const agent = new ToolLoopAgent({
         model: model(),
-        maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+        maxOutputTokens,
         tools: { regulatorySignal: regulatorySignalTool },
         providerOptions: options('tools'),
         stopWhen: stepCountIs(3),
@@ -134,7 +141,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
         streamText({
           model: model(),
           prompt: prompts.streamTools,
-          maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+          maxOutputTokens,
           providerOptions: options('tools'),
           stopWhen: stepCountIs(3),
           tools: { regulatorySignal: regulatorySignalTool },
@@ -156,7 +163,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
           description: 'A structured regulatory signal summary after tool execution.',
         }),
         prompt: prompts.jsonTools,
-        maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+        maxOutputTokens,
         providerOptions: options('tools'),
         stopWhen: stepCountIs(3),
         tools: { regulatorySignal: regulatorySignalTool },
@@ -167,7 +174,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       expect(result.output.summary.toLowerCase()).toContain('oncology');
     });
 
-    if (supportsVision) {
+    if (supportsVision || chatOpenWeight) {
       it(`${provider}:${modelId}: Image`, async () => {
         const result = await generateText({
           model: model(),
@@ -180,7 +187,7 @@ describe.skipIf(languageModels.length === 0)('language', () => {
               ],
             },
           ],
-          maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+          maxOutputTokens,
           providerOptions: options('baseline'),
         });
 
@@ -195,30 +202,18 @@ describe.skipIf(languageModels.length === 0)('language', () => {
           streamText({
             model: model(),
             prompt: short ? prompts.reasoningReady : prompts.reasoning,
-            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
+            maxOutputTokens,
             providerOptions: options('reasoning'),
           }),
         );
 
-        if (provider === 'anthropic') {
+        if (provider === 'anthropic' || chatOpenWeight) {
           expect(summary.reasoningText.trim().length).toBeGreaterThan(0);
         } else {
           expect(hasReasoningEvidence(summary)).toBe(true);
         }
 
         expect(summary.text).toMatch(short ? /ready/iu : REASONING_ANSWER);
-      });
-    }
-
-    if (provider === 'xai') {
-      it(`${provider}:${modelId}: Chat Completions rejected`, async () => {
-        await expect(
-          generateText({
-            model: providers.xai.chat(modelId),
-            prompt: prompts.xaiChat,
-            maxOutputTokens: LIVE_MAX_OUTPUT_TOKENS,
-          }),
-        ).rejects.toSatisfy((error) => APICallError.isInstance(error) && error.statusCode === 400);
       });
     }
   }
@@ -244,6 +239,13 @@ function getProviderOptions(
 ): FoundryCallOptions['providerOptions'] {
   if (provider === 'xai') {
     return { xai: { store: false } };
+  }
+
+  if (
+    mode === 'reasoning' &&
+    (provider === 'deepseek' || provider === 'nvidia' || provider === 'qwen')
+  ) {
+    return { [provider]: { reasoningEffort: 'high' } };
   }
 
   if (provider === 'openai') {

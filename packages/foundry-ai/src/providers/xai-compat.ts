@@ -5,9 +5,6 @@ import { isRecord } from '../records.js';
 export function createXaiProxyFetch(): typeof fetch {
   return async (input, init) => {
     const request = new Request(input, init);
-    if (!new URL(request.url).pathname.endsWith('/responses')) {
-      return fetch(request);
-    }
     const body: unknown = await request.json();
     if (isRecord(body) && Array.isArray(body.input)) {
       body.input = body.input.map((item: unknown) => {

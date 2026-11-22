@@ -174,11 +174,12 @@
     "displayName": "Gemma 4 31B",
     "lifecycle": "ga",
     "performance": {
-      "cost": "MEDIUM",
+      "cost": "LOW",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
     },
-    "externalUrl": "https://huggingface.co/google/gemma-4-31B-it"
+    "externalUrl": "https://huggingface.co/google/gemma-4-31B-it",
+    "modelCreator": "GOOGLE"
   },
   {
     "rid": "ri.language-model-service..language-model.gemini-3-1-flash-lite",
@@ -341,11 +342,12 @@
     "lifecycle": "ga",
     "trainingCutoffDate": "2025-01-01T00:00:00Z",
     "performance": {
-      "cost": "MEDIUM",
+      "cost": "LOW",
       "modelClass": "REASONING",
       "speed": "MEDIUM"
     },
-    "externalUrl": "https://huggingface.co/google/gemma-4-26B-A4B-it"
+    "externalUrl": "https://huggingface.co/google/gemma-4-26B-A4B-it",
+    "modelCreator": "OPEN_SOURCE"
   },
   {
     "rid": "ri.language-model-service..language-model.schematic-7B",
@@ -954,5 +956,124 @@
       "speed": "HIGH"
     },
     "externalUrl": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1-mini"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.deepseek-v3-2",
+    "modelIdentifier": "DEEPSEEK_V3_2",
+    "displayName": "DeepSeek V3.2",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-03-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V3.2",
+    "modelCreator": "DEEPSEEK"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.nemotron-3-super-120b",
+    "modelIdentifier": "NEMOTRON_3_SUPER_120B",
+    "displayName": "NVIDIA Nemotron 3 Super 120B",
+    "lifecycle": "ga",
+    "trainingCutoffDate": "2025-06-01T00:00:00Z",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://build.nvidia.com/nvidia/nemotron-3-super-120b-a12b/modelcard",
+    "modelCreator": "NVIDIA"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.nemotron-3-nano-30b",
+    "modelIdentifier": "NEMOTRON_3_NANO_30B",
+    "displayName": "NVIDIA Nemotron 3 Nano 30B",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://build.nvidia.com/nvidia/nemotron-3-nano-30b-a3b/modelcard",
+    "modelCreator": "NVIDIA"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.nemotron-3-ultra-550b-a55b-nvfp4",
+    "modelIdentifier": "NEMOTRON_3_ULTRA_550B_A55B_NVFP4",
+    "displayName": "NVIDIA Nemotron 3 Ultra 550B A55B NVFP4",
+    "lifecycle": "experimental",
+    "trainingCutoffDate": "2026-05-01T00:00:00Z",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://build.nvidia.com/nvidia/nemotron-3-ultra-550b-a55b/modelcard",
+    "modelCreator": "NVIDIA"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.qwen3-32b",
+    "modelIdentifier": "QWEN3_32B",
+    "displayName": "Qwen3 32B",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://qwen.ai/blog?id=qwen3",
+    "modelCreator": "QWEN"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.qwen3-235b-a22b-2507",
+    "modelIdentifier": "QWEN3_235B_A22B_2507",
+    "displayName": "Qwen3 235B A22B 2507",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "LOW",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://qwen.ai/blog?id=qwen3",
+    "modelCreator": "QWEN"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.kimi-k3-1-pro-highspeed",
+    "modelIdentifier": "KIMI_K3_1_PRO_HIGHSPEED",
+    "displayName": "Kimi K3.1 Pro - Highspeed",
+    "lifecycle": "experimental",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING"
+    },
+    "externalUrl": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
+    "modelCreator": "MOONSHOT_AI"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.kimi-k3",
+    "modelIdentifier": "KIMI_K3",
+    "displayName": "Kimi K3",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "HIGH",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://huggingface.co/moonshotai/Kimi-K3",
+    "modelCreator": "MOONSHOT_AI"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.kimi-k2-5",
+    "modelIdentifier": "KIMI_K2_5",
+    "displayName": "Kimi K2.5",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://www.kimi.com/ai-models/kimi-k2-5",
+    "modelCreator": "MOONSHOT_AI"
   }
 ]

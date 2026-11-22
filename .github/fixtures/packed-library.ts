@@ -25,7 +25,6 @@ const xai = createFoundryXai(config);
 const providersAndModels = [
   { provider: xai, model: xai('grok-4-6') },
   { provider: xai, model: xai.responses('grok-4-6') },
-  { provider: xai, model: xai.chat('grok-4-6') },
   { provider: openai, model: openai('gpt-5.6-terra') },
   { provider: anthropic, model: anthropic('claude-opus-5') },
   { provider: google, model: google('gemini-4-argon') },
@@ -62,47 +61,35 @@ globalThis.fetch = async (input, init) => {
   requests.push(request.url);
   assert.equal(request.headers.get('authorization'), 'Bearer test-token');
   assert.equal(body.model, 'ri.language-model-service..language-model.grok-4-6');
-  if (request.url.endsWith('/responses')) {
-    assert.equal(body.store, false);
-    return Response.json({
-      id: 'resp',
-      created_at: 1,
-      status: 'completed',
-      output: [
-        {
-          type: 'message',
-          id: 'msg',
-          role: 'assistant',
-          status: 'completed',
-          content: [{ type: 'output_text', text: 'OK' }],
-        },
-      ],
-    });
-  }
-  assert.equal(body.store, undefined);
+  assert.ok(request.url.endsWith('/xai/v1/responses'));
+  assert.equal(body.store, false);
   return Response.json({
-    id: 'chat',
-    created: 1,
-    model: body.model,
-    choices: [{ index: 0, message: { role: 'assistant', content: 'OK' }, finish_reason: 'stop' }],
+    id: 'resp',
+    created_at: 1,
+    status: 'completed',
+    output: [
+      {
+        type: 'message',
+        id: 'msg',
+        role: 'assistant',
+        status: 'completed',
+        content: [{ type: 'output_text', text: 'OK' }],
+      },
+    ],
   });
 };
 const results = await Promise.all(
-  [createFoundryXai, cjsXai.createFoundryXai].flatMap((factory) => {
+  [createFoundryXai, cjsXai.createFoundryXai].map((factory) => {
     const provider = factory(config);
     const model = createProviderRegistry({ xai: provider }).languageModel('xai:grok-4-6');
     assert.equal(model.provider, 'foundry-xai');
-    return [model, provider.chat('grok-4-6')].map((selected) =>
-      generateText({ model: selected, prompt: 'Reply OK.', maxRetries: 0 }),
-    );
+    return generateText({ model, prompt: 'Reply OK.', maxRetries: 0 });
   }),
 );
 for (const result of results) {
   assert.equal(result.text, 'OK');
 }
-assert.equal(requests.length, 4);
-assert.equal(requests.filter((url) => url.endsWith('/xai/v1/responses')).length, 2);
-assert.equal(requests.filter((url) => url.endsWith('/xai/v1/chat/completions')).length, 2);
+assert.equal(requests.length, 2);
 console.log(`Packed ESM/CJS native xAI routing and registry passed for ${expectedVersion}.`);
 
 // Decision models need an @ai-sdk/openai release with decisionModel; older peers get a clear error.

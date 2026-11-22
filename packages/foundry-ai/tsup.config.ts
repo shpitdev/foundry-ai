@@ -7,13 +7,25 @@ const entries = {
   'providers/anthropic': 'src/providers/anthropic.ts',
   'providers/google': 'src/providers/google.ts',
   'providers/xai': 'src/providers/xai.ts',
+  'providers/deepseek': 'src/providers/deepseek.ts',
+  'providers/nvidia': 'src/providers/nvidia.ts',
+  'providers/qwen': 'src/providers/qwen.ts',
+  'providers/moonshot': 'src/providers/moonshot.ts',
+  'providers/gemma': 'src/providers/gemma.ts',
 };
 
 function build(entry: Record<string, string>, output: Pick<Options, 'dts' | 'sourcemap'>): Options {
   return {
     ...output,
     entry,
-    external: ['ai', '@ai-sdk/anthropic', '@ai-sdk/google', '@ai-sdk/openai', '@ai-sdk/xai'],
+    external: [
+      'ai',
+      '@ai-sdk/anthropic',
+      '@ai-sdk/google',
+      '@ai-sdk/openai',
+      '@ai-sdk/openai-compatible',
+      '@ai-sdk/xai',
+    ],
     format: ['esm', 'cjs'],
     outExtension({ format }) {
       return {

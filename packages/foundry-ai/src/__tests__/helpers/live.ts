@@ -17,7 +17,7 @@ interface LiveModelIds {
 }
 export type LiveKind = keyof LiveModelIds;
 
-const PROVIDERS = ['openai', 'anthropic', 'google', 'xai'];
+const PROVIDERS = [...new Set(Object.values(MODEL_CATALOG).map(({ provider }) => provider))];
 
 const DEFAULT_MODELS: { [K in LiveKind]: ReadonlyArray<LiveModelIds[K]> } = {
   language: ['gpt-6-luna', 'claude-haiku-4.5', 'gemini-3.1-flash-lite', 'grok-4-6'],
@@ -54,7 +54,10 @@ export function liveModels<K extends LiveKind>(kind: K): Array<LiveModelIds[K]> 
     .map((token) => token.trim())
     .filter(Boolean);
   const unknown = tokens.filter(
-    (token) => token !== 'all' && !PROVIDERS.includes(token) && !(token in MODEL_CATALOG),
+    (token) =>
+      token !== 'all' &&
+      !PROVIDERS.some((provider) => provider === token) &&
+      !Object.hasOwn(MODEL_CATALOG, token),
   );
 
   if (tokens.length === 0 || unknown.length > 0) {
@@ -86,8 +89,10 @@ function isKind(id: KnownModelId, kind: LiveKind) {
   return kinds[kind];
 }
 
-// A capability survey should leave room for reasoning and final output.
-export const LIVE_MAX_OUTPUT_TOKENS = 8192;
+/** Leave room for reasoning and final output without exceeding Nano's listed cap. */
+export function liveMaxOutputTokens(modelId: KnownModelId): number {
+  return modelId === 'nemotron-3-nano-30b' ? 8000 : 8192;
+}
 
 export const expectedSignal = {
   indication: 'relapse prevention',
@@ -128,6 +133,5 @@ export const prompts = {
   reasoning:
     'Work through this carefully: find the smallest positive integer n that leaves remainder 1 when divided by 2, 3, 4, 5, and 6, and is divisible by 7. Give the number and a concise justification.',
   reasoningReady: 'Reply with READY and one short clause about reasoning visibility.',
-  xaiChat: 'Reply with exactly "XAI: chat route works."',
   embedding: 'Foundry capability matrix embedding probe',
 };

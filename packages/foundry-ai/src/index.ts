@@ -18,11 +18,35 @@ export {
   resolveModelTarget,
 } from './models/catalog.js';
 export {
+  DEEPSEEK_MODEL_IDS,
+  DEEPSEEK_MODELS,
+  type DeepSeekModelId,
+  type KnownDeepSeekModelId,
+} from './models/deepseek-models.js';
+export {
+  GEMMA_MODEL_IDS,
+  GEMMA_MODELS,
+  type GemmaModelId,
+  type KnownGemmaModelId,
+} from './models/gemma-models.js';
+export {
   GOOGLE_MODEL_IDS,
   GOOGLE_MODELS,
   type GoogleModelId,
   type KnownGoogleModelId,
 } from './models/google-models.js';
+export {
+  type KnownMoonshotModelId,
+  MOONSHOT_MODEL_IDS,
+  MOONSHOT_MODELS,
+  type MoonshotModelId,
+} from './models/moonshot-models.js';
+export {
+  type KnownNvidiaModelId,
+  NVIDIA_MODEL_IDS,
+  NVIDIA_MODELS,
+  type NvidiaModelId,
+} from './models/nvidia-models.js';
 export {
   type KnownOpenAIDecisionModelId,
   type KnownOpenAIEmbeddingModelId,
@@ -36,6 +60,12 @@ export {
   type OpenAIEmbeddingModelId,
   type OpenAIModelId,
 } from './models/openai-models.js';
+export {
+  type KnownQwenModelId,
+  QWEN_MODEL_IDS,
+  QWEN_MODELS,
+  type QwenModelId,
+} from './models/qwen-models.js';
 export {
   REALTIME_MODEL_IDS,
   REALTIME_MODELS,

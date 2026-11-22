@@ -45,7 +45,7 @@ const config = {
 
 afterEach(() => vi.unstubAllGlobals());
 
-type RequestBody = Record<string, unknown> & { input?: Array<unknown>; messages?: Array<unknown> };
+type RequestBody = Record<string, unknown> & { input?: Array<unknown> };
 async function readBody(request: Request): Promise<RequestBody> {
   return (await request.json()) as RequestBody;
 }
@@ -57,26 +57,6 @@ function lastRequest(requests: Array<Request>): Request {
   }
   return request;
 }
-
-/** What each xAI route sends: Responses forces store=false; Chat Completions omits store. */
-const ROUTES = [
-  {
-    route: 'responses',
-    path: 'responses',
-    store: false,
-    reasoning: { reasoning: { effort: 'low' } },
-    history: 'input',
-    otherHistory: 'messages',
-  },
-  {
-    route: 'chat',
-    path: 'chat/completions',
-    store: undefined,
-    reasoning: { reasoning_effort: 'low' },
-    history: 'messages',
-    otherHistory: 'input',
-  },
-] as const;
 
 function captureRequests() {
   const requests: Array<Request> = [];
@@ -91,69 +71,54 @@ function captureRequests() {
           headers: { 'content-type': 'text/event-stream' },
         });
       }
-      return Response.json(
-        request.url.endsWith('/chat/completions')
-          ? {
-              id: 'chat-1',
-              created: 1,
-              model: body.model,
-              choices: [
-                { index: 0, message: { role: 'assistant', content: 'OK' }, finish_reason: 'stop' },
-              ],
-              usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
-            }
-          : {
-              id: 'resp-1',
-              created_at: 1,
-              model: body.model,
-              status: 'completed',
-              output: [
-                {
-                  type: 'message',
-                  id: 'msg-1',
-                  role: 'assistant',
-                  status: 'completed',
-                  content: [{ type: 'output_text', text: 'OK', annotations: [] }],
-                },
-              ],
-              usage: { input_tokens: 1, output_tokens: 1, total_tokens: 2 },
-            },
-      );
+      return Response.json({
+        id: 'resp-1',
+        created_at: 1,
+        model: body.model,
+        status: 'completed',
+        output: [
+          {
+            type: 'message',
+            id: 'msg-1',
+            role: 'assistant',
+            status: 'completed',
+            content: [{ type: 'output_text', text: 'OK', annotations: [] }],
+          },
+        ],
+        usage: { input_tokens: 1, output_tokens: 1, total_tokens: 2 },
+      });
     }),
   );
   return requests;
 }
 
 describe('xAI routing through the real SDK', () => {
-  it.each(ROUTES)(
-    'routes every Grok alias and RID through $route',
-    async ({ route, path, store }) => {
-      const requests = captureRequests();
-      const provider = createFoundryXai(config);
-      for (const alias of XAI_MODEL_IDS) {
-        expect(XAI_MODELS[alias].supportsResponses).toBe(true);
-        for (const target of [alias, XAI_MODELS[alias].rid]) {
-          const model = provider[route](target);
-          expect(model.modelId).toBe(target);
-          expect(model.provider).toBe('foundry-xai');
-          expect(model.specificationVersion).toBe(provider.specificationVersion);
-          const result = await generateText({ model, prompt: 'Say OK', maxRetries: 0 });
-          expect(result.text).toBe('OK');
-          const request = lastRequest(requests);
-          expect(request.url).toBe(`https://foundry.example/api/v2/llm/proxy/xai/v1/${path}`);
-          expect(request.method).toBe('POST');
-          expect(request.headers.get('authorization')).toBe('Bearer test-token');
-          expect(request.headers.get('attribution')).toBe(config.attributionRid);
-          expect(request.headers.get('traceparent')).toBe(config.traceParent);
-          expect(request.headers.get('tracestate')).toBe(config.traceState);
-          const body = await readBody(request);
-          expect(body.model).toBe(XAI_MODELS[alias].rid);
-          expect(body.store).toBe(store);
-        }
+  it('routes every Grok alias and RID through Responses', async () => {
+    const requests = captureRequests();
+    const provider = createFoundryXai(config);
+    for (const alias of XAI_MODEL_IDS) {
+      expect(XAI_MODELS[alias].supportsResponses).toBe(true);
+      for (const target of [alias, XAI_MODELS[alias].rid]) {
+        const model = provider.responses(target);
+        expect(model.modelId).toBe(target);
+        expect(model.provider).toBe('foundry-xai');
+        expect(model.specificationVersion).toBe(provider.specificationVersion);
+        const result = await generateText({ model, prompt: 'Say OK', maxRetries: 0 });
+        expect(result.text).toBe('OK');
+        const request = lastRequest(requests);
+        expect(request.url).toBe('https://foundry.example/api/v2/llm/proxy/xai/v1/responses');
+        expect(request.method).toBe('POST');
+        expect(request.headers.get('authorization')).toBe('Bearer test-token');
+        expect(request.headers.get('attribution')).toBe(config.attributionRid);
+        expect(request.headers.get('traceparent')).toBe(config.traceParent);
+        expect(request.headers.get('tracestate')).toBe(config.traceState);
+        const body = await readBody(request);
+        expect(body.model).toBe(XAI_MODELS[alias].rid);
+        expect(body.store).toBe(false);
       }
-      expect(requests).toHaveLength(XAI_MODEL_IDS.length * 2);
-    },
-  );
+    }
+    expect(requests).toHaveLength(XAI_MODEL_IDS.length * 2);
+  });
 
   it('defaults callable, languageModel and registry calls to Responses with xAI identity', async () => {
     const requests = captureRequests();
@@ -173,81 +138,68 @@ describe('xAI routing through the real SDK', () => {
     expect(() => registry.imageModel('xai:grok-4-6')).toThrow(NoSuchModelError);
   });
 
-  it.each(['responses', 'chat'] as const)(
-    'passes unknown enrollment IDs unchanged on %s and rejects known foreign models',
-    async (route) => {
-      const requests = captureRequests();
-      const xai = createFoundryXai(config);
-      for (const id of ['custom-grok', 'ri.language-model-service..language-model.custom-grok']) {
-        await generateText({ model: xai[route](id), prompt: 'OK', maxRetries: 0 });
-        expect((await readBody(lastRequest(requests))).model).toBe(id);
-      }
-      for (const id of ['gpt-5', resolveModelTarget('gpt-5').rid]) {
-        expect(() => xai[route](id)).toThrow(NoSuchModelError);
-      }
-    },
-  );
+  it('passes unknown enrollment IDs unchanged and rejects known foreign models', async () => {
+    const requests = captureRequests();
+    const xai = createFoundryXai(config);
+    for (const id of ['custom-grok', 'ri.language-model-service..language-model.custom-grok']) {
+      await generateText({ model: xai.responses(id), prompt: 'OK', maxRetries: 0 });
+      expect((await readBody(lastRequest(requests))).model).toBe(id);
+    }
+    for (const id of ['gpt-5', resolveModelTarget('gpt-5').rid]) {
+      expect(() => xai.responses(id)).toThrow(NoSuchModelError);
+    }
+  });
 
-  it.each(['responses', 'chat'] as const)(
-    'rejects store=true before generate or stream fetch on %s',
-    async (route) => {
-      const fetch = vi.fn<typeof globalThis.fetch>();
-      vi.stubGlobal('fetch', fetch);
-      const model = createFoundryXai(config)[route]('grok-4-6');
-      for (const method of ['doGenerate', 'doStream'] as const) {
-        await expect(
-          model[method]({
-            prompt: [{ role: 'user', content: [{ type: 'text', text: 'OK' }] }],
-            providerOptions: { xai: { store: true } },
-          }),
-        ).rejects.toThrow('Foundry xAI does not support providerOptions.xai.store=true');
-      }
-      expect(fetch).not.toHaveBeenCalled();
-    },
-  );
+  it('rejects store=true before generate or stream fetch', async () => {
+    const fetch = vi.fn<typeof globalThis.fetch>();
+    vi.stubGlobal('fetch', fetch);
+    const model = createFoundryXai(config).responses('grok-4-6');
+    for (const method of ['doGenerate', 'doStream'] as const) {
+      await expect(
+        model[method]({
+          prompt: [{ role: 'user', content: [{ type: 'text', text: 'OK' }] }],
+          providerOptions: { xai: { store: true } },
+        }),
+      ).rejects.toThrow('Foundry xAI does not support providerOptions.xai.store=true');
+    }
+    expect(fetch).not.toHaveBeenCalled();
+  });
 
-  it.each(ROUTES)(
-    'preserves options, headers and cancellation with store=false on $route',
-    async ({ route, store, reasoning }) => {
-      const requests = captureRequests();
-      const controller = new AbortController();
-      const model = createFoundryXai(config)[route]('grok-4-6');
-      await model.doGenerate({
-        prompt: [{ role: 'user', content: [{ type: 'text', text: 'OK' }] }],
-        providerOptions: { xai: { store: false, reasoningEffort: 'low' } },
-        headers: { 'x-request-id': 'custom-request' },
-        abortSignal: controller.signal,
-      });
-      const request = requests[0];
-      const body = await readBody(request);
-      expect(body).toMatchObject(reasoning);
-      expect(request.headers.get('x-request-id')).toBe('custom-request');
-      expect(body.store).toBe(store);
-      controller.abort();
-      expect(request.signal.aborted).toBe(true);
-    },
-  );
+  it('preserves options, headers and cancellation with store=false', async () => {
+    const requests = captureRequests();
+    const controller = new AbortController();
+    const model = createFoundryXai(config).responses('grok-4-6');
+    await model.doGenerate({
+      prompt: [{ role: 'user', content: [{ type: 'text', text: 'OK' }] }],
+      providerOptions: { xai: { store: false, reasoningEffort: 'low' } },
+      headers: { 'x-request-id': 'custom-request' },
+      abortSignal: controller.signal,
+    });
+    const request = requests[0];
+    const body = await readBody(request);
+    expect(body).toMatchObject({ reasoning: { effort: 'low' }, store: false });
+    expect(request.headers.get('x-request-id')).toBe('custom-request');
+    controller.abort();
+    expect(request.signal.aborted).toBe(true);
+  });
 
-  it.each(ROUTES)(
-    'applies governance and history conversion to streaming requests on $route',
-    async ({ route, store, history, otherHistory }) => {
-      const requests = captureRequests();
-      const model = createFoundryXai(config)[route]('grok-4-6');
-      const result = await model.doStream({
-        prompt: [
-          { role: 'user', content: [{ type: 'text', text: 'Remember blue.' }] },
-          { role: 'assistant', content: [{ type: 'text', text: 'Blue.' }] },
-          { role: 'user', content: [{ type: 'text', text: 'Which color?' }] },
-        ],
-      });
-      await result.stream.pipeTo(new WritableStream());
-      const body = await readBody(requests[0]);
-      expect(body.stream).toBe(true);
-      expect(body.store).toBe(store);
-      expect(body).not.toHaveProperty(otherHistory);
-      expect(body[history]?.[1]).toEqual({ role: 'assistant', content: 'Blue.' });
-    },
-  );
+  it('applies governance and history conversion to streaming requests', async () => {
+    const requests = captureRequests();
+    const model = createFoundryXai(config).responses('grok-4-6');
+    const result = await model.doStream({
+      prompt: [
+        { role: 'user', content: [{ type: 'text', text: 'Remember blue.' }] },
+        { role: 'assistant', content: [{ type: 'text', text: 'Blue.' }] },
+        { role: 'user', content: [{ type: 'text', text: 'Which color?' }] },
+      ],
+    });
+    await result.stream.pipeTo(new WritableStream());
+    const body = await readBody(requests[0]);
+    expect(body.stream).toBe(true);
+    expect(body.store).toBe(false);
+    expect(body).not.toHaveProperty('messages');
+    expect(body.input?.[1]).toEqual({ role: 'assistant', content: 'Blue.' });
+  });
 
   it('preserves tool calls and results during Responses assistant normalization', async () => {
     const requests = captureRequests();

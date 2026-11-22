@@ -12,12 +12,11 @@ export interface FoundryXaiProvider {
   specificationVersion: FoundryLanguageModel['specificationVersion'];
   languageModel(modelId: XaiModelId): FoundryLanguageModel;
   responses(modelId: XaiModelId): FoundryLanguageModel;
-  chat(modelId: XaiModelId): FoundryLanguageModel;
   embeddingModel(modelId: string): never;
   imageModel(modelId: string): never;
 }
 
-/** Foundry's beta language routes, using the native xAI SDK and xai options. */
+/** Foundry's xAI Responses route, using the native xAI SDK and xai options. */
 export function createFoundryXai(config: FoundryConfig): FoundryXaiProvider {
   const resolved = resolveFoundryConfig(config, 'createFoundryXai');
   const providerId = 'foundry-xai';
@@ -28,15 +27,12 @@ export function createFoundryXai(config: FoundryConfig): FoundryXaiProvider {
     fetch: createXaiProxyFetch(),
   });
 
-  const createLanguageModel = (
-    modelId: XaiModelId,
-    route: 'responses' | 'chat',
-  ): FoundryLanguageModel => {
+  const responses = (modelId: XaiModelId): FoundryLanguageModel => {
     const { rid, metadata } = resolveModelTarget(modelId);
     if (metadata && metadata.provider !== 'xai') {
       throw new NoSuchModelError({ modelId, modelType: 'languageModel' });
     }
-    return wrapFoundryLanguageModel(baseProvider[route](rid), {
+    return wrapFoundryLanguageModel(baseProvider.responses(rid), {
       modelId,
       providerId,
       transformParams: (params) => {
@@ -48,19 +44,17 @@ export function createFoundryXai(config: FoundryConfig): FoundryXaiProvider {
           ...params,
           providerOptions: {
             ...params.providerOptions,
-            xai: { ...options, store: route === 'responses' ? false : undefined },
+            xai: { ...options, store: false },
           },
         };
       },
     });
   };
 
-  const responses = (modelId: XaiModelId) => createLanguageModel(modelId, 'responses');
-  return Object.assign((modelId: XaiModelId) => responses(modelId), {
+  return Object.assign(responses, {
     specificationVersion: baseProvider.specificationVersion,
     languageModel: responses,
     responses,
-    chat: (modelId: XaiModelId) => createLanguageModel(modelId, 'chat'),
     embeddingModel: (modelId: string): never => {
       throw new NoSuchModelError({ modelId, modelType: 'embeddingModel' });
     },
