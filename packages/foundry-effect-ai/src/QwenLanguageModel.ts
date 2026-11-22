@@ -18,7 +18,8 @@ export interface Config {
   /**
    * `'high'` makes the model reason; its `<reasoning>` spans come back as reasoning parts. Without
    * an effort, or with `'none'`, the model shows no reasoning. Under `'high'` a structured answer
-   * can land inside the reasoning, so leave it unset for `generateObject`.
+   * can land inside the reasoning, so leave it unset for `generateObject`. Qwen3 235B A22B 2507
+   * does not think, and Foundry never answers it with `'high'`.
    */
   readonly reasoning_effort?: Wire.ReasoningEffort | undefined;
 }
