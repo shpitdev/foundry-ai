@@ -1,0 +1,117 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"The European capital that hosted the Summer Olympics in 1900 and 1924 is\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" Paris, France.\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"\"}}]},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":[{\"index\":0,\"id\":null,\"type\":\"function\",\"function\":{\"name\":null,\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"}}]},\"finish_reason\":\"tool_calls\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795316899,\"model\":\"zai.glm-5\",\"choices\":[],\"usage\":{\"prompt_tokens\":205,\"completion_tokens\":32,\"total_tokens\":237,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.glm-5",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795316901,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795316901,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"Paris, the European capital that hosted the Summer Olympics in 1900 and 192\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795316901,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"4, currently has sunny conditions with a temperature of 21°C.\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795316901,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-3\",\"object\":\"chat.completion.chunk\",\"created\":1795316901,\"model\":\"zai.glm-5\",\"choices\":[],\"usage\":{\"prompt_tokens\":262,\"completion_tokens\":32,\"total_tokens\":294,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.glm-5",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": "The European capital that hosted the Summer Olympics in 1900 and 1924 is Paris, France.",
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

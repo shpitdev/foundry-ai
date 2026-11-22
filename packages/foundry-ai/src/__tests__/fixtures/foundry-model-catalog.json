@@ -1075,5 +1075,31 @@
     },
     "externalUrl": "https://www.kimi.com/ai-models/kimi-k2-5",
     "modelCreator": "MOONSHOT_AI"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.glm-5",
+    "modelIdentifier": "GLM_5",
+    "displayName": "Z.ai GLM-5",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://z.ai/blog/glm-5",
+    "modelCreator": "Z_AI"
+  },
+  {
+    "rid": "ri.language-model-service..language-model.glm-5-3",
+    "modelIdentifier": "GLM_5_3",
+    "displayName": "Z.ai GLM-5.3",
+    "lifecycle": "ga",
+    "performance": {
+      "cost": "MEDIUM",
+      "modelClass": "REASONING",
+      "speed": "MEDIUM"
+    },
+    "externalUrl": "https://huggingface.co/zai-org/GLM-5.3",
+    "modelCreator": "Z_AI"
   }
 ]

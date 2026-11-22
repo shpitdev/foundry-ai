@@ -14,6 +14,7 @@ import * as OpenAi from '../src/internal/models/openai.ts';
 import * as Qwen from '../src/internal/models/qwen.ts';
 import * as Realtime from '../src/internal/models/realtime.ts';
 import * as Xai from '../src/internal/models/xai.ts';
+import * as Zai from '../src/internal/models/zai.ts';
 
 export interface Row {
   readonly module: string;
@@ -43,6 +44,7 @@ const vendors = {
   nvidia: Object.keys(Nvidia.models),
   qwen: Object.keys(Qwen.models),
   moonshot: Object.keys(Moonshot.models),
+  zai: Object.keys(Zai.models),
   gemma: Object.keys(Gemma.models),
 };
 
@@ -182,6 +184,14 @@ export const rows: ReadonlyArray<Row> = [
     sweep: vendors.moonshot,
     // `tools` and `stream-tools` also check that the replay leaves out `reasoning_content`.
     cells: languageCells,
+  },
+  {
+    module: 'ZaiLanguageModel',
+    phase: 10,
+    liveModels: ['glm-5'],
+    sweep: vendors.zai,
+    cells: taggedChatCells,
+    sweepOnly: taggedChatSweepOnly,
   },
   {
     module: 'GemmaLanguageModel',

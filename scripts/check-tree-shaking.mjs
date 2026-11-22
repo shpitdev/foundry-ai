@@ -26,12 +26,14 @@ const owners = {
     'NvidiaLanguageModel',
     'QwenLanguageModel',
     'MoonshotLanguageModel',
+    'ZaiLanguageModel',
   ],
   // The `<reasoning>` tag parser, passed in only by the makers that send tagged reasoning.
   'src/internal/openai-chat-completions/reasoningTags.js': [
     'DeepSeekLanguageModel',
     'NvidiaLanguageModel',
     'QwenLanguageModel',
+    'ZaiLanguageModel',
   ],
   'src/internal/openai-decisions/': ['OpenAiDecisionModel'],
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
@@ -52,6 +54,7 @@ const owners = {
   'src/internal/models/nvidia.js': ['NvidiaLanguageModel'],
   'src/internal/models/qwen.js': ['QwenLanguageModel'],
   'src/internal/models/moonshot.js': ['MoonshotLanguageModel'],
+  'src/internal/models/zai.js': ['ZaiLanguageModel'],
   'src/internal/models/gemma.js': ['GemmaLanguageModel'],
   'src/internal/models/realtime.js': ['OpenAiRealtime'],
 };
@@ -73,6 +76,7 @@ const budgets = {
   OpenAiRealtime: 12_600,
   QwenLanguageModel: 21_300,
   XaiLanguageModel: 25_400,
+  ZaiLanguageModel: 21_500,
 };
 
 const modules = readdirSync(distRoot)
@@ -132,6 +136,7 @@ try {
       '  (metadata: AiError.UnknownErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
       "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-openai']?.itemId,",
       "  (metadata: Response.FinishPartMetadata): string | undefined => metadata['foundry-moonshot']?.refusal,",
+      "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-zai']?.arguments,",
       '];',
       '',
     ].join('\n'),

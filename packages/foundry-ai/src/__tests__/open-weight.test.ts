@@ -7,6 +7,7 @@ import { createFoundryGemma } from '../providers/gemma.js';
 import { createFoundryMoonshot } from '../providers/moonshot.js';
 import { createFoundryNvidia } from '../providers/nvidia.js';
 import { createFoundryQwen } from '../providers/qwen.js';
+import { createFoundryZai } from '../providers/zai.js';
 
 const config = {
   foundryUrl: 'https://foundry.example///',
@@ -21,6 +22,7 @@ const makers = [
   ['nvidia', createFoundryNvidia, 'deepseek-v3.2', 'chat/completions', simpleChatOutput],
   ['qwen', createFoundryQwen, 'deepseek-v3.2', 'chat/completions', simpleChatOutput],
   ['moonshot', createFoundryMoonshot, 'deepseek-v3.2', 'chat/completions', simpleChatOutput],
+  ['zai', createFoundryZai, 'deepseek-v3.2', 'chat/completions', simpleChatOutput],
   ['gemma', createFoundryGemma, 'deepseek-v3.2', 'responses', responsesOutput],
 ] as const;
 
@@ -49,6 +51,20 @@ function chatOutput(message: Record<string, unknown>, finishReason = 'stop') {
 
 function simpleChatOutput() {
   return chatOutput({ content: 'OK' });
+}
+
+function chatStreamOutput(chunks: ReadonlyArray<string>) {
+  const responses = [
+    ...chunks.map((content) => ({ choices: [{ delta: { content } }] })),
+    { choices: [{ delta: {}, finish_reason: 'stop' }] },
+    { choices: [], usage },
+  ];
+  return new Response(
+    responses.map((response) => `data: ${JSON.stringify(response)}\n\n`).join(''),
+    {
+      headers: { 'content-type': 'text/event-stream' },
+    },
+  );
 }
 
 function responsesOutput() {
@@ -152,43 +168,120 @@ it('extracts tagged reasoning before parsing structured output', async () => {
   });
 });
 
-it('extracts repeated reasoning tags split across Chat stream chunks and retains terminal usage', async () => {
-  const chunks = [
-    '<reas',
-    'oning>First</rea',
-    'soning><reason',
-    'ing>Second</reason',
-    'ing>{"ok":',
-    'true}',
-  ];
-  const responses = [
-    ...chunks.map((content) => ({ choices: [{ delta: { content } }] })),
-    { choices: [{ delta: {}, finish_reason: 'stop' }] },
-    { choices: [], usage },
-  ];
-  const requests = stubFetch(
-    () =>
-      new Response(responses.map((response) => `data: ${JSON.stringify(response)}\n\n`).join(''), {
-        headers: { 'content-type': 'text/event-stream' },
-      }),
+const taggedText = '<reasoning>details</reasoning>answer';
+const intact = { text: taggedText, reasoningText: undefined };
+const extracted = { text: 'answer', reasoningText: 'details' };
+
+it.each([
+  ['default effort', {}, undefined, intact],
+  ['provider default', { reasoning: 'provider-default' }, undefined, intact],
+  ['explicit none', { reasoning: 'none' }, 'none', intact],
+  ['standardized high', { reasoning: 'high' }, 'high', extracted],
+  ['provider high', { providerOptions: { zai: { reasoningEffort: 'high' } } }, 'high', extracted],
+  [
+    'provider override',
+    { reasoning: 'high', providerOptions: { zai: { reasoningEffort: 'none' } } },
+    'none',
+    intact,
+  ],
+  ['unsupported effort', { reasoning: 'max' }, undefined, intact],
+] as const)(
+  'GLM-5 only extracts tags when reasoning is requested: %s',
+  async (_name, options, effort, { text, reasoningText }) => {
+    const responses = [chatOutput({ content: taggedText }), chatStreamOutput([taggedText])];
+    const requests = stubFetch((index) => responses[index]);
+    const call = { model: createFoundryZai(config)('glm-5'), prompt: 'Reply.', ...options };
+    const generated = await generateText(call);
+    const streamed = streamText(call);
+    for (const step of [generated.finalStep, await streamed.finalStep]) {
+      expect(step.text).toBe(text);
+      expect(step.reasoningText).toBe(reasoningText);
+    }
+    expect(requests.map(({ body }) => body.reasoning_effort)).toEqual([effort, effort]);
+  },
+);
+
+it('keeps literal reasoning tags inside JSON when reasoning is off', async () => {
+  const value = '<reasoning>literal text</reasoning>';
+  stubFetch(() => chatOutput({ content: JSON.stringify({ value }) }));
+  const result = await generateText({
+    model: createFoundryDeepSeek(config)('deepseek-v3.2'),
+    prompt: 'Return JSON containing the literal tag.',
+    output: Output.object({ schema: z.object({ value: z.string() }) }),
+  });
+  expect(result.output).toEqual({ value });
+  expect(result.finalStep.reasoning).toEqual([]);
+});
+
+it.each([
+  ['Qwen', () => createFoundryQwen(config).chat('qwen3-32b'), 'qwen'],
+  ['GLM-5', () => createFoundryZai(config).chat('glm-5'), 'zai'],
+] as const)(
+  '%s splits streamed reasoning tags and retains terminal usage',
+  async (_name, model, key) => {
+    const chunks = [
+      '<reas',
+      'oning>First</rea',
+      'soning><reason',
+      'ing>Second</reason',
+      'ing>{"ok":',
+      'true}',
+    ];
+    const requests = stubFetch(() => chatStreamOutput(chunks));
+    const result = streamText({
+      model: model(),
+      prompt: 'Think first, then output JSON.',
+      providerOptions: { [key]: { reasoningEffort: 'high', parallel_tool_calls: false } },
+    });
+    const { reasoningText: reasoning } = await result.finalStep;
+    expect(reasoning).toContain('First');
+    expect(reasoning).toContain('Second');
+    expect(reasoning).not.toContain('<');
+    expect(await result.text).toBe('{"ok":true}');
+    expect(await result.usage).toMatchObject({ inputTokens: 4, outputTokens: 3 });
+    expect(requests[0]?.body).toMatchObject({
+      stream: true,
+      stream_options: { include_usage: true },
+      reasoning_effort: 'high',
+    });
+    expect(requests[0]?.body).not.toHaveProperty('parallel_tool_calls');
+  },
+);
+
+it.each([
+  ['glm-5', 'none', 'none'],
+  ['glm-5', 'max', undefined],
+  ['glm-5.3', 'none', undefined],
+  [resolveModelRid('glm-5.3'), 'xhigh', 'xhigh'],
+  ['glm-5.3', 'max', 'max'],
+] as const)('Z.ai only sends supported effort: %s with %s', async (id, effort, sent) => {
+  const requests = stubFetch(simpleChatOutput);
+  await generateText({
+    model: createFoundryZai(config)(id),
+    prompt: 'Reply OK.',
+    maxOutputTokens: 8192,
+    providerOptions: { zai: { reasoningEffort: effort } },
+  });
+  expect(requests[0]?.body.reasoning_effort).toBe(sent);
+  expect(requests[0]?.body.max_tokens).toBe(8192);
+});
+
+it('returns GLM-5.3 reasoning token usage without extracting reasoning from its text', async () => {
+  const content = '<reasoning>literal text</reasoning>';
+  stubFetch(() =>
+    Response.json({
+      choices: [{ message: { content, role: 'assistant' }, finish_reason: 'stop' }],
+      usage: { ...usage, completion_tokens_details: { reasoning_tokens: 2 } },
+    }),
   );
-  const result = streamText({
-    model: createFoundryQwen(config).chat('qwen3-32b'),
-    prompt: 'Think first, then output JSON.',
-    providerOptions: { qwen: { reasoningEffort: 'high', parallel_tool_calls: false } },
+  const result = await generateText({
+    model: createFoundryZai(config)('glm-5.3'),
+    prompt: 'Show the reasoning tag as text.',
+    providerOptions: { zai: { reasoningEffort: 'high' } },
   });
-  const { reasoningText: reasoning } = await result.finalStep;
-  expect(reasoning).toContain('First');
-  expect(reasoning).toContain('Second');
-  expect(reasoning).not.toContain('<');
-  expect(await result.text).toBe('{"ok":true}');
-  expect(await result.usage).toMatchObject({ inputTokens: 4, outputTokens: 3 });
-  expect(requests[0]?.body).toMatchObject({
-    stream: true,
-    stream_options: { include_usage: true },
-    reasoning_effort: 'high',
-  });
-  expect(requests[0]?.body).not.toHaveProperty('parallel_tool_calls');
+  expect(result.text).toBe(content);
+  expect(result.finalStep.reasoning).toEqual([]);
+  expect(result.usage.outputTokenDetails?.reasoningTokens).toBe(2);
 });
 
 it('exposes Kimi reasoning but does not replay it in the next tool-loop request', async () => {

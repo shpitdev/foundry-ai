@@ -1,0 +1,23 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795316995,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Hello\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":2,\"prompt_tokens\":12,\"total_tokens\":14,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.glm-5",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with exactly one word: hello"
+          }
+        ]
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

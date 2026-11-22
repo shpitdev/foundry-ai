@@ -11,6 +11,7 @@ const entries = {
   'providers/nvidia': 'src/providers/nvidia.ts',
   'providers/qwen': 'src/providers/qwen.ts',
   'providers/moonshot': 'src/providers/moonshot.ts',
+  'providers/zai': 'src/providers/zai.ts',
   'providers/gemma': 'src/providers/gemma.ts',
 };
 

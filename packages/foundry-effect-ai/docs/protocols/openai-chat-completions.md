@@ -1,6 +1,6 @@
 # Chat Completions (generic and xAI)
 
-**Routes:** POST `${foundryUrl}/api/v2/llm/proxy/xai/v1/chat/completions` for xAI. Generic OpenAI-compatible client POSTs `/chat/completions` to its configured base. `${foundryUrl}/api/v2/llm/proxy/openai/v1/chat/completions` is **UNVERIFIED**; the Foundry OpenAI wrapper exposes Responses, not Chat. See [shared Effect contract](effect-provider-contract.md).
+**Routes:** POST `${foundryUrl}/api/v2/llm/proxy/xai/v1/chat/completions` for xAI. Generic OpenAI-compatible client POSTs `/chat/completions` to its configured base. Foundry serves OpenAI GPT and open-weight Chat models, including Z.ai GLM, at `${foundryUrl}/api/v2/llm/proxy/openai/v1/chat/completions`. See [shared Effect contract](effect-provider-contract.md).
 
 ## Request and Prompt
 
@@ -26,6 +26,8 @@
 - Errors: shared HTTP mapper; inspect `{error:...}` in SSE before treating a chunk as unknown. xAI peer also handles 2xx JSON `{error:string,code?}` instead of SSE; map service-unavailable to `InternalProviderError`, malformed success body to `InvalidResponseError`. Invalid tool JSON → `ToolParameterValidationError`. Don't copy compat's silent filter of malformed JSON frames.
 
 ## Foundry specifics
+
+- **Z.ai GLM:** Both RIDs accept `max_tokens` or `max_completion_tokens`, strict JSON Schema, and required or named tool choice. Both reject `parallel_tool_calls` and assistant replay of `reasoning` or `reasoning_content`. A final usage chunk with `choices: []` ends the stream without `[DONE]`. GLM-5 puts reasoning in `<reasoning>` spans inside `content` at high effort; GLM-5.3 reports only reasoning token usage and rejects effort `'none'`. Foundry rejects image input for both. See [live results](../README.md#zai-glm).
 
 - `providers/xai.ts:21–67`, `providers/xai-compat.ts:3–11`, `models/xai-models.ts:5–106`, `models/catalog.ts:20–47`: xAI `chat()` is explicit, default is Responses; aliases resolve to RID, raw targets pass through, known other-provider targets rejected. Bearer + optional `attribution`, `traceParent`, `traceState`. Reject `xai.store:true`, omit `store` on Chat. No Responses request/response rewrites on Chat. Do not silently fall back between routes.
 - **Not supported in last recorded sweep:** all seven xAI Chat text probes returned HTTP 400; Responses worked (`packages/foundry-ai/docs/README.md:77–90`). Current availability for any other enrollment **UNVERIFIED**; keep opt-in and test before claiming Foundry support.

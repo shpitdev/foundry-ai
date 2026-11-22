@@ -19,7 +19,7 @@ import type * as Wire from './schema.ts';
 
 /**
  * What one maker's models need on the Chat route, passed in by its public module so this folder
- * holds no vendor branches. OpenAI, DeepSeek, NVIDIA, Qwen and Moonshot differ only in these values.
+ * holds no vendor branches.
  */
 export interface Dialect {
   /** The public module, named in errors. */
@@ -36,13 +36,13 @@ export interface Dialect {
    * The `reasoning_effort` sent with every request, which is how each maker switches reasoning:
    * `'high'` turns on the tagged makers' spans, `'none'` turns off Kimi's default reasoning.
    */
-  readonly reasoningEffort: Wire.ReasoningEffort | undefined;
+  readonly reasoningEffort: Wire.Request['reasoning_effort'];
   /** Function tools are accepted only with `reasoning_effort: 'none'`, sent when no effort is set. */
   readonly toolsNeedNoReasoning: boolean;
   /** Reads `reasoning_content` as reasoning (Kimi). OpenAI's field is always null. */
   readonly reasoningContent: boolean;
   /**
-   * Splits `<reasoning>` spans out of `content` (DeepSeek, Nemotron, Qwen). Set only when the
+   * Splits `<reasoning>` spans out of `content` (DeepSeek, Nemotron, Qwen, GLM-5). Set only when the
    * request asks for reasoning, so content without it, such as JSON that holds the tag as text,
    * passes through untouched.
    */

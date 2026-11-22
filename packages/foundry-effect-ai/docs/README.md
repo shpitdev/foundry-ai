@@ -199,6 +199,20 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 - Kimi K2.5 (RID `kimi-k2-5`) returns no reasoning, and with JSON and a tool it answers without calling the tool.
 - Kimi K3.1 Pro – Highspeed skipped the tool once in JSON + tools in a later default run and passed on rerun.
 
+### Z.ai GLM
+
+`ZaiLanguageModel`, over Foundry's Chat Completions route. November 22, 2026 (UTC); every sweep failure was rerun in isolation and the result was unchanged.
+
+| Model     | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| --------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `glm-5`   | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `glm-5.3` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ×         |
+
+- GLM-5 passed Text and Stream in the sweep but sometimes replied `Hi` instead of `hello` while recording fixtures. Both eventually recorded a passing response.
+- With JSON and a tool, GLM-5 skipped the tool. GLM-5.3 returned prose instead of JSON. Each outcome repeated on the isolated rerun.
+- Both image requests returned HTTP 404 `LanguageModelNotAvailable`: the serving backend does not support vision.
+- The Reasoning cell uses `reasoning_effort: 'high'`. GLM-5 exposes tagged reasoning; GLM-5.3 reports reasoning token counts but no separate reasoning text.
+
 ### Gemma
 
 `GemmaLanguageModel`, over Foundry's OpenAI Responses route.
@@ -256,8 +270,9 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 - **xAI.** Grok is served through the Responses route with OpenAI's events. The adapter uses the `system` role and always asks for encrypted reasoning. Grok models reject `reasoning.effort: 'none'`; Grok 4.20 reasoning rejects `effort` entirely and takes `summary` alone. xAI error bodies put the message in a string `error` field.
 - **Anthropic.** Requests send `anthropic-version: 2023-06-01`. Foundry does not support eager tool-input streaming, so tool input is collected and parsed when its block ends. Claude Opus and Sonnet 5.5 reject forced tool use, so structured output uses `output_config.format` instead of a forced JSON tool. Opus 4.7 and later, Claude 5 and the 5.5 models reject budget thinking (`thinking.type.enabled`); use `{ type: 'adaptive' }`.
 - **Gemini.** Foundry rejects lower-case `thinkingLevel` values (HTTP 422). Streams have no terminal event, so the finish comes from `finishReason`, and a stream cut before it fails with `InvalidResponseError`. With tools, structured output is a synthetic `json` function the model is forced to call.
-- **Chat Completions.** The route takes `max_completion_tokens`, not `max_tokens`; streams end without `[DONE]`; OpenAI models return no reasoning text, only reasoning token counts. GPT-6 Luna, GPT-6 Sol and GPT-6.1 Terra accept tools only with `reasoning_effort: 'none'`, which the adapter sends with tools unless `config` sets an effort.
+- **Chat Completions.** OpenAI GPT models take `max_completion_tokens`, not `max_tokens`; streams end without `[DONE]`; OpenAI models return no reasoning text, only reasoning token counts. GPT-6 Luna, GPT-6 Sol and GPT-6.1 Terra accept tools only with `reasoning_effort: 'none'`, which the adapter sends with tools unless `config` sets an effort.
 - **Open-weight Chat models.** DeepSeek, Nemotron and Qwen put reasoning in `<reasoning>…</reasoning>` spans inside `content` when `reasoning_effort` is `'high'`, usually one span per stream delta, and a tag can split across deltas; the adapter parses the spans into reasoning parts. Kimi K3.1 and K3 reason by default into `reasoning_content`; `'none'` turns it off. Foundry rejects `reasoning_content` on a replayed assistant message, `thinking`, `chat_template_kwargs` and `parallel_tool_calls` (HTTP 400), so none is sent. Image input fails for the three Bedrock makers with 404 `LanguageModelNotAvailable`. Streams end without `[DONE]` after a usage chunk with `choices: []`.
+- **Z.ai GLM.** Both GLMs accept `max_tokens` or `max_completion_tokens` on the wire. For `glm-5`, high effort enables `<reasoning>` spans and `'none'` is accepted. `glm-5.3` does not expose reasoning text and rejects `'none'`; the adapter omits it. Both reject `reasoning` and `reasoning_content` on replay and `parallel_tool_calls` on the request.
 - **Gemma.** Served only on the OpenAI Responses route, with `store: false`. No reasoning setting produced reasoning items or tokens, so the adapter sends none.
 - **Decisions.** Foundry rejects image URLs, so URL images fail with `InvalidUserInputError` before sending; base64 and data URLs work. A refusal without a decision name refuses every decision it left unanswered.
 - **Embeddings.** Foundry rejects `dimensions` for `text-embedding-ada-002`, even at its native size, so a catalog model's native size is never sent.
@@ -273,7 +288,7 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 - Anthropic `output_config.effort`, and PDF or plain-text documents.
 - Decision `locate` questions, which Foundry's decisions route does not offer.
 - xAI Chat Completions (the proxy rejects it), and Chat Completions for Anthropic, Google and xAI models.
-- Catalog models without an adapter here: Llama 3.3 Nemotron Super 49B (Foundry serves it on neither OpenAI route), Z.ai GLM (streaming, structured output and tools unverified), Schematic 7B, and the Snowflake and Llama embeddings.
+- Catalog models without an adapter here: Llama 3.3 Nemotron Super 49B (Foundry serves it on neither OpenAI route), Schematic 7B, and the Snowflake and Llama embeddings.
 - `parallel_tool_calls`: Foundry rejects it on the open-weight Chat models (HTTP 400), so it is never sent.
 
 ## Run the live suite
@@ -288,7 +303,7 @@ LIVE_MODELS=all pnpm run test:live:effect                   # catalog sweep
 FOUNDRY_RECORD=1 pnpm run test:live:effect                  # re-record the default fixtures
 ```
 
-The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, `deepseek-v3.2`, `nemotron-3-super-120b`, `qwen3-32b`, `kimi-k3.1-pro-highspeed`, `gemma-4-31b`, all three embeddings, `gpt-realtime-2.1`, and one bad-token and one unknown-model request per vendor route and for realtime. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`, `deepseek`, `nvidia`, `qwen`, `moonshot`, `gemma`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
+The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, `deepseek-v3.2`, `nemotron-3-super-120b`, `qwen3-32b`, `kimi-k3.1-pro-highspeed`, `glm-5`, `gemma-4-31b`, all three embeddings, `gpt-realtime-2.1`, and one bad-token and one unknown-model request per vendor route and for realtime. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`, `deepseek`, `nvidia`, `qwen`, `moonshot`, `zai`, `gemma`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
 
 Test names are `<Module> live (<model>) > <cell>`. To run one cell, call Vitest directly so the pattern reaches it unchanged, and match the `>` separator:
 

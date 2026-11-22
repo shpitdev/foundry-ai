@@ -50,7 +50,7 @@ Grok uses model identity `foundry-xai`, catalog provider `xai`, registry prefix 
 
 ## Open-weight models
 
-Install `@ai-sdk/openai-compatible@3` with AI SDK 7 for DeepSeek, NVIDIA Nemotron, Qwen, and Moonshot Kimi (use `@ai-sdk/openai-compatible@2` with AI SDK 6). For Gemma, install `@ai-sdk/openai` instead.
+Install `@ai-sdk/openai-compatible@3` with AI SDK 7 for DeepSeek, NVIDIA Nemotron, Qwen, Moonshot Kimi, and Z.ai GLM (use `@ai-sdk/openai-compatible@2` with AI SDK 6). For Gemma, install `@ai-sdk/openai` instead.
 
 ```ts
 import { createFoundryDeepSeek } from '@shpitdev/foundry-ai/deepseek';
@@ -59,7 +59,7 @@ const deepseek = createFoundryDeepSeek(loadFoundryConfig());
 const model = deepseek('deepseek-v3.2');
 ```
 
-The other factories are `createFoundryNvidia`, `createFoundryQwen`, `createFoundryMoonshot`, and `createFoundryGemma`, on the `nvidia`, `qwen`, `moonshot`, and `gemma` subpaths. See [model routing and live results](./docs/README.md#model-routing) for aliases and feature limits.
+The other factories are `createFoundryNvidia`, `createFoundryQwen`, `createFoundryMoonshot`, `createFoundryZai`, and `createFoundryGemma`, on the `nvidia`, `qwen`, `moonshot`, `zai`, and `gemma` subpaths. See [model routing and live results](./docs/README.md#model-routing) for aliases and feature limits.
 
 ## Embeddings and multiple providers
 
