@@ -64,7 +64,8 @@ export const make = (options: {
     systemRole: entry?.reasoning === true ? 'developer' : 'system',
     reasoningEffort: options.config?.reasoning_effort,
     toolsNeedNoReasoning: entry?.chatToolsNeedNoReasoning === true,
-    reasoningText: 'none',
+    reasoningContent: false,
+    reasoningTags: undefined,
   });
 };
 

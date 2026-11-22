@@ -1,15 +1,26 @@
 /**
  * Splits content that carries `<reasoning>…</reasoning>` spans into reasoning and text. DeepSeek,
- * Nemotron and Qwen send their reasoning this way on Foundry's Chat route: often one span per
- * stream delta, and a tag may be split across deltas, so a suffix that could start a tag waits
- * for the next piece. Whitespace between spans and before the answer is the chat template's
- * separator, not output, so text right after a span starts at its first non-blank character.
+ * Nemotron and Qwen send their reasoning this way on Foundry's Chat route when asked to reason:
+ * often one span per stream delta, and a tag may be split across deltas, so a suffix that could
+ * start a tag waits for the next piece. Whitespace between spans and before the answer is the
+ * chat template's separator, not output, so text after a closing tag starts at its first
+ * non-blank character, even when the span was empty.
+ *
+ * Only the makers that send spans pass `makeSplitter` in their dialect, so other bundles never
+ * include this file; the shared decoders import its types alone.
  */
 const tags = { open: '<reasoning>', close: '</reasoning>' } as const;
 
 export interface Segment {
   readonly type: 'reasoning' | 'text';
   readonly text: string;
+}
+
+export interface Splitter {
+  /** Splits the next content piece, in order. */
+  readonly push: (piece: string) => ReadonlyArray<Segment>;
+  /** What a partial tag held back; an unclosed span stays reasoning. */
+  readonly flush: () => ReadonlyArray<Segment>;
 }
 
 /** The length of the longest end of `text` that is a proper start of `tag`. */
@@ -22,16 +33,16 @@ const partialTag = (text: string, tag: string): number => {
   return 0;
 };
 
-/** A stateful splitter: `push` each content piece in order, then `flush` at the end. */
-export const makeSplitter = () => {
+/** A stateful splitter for one message's content. */
+export const makeSplitter = (): Splitter => {
   let inside = false;
   let pending = '';
+  // A closing tag came last, so separator whitespace is still to be dropped.
   let afterReasoning = false;
 
   const emit = (segments: Array<Segment>, text: string) => {
     if (inside) {
       if (text !== '') {
-        afterReasoning = true;
         segments.push({ type: 'reasoning', text });
       }
       return;
@@ -44,7 +55,7 @@ export const makeSplitter = () => {
   };
 
   return {
-    push: (piece: string): ReadonlyArray<Segment> => {
+    push: (piece) => {
       const segments: Array<Segment> = [];
       let buffer = pending + piece;
       pending = '';
@@ -59,31 +70,16 @@ export const makeSplitter = () => {
         }
         emit(segments, buffer.slice(0, at));
         buffer = buffer.slice(at + tag.length);
+        afterReasoning ||= inside;
         inside = !inside;
       }
       return segments;
     },
-    /** What a partial tag held back; an unclosed span stays reasoning. */
-    flush: (): ReadonlyArray<Segment> => {
+    flush: () => {
       const segments: Array<Segment> = [];
       emit(segments, pending);
       pending = '';
       return segments;
     },
   };
-};
-
-/** Splits a whole message's content, joining neighbouring spans into one segment. */
-export const split = (content: string): ReadonlyArray<Segment> => {
-  const splitter = makeSplitter();
-  const segments: Array<Segment> = [];
-  for (const segment of [...splitter.push(content), ...splitter.flush()]) {
-    const last = segments.at(-1);
-    if (last?.type === segment.type) {
-      segments[segments.length - 1] = { type: last.type, text: last.text + segment.text };
-    } else {
-      segments.push(segment);
-    }
-  }
-  return segments;
 };

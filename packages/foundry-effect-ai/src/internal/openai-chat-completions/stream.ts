@@ -15,7 +15,7 @@ import type * as Sse from 'effect/encoding/Sse';
 import * as Predicate from 'effect/Predicate';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
-import * as ReasoningTags from './reasoningTags.ts';
+import type * as ReasoningTags from './reasoningTags.ts';
 import type { Dialect } from './request.ts';
 import {
   callsComplete,
@@ -45,7 +45,7 @@ export const decodeStream = (
   // The open text or reasoning block, and how many of each kind have opened.
   let open: { readonly type: ReasoningTags.Segment['type']; readonly id: string } | undefined;
   const opened = { text: 0, reasoning: 0 };
-  const tags = dialect.reasoningText === 'content-tags' ? ReasoningTags.makeSplitter() : undefined;
+  const tags = dialect.reasoningTags?.();
   let refusal = '';
   let reason: string | undefined;
   let latestUsage: typeof Wire.Usage.Type | undefined;
@@ -132,7 +132,7 @@ export const decodeStream = (
     const [choice] = chunk.choices;
     const delta = choice?.delta;
     const reasoning = delta?.reasoning_content ?? '';
-    if (dialect.reasoningText === 'reasoning-content' && reasoning !== '') {
+    if (dialect.reasoningContent && reasoning !== '') {
       write(parts, { type: 'reasoning', text: reasoning });
     }
     const content = delta?.content ?? '';

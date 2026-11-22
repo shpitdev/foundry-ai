@@ -47,7 +47,8 @@ export const make = (options: {
     systemRole: 'system',
     reasoningEffort: options.config?.reasoning_effort,
     toolsNeedNoReasoning: false,
-    reasoningText: 'reasoning-content',
+    reasoningContent: true,
+    reasoningTags: undefined,
   });
 
 export const layer = (options: {

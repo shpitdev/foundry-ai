@@ -6,6 +6,7 @@ import * as Layer from 'effect/Layer';
 import type { FoundryClient } from './FoundryClient.ts';
 import { models } from './internal/models/nvidia.ts';
 import * as ChatModel from './internal/openai-chat-completions/languageModel.ts';
+import { makeSplitter } from './internal/openai-chat-completions/reasoningTags.ts';
 import type * as Wire from './internal/openai-chat-completions/schema.ts';
 
 export const providerName = 'foundry-nvidia';
@@ -39,17 +40,21 @@ export const model = (
 export const make = (options: {
   readonly model: ModelId;
   readonly config?: Config | undefined;
-}): Effect.Effect<LanguageModel.LanguageModel, never, FoundryClient> =>
-  ChatModel.make({
+}): Effect.Effect<LanguageModel.LanguageModel, never, FoundryClient> => {
+  const effort = options.config?.reasoning_effort;
+  return ChatModel.make({
     module: 'NvidiaLanguageModel',
     metadataKey: providerName,
     path: '/openai/v1/chat/completions',
     model: known[options.model]?.rid ?? options.model,
     systemRole: 'system',
-    reasoningEffort: options.config?.reasoning_effort,
+    reasoningEffort: effort,
     toolsNeedNoReasoning: false,
-    reasoningText: 'content-tags',
+    reasoningContent: false,
+    // Spans arrive only when asked for; otherwise content, tags included, is the answer.
+    reasoningTags: effort === undefined || effort === 'none' ? undefined : makeSplitter,
   });
+};
 
 export const layer = (options: {
   readonly model: ModelId;

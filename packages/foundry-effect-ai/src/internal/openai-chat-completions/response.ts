@@ -8,7 +8,7 @@ import * as Tool from 'effect/ai/Tool';
 import * as DateTime from 'effect/DateTime';
 import * as Effect from 'effect/Effect';
 import * as Schema from 'effect/Schema';
-import * as ReasoningTags from './reasoningTags.ts';
+import type * as ReasoningTags from './reasoningTags.ts';
 import { type Dialect, isStrict } from './request.ts';
 import type * as Wire from './schema.ts';
 
@@ -209,11 +209,22 @@ const contentParts = (
 ): ReadonlyArray<ReasoningTags.Segment> => {
   const content = message.content ?? '';
   const reasoning = message.reasoning_content ?? '';
-  if (dialect.reasoningText === 'content-tags') {
-    return ReasoningTags.split(content);
+  if (dialect.reasoningTags !== undefined) {
+    // Neighbouring spans form one reasoning part.
+    const splitter = dialect.reasoningTags();
+    const segments: Array<ReasoningTags.Segment> = [];
+    for (const segment of [...splitter.push(content), ...splitter.flush()]) {
+      const last = segments.at(-1);
+      if (last?.type === segment.type) {
+        segments[segments.length - 1] = { type: last.type, text: last.text + segment.text };
+      } else {
+        segments.push(segment);
+      }
+    }
+    return segments;
   }
   return [
-    ...(dialect.reasoningText === 'reasoning-content' && reasoning !== ''
+    ...(dialect.reasoningContent && reasoning !== ''
       ? [{ type: 'reasoning' as const, text: reasoning }]
       : []),
     ...(content === '' ? [] : [{ type: 'text' as const, text: content }]),

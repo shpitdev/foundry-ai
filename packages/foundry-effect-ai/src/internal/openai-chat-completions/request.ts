@@ -14,6 +14,7 @@ import * as Tool from 'effect/ai/Tool';
 import * as Effect from 'effect/Effect';
 import * as Base64 from 'effect/encoding/Base64';
 import * as Predicate from 'effect/Predicate';
+import type * as ReasoningTags from './reasoningTags.ts';
 import type * as Wire from './schema.ts';
 
 /**
@@ -38,11 +39,14 @@ export interface Dialect {
   readonly reasoningEffort: Wire.ReasoningEffort | undefined;
   /** Function tools are accepted only with `reasoning_effort: 'none'`, sent when no effort is set. */
   readonly toolsNeedNoReasoning: boolean;
+  /** Reads `reasoning_content` as reasoning (Kimi). OpenAI's field is always null. */
+  readonly reasoningContent: boolean;
   /**
-   * Where reasoning text arrives: `<reasoning>` spans inside `content` (DeepSeek, Nemotron, Qwen),
-   * the `reasoning_content` field (Kimi), or nowhere (OpenAI, whose field is always null).
+   * Splits `<reasoning>` spans out of `content` (DeepSeek, Nemotron, Qwen). Set only when the
+   * request asks for reasoning, so content without it, such as JSON that holds the tag as text,
+   * passes through untouched.
    */
-  readonly reasoningText: 'content-tags' | 'reasoning-content' | 'none';
+  readonly reasoningTags: (() => ReasoningTags.Splitter) | undefined;
 }
 
 const fail = (dialect: Dialect, reason: AiError.AiErrorReason) =>

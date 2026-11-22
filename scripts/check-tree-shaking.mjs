@@ -27,6 +27,12 @@ const owners = {
     'QwenLanguageModel',
     'MoonshotLanguageModel',
   ],
+  // The `<reasoning>` tag parser, passed in only by the makers that send tagged reasoning.
+  'src/internal/openai-chat-completions/reasoningTags.js': [
+    'DeepSeekLanguageModel',
+    'NvidiaLanguageModel',
+    'QwenLanguageModel',
+  ],
   'src/internal/openai-decisions/': ['OpenAiDecisionModel'],
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
