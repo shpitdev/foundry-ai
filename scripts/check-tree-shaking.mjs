@@ -45,7 +45,7 @@ const budgets = {
   OpenAiDecisionModel: 13_700,
   OpenAiEmbeddingModel: 8_300,
   OpenAiLanguageModel: 27_400,
-  OpenAiRealtime: 11_200,
+  OpenAiRealtime: 12_600,
   XaiLanguageModel: 25_400,
 };
 

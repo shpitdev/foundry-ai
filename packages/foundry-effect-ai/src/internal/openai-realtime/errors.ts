@@ -51,6 +51,10 @@ export const encodeError = (url: string, cause: unknown): AiError.AiError =>
 export const sendError = (url: string, error: Socket.SocketError): AiError.AiError =>
   networkError('send', url, error.message, error);
 
+/** A send on a socket that is closing or closed, which a WebSocket would drop silently. */
+export const closedError = (url: string): AiError.AiError =>
+  networkError('send', url, 'The realtime session is closed');
+
 /** Foundry's `Namespace:Name` error name and `UPPER_CASE` code in a close reason. */
 const closeDetails = (reason: string) => ({
   errorName: /\b[A-Z]\w*:[A-Z]\w*\b/u.exec(reason)?.[0],

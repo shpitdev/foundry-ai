@@ -43,14 +43,18 @@ const decisionModels = Object.entries(OpenAi.models).flatMap(([id, entry]) =>
 /**
  * Proven offline only, from fixtures Foundry cannot produce on demand: a recorded `.sse` cut short
  * (must fail with `InvalidResponseError`, never finish as `stop`), an in-band stream error event,
- * a synthetic decision refusal, and `transformClient` checks: a retry that recovers from a 503,
- * and a failed response a transform hands back.
+ * a synthetic decision refusal, `transformClient` checks (a retry that recovers from a 503, and
+ * a failed response a transform hands back), and realtime sessions: tool calls `handleToolCalls`
+ * must not run, socket lifecycle failures, and malformed frames.
  */
 export const contractOnly: ReadonlySet<string> = new Set([
   'stream-truncated',
   'stream-error',
   'refusal',
   'transform-client',
+  'tool-policy',
+  'socket-lifecycle',
+  'malformed-frames',
 ]);
 
 // `tools` is two requests (tool call, then tool result and answer) with reasoning on, so it
@@ -137,7 +141,17 @@ export const rows: ReadonlyArray<Row> = [
     sweep: Object.keys(Realtime.models),
     // The AI SDK realtime suite's probes, one session each (`audio-input` opens two: the speech
     // comes from the `audio-output` prompt). `error-mapping` adds a refused token and model live,
-    // and synthetic closes and error events offline.
-    cells: ['connect', 'text', 'tools', 'audio-output', 'audio-input', 'error-mapping'],
+    // and synthetic closes and error events offline. The last three are contract-only.
+    cells: [
+      'connect',
+      'text',
+      'tools',
+      'audio-output',
+      'audio-input',
+      'error-mapping',
+      'tool-policy',
+      'socket-lifecycle',
+      'malformed-frames',
+    ],
   },
 ];

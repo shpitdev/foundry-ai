@@ -1,10 +1,13 @@
 import { expect } from '@effect/vitest';
 import type * as AiError from 'effect/ai/AiError';
+import * as Prompt from 'effect/ai/Prompt';
 import * as Tool from 'effect/ai/Tool';
 import * as Toolkit from 'effect/ai/Toolkit';
 import * as Effect from 'effect/Effect';
+import * as Fiber from 'effect/Fiber';
 import * as Redacted from 'effect/Redacted';
 import * as Schema from 'effect/Schema';
+import * as Socket from 'effect/socket/Socket';
 import * as Stream from 'effect/Stream';
 import * as OpenAiRealtime from '../../src/OpenAiRealtime.ts';
 import type { Cell, Env } from '../harness.ts';
@@ -96,6 +99,34 @@ const reasonOf = <A, R>(effect: Effect.Effect<A, AiError.AiError, R>) =>
     Effect.orDie,
     Effect.map((error) => error.reason),
   );
+
+// Tools `handleToolCalls` must treat specially: one whose model output hides part of its result,
+// one whose model output is a file, two gated by approval and one the client executes.
+const policyToolkit = Toolkit.make(
+  Tool.make('lookupAccount', {
+    description: 'Look up an account.',
+    success: Schema.Struct({ balance: Schema.Finite, ownerTaxId: Schema.String }),
+    toModelOutput: ({ balance }) => [Prompt.textPart({ text: `Balance: ${balance}` })],
+  }),
+  Tool.make('attachScreenshot', {
+    description: 'Take a screenshot.',
+    success: Schema.String,
+    toModelOutput: (data) => [Prompt.filePart({ mediaType: 'image/png', data })],
+  }),
+  Tool.make('deleteFile', { description: 'Delete a file.', needsApproval: true }),
+  Tool.make('transferFunds', {
+    description: 'Move money.',
+    parameters: Schema.Struct({ amount: Schema.Finite }),
+    needsApproval: ({ amount }) => amount > 100,
+  }),
+  Tool.make('pickColor', { description: 'Ask the user for a color.', execution: 'client' }),
+);
+const policyHandlers = policyToolkit.toLayer({
+  lookupAccount: () => Effect.succeed({ balance: 42, ownerTaxId: 'TAX-SECRET-1' }),
+  attachScreenshot: () => Effect.succeed('iVBORw0KGgo='),
+  deleteFile: () => Effect.die('deleteFile ran without approval'),
+  transferFunds: () => Effect.die('transferFunds ran without approval'),
+});
 
 export const cellsFor = (model: string): Readonly<Record<string, Cell>> => ({
   connect: (env) =>
@@ -305,5 +336,102 @@ export const cells: Readonly<Record<string, Cell>> = {
           expect(missing).toMatchObject({ _tag: 'ToolNotFoundError', toolName: 'missingTool' });
         }),
       ).pipe(Effect.provide(handlers));
+    }),
+
+  // Synthetic: approval-gated and client-executed calls are left to the caller (no output and no
+  // `response.create` for their response), and a tool's model output replaces its result.
+  'tool-policy': (env) =>
+    Effect.gen(function* () {
+      const tools = yield* policyToolkit;
+      yield* Effect.scoped(
+        Effect.gen(function* () {
+          const session = yield* connect(env, defaultModel);
+          const events = yield* session.events.pipe(
+            OpenAiRealtime.handleToolCalls(session, tools),
+            Stream.runCollect,
+          );
+          expect(events.filter((event) => event.type === 'response.done')).toHaveLength(2);
+          // The model output, not the encoded result with the tax ID.
+          expect(env.sessions.at(-1)?.sent).toContainEqual({
+            type: 'conversation.item.create',
+            item: { type: 'function_call_output', call_id: 'call_4', output: 'Balance: 42' },
+          });
+        }),
+      );
+      // A file in a tool's model output cannot become realtime output text.
+      yield* Effect.scoped(
+        Effect.gen(function* () {
+          const session = yield* connect(env, defaultModel);
+          const unsupported = yield* reasonOf(
+            session.events.pipe(OpenAiRealtime.handleToolCalls(session, tools), Stream.runDrain),
+          );
+          expect(unsupported).toMatchObject({ _tag: 'InvalidUserInputError' });
+          expect(unsupported.message).toContain('image/png');
+        }),
+      );
+    }).pipe(Effect.provide(policyHandlers)),
+
+  // Synthetic: sockets close when `connect` fails or is interrupted, a send after a close fails,
+  // and a constructor that throws is a `NetworkError`.
+  'socket-lifecycle': (env) =>
+    Effect.gen(function* () {
+      yield* Effect.scoped(
+        Effect.gen(function* () {
+          const session = yield* connect(env, defaultModel);
+          yield* Stream.runDrain(session.events);
+          const closed = yield* reasonOf(session.send({ type: 'response.create' }));
+          expect(closed).toMatchObject({ _tag: 'NetworkError', reason: 'TransportError' });
+          expect(closed.message).toContain('closed');
+        }),
+      );
+      // The caller's scope stays open in both checks; the failed attempt's socket must not.
+      yield* Effect.scoped(
+        Effect.gen(function* () {
+          const refused = yield* reasonOf(connect(env, defaultModel));
+          expect(refused._tag).toBe('InvalidRequestError');
+          expect(env.sessions.at(-1)?.closedByClient).toBe(1000);
+
+          const before = env.sessions.length;
+          const fiber = yield* Effect.forkChild(connect(env, defaultModel));
+          for (let turn = 0; turn < 100 && env.sessions.length === before; turn += 1) {
+            yield* Effect.yieldNow;
+          }
+          yield* Fiber.interrupt(fiber);
+          expect(env.sessions).toHaveLength(before + 1);
+          expect(env.sessions.at(-1)?.closedByClient).toBe(1000);
+        }),
+      );
+      const thrown = yield* reasonOf(
+        Effect.scoped(OpenAiRealtime.connect({ model: defaultModel, ...env.settings })).pipe(
+          Effect.provideService(Socket.WebSocketConstructor, () => {
+            throw new Error('WebSocket is not available');
+          }),
+        ),
+      );
+      expect(thrown).toMatchObject({ _tag: 'NetworkError', reason: 'TransportError' });
+    }),
+
+  // Synthetic: a frame without a string `type` is malformed, before or after `session.created`;
+  // only unknown string types are skipped.
+  'malformed-frames': (env) =>
+    Effect.gen(function* () {
+      for (const _ of ['{}', 'null', '{"type":7}']) {
+        yield* Effect.scoped(
+          Effect.gen(function* () {
+            const session = yield* connect(env, defaultModel);
+            expect(yield* reasonOf(Stream.runDrain(session.events))).toMatchObject({
+              _tag: 'InvalidResponseError',
+            });
+          }),
+        );
+      }
+      yield* Effect.scoped(
+        Effect.gen(function* () {
+          expect(yield* reasonOf(connect(env, defaultModel))).toMatchObject({
+            _tag: 'InvalidResponseError',
+          });
+          expect(env.sessions.at(-1)?.closedByClient).toBe(1000);
+        }),
+      );
     }),
 };

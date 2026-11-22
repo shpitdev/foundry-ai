@@ -1,0 +1,69 @@
+[
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1"
+          }
+        }
+      },
+      {
+        "received": {}
+      }
+    ]
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1"
+          }
+        }
+      },
+      {
+        "received": null
+      }
+    ]
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1"
+          }
+        }
+      },
+      {
+        "received": {
+          "type": 7
+        }
+      }
+    ]
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {}
+      }
+    ]
+  }
+]

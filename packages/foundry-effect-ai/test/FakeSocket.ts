@@ -24,6 +24,8 @@ export interface CapturedSession {
   readonly url: string;
   readonly protocols: unknown;
   readonly sent: Array<unknown>;
+  /** The code the client closed with; unset while open or when Foundry closed first. */
+  closedByClient?: number;
 }
 
 type Listener = (event: Socket.WebSocketEvent) => void;
@@ -48,9 +50,11 @@ class ReplayingSocket implements Socket.WebSocketLike {
     this.fixture = fixture;
     this.captured = captured;
     queueMicrotask(() => {
-      this.readyState = 1;
-      this.emit('open', {});
-      this.pump();
+      if (this.readyState === 0) {
+        this.readyState = 1;
+        this.emit('open', {});
+        this.pump();
+      }
     });
   }
 
@@ -76,9 +80,13 @@ class ReplayingSocket implements Socket.WebSocketLike {
   }
 
   close(code = 1000, reason = ''): void {
-    if (this.readyState === 3) {
-      return;
+    if (this.readyState !== 3) {
+      this.captured.closedByClient = code;
+      this.finish(code, reason);
     }
+  }
+
+  private finish(code: number, reason: string): void {
     this.readyState = 3;
     this.emit('close', { code, reason });
   }
@@ -107,7 +115,7 @@ class ReplayingSocket implements Socket.WebSocketLike {
       this.emit('message', { data: JSON.stringify(frame.received) });
     }
     if (this.readyState === 1 && this.fixture.close !== undefined) {
-      this.close(this.fixture.close.code, this.fixture.close.reason);
+      this.finish(this.fixture.close.code, this.fixture.close.reason);
     }
   }
 }
@@ -117,7 +125,7 @@ export const replay = (...fixtures: ReadonlyArray<SocketFixture>) => {
   const sessions: Array<CapturedSession> = [];
   const layer = Layer.succeed(Socket.WebSocketConstructor, (url, protocols) => {
     const fixture = fixtures[sessions.length];
-    const captured = { url, protocols, sent: [] };
+    const captured: CapturedSession = { url, protocols, sent: [] };
     sessions.push(captured);
     if (fixture === undefined) {
       throw new Error(`FakeSocket has no fixture for socket ${sessions.length}: ${url}`);

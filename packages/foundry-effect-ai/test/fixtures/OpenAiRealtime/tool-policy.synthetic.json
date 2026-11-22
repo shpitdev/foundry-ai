@@ -1,0 +1,147 @@
+[
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1"
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.done",
+          "event_id": "event_2",
+          "response": {
+            "id": "resp_1",
+            "status": "completed",
+            "output": [
+              {
+                "type": "function_call",
+                "id": "item_1",
+                "call_id": "call_1",
+                "name": "deleteFile",
+                "arguments": "{}",
+                "status": "completed"
+              },
+              {
+                "type": "function_call",
+                "id": "item_2",
+                "call_id": "call_2",
+                "name": "transferFunds",
+                "arguments": "{\"amount\":5}",
+                "status": "completed"
+              },
+              {
+                "type": "function_call",
+                "id": "item_3",
+                "call_id": "call_3",
+                "name": "pickColor",
+                "arguments": "{}",
+                "status": "completed"
+              },
+              {
+                "type": "function_call",
+                "id": "item_4",
+                "call_id": "call_4",
+                "name": "lookupAccount",
+                "arguments": "{}",
+                "status": "completed"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sent": {
+          "type": "conversation.item.create",
+          "item": {
+            "type": "function_call_output",
+            "call_id": "call_4",
+            "output": "Balance: 42"
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.done",
+          "event_id": "event_3",
+          "response": {
+            "id": "resp_2",
+            "status": "completed",
+            "output": [
+              {
+                "type": "function_call",
+                "id": "item_5",
+                "call_id": "call_5",
+                "name": "lookupAccount",
+                "arguments": "{}",
+                "status": "completed"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "sent": {
+          "type": "conversation.item.create",
+          "item": {
+            "type": "function_call_output",
+            "call_id": "call_5",
+            "output": "Balance: 42"
+          }
+        }
+      },
+      {
+        "sent": {
+          "type": "response.create"
+        }
+      }
+    ],
+    "close": {
+      "code": 1000,
+      "reason": ""
+    }
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1"
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.done",
+          "event_id": "event_2",
+          "response": {
+            "id": "resp_1",
+            "status": "completed",
+            "output": [
+              {
+                "type": "function_call",
+                "id": "item_6",
+                "call_id": "call_6",
+                "name": "attachScreenshot",
+                "arguments": "{}",
+                "status": "completed"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
