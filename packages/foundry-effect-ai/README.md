@@ -1,6 +1,6 @@
 # @shpitdev/foundry-effect-ai
 
-[Effect AI](https://effect.website) providers for Palantir Foundry's LLM proxy: OpenAI, Anthropic, Google and xAI language models, GPT-6 Luna decisions, OpenAI embeddings and OpenAI realtime sessions, addressed by catalog alias or model RID. The package speaks each vendor's wire protocol itself; `effect` is its only peer dependency.
+[Effect AI](https://effect.website) providers for Palantir Foundry's LLM proxy: OpenAI, Anthropic, Google and xAI language models, open-weight DeepSeek, NVIDIA Nemotron, Qwen, Moonshot Kimi and Gemma models, GPT-6 Luna decisions, OpenAI embeddings and OpenAI realtime sessions, addressed by catalog alias or model RID. The package speaks each vendor's wire protocol itself; `effect` is its only peer dependency.
 
 ## Install
 
@@ -22,6 +22,11 @@ Import each module by its subpath. There is no root entry, so a program that use
 | `AnthropicLanguageModel`  | `/anthropic/v1/messages`                                                  | `LanguageModel`   |
 | `GoogleLanguageModel`     | `/google/v1/models/{rid}:generateContent`                                 | `LanguageModel`   |
 | `XaiLanguageModel`        | `/xai/v1/responses`                                                       | `LanguageModel`   |
+| `DeepSeekLanguageModel`   | `/openai/v1/chat/completions`                                             | `LanguageModel`   |
+| `NvidiaLanguageModel`     | `/openai/v1/chat/completions`                                             | `LanguageModel`   |
+| `QwenLanguageModel`       | `/openai/v1/chat/completions`                                             | `LanguageModel`   |
+| `MoonshotLanguageModel`   | `/openai/v1/chat/completions`                                             | `LanguageModel`   |
+| `GemmaLanguageModel`      | `/openai/v1/responses`                                                    | `LanguageModel`   |
 | `OpenAiDecisionModel`     | `/openai/v1/decisions`                                                    | `DecisionModel`   |
 | `OpenAiEmbeddingModel`    | `/openai/v1/embeddings`                                                   | `EmbeddingModel`  |
 | `OpenAiRealtime`          | WebSocket `/language-model-service/ws/v1/open-ai/realtime`                | none: a session   |
@@ -124,6 +129,29 @@ const capital = LanguageModel.generateObject({
 );
 ```
 
+### Open-weight models
+
+`DeepSeekLanguageModel`, `NvidiaLanguageModel`, `QwenLanguageModel` and `MoonshotLanguageModel` use Foundry's Chat Completions route; `GemmaLanguageModel` uses Responses. Text, streaming, structured output and tool loops work as in the examples above.
+
+```ts
+import * as MoonshotLanguageModel from '@shpitdev/foundry-effect-ai/MoonshotLanguageModel';
+import * as QwenLanguageModel from '@shpitdev/foundry-effect-ai/QwenLanguageModel';
+
+// Kimi reasons by default; its reasoning arrives as reasoning parts.
+const kimi = Layer.provide(MoonshotLanguageModel.model('kimi-k3.1-pro-highspeed'), Foundry);
+// DeepSeek, Nemotron and Qwen reason only with `reasoning_effort: 'high'`.
+const qwen = Layer.provide(
+  QwenLanguageModel.model('qwen3-32b', { reasoning_effort: 'high' }),
+  Foundry,
+);
+```
+
+- DeepSeek, Nemotron and Qwen send reasoning as `<reasoning>` spans inside the text; the adapter returns them as reasoning parts and the rest as text. Under `'high'`, DeepSeek V3.2 often leaves its whole answer inside the reasoning, so leave the effort unset when you need the answer or JSON.
+- Kimi's reasoning arrives in `reasoning_content`; `reasoning_effort: 'none'` turns it off. Replays never send it back, which Foundry would reject.
+- Foundry rejects image input for DeepSeek, Nemotron and Qwen. Kimi and Gemma read images.
+- Gemma takes no config: no reasoning control changes it.
+- JSON output together with tools is unreliable on DeepSeek, Nemotron, Qwen and Gemma: they usually answer without the tool or in prose.
+
 ### Decisions
 
 GPT-6 Luna answers probability, classification and rating questions in one call.
@@ -214,7 +242,7 @@ To transcribe the user's speech, set `audio.input.transcription: { model: 'whisp
 
 ## Provider metadata
 
-Response parts, prompt options and errors carry this package's data under its own keys: `foundry-openai`, `foundry-anthropic`, `foundry-google` and `foundry-xai`, plus `foundry` for transport errors (`errorName`, `errorInstanceId`, `code`, `type`). With `exactOptionalPropertyTypes`, which Effect recommends, these keys are typed; without it they read as plain JSON.
+Response parts, prompt options and errors carry this package's data under its own keys: `foundry-openai`, `foundry-anthropic`, `foundry-google`, `foundry-xai`, `foundry-deepseek`, `foundry-nvidia`, `foundry-qwen`, `foundry-moonshot` and `foundry-gemma`, plus `foundry` for transport errors (`errorName`, `errorInstanceId`, `code`, `type`). With `exactOptionalPropertyTypes`, which Effect recommends, these keys are typed; without it they read as plain JSON.
 
 ## More
 
