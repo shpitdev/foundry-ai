@@ -129,6 +129,8 @@ declare module 'effect/ai/Response' {
   export interface ReasoningStartPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
   export interface ReasoningEndPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
   export interface ToolCallPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
+  // Chat Completions puts a refusal's explanation on the finish part.
+  export interface FinishPartMetadata extends FoundryExactOnly<FoundryPartKeys> {}
 }
 
 declare module 'effect/ai/Prompt' {

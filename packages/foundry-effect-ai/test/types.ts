@@ -74,6 +74,8 @@ export const metadataReads = {
     metadata['foundry-gemma']?.itemId,
   chat: (metadata: Response.ToolCallPartMetadata): string | undefined =>
     metadata['foundry-deepseek']?.arguments ?? metadata['foundry-moonshot']?.arguments,
+  refusal: (metadata: Response.FinishPartMetadata): string | undefined =>
+    metadata['foundry-moonshot']?.refusal ?? metadata['foundry-openai']?.refusal,
   chatError: (metadata: AiError.InternalProviderErrorMetadata): string | null | undefined =>
     metadata['foundry-qwen']?.code ?? metadata['foundry-nvidia']?.type,
   replay: (options: Prompt.ReasoningPartOptions): string | undefined =>

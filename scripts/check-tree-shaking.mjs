@@ -125,6 +125,7 @@ try {
       '  (metadata: AiError.RateLimitErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
       '  (metadata: AiError.UnknownErrorMetadata): string | null | undefined => metadata.foundry?.errorName,',
       "  (metadata: Response.ToolCallPartMetadata): string | undefined => metadata['foundry-openai']?.itemId,",
+      "  (metadata: Response.FinishPartMetadata): string | undefined => metadata['foundry-moonshot']?.refusal,",
       '];',
       '',
     ].join('\n'),
