@@ -66,6 +66,9 @@ export const readFixtures = (module: string, cell: string): ReadonlyArray<AnyFix
   ...readFile(fixtureFile(module, cell, 'synthetic.json')),
 ];
 
+export const readFixtureBytes = (module: string, file: string): Buffer =>
+  readFileSync(new URL(`fixtures/${module}/${file}`, import.meta.url));
+
 /**
  * A replay sends one request per fixture, each matching the request recorded with it: path and
  * body exactly, and any pinned headers.

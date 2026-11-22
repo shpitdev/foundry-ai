@@ -140,7 +140,8 @@ export const rows: ReadonlyArray<Row> = [
     liveModels: ['gpt-realtime-2.1'],
     sweep: Object.keys(Realtime.models),
     // The AI SDK realtime suite's probes, one session each (`audio-input` opens two: the speech
-    // comes from the `audio-output` prompt). `error-mapping` adds a refused token and model live,
+    // comes from the `audio-output` prompt), plus inline transcription of fixed speech.
+    // `error-mapping` adds a refused token and model live,
     // and synthetic closes and error events offline. The last three are contract-only.
     cells: [
       'connect',
@@ -148,6 +149,7 @@ export const rows: ReadonlyArray<Row> = [
       'tools',
       'audio-output',
       'audio-input',
+      'input-transcription',
       'error-mapping',
       'tool-policy',
       'socket-lifecycle',

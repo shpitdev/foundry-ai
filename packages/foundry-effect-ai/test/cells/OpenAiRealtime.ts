@@ -10,7 +10,7 @@ import * as Schema from 'effect/Schema';
 import * as Socket from 'effect/socket/Socket';
 import * as Stream from 'effect/Stream';
 import * as OpenAiRealtime from '../../src/OpenAiRealtime.ts';
-import type { Cell, Env } from '../harness.ts';
+import { type Cell, type Env, readFixtureBytes } from '../harness.ts';
 
 type ServerEvent = OpenAiRealtime.ServerEvent;
 
@@ -232,6 +232,34 @@ export const cellsFor = (model: string): Readonly<Record<string, Cell>> => ({
         }),
       );
     }),
+
+  'input-transcription': (env) =>
+    Effect.scoped(
+      Effect.gen(function* () {
+        // Fixed synthetic speech (24 kHz, mono PCM16) so this doesn't depend on speech generation.
+        const audio = readFixtureBytes('OpenAiRealtime', 'hello-world.pcm');
+        const session = yield* connect(env, model);
+        yield* configure(session, {
+          type: 'realtime',
+          audio: {
+            input: { format: pcm, turn_detection: null, transcription: { model: 'whisper-1' } },
+          },
+        });
+        yield* session.send({ type: 'input_audio_buffer.append', audio: audio.toString('base64') });
+        yield* session.send({ type: 'input_audio_buffer.commit' });
+        const completed = 'conversation.item.input_audio_transcription.completed';
+        const events = yield* until(session, completed);
+        expect(events.at(-1)).toMatchObject({
+          type: completed,
+          transcript: expect.stringMatching(/hello world/iu),
+        });
+        if (!env.live) {
+          expect(joined(events, 'conversation.item.input_audio_transcription.delta')).toMatch(
+            /hello world/iu,
+          );
+        }
+      }),
+    ),
 });
 
 export const cells: Readonly<Record<string, Cell>> = {

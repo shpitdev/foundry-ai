@@ -158,6 +158,7 @@ describe.skipIf(models.length === 0)('realtime', () => {
               outputModalities: ['text'],
               turnDetection: { type: 'disabled' },
               inputAudioFormat: { type: 'audio/pcm', rate: 24000 },
+              inputAudioTranscription: { model: 'whisper-1' },
             },
           });
           await waitFor('session-updated');
@@ -169,6 +170,9 @@ describe.skipIf(models.length === 0)('realtime', () => {
           expect(await waitFor('response-done', start)).toMatchObject({ status: 'completed' });
           const heard = textOf(events.slice(start));
           expect(heard.toLowerCase()).toContain('sunflower');
+          expect(await waitFor('input-transcription-completed', start)).toMatchObject({
+            transcript: expect.stringMatching(/the garden contains a sunflower/iu),
+          });
         } finally {
           inputSocket.close(1000);
         }
