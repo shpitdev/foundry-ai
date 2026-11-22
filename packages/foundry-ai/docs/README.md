@@ -1,6 +1,6 @@
 # Models and live test status
 
-**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings, and five realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Transcription is not exposed.
+**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings, and five realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Standalone transcription is not exposed.
 
 Both Gemma 4 variants and Llama Nemotron Super appear in Foundry’s listing but are excluded because the package does not provide a dedicated adapter for them.
 
@@ -192,6 +192,8 @@ import { createFoundryRealtime } from '@shpitdev/foundry-ai/realtime';
 const model = createFoundryRealtime({ foundryUrl })('gpt-realtime-2.1');
 // experimental_useRealtime({ model, api: { token: '/api/realtime/setup' } })
 ```
+
+Set `inputAudioTranscription: { model: 'whisper-1' }` in the realtime session config to receive the user's speech as `input-transcription-completed` events.
 
 For server-side use, [the realtime example](https://github.com/shpitdev/foundry-ai/blob/main/examples/advanced/realtime.ts) shows a direct WebSocket connection. Realtime IDs are excluded from the HTTP language-model survey and rejected by `createFoundryOpenAI`; use the realtime factory instead. API names are used on this endpoint, including the dot in `gpt-realtime-1.5`, rather than model RIDs.
 

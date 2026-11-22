@@ -50,6 +50,15 @@ export interface SessionConfig {
         readonly input?:
           | {
               readonly format?: AudioFormat | undefined;
+              /** Transcribes user audio in this session. Set `null` to disable it. */
+              readonly transcription?:
+                | {
+                    readonly model: string;
+                    readonly language?: string | undefined;
+                    readonly prompt?: string | undefined;
+                  }
+                | null
+                | undefined;
               /** `null` turns detection off: commit the buffer and create responses yourself. */
               readonly turn_detection?: TurnDetection | null | undefined;
             }
@@ -155,6 +164,7 @@ export const OutputItem = Schema.Union([
 export const outputItemTypes: ReadonlySet<string> = new Set(['function_call', 'message']);
 
 const Delta = { response_id: Id, item_id: Id };
+const InputTranscription = { item_id: Id, content_index: Count };
 
 export const ServerEvent = Schema.Union([
   Schema.Struct({
@@ -169,6 +179,21 @@ export const ServerEvent = Schema.Union([
     type: Schema.Literal('input_audio_buffer.committed'),
     item_id: Id,
     previous_item_id: Text,
+  }),
+  Schema.Struct({
+    type: Schema.Literal('conversation.item.input_audio_transcription.delta'),
+    ...InputTranscription,
+    delta: Schema.String,
+  }),
+  Schema.Struct({
+    type: Schema.Literal('conversation.item.input_audio_transcription.completed'),
+    ...InputTranscription,
+    transcript: Schema.String,
+  }),
+  Schema.Struct({
+    type: Schema.Literal('conversation.item.input_audio_transcription.failed'),
+    ...InputTranscription,
+    error: Schema.optional(Schema.NullOr(Schema.Struct({ type: Text, code: Text, message: Text }))),
   }),
   Schema.Struct({
     type: Schema.Literal('response.created'),
@@ -235,6 +260,9 @@ export const eventTypes: ReadonlySet<string> = new Set([
   'session.updated',
   'error',
   'input_audio_buffer.committed',
+  'conversation.item.input_audio_transcription.delta',
+  'conversation.item.input_audio_transcription.completed',
+  'conversation.item.input_audio_transcription.failed',
   'response.created',
   'response.done',
   'response.output_text.delta',

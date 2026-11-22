@@ -164,7 +164,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 | `gpt-realtime-2.1`      | ✓       | ✓    | ✓                      | ✓            | ✓           |
 | `gpt-realtime-2.1-mini` | ✓       | ✓    | ✓                      | ✓            | ✓           |
 
-The cells are the AI SDK realtime suite's probes, one session each. **Connect** waits for `session.created`. **Text** asks for `READY`. **Tool result round-trip** has the model call `lookupCode`; `handleToolCalls` runs the toolkit handler and asks for the answer, which must quote the code. **Audio output** asks for a spoken sentence as 24 kHz PCM and checks the audio and its transcript. **Audio input** sends that audio to a fresh session, which must repeat the phrase. Voice activity detection, microphone capture, playback, interruptions and long sessions are not tested. See [realtime setup](#realtime-setup).
+The cells are the AI SDK realtime suite's probes, one session each. **Connect** waits for `session.created`. **Text** asks for `READY`. **Tool result round-trip** has the model call `lookupCode`; `handleToolCalls` runs the toolkit handler and asks for the answer, which must quote the code. **Audio output** asks for a spoken sentence as 24 kHz PCM and checks the audio and its transcript. **Audio input** sends that audio to a fresh session, which must repeat the phrase. **Input transcription** sends a fixed spoken clip and checks the completed `whisper-1` transcript without asking the model to reply. It passed live on all five models. Voice activity detection, microphone capture, playback, interruptions and long sessions are not tested. See [realtime setup](#realtime-setup).
 
 ### Transport
 
@@ -197,7 +197,7 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 ## Out of scope
 
 - Standalone speech, transcription, image generation and reranking.
-- Realtime events outside the probes, such as voice activity detection, input transcription and conversation item events; `events` skips them.
+- Realtime events outside the probes, such as voice activity detection and conversation item lifecycle events; `events` skips them.
 - Provider-defined tools (web search, code execution, MCP); they fail with `InvalidRequestError`.
 - Prompt caching controls: Anthropic `cache_control` is not forwarded, and Foundry rejects OpenAI's `prompt_cache_key`.
 - Anthropic `output_config.effort`, and PDF or plain-text documents.
