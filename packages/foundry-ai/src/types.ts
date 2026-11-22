@@ -15,6 +15,7 @@ export type ModelProvider =
   | 'nvidia'
   | 'qwen'
   | 'moonshot'
+  | 'zai'
   | 'gemma';
 export type ModelLifecycle = 'ga' | 'experimental';
 export type ModelInputType =

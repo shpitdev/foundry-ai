@@ -121,6 +121,19 @@ Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 on Responses. The adapt
 | `kimi-k3`                 | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `kimi-k2.5`               | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | ×         |
 
+### Z.ai GLM
+
+November 22, 2026 (UTC), on Foundry's Chat Completions route. Every failure was rerun in isolation and the result was unchanged.
+
+| Model     | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| --------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `glm-5`   | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `glm-5.3` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | R     | ×         |
+
+- GLM-5 skipped the tool both times when asked for JSON and a tool in the same request. GLM-5.3 passed the AI SDK probe; the [Effect probe](../../foundry-effect-ai/docs/README.md#zai-glm) got prose instead of JSON.
+- Both image requests returned HTTP 404 `LanguageModelNotAvailable`: the serving backend does not support vision.
+- The reasoning probe used high effort. GLM-5 exposed reasoning text; GLM-5.3 only reported reasoning token usage, which does not count as visible reasoning.
+
 ### Gemma
 
 | Model             | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
@@ -193,15 +206,18 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 | NVIDIA Nemotron        | `createFoundryNvidia` / `nvidia`       | `@ai-sdk/openai-compatible` |
 | Qwen                   | `createFoundryQwen` / `qwen`           | `@ai-sdk/openai-compatible` |
 | Moonshot Kimi          | `createFoundryMoonshot` / `moonshot`   | `@ai-sdk/openai-compatible` |
+| Z.ai GLM               | `createFoundryZai` / `zai`             | `@ai-sdk/openai-compatible` |
 | Gemma                  | `createFoundryGemma` / `gemma`         | `@ai-sdk/openai`            |
 
-DeepSeek, NVIDIA Nemotron, Qwen, and Moonshot Kimi use `/api/v2/llm/proxy/openai/v1/chat/completions`. Gemma uses `/api/v2/llm/proxy/openai/v1/responses`. These factories accept only their maker's catalog aliases or raw language-model RIDs; a known RID from another maker is rejected. OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged. Grok uses the xAI Responses route. Foundry supplies upstream credentials; there is no endpoint fallback.
+DeepSeek, NVIDIA Nemotron, Qwen, Moonshot Kimi, and Z.ai GLM use `/api/v2/llm/proxy/openai/v1/chat/completions`. Gemma uses `/api/v2/llm/proxy/openai/v1/responses`. These factories accept only their maker's catalog aliases or raw language-model RIDs; a known RID from another maker is rejected. OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged. Grok uses the xAI Responses route. Foundry supplies upstream credentials; there is no endpoint fallback.
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
 OpenAI rejects `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5 and Sonnet 5.5, which reject forced tool use and therefore keep the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
 
 For reasoning on DeepSeek, Nemotron, or Qwen, set `reasoningEffort: 'high'` under `providerOptions.deepseek`, `providerOptions.nvidia`, or `providerOptions.qwen`. Tagged thinking is returned separately from the answer. Moonshot Kimi can return separate reasoning by default; set `providerOptions.moonshot.reasoningEffort` to `'none'` to turn it off on models that support the switch. Foundry rejects replayed Kimi reasoning, so the adapter removes it from outgoing assistant messages. Chat requests never send `parallel_tool_calls`. Gemma does not send OpenAI-specific or generic reasoning options.
+
+For Z.ai, set `providerOptions.zai.reasoningEffort` to `'high'` to see GLM-5's reasoning. Both GLMs accept `'low'`, `'medium'`, and `'high'`; `'none'` works only on GLM-5, and `'xhigh'` and `'max'` only on GLM-5.3. The adapter omits unsupported values so Foundry uses the model's default. GLM-5.3 needs enough `maxOutputTokens` for both reasoning and the visible answer; the live probes use 8,192.
 
 Only OpenAI exposes `embeddingModel()`, `embedding()`, and `decisionModel()`. Embedding strings pass through without language-model RID routing; decision aliases resolve to RIDs like language models. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
 

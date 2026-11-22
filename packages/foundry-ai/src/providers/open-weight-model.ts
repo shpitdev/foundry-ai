@@ -5,7 +5,7 @@ import type { ModelProvider } from '../types.js';
 
 export type OpenWeightMaker = Extract<
   ModelProvider,
-  'deepseek' | 'nvidia' | 'qwen' | 'moonshot' | 'gemma'
+  'deepseek' | 'nvidia' | 'qwen' | 'moonshot' | 'zai' | 'gemma'
 >;
 
 export interface OpenWeightLanguageProvider<Id extends string> {

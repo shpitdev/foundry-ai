@@ -15,6 +15,7 @@ import {
 import { QWEN_MODELS, type KnownQwenModelId } from './qwen-models.js';
 import { REALTIME_MODELS, type RealtimeModelId } from './realtime-models.js';
 import { type KnownXaiModelId, XAI_MODELS } from './xai-models.js';
+import { type KnownZaiModelId, ZAI_MODELS } from './zai-models.js';
 
 export type KnownModelId =
   | RealtimeModelId
@@ -27,7 +28,8 @@ export type KnownModelId =
   | KnownGemmaModelId
   | KnownMoonshotModelId
   | KnownNvidiaModelId
-  | KnownQwenModelId;
+  | KnownQwenModelId
+  | KnownZaiModelId;
 
 export const MODEL_CATALOG = {
   ...OPENAI_MODELS,
@@ -41,6 +43,7 @@ export const MODEL_CATALOG = {
   ...MOONSHOT_MODELS,
   ...NVIDIA_MODELS,
   ...QWEN_MODELS,
+  ...ZAI_MODELS,
 } as const satisfies Record<KnownModelId, ModelMetadata>;
 export const MODEL_CATALOG_BY_RID = Object.fromEntries(
   Object.values(MODEL_CATALOG).map((metadata) => [metadata.rid, metadata]),

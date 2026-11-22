@@ -52,7 +52,7 @@ export type ReasoningEffort = 'none' | 'minimal' | 'low' | 'medium' | 'high' | '
 export interface Request {
   readonly model: string;
   readonly messages: ReadonlyArray<Message>;
-  readonly reasoning_effort?: ReasoningEffort;
+  readonly reasoning_effort?: ReasoningEffort | 'max';
   readonly tools?: ReadonlyArray<FunctionTool>;
   readonly tool_choice?: ToolChoice;
   readonly response_format?: {

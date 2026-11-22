@@ -69,6 +69,11 @@
       "import": "./dist/providers/qwen.mjs",
       "require": "./dist/providers/qwen.cjs"
     },
+    "./zai": {
+      "types": "./dist/providers/zai.d.ts",
+      "import": "./dist/providers/zai.mjs",
+      "require": "./dist/providers/zai.cjs"
+    },
     "./moonshot": {
       "types": "./dist/providers/moonshot.d.ts",
       "import": "./dist/providers/moonshot.mjs",

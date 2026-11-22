@@ -14,6 +14,7 @@ import { createFoundryNvidia } from '../providers/nvidia.js';
 import { createFoundryOpenAI } from '../providers/openai.js';
 import { createFoundryQwen } from '../providers/qwen.js';
 import { createFoundryXai } from '../providers/xai.js';
+import { createFoundryZai } from '../providers/zai.js';
 import type { ModelProvider } from '../types.js';
 import {
   EMBEDDING_DIMENSIONS,
@@ -42,6 +43,7 @@ const providers = {
   moonshot: createFoundryMoonshot(config),
   nvidia: createFoundryNvidia(config),
   qwen: createFoundryQwen(config),
+  zai: createFoundryZai(config),
 };
 
 const signalSchema = z.object({
@@ -77,7 +79,8 @@ describe.skipIf(languageModels.length === 0)('language', () => {
       provider === 'deepseek' ||
       provider === 'nvidia' ||
       provider === 'qwen' ||
-      provider === 'moonshot';
+      provider === 'moonshot' ||
+      provider === 'zai';
     const model = () => providers[provider](modelId);
     const options = (mode: ProviderOptionMode) => getProviderOptions(provider, modelId, mode);
 
@@ -243,7 +246,7 @@ function getProviderOptions(
 
   if (
     mode === 'reasoning' &&
-    (provider === 'deepseek' || provider === 'nvidia' || provider === 'qwen')
+    (provider === 'deepseek' || provider === 'nvidia' || provider === 'qwen' || provider === 'zai')
   ) {
     return { [provider]: { reasoningEffort: 'high' } };
   }

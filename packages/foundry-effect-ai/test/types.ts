@@ -22,6 +22,7 @@ import * as OpenAiLanguageModel from '../src/OpenAiLanguageModel.ts';
 import * as OpenAiRealtime from '../src/OpenAiRealtime.ts';
 import * as QwenLanguageModel from '../src/QwenLanguageModel.ts';
 import * as XaiLanguageModel from '../src/XaiLanguageModel.ts';
+import * as ZaiLanguageModel from '../src/ZaiLanguageModel.ts';
 
 type Language<P extends string> = AiModel.Model<
   P,
@@ -38,6 +39,7 @@ export const languageModels: readonly [
   Language<'foundry-nvidia'>,
   Language<'foundry-qwen'>,
   Language<'foundry-moonshot'>,
+  Language<'foundry-zai'>,
   Language<'foundry-gemma'>,
 ] = [
   OpenAiLanguageModel.model('gpt-6-sol'),
@@ -48,6 +50,7 @@ export const languageModels: readonly [
   NvidiaLanguageModel.model('nemotron-3-super-120b'),
   QwenLanguageModel.model('qwen3-32b'),
   MoonshotLanguageModel.model('kimi-k3.1-pro-highspeed', { reasoning_effort: 'none' }),
+  ZaiLanguageModel.model('glm-5.3', { reasoning_effort: 'max' }),
   GemmaLanguageModel.model('gemma-4-31b'),
 ];
 
@@ -73,7 +76,9 @@ export const metadataReads = {
     metadata['foundry-xai']?.arguments ??
     metadata['foundry-gemma']?.itemId,
   chat: (metadata: Response.ToolCallPartMetadata): string | undefined =>
-    metadata['foundry-deepseek']?.arguments ?? metadata['foundry-moonshot']?.arguments,
+    metadata['foundry-deepseek']?.arguments ??
+    metadata['foundry-moonshot']?.arguments ??
+    metadata['foundry-zai']?.arguments,
   refusal: (metadata: Response.FinishPartMetadata): string | undefined =>
     metadata['foundry-moonshot']?.refusal ?? metadata['foundry-openai']?.refusal,
   chatError: (metadata: AiError.InternalProviderErrorMetadata): string | null | undefined =>

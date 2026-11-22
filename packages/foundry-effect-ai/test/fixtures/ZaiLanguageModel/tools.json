@@ -1,0 +1,109 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795316897,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"The European capital that hosted the Summer Olympics in 1900 and 1924 was Paris, France.\",\"tool_calls\":[{\"id\":\"redacted-id-2\",\"type\":\"function\",\"function\":{\"name\":\"GetWeather\",\"arguments\":\"{\\\"city\\\": \\\"Paris\\\"}\"}}]},\"finish_reason\":\"tool_calls\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":32,\"prompt_tokens\":205,\"total_tokens\":237,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.glm-5",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"object\":\"chat.completion\",\"created\":1795316898,\"model\":\"zai.glm-5\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"Paris, the European capital that hosted the Summer Olympics in 1900 and 1924, currently has a temperature of 21°C with sunny conditions.\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"completion_tokens\":32,\"prompt_tokens\":262,\"total_tokens\":294,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.glm-5",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+          },
+          {
+            "role": "assistant",
+            "content": "The European capital that hosted the Summer Olympics in 1900 and 1924 was Paris, France.",
+            "tool_calls": [
+              {
+                "id": "redacted-id-2",
+                "type": "function",
+                "function": {
+                  "name": "GetWeather",
+                  "arguments": "{\"city\": \"Paris\"}"
+                }
+              }
+            ]
+          },
+          {
+            "role": "tool",
+            "tool_call_id": "redacted-id-2",
+            "content": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "tools": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GetWeather",
+              "parameters": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "city"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true,
+              "description": "Get the current weather in a city"
+            }
+          }
+        ],
+        "tool_choice": "auto"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

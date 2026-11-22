@@ -23,7 +23,7 @@ export type FoundryError = {
 
 /**
  * An error reported inside a successful response or stream by a Responses or Chat Completions
- * route: OpenAI, xAI, DeepSeek, NVIDIA, Qwen, Moonshot and Gemma.
+ * route: OpenAI, xAI, DeepSeek, NVIDIA, Qwen, Moonshot, Z.ai and Gemma.
  */
 export type ResponsesError = { readonly code: string | null; readonly type: string | null };
 export type AnthropicError = { readonly type: string | null };
@@ -94,6 +94,7 @@ type FoundryErrorKeys = {
   readonly 'foundry-nvidia'?: ResponsesError | null;
   readonly 'foundry-qwen'?: ResponsesError | null;
   readonly 'foundry-moonshot'?: ResponsesError | null;
+  readonly 'foundry-zai'?: ResponsesError | null;
   readonly 'foundry-gemma'?: ResponsesError | null;
   readonly 'foundry-anthropic'?: AnthropicError | null;
   readonly 'foundry-google'?: GoogleError | null;
@@ -107,6 +108,7 @@ type FoundryPartKeys = {
   readonly 'foundry-nvidia'?: ResponsesPart | null;
   readonly 'foundry-qwen'?: ResponsesPart | null;
   readonly 'foundry-moonshot'?: ResponsesPart | null;
+  readonly 'foundry-zai'?: ResponsesPart | null;
   readonly 'foundry-gemma'?: ResponsesPart | null;
   readonly 'foundry-anthropic'?: AnthropicPart | null;
   readonly 'foundry-google'?: GooglePart | null;

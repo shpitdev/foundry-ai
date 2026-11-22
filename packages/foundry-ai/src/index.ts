@@ -77,6 +77,12 @@ export {
   XAI_MODELS,
   type XaiModelId,
 } from './models/xai-models.js';
+export {
+  type KnownZaiModelId,
+  ZAI_MODEL_IDS,
+  ZAI_MODELS,
+  type ZaiModelId,
+} from './models/zai-models.js';
 export type {
   FoundryConfig,
   ModelClass,
