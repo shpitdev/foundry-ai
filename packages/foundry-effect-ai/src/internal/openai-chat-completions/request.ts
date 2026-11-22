@@ -2,9 +2,9 @@
 /**
  * Effect AI prompt, tools and response format → a Chat Completions request. Chat is stateless,
  * so every turn sends the whole prompt. Tool calls replay with the model's own argument text.
- * Reasoning never replays: OpenAI models return none here, Kimi rejects `reasoning_content` on
- * assistant messages (HTTP 400), and the tagged makers' spans are output the model reads back
- * as ordinary text.
+ * Reasoning never replays: OpenAI models return none here, Foundry rejects Kimi's
+ * `reasoning_content` on assistant messages (HTTP 400), and sending the tagged makers' spans
+ * back would put reasoning into the assistant's text.
  */
 import * as AiError from 'effect/ai/AiError';
 import * as LanguageModel from 'effect/ai/LanguageModel';
