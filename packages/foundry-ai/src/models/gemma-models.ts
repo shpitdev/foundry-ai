@@ -8,8 +8,6 @@ const GEMMA_MODEL_DEFINITIONS = {
     displayName: 'Gemma 4 31B',
     lifecycle: 'ga',
     inputTypes: ['OPEN_AI_RESPONSES', 'GENERIC_VISION_COMPLETION'],
-    contextWindow: 262144,
-    maxOutputTokens: 65536,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',
@@ -25,8 +23,6 @@ const GEMMA_MODEL_DEFINITIONS = {
     lifecycle: 'ga',
     inputTypes: ['OPEN_AI_RESPONSES', 'GENERIC_VISION_COMPLETION'],
     trainingCutoffDate: '2025-01-01T00:00:00Z',
-    contextWindow: 262144,
-    maxOutputTokens: 65536,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',

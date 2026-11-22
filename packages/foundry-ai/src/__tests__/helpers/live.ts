@@ -89,8 +89,10 @@ function isKind(id: KnownModelId, kind: LiveKind) {
   return kinds[kind];
 }
 
-// A capability survey should leave room for reasoning and final output.
-export const LIVE_MAX_OUTPUT_TOKENS = 8192;
+/** Leave room for reasoning and final output without exceeding Nano's listed cap. */
+export function liveMaxOutputTokens(modelId: KnownModelId): number {
+  return modelId === 'nemotron-3-nano-30b' ? 8000 : 8192;
+}
 
 export const expectedSignal = {
   indication: 'relapse prevention',

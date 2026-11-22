@@ -8,8 +8,6 @@ const QWEN_MODEL_DEFINITIONS = {
     displayName: 'Qwen3 32B',
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
-    contextWindow: 32000,
-    maxOutputTokens: 8192,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',
@@ -24,8 +22,6 @@ const QWEN_MODEL_DEFINITIONS = {
     displayName: 'Qwen3 235B A22B 2507',
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
-    contextWindow: 256000,
-    maxOutputTokens: 8192,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',

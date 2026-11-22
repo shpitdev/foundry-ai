@@ -8,7 +8,6 @@ const MOONSHOT_MODEL_DEFINITIONS = {
     displayName: 'Kimi K3.1 Pro - Highspeed',
     lifecycle: 'experimental',
     inputTypes: ['GENERIC_CHAT_COMPLETION', 'GENERIC_VISION_COMPLETION'],
-    contextWindow: 1048576,
     performance: {
       cost: 'HIGH',
       modelClass: 'REASONING',
@@ -22,7 +21,6 @@ const MOONSHOT_MODEL_DEFINITIONS = {
     displayName: 'Kimi K3',
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION', 'GENERIC_VISION_COMPLETION'],
-    contextWindow: 1048576,
     performance: {
       cost: 'HIGH',
       modelClass: 'REASONING',
@@ -37,8 +35,6 @@ const MOONSHOT_MODEL_DEFINITIONS = {
     displayName: 'Kimi K2.5',
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION', 'GENERIC_VISION_COMPLETION'],
-    contextWindow: 256000,
-    maxOutputTokens: 16000,
     performance: {
       cost: 'MEDIUM',
       modelClass: 'REASONING',

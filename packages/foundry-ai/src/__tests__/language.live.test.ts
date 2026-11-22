@@ -18,7 +18,7 @@ import type { ModelProvider } from '../types.js';
 import {
   EMBEDDING_DIMENSIONS,
   expectedSignal,
-  LIVE_MAX_OUTPUT_TOKENS,
+  liveMaxOutputTokens,
   liveModels,
   loadLiveFoundryConfig,
   prompts,
@@ -71,12 +71,8 @@ const executedTool = expect.arrayContaining([
 
 describe.skipIf(languageModels.length === 0)('language', () => {
   for (const modelId of languageModels) {
-    const metadata = resolveKnownModelMetadata(modelId);
-    const { provider, supportsVision } = metadata;
-    const maxOutputTokens = Math.min(
-      LIVE_MAX_OUTPUT_TOKENS,
-      metadata.maxOutputTokens ?? LIVE_MAX_OUTPUT_TOKENS,
-    );
+    const { provider, supportsVision } = resolveKnownModelMetadata(modelId);
+    const maxOutputTokens = liveMaxOutputTokens(modelId);
     const chatOpenWeight =
       provider === 'deepseek' ||
       provider === 'nvidia' ||

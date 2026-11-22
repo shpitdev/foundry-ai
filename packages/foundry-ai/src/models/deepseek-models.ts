@@ -9,8 +9,6 @@ const DEEPSEEK_MODEL_DEFINITIONS = {
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
     trainingCutoffDate: '2025-03-01T00:00:00Z',
-    contextWindow: 164000,
-    maxOutputTokens: 8192,
     performance: {
       cost: 'MEDIUM',
       modelClass: 'REASONING',

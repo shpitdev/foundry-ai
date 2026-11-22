@@ -48,8 +48,6 @@ export interface ModelDefinition {
   lifecycle: ModelLifecycle;
   inputTypes: ReadonlyArray<ModelInputType>;
   trainingCutoffDate?: string;
-  contextWindow?: number;
-  maxOutputTokens?: number;
   performance: ModelPerformance;
   externalUrl?: string;
   modelCreator?: string;

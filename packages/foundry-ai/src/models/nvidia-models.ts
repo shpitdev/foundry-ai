@@ -9,8 +9,6 @@ const NVIDIA_MODEL_DEFINITIONS = {
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
     trainingCutoffDate: '2025-06-01T00:00:00Z',
-    contextWindow: 262144,
-    maxOutputTokens: 32768,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',
@@ -25,8 +23,6 @@ const NVIDIA_MODEL_DEFINITIONS = {
     displayName: 'NVIDIA Nemotron 3 Nano 30B',
     lifecycle: 'ga',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
-    contextWindow: 256000,
-    maxOutputTokens: 8000,
     performance: {
       cost: 'LOW',
       modelClass: 'REASONING',
@@ -42,8 +38,6 @@ const NVIDIA_MODEL_DEFINITIONS = {
     lifecycle: 'experimental',
     inputTypes: ['GENERIC_CHAT_COMPLETION'],
     trainingCutoffDate: '2026-05-01T00:00:00Z',
-    contextWindow: 1000000,
-    maxOutputTokens: 1000000,
     performance: {
       cost: 'MEDIUM',
       modelClass: 'REASONING',

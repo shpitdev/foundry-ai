@@ -173,8 +173,6 @@
     "modelIdentifier": "GEMMA_4_31B",
     "displayName": "Gemma 4 31B",
     "lifecycle": "ga",
-    "contextWindow": 262144,
-    "maxOutputTokens": 65536,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -343,8 +341,6 @@
     "displayName": "Gemma 4 26B A4B",
     "lifecycle": "ga",
     "trainingCutoffDate": "2025-01-01T00:00:00Z",
-    "contextWindow": 262144,
-    "maxOutputTokens": 65536,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -967,8 +963,6 @@
     "displayName": "DeepSeek V3.2",
     "lifecycle": "ga",
     "trainingCutoffDate": "2025-03-01T00:00:00Z",
-    "contextWindow": 164000,
-    "maxOutputTokens": 8192,
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING",
@@ -983,8 +977,6 @@
     "displayName": "NVIDIA Nemotron 3 Super 120B",
     "lifecycle": "ga",
     "trainingCutoffDate": "2025-06-01T00:00:00Z",
-    "contextWindow": 262144,
-    "maxOutputTokens": 32768,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -998,8 +990,6 @@
     "modelIdentifier": "NEMOTRON_3_NANO_30B",
     "displayName": "NVIDIA Nemotron 3 Nano 30B",
     "lifecycle": "ga",
-    "contextWindow": 256000,
-    "maxOutputTokens": 8000,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -1014,8 +1004,6 @@
     "displayName": "NVIDIA Nemotron 3 Ultra 550B A55B NVFP4",
     "lifecycle": "experimental",
     "trainingCutoffDate": "2026-05-01T00:00:00Z",
-    "contextWindow": 1000000,
-    "maxOutputTokens": 1000000,
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING",
@@ -1029,8 +1017,6 @@
     "modelIdentifier": "QWEN3_32B",
     "displayName": "Qwen3 32B",
     "lifecycle": "ga",
-    "contextWindow": 32000,
-    "maxOutputTokens": 8192,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -1044,8 +1030,6 @@
     "modelIdentifier": "QWEN3_235B_A22B_2507",
     "displayName": "Qwen3 235B A22B 2507",
     "lifecycle": "ga",
-    "contextWindow": 256000,
-    "maxOutputTokens": 8192,
     "performance": {
       "cost": "LOW",
       "modelClass": "REASONING",
@@ -1059,7 +1043,6 @@
     "modelIdentifier": "KIMI_K3_1_PRO_HIGHSPEED",
     "displayName": "Kimi K3.1 Pro - Highspeed",
     "lifecycle": "experimental",
-    "contextWindow": 1048576,
     "performance": {
       "cost": "HIGH",
       "modelClass": "REASONING"
@@ -1072,7 +1055,6 @@
     "modelIdentifier": "KIMI_K3",
     "displayName": "Kimi K3",
     "lifecycle": "ga",
-    "contextWindow": 1048576,
     "performance": {
       "cost": "HIGH",
       "modelClass": "REASONING",
@@ -1086,8 +1068,6 @@
     "modelIdentifier": "KIMI_K2_5",
     "displayName": "Kimi K2.5",
     "lifecycle": "ga",
-    "contextWindow": 256000,
-    "maxOutputTokens": 16000,
     "performance": {
       "cost": "MEDIUM",
       "modelClass": "REASONING",

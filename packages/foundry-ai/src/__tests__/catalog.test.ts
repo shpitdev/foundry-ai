@@ -31,8 +31,6 @@ const enrollments = JSON.parse(
   displayName: string;
   lifecycle: string;
   trainingCutoffDate?: string;
-  contextWindow?: number;
-  maxOutputTokens?: number;
   performance: { cost?: string; modelClass?: string; speed?: string };
   externalUrl?: string;
   modelCreator?: string;
@@ -73,12 +71,6 @@ describe('model catalog', () => {
       );
       expect(model.externalUrl, `${id} externalUrl must match Foundry`).toBe(
         enrollment?.externalUrl,
-      );
-      expect(model.contextWindow, `${id} contextWindow must match Foundry`).toBe(
-        enrollment?.contextWindow,
-      );
-      expect(model.maxOutputTokens, `${id} maxOutputTokens must match Foundry`).toBe(
-        enrollment?.maxOutputTokens,
       );
       expect(model).toMatchObject(retainedCreator(enrollment));
     }
