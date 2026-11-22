@@ -4,7 +4,7 @@
     "frames": [
       {
         "received": {
-          "event_id": "event_Empi0zb6q8yr4K8zGgdrG",
+          "event_id": "redacted-id-1",
           "session": {
             "type": "realtime",
             "audio": {
@@ -47,8 +47,8 @@
             "tracing": null,
             "truncation": "auto",
             "object": "realtime.session",
-            "id": "redacted-id-1",
-            "expires_at": 1795310820
+            "id": "redacted-id-2",
+            "expires_at": 1795311693
           },
           "type": "session.created"
         }
@@ -92,7 +92,7 @@
       },
       {
         "received": {
-          "event_id": "event_Empi0Huyc2qUrPdvzKgbN",
+          "event_id": "redacted-id-3",
           "session": {
             "type": "realtime",
             "audio": {
@@ -137,8 +137,8 @@
             "tracing": null,
             "truncation": "auto",
             "object": "realtime.session",
-            "id": "redacted-id-1",
-            "expires_at": 1795310820
+            "id": "redacted-id-2",
+            "expires_at": 1795311693
           },
           "type": "session.updated"
         }
@@ -170,7 +170,7 @@
       },
       {
         "received": {
-          "event_id": "event_Empi0tiTjztlIk1ciOC0P",
+          "event_id": "redacted-id-4",
           "item": {
             "content": [
               {
@@ -180,7 +180,7 @@
             ],
             "role": "user",
             "type": "message",
-            "id": "redacted-id-2",
+            "id": "redacted-id-5",
             "status": "completed"
           },
           "type": "conversation.item.added",
@@ -189,7 +189,7 @@
       },
       {
         "received": {
-          "event_id": "event_Empi0IZJJqHYggPRvidAb",
+          "event_id": "redacted-id-6",
           "item": {
             "content": [
               {
@@ -199,7 +199,7 @@
             ],
             "role": "user",
             "type": "message",
-            "id": "redacted-id-2",
+            "id": "redacted-id-5",
             "status": "completed"
           },
           "type": "conversation.item.done",
@@ -208,9 +208,9 @@
       },
       {
         "received": {
-          "event_id": "event_Empi0u0xeZzaqIjqKi7KX",
+          "event_id": "redacted-id-7",
           "response": {
-            "id": "redacted-id-3",
+            "id": "redacted-id-8",
             "audio": {
               "output": {
                 "format": {
@@ -220,7 +220,7 @@
                 "voice": "marin"
               }
             },
-            "conversation_id": "conv_Empi01Xwrfvm8tscHJWIZ",
+            "conversation_id": "redacted-id-9",
             "max_output_tokens": "inf",
             "metadata": null,
             "object": "realtime.response",
@@ -237,46 +237,46 @@
       },
       {
         "received": {
-          "event_id": "event_Empi0fyYhZL59C2bSxqPf",
+          "event_id": "redacted-id-10",
           "item": {
             "content": [],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-4",
+            "id": "redacted-id-11",
             "status": "in_progress",
             "phase": "commentary"
           },
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_item.added"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi0uJ3X1XzWMRVniiDI",
+          "event_id": "redacted-id-12",
           "item": {
             "content": [],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-4",
+            "id": "redacted-id-11",
             "status": "in_progress",
             "phase": "commentary"
           },
           "type": "conversation.item.added",
-          "previous_item_id": "redacted-id-2"
+          "previous_item_id": "redacted-id-5"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi0FDV82YhF5TVO9e79",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-13",
+          "item_id": "redacted-id-11",
           "output_index": 0,
           "part": {
             "text": "",
             "type": "text"
           },
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.content_part.added"
         }
       },
@@ -284,275 +284,191 @@
         "received": {
           "content_index": 0,
           "delta": "I",
-          "event_id": "event_Empi0O3qPv8p1eU0xIo2m",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-14",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "p8twsm0unk0AQwI"
+          "obfuscation": "8Yz2BDmzBXsrnXA"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "’m",
-          "event_id": "event_Empi08daR5WbqQNPYLkKv",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-15",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "ZIRShkthRBZ89N"
+          "obfuscation": "d3eekbTTImT1AR"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "delta": " fetching",
-          "event_id": "event_Empi01f0UuFREIWSmxred",
-          "item_id": "redacted-id-4",
+          "delta": " going",
+          "event_id": "redacted-id-16",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "eNo9YgQ"
+          "obfuscation": "cAAkMMV250"
+        }
+      },
+      {
+        "received": {
+          "content_index": 0,
+          "delta": " to",
+          "event_id": "redacted-id-17",
+          "item_id": "redacted-id-11",
+          "output_index": 0,
+          "response_id": "redacted-id-8",
+          "type": "response.output_text.delta",
+          "obfuscation": "YcDoeeCNEPKog"
+        }
+      },
+      {
+        "received": {
+          "content_index": 0,
+          "delta": " fetch",
+          "event_id": "redacted-id-18",
+          "item_id": "redacted-id-11",
+          "output_index": 0,
+          "response_id": "redacted-id-8",
+          "type": "response.output_text.delta",
+          "obfuscation": "BHB1UYGNHS"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": " that",
-          "event_id": "event_Empi0UOCmQpks5Dedpj0h",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-19",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "TpleP33yuHv"
+          "obfuscation": "hBdAPVem53l"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": " code",
-          "event_id": "event_Empi0lBwasbBQ3gD6yeGC",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-20",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "XVA1pzctiRG"
+          "obfuscation": "1Io7s4xc5pZ"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": " now",
-          "event_id": "event_Empi0r5A0huHUInA4EpGA",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-21",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "gYjea18GfbIz"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": ",",
-          "event_id": "event_Empi0agri28X4DhCmB053",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "BhiMOelfbkEdxfx"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " then",
-          "event_id": "event_Empi0jMCwr60WRbw9zCJl",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "XDk3XUULxXB"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " I",
-          "event_id": "event_Empi0So3jWGC2Bt1I0h2x",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "8azuKMG7r3drLs"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": "’ll",
-          "event_id": "event_Empi000zKbHTttbgSPgA7",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "0VGPth4CTiYka"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " share",
-          "event_id": "event_Empi0uGDXCGwVP0ZrUT8A",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "a7Z2ysDP8M"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " it",
-          "event_id": "event_Empi0IEYn1EwUF5x3xS9c",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "XA5MGX3PzS7mm"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " exactly",
-          "event_id": "event_Empi08FsjKkX783ISDuph",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "xF7PwIkd"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " as",
-          "event_id": "event_Empi0deXPTeXxfwdrXoVL",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "xZxdx9RSYv15e"
-        }
-      },
-      {
-        "received": {
-          "content_index": 0,
-          "delta": " returned",
-          "event_id": "event_Empi0MF4pqRj3y1eya0kW",
-          "item_id": "redacted-id-4",
-          "output_index": 0,
-          "response_id": "redacted-id-3",
-          "type": "response.output_text.delta",
-          "obfuscation": "U7JFDfC"
+          "obfuscation": "ZsEJNoRxDNhF"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": ".",
-          "event_id": "event_Empi1GZueZrPbeyVFhqtG",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-22",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_text.delta",
-          "obfuscation": "KZeffnDGn1ThvcQ"
+          "obfuscation": "A77m0eabTvY0gcp"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1m1JkmibQ4XLmoVkb",
+          "event_id": "redacted-id-23",
           "item": {
             "arguments": "",
             "name": "lookupCode",
             "type": "function_call",
-            "id": "redacted-id-5",
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "id": "redacted-id-24",
+            "call_id": "redacted-id-25",
             "status": "in_progress"
           },
           "output_index": 1,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_item.added"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1F5gAcOupPg6PNfUc",
+          "event_id": "redacted-id-26",
           "item": {
             "arguments": "",
             "name": "lookupCode",
             "type": "function_call",
-            "id": "redacted-id-5",
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "id": "redacted-id-24",
+            "call_id": "redacted-id-25",
             "status": "in_progress"
           },
           "type": "conversation.item.added",
-          "previous_item_id": "redacted-id-4"
+          "previous_item_id": "redacted-id-11"
         }
       },
       {
         "received": {
-          "call_id": "call_UcI0213vIA0kmYo6",
+          "call_id": "redacted-id-25",
           "delta": "{}",
-          "event_id": "event_Empi1zv9mHfwY5Kf40eYO",
-          "item_id": "redacted-id-5",
+          "event_id": "redacted-id-27",
+          "item_id": "redacted-id-24",
           "output_index": 1,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.function_call_arguments.delta",
-          "obfuscation": "pr5KNAkAKMOEdn"
+          "obfuscation": "61gd5FIm9rQCjB"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi1ejiOdGXso4WdbCxJ",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-28",
+          "item_id": "redacted-id-11",
           "output_index": 0,
-          "response_id": "redacted-id-3",
-          "text": "I’m fetching that code now, then I’ll share it exactly as returned.",
+          "response_id": "redacted-id-8",
+          "text": "I’m going to fetch that code now.",
           "type": "response.output_text.done"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi1uDGl4QBCWEyvrhBS",
-          "item_id": "redacted-id-4",
+          "event_id": "redacted-id-29",
+          "item_id": "redacted-id-11",
           "output_index": 0,
           "part": {
-            "text": "I’m fetching that code now, then I’ll share it exactly as returned.",
+            "text": "I’m going to fetch that code now.",
             "type": "text"
           },
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.content_part.done"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1CyCUkYEV44xHPfS2",
+          "event_id": "redacted-id-30",
           "item": {
             "content": [
               {
-                "text": "I’m fetching that code now, then I’ll share it exactly as returned.",
+                "text": "I’m going to fetch that code now.",
                 "type": "output_text"
               }
             ],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-4",
+            "id": "redacted-id-11",
             "status": "completed",
             "phase": "commentary"
           },
@@ -562,73 +478,73 @@
       },
       {
         "received": {
-          "event_id": "event_Empi1EeqTq8SDGamCG5pK",
+          "event_id": "redacted-id-31",
           "item": {
             "content": [
               {
-                "text": "I’m fetching that code now, then I’ll share it exactly as returned.",
+                "text": "I’m going to fetch that code now.",
                 "type": "output_text"
               }
             ],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-4",
+            "id": "redacted-id-11",
             "status": "completed",
             "phase": "commentary"
           },
           "output_index": 0,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_item.done"
         }
       },
       {
         "received": {
           "arguments": "{}",
-          "call_id": "call_UcI0213vIA0kmYo6",
-          "event_id": "event_Empi1AjDK9rPUCP7nI20w",
-          "item_id": "redacted-id-5",
+          "call_id": "redacted-id-25",
+          "event_id": "redacted-id-32",
+          "item_id": "redacted-id-24",
           "name": "lookupCode",
           "output_index": 1,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.function_call_arguments.done"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1Mg6U5t5wTDzXDLwW",
+          "event_id": "redacted-id-33",
           "item": {
             "arguments": "{}",
             "name": "lookupCode",
             "type": "function_call",
-            "id": "redacted-id-5",
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "id": "redacted-id-24",
+            "call_id": "redacted-id-25",
             "status": "completed"
           },
           "type": "conversation.item.done",
-          "previous_item_id": "redacted-id-4"
+          "previous_item_id": "redacted-id-11"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1OmkckcbmZyJUtfGV",
+          "event_id": "redacted-id-34",
           "item": {
             "arguments": "{}",
             "name": "lookupCode",
             "type": "function_call",
-            "id": "redacted-id-5",
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "id": "redacted-id-24",
+            "call_id": "redacted-id-25",
             "status": "completed"
           },
           "output_index": 1,
-          "response_id": "redacted-id-3",
+          "response_id": "redacted-id-8",
           "type": "response.output_item.done"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1EfTQJnWGpCbp9o71",
+          "event_id": "redacted-id-35",
           "response": {
-            "id": "redacted-id-3",
+            "id": "redacted-id-8",
             "audio": {
               "output": {
                 "format": {
@@ -638,7 +554,7 @@
                 "voice": "marin"
               }
             },
-            "conversation_id": "conv_Empi01Xwrfvm8tscHJWIZ",
+            "conversation_id": "redacted-id-9",
             "max_output_tokens": "inf",
             "metadata": null,
             "object": "realtime.response",
@@ -646,13 +562,13 @@
               {
                 "content": [
                   {
-                    "text": "I’m fetching that code now, then I’ll share it exactly as returned.",
+                    "text": "I’m going to fetch that code now.",
                     "type": "output_text"
                   }
                 ],
                 "role": "assistant",
                 "type": "message",
-                "id": "redacted-id-4",
+                "id": "redacted-id-11",
                 "status": "completed",
                 "phase": "commentary"
               },
@@ -660,8 +576,8 @@
                 "arguments": "{}",
                 "name": "lookupCode",
                 "type": "function_call",
-                "id": "redacted-id-5",
-                "call_id": "call_UcI0213vIA0kmYo6",
+                "id": "redacted-id-24",
+                "call_id": "redacted-id-25",
                 "status": "completed"
               }
             ],
@@ -685,10 +601,10 @@
               "input_tokens": 445,
               "output_token_details": {
                 "audio_tokens": 0,
-                "text_tokens": 37
+                "text_tokens": 30
               },
-              "output_tokens": 37,
-              "total_tokens": 482
+              "output_tokens": 30,
+              "total_tokens": 475
             }
           },
           "type": "response.done"
@@ -699,7 +615,7 @@
           "type": "conversation.item.create",
           "item": {
             "type": "function_call_output",
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "call_id": "redacted-id-25",
             "output": "{\"code\":\"VERIFIED_k3v9q2xa\"}"
           }
         }
@@ -716,35 +632,35 @@
       },
       {
         "received": {
-          "event_id": "event_Empi1CiUpHTYIC0xA9zyd",
+          "event_id": "redacted-id-36",
           "item": {
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "call_id": "redacted-id-25",
             "output": "{\"code\":\"VERIFIED_k3v9q2xa\"}",
             "type": "function_call_output",
-            "id": "redacted-id-6"
+            "id": "redacted-id-37"
           },
           "type": "conversation.item.added",
-          "previous_item_id": "redacted-id-5"
+          "previous_item_id": "redacted-id-24"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi11RAzqBVJ7OijZeN1",
+          "event_id": "redacted-id-38",
           "item": {
-            "call_id": "call_UcI0213vIA0kmYo6",
+            "call_id": "redacted-id-25",
             "output": "{\"code\":\"VERIFIED_k3v9q2xa\"}",
             "type": "function_call_output",
-            "id": "redacted-id-6"
+            "id": "redacted-id-37"
           },
           "type": "conversation.item.done",
-          "previous_item_id": "redacted-id-5"
+          "previous_item_id": "redacted-id-24"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1qXkEiEQCBRz90vpL",
+          "event_id": "redacted-id-39",
           "response": {
-            "id": "redacted-id-7",
+            "id": "redacted-id-40",
             "audio": {
               "output": {
                 "format": {
@@ -754,7 +670,7 @@
                 "voice": "marin"
               }
             },
-            "conversation_id": "conv_Empi01Xwrfvm8tscHJWIZ",
+            "conversation_id": "redacted-id-9",
             "max_output_tokens": "inf",
             "metadata": null,
             "object": "realtime.response",
@@ -771,46 +687,46 @@
       },
       {
         "received": {
-          "event_id": "event_Empi121rNsOF4odKx1EO8",
+          "event_id": "redacted-id-41",
           "item": {
             "content": [],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-8",
+            "id": "redacted-id-42",
             "status": "in_progress",
             "phase": "final_answer"
           },
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_item.added"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi1gVtQUYvEYWlCiiVw",
+          "event_id": "redacted-id-43",
           "item": {
             "content": [],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-8",
+            "id": "redacted-id-42",
             "status": "in_progress",
             "phase": "final_answer"
           },
           "type": "conversation.item.added",
-          "previous_item_id": "redacted-id-6"
+          "previous_item_id": "redacted-id-37"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi1UNGHtzRHd5qgclgG",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-44",
+          "item_id": "redacted-id-42",
           "output_index": 0,
           "part": {
             "text": "",
             "type": "text"
           },
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.content_part.added"
         }
       },
@@ -818,117 +734,117 @@
         "received": {
           "content_index": 0,
           "delta": "VER",
-          "event_id": "event_Empi1l8E2cqVatPDytStZ",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-45",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "nAus0Z3hUrr7z"
+          "obfuscation": "q83Og8tLBnNAD"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "IFIED",
-          "event_id": "event_Empi1cnHykMFEJU7oRfCk",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-46",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "eroSDfbzDaS"
+          "obfuscation": "tIF8KqjBfH2"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "_k",
-          "event_id": "event_Empi18PO8OAKnKWyhFxTL",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-47",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "yIenX9bjlqtcBy"
+          "obfuscation": "0b11OGBpA1Q5MM"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "3",
-          "event_id": "event_Empi1T4YdHQ8QQvU25DLk",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-48",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "T3uPiD0oIi4S3Lm"
+          "obfuscation": "Ust5VHlaJvzVinY"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "v",
-          "event_id": "event_Empi1mxkEbpFi1vz04Rvj",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-49",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "rkKjAy2VrVO57sg"
+          "obfuscation": "9OyceWn8nLNKVQS"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "9",
-          "event_id": "event_Empi1fMrcaR3lQMz43e6Y",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-50",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "HOCus8p9SbGLRQr"
+          "obfuscation": "02zAy6wegrChp5c"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "q",
-          "event_id": "event_Empi10KyLjPhIzbH2f0nK",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-51",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "7EGnChM6yGmqMe6"
+          "obfuscation": "ZgwqiYrLFOu9ts2"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "2",
-          "event_id": "event_Empi1GgDAnQw88vrBVxHt",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-52",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "TafkvrsstB5yMZG"
+          "obfuscation": "cKg9ev7EStFRevl"
         }
       },
       {
         "received": {
           "content_index": 0,
           "delta": "xa",
-          "event_id": "event_Empi22tYTqapNUR1L0n0O",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-53",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_text.delta",
-          "obfuscation": "ViSx1XPlQvJiYg"
+          "obfuscation": "5oNfqkIvvl3FVj"
         }
       },
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi2rwGpG0ePwvrE2yEC",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-54",
+          "item_id": "redacted-id-42",
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "text": "VERIFIED_k3v9q2xa",
           "type": "response.output_text.done"
         }
@@ -936,20 +852,20 @@
       {
         "received": {
           "content_index": 0,
-          "event_id": "event_Empi2ox591VIXilTg2D5l",
-          "item_id": "redacted-id-8",
+          "event_id": "redacted-id-55",
+          "item_id": "redacted-id-42",
           "output_index": 0,
           "part": {
             "text": "VERIFIED_k3v9q2xa",
             "type": "text"
           },
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.content_part.done"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi2eHUFFmKSJxZJGzLv",
+          "event_id": "redacted-id-56",
           "item": {
             "content": [
               {
@@ -959,17 +875,17 @@
             ],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-8",
+            "id": "redacted-id-42",
             "status": "completed",
             "phase": "final_answer"
           },
           "type": "conversation.item.done",
-          "previous_item_id": "redacted-id-6"
+          "previous_item_id": "redacted-id-37"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi2xv8i2UaP3SEGSt0P",
+          "event_id": "redacted-id-57",
           "item": {
             "content": [
               {
@@ -979,20 +895,20 @@
             ],
             "role": "assistant",
             "type": "message",
-            "id": "redacted-id-8",
+            "id": "redacted-id-42",
             "status": "completed",
             "phase": "final_answer"
           },
           "output_index": 0,
-          "response_id": "redacted-id-7",
+          "response_id": "redacted-id-40",
           "type": "response.output_item.done"
         }
       },
       {
         "received": {
-          "event_id": "event_Empi2F8dR5lvNHn37vbTc",
+          "event_id": "redacted-id-58",
           "response": {
-            "id": "redacted-id-7",
+            "id": "redacted-id-40",
             "audio": {
               "output": {
                 "format": {
@@ -1002,7 +918,7 @@
                 "voice": "marin"
               }
             },
-            "conversation_id": "conv_Empi01Xwrfvm8tscHJWIZ",
+            "conversation_id": "redacted-id-9",
             "max_output_tokens": "inf",
             "metadata": null,
             "object": "realtime.response",
@@ -1016,7 +932,7 @@
                 ],
                 "role": "assistant",
                 "type": "message",
-                "id": "redacted-id-8",
+                "id": "redacted-id-42",
                 "status": "completed",
                 "phase": "final_answer"
               }
@@ -1036,15 +952,15 @@
                   "text_tokens": 384
                 },
                 "image_tokens": 0,
-                "text_tokens": 502
+                "text_tokens": 495
               },
-              "input_tokens": 502,
+              "input_tokens": 495,
               "output_token_details": {
                 "audio_tokens": 0,
                 "text_tokens": 13
               },
               "output_tokens": 13,
-              "total_tokens": 515
+              "total_tokens": 508
             }
           },
           "type": "response.done"

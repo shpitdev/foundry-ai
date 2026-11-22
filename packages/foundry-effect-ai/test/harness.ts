@@ -116,33 +116,42 @@ export const writeFixtures = (
 };
 
 const modelRid = 'ri.language-model-service..language-model.';
-// An ID key, possibly inside JSON that is itself a string, then its value of 8+ characters.
+// An ID key, possibly inside JSON that is itself a string, then its value of 8+ characters. The
+// realtime keys name events, items, responses, calls and conversations.
 const idValue =
-  /\\*"(?:errorInstanceId|id|responseId|response_id|request_id|requestId|trace_id|traceId)\\*"\s*:\s*\\*"([^"\\]{8,})/gu;
+  /\\*"(?:errorInstanceId|id|responseId|response_id|request_id|requestId|trace_id|traceId|event_id|item_id|previous_item_id|call_id|conversation_id)\\*"\s*:\s*\\*"([^"\\]{8,})/gu;
 
 /**
  * A scrubber for one cell's recordings, which are committed. It replaces the token, any bearer
- * credential, the stack host, RIDs that are not model RIDs, and ID values. Each ID gets the
- * same placeholder everywhere in the cell, so stream events and replayed tool turns that
- * mention it still agree.
+ * credential, the stack host, RIDs that are not model RIDs, and ID values. It learns the IDs
+ * from all of the cell's `texts` first, so each ID gets one placeholder everywhere in the cell,
+ * even where it first appears under a key that is not an ID key.
  */
-export const scrubber = (secrets: { readonly host: string; readonly token: string }) => {
+export const scrubber = (
+  secrets: { readonly host: string; readonly token: string },
+  texts: ReadonlyArray<string>,
+) => {
   const host = new RegExp(secrets.host.replaceAll(/[.*+?^${}()|[\]\\]/gu, '\\$&'), 'giu');
-  const ids = new Map<string, string>();
-  return (body: string): string => {
-    const scrubbed = (
-      secrets.token === '' ? body : body.replaceAll(secrets.token, 'redacted-token')
-    )
+  const secret = (body: string) =>
+    (secrets.token === '' ? body : body.replaceAll(secrets.token, 'redacted-token'))
       .replaceAll(/Bearer\s+[\w.~+/=-]+/gu, 'Bearer redacted-token')
       .replaceAll(host, 'example.palantirfoundry.com')
       .replaceAll(/ri\.[a-z0-9-]+\.[\w.-]*/gu, (rid) =>
         rid.startsWith(modelRid) ? rid : 'ri.redacted',
       );
-    for (const [, id = ''] of scrubbed.matchAll(idValue)) {
+  const ids = new Map<string, string>();
+  for (const text of texts) {
+    for (const [, id = ''] of secret(text).matchAll(idValue)) {
       if (!ids.has(id)) {
         ids.set(id, `redacted-id-${ids.size + 1}`);
       }
     }
-    return [...ids].reduce((text, [id, placeholder]) => text.replaceAll(id, placeholder), scrubbed);
-  };
+  }
+  // Longest first, so an ID that is a prefix of another cannot split it.
+  const replacements = [...ids].toSorted(([a], [b]) => b.length - a.length);
+  return (body: string): string =>
+    replacements.reduce(
+      (text, [id, placeholder]) => text.replaceAll(id, placeholder),
+      secret(body),
+    );
 };

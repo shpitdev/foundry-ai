@@ -4,7 +4,7 @@
     "frames": [
       {
         "received": {
-          "event_id": "event_EmphywBCVKRtmAfHq09ZN",
+          "event_id": "redacted-id-1",
           "session": {
             "type": "realtime",
             "audio": {
@@ -47,8 +47,8 @@
             "tracing": null,
             "truncation": "auto",
             "object": "realtime.session",
-            "id": "redacted-id-1",
-            "expires_at": 1795310818
+            "id": "redacted-id-2",
+            "expires_at": 1795311691
           },
           "type": "session.created"
         }

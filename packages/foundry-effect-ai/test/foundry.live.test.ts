@@ -133,23 +133,22 @@ const probe = (module: string, cell: string, run: Cell, record: boolean) =>
       sessions: [],
     });
     if (record) {
-      // One scrubber, in exchange order, so an ID keeps its placeholder across the cell.
-      const scrub = scrubber({
-        host: new URL(foundryUrl).host,
-        token: Redacted.value(token),
-      });
       const exchanges = yield* Effect.promise(() => Promise.all(recordings));
-      const sessions = (socketRecorder?.sessions ?? []).map(
-        (session): FakeSocket.SocketFixture => ({
-          url: scrub(session.url),
-          frames: session.frames.map(
-            (frame) => JSON.parse(scrub(JSON.stringify(frame))) as FakeSocket.Frame,
-          ),
-          ...(session.close === undefined
-            ? undefined
-            : { close: { ...session.close, reason: scrub(session.close.reason) } }),
-        }),
-      );
+      const recorded = socketRecorder?.sessions ?? [];
+      // One scrubber for the cell, which learns every ID first, so each keeps one placeholder.
+      const scrub = scrubber({ host: new URL(foundryUrl).host, token: Redacted.value(token) }, [
+        ...exchanges.flatMap(({ sent, response }) => [sent, response.body ?? '']),
+        ...recorded.flatMap((session) => session.frames.map((frame) => JSON.stringify(frame))),
+      ]);
+      const sessions = recorded.map((session): FakeSocket.SocketFixture => ({
+        url: scrub(session.url),
+        frames: session.frames.map(
+          (frame) => JSON.parse(scrub(JSON.stringify(frame))) as FakeSocket.Frame,
+        ),
+        ...(session.close === undefined
+          ? undefined
+          : { close: { ...session.close, reason: scrub(session.close.reason) } }),
+      }));
       writeFixtures(module, cell, [
         ...exchanges.map(({ path, headers, sent, response }) => {
           const request = scrub(sent);
