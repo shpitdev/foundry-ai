@@ -111,7 +111,7 @@ Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 on Responses. The adapt
 | Model                  | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | ---------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
 | `qwen3-32b`            | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
-| `qwen3-235b-a22b-2507` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `qwen3-235b-a22b-2507` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ×         |
 
 ### Moonshot Kimi
 
@@ -178,7 +178,7 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 - **xAI streaming:** Foundry now sends the reasoning-start events the native parser needs. Streaming text, streamed tools, and reasoning passed on every Grok alias except Grok 420 non-reasoning, which produced no reasoning signal. Grok 4.6 also passes on `main` with `@ai-sdk/xai` 4.0.58, so the change is on the proxy side, not the SDK bump.
 - **JSON + tools:** the two Gemini failures return no output; Gemini 3.5 Flash-Lite passed on September 25 and fails the same way on `main`.
 - **Thinking:** use adaptive thinking for Opus 4.7/4.8, Claude 5, and the Claude 5.5 models; the proxy rejects budget-based thinking for Claude 5.5 with HTTP 400.
-- **Open-weight models:** Foundry rejected image input on every DeepSeek, Nemotron, and Qwen alias. Nemotron 3 Ultra streamed tools, Qwen3 32B tools, and Gemma 4 26B JSON + tools passed only on isolated rerun. Standalone JSON used default reasoning; JSON with tools is not consistently supported. The reasoning column uses high effort for DeepSeek, Nemotron, and Qwen, with defaults for Kimi and Gemma.
+- **Open-weight models:** Foundry rejected image input on every DeepSeek, Nemotron, and Qwen alias. Nemotron 3 Ultra streamed tools, Qwen3 32B tools, and Gemma 4 26B JSON + tools passed only on isolated rerun. Standalone JSON used default reasoning; JSON with tools is not consistently supported. The reasoning column uses high effort for DeepSeek, Nemotron, and Qwen, with defaults for Kimi and Gemma. Qwen3 235B reasoning passed once, then timed out in the follow-up and its isolated rerun.
 - **Not proven:** missing reasoning events or token usage do not show that a model cannot reason.
 
 ## Model routing
