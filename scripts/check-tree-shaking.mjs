@@ -21,6 +21,7 @@ const owners = {
   'src/internal/openai-embeddings/': ['OpenAiEmbeddingModel'],
   'src/internal/anthropic-messages/': ['AnthropicLanguageModel'],
   'src/internal/google-gemini/': ['GoogleLanguageModel'],
+  'src/internal/openai-realtime/': ['OpenAiRealtime'],
   // Per-vendor model lists.
   'src/internal/models/openai.js': [
     'OpenAiLanguageModel',
@@ -31,6 +32,7 @@ const owners = {
   'src/internal/models/anthropic.js': ['AnthropicLanguageModel'],
   'src/internal/models/google.js': ['GoogleLanguageModel'],
   'src/internal/models/xai.js': ['XaiLanguageModel'],
+  'src/internal/models/realtime.js': ['OpenAiRealtime'],
 };
 
 // Minified bytes with effect external: each module's measured size plus about 20%, re-measured
@@ -43,6 +45,7 @@ const budgets = {
   OpenAiDecisionModel: 13_700,
   OpenAiEmbeddingModel: 8_300,
   OpenAiLanguageModel: 27_400,
+  OpenAiRealtime: 11_200,
   XaiLanguageModel: 25_400,
 };
 
