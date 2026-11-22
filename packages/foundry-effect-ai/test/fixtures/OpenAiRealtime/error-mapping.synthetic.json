@@ -1,0 +1,197 @@
+[
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "object": "realtime.session",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1",
+            "output_modalities": [
+              "audio"
+            ]
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "error",
+          "event_id": "event_2",
+          "error": {
+            "type": "invalid_request_error",
+            "code": "invalid_value",
+            "message": "Invalid value: 'video'.",
+            "param": "session.output_modalities",
+            "event_id": null
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.output_text.delta",
+          "event_id": "event_3",
+          "response_id": "resp_1",
+          "item_id": "item_1",
+          "output_index": 0,
+          "content_index": 0,
+          "delta": "partial"
+        }
+      }
+    ],
+    "close": {
+      "code": 1011,
+      "reason": "Internal error"
+    }
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "object": "realtime.session",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1",
+            "output_modalities": [
+              "audio"
+            ]
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.output_text.delta",
+          "event_id": "event_2",
+          "response_id": "resp_1",
+          "item_id": "item_1"
+        }
+      }
+    ]
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [],
+    "close": {
+      "code": 1006,
+      "reason": ""
+    }
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "object": "realtime.session",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1",
+            "output_modalities": [
+              "audio"
+            ]
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "conversation.item.added",
+          "event_id": "event_2",
+          "item": {
+            "id": "item_1",
+            "type": "message",
+            "role": "user",
+            "content": []
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "rate_limits.updated",
+          "event_id": "event_3",
+          "rate_limits": []
+        }
+      },
+      {
+        "received": {
+          "type": "response.done",
+          "event_id": "event_4",
+          "response": {
+            "id": "resp_1",
+            "object": "realtime.response",
+            "status": "completed",
+            "status_details": null,
+            "output": [
+              {
+                "type": "mcp_list_tools",
+                "id": "item_2",
+                "server_label": "example"
+              },
+              {
+                "type": "function_call",
+                "id": "item_3",
+                "call_id": "call_1",
+                "name": "missingTool",
+                "arguments": "{}",
+                "status": "completed"
+              }
+            ],
+            "usage": null
+          }
+        }
+      }
+    ],
+    "close": {
+      "code": 1000,
+      "reason": ""
+    }
+  },
+  {
+    "url": "wss://example.palantirfoundry.com/language-model-service/ws/v1/open-ai/realtime?model=gpt-realtime-2.1",
+    "frames": [
+      {
+        "received": {
+          "type": "session.created",
+          "event_id": "event_1",
+          "session": {
+            "type": "realtime",
+            "object": "realtime.session",
+            "id": "sess_1",
+            "model": "gpt-realtime-2.1",
+            "output_modalities": [
+              "audio"
+            ]
+          }
+        }
+      },
+      {
+        "received": {
+          "type": "response.done",
+          "event_id": "event_2",
+          "response": {
+            "id": "resp_1",
+            "status": "completed",
+            "output": [
+              {
+                "type": "function_call",
+                "id": "item_1",
+                "call_id": "call_1",
+                "name": "missingTool",
+                "arguments": "{}",
+                "status": "completed"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]

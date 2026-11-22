@@ -10,8 +10,11 @@ import { expect } from '@effect/vitest';
 import type * as AiError from 'effect/ai/AiError';
 import type * as Effect from 'effect/Effect';
 import type * as Layer from 'effect/Layer';
+import type * as Redacted from 'effect/Redacted';
+import type * as Socket from 'effect/socket/Socket';
 import type * as FoundryClient from '../src/FoundryClient.ts';
 import { type CapturedRequest, type Fixture, proxyPath } from './FakeFoundry.ts';
+import type { CapturedSession, SocketFixture } from './FakeSocket.ts';
 
 export interface Env {
   readonly live: boolean;
@@ -21,6 +24,12 @@ export interface Env {
   ) => Layer.Layer<FoundryClient.FoundryClient>;
   /** Requests sent so far; empty when live. */
   readonly requests: ReadonlyArray<CapturedRequest>;
+  /** The suite's stack URL and token, for modules that connect without FoundryClient. */
+  readonly settings: { readonly foundryUrl: string; readonly token: Redacted.Redacted };
+  /** WebSocket transport: replays recorded sessions offline, the global WebSocket live. */
+  readonly sockets: Layer.Layer<Socket.WebSocketConstructor>;
+  /** Sockets opened so far; empty when live. */
+  readonly sessions: ReadonlyArray<CapturedSession>;
 }
 
 /** Runs one matrix cell; assertions throw. */
@@ -45,11 +54,14 @@ export const loadCells = async (module: string): Promise<CellModule | undefined>
 const fixtureFile = (module: string, cell: string, kind: 'json' | 'synthetic.json') =>
   new URL(`fixtures/${module}/${cell}.${kind}`, import.meta.url);
 
-const readFile = (file: URL): ReadonlyArray<Fixture> =>
-  existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as ReadonlyArray<Fixture>) : [];
+/** An HTTP exchange, or a realtime socket session. */
+export type AnyFixture = Fixture | SocketFixture;
+
+const readFile = (file: URL): ReadonlyArray<AnyFixture> =>
+  existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as ReadonlyArray<AnyFixture>) : [];
 
 /** Recorded fixtures, then the hand-written `<cell>.synthetic.json` ones. */
-export const readFixtures = (module: string, cell: string): ReadonlyArray<Fixture> => [
+export const readFixtures = (module: string, cell: string): ReadonlyArray<AnyFixture> => [
   ...readFile(fixtureFile(module, cell, 'json')),
   ...readFile(fixtureFile(module, cell, 'synthetic.json')),
 ];
@@ -73,11 +85,27 @@ export const expectGoldenRequests = (
   }
 };
 
+/**
+ * A replay dials one socket per recorded session, each at the recorded URL, and sends exactly the
+ * recorded client frames.
+ */
+export const expectGoldenSessions = (
+  fixtures: ReadonlyArray<SocketFixture>,
+  sessions: ReadonlyArray<CapturedSession>,
+): void => {
+  expect(sessions.map(({ url, sent }) => ({ url, sent }))).toEqual(
+    fixtures.map(({ url, frames }) => ({
+      url,
+      sent: frames.flatMap((frame) => ('sent' in frame ? [frame.sent] : [])),
+    })),
+  );
+};
+
 /** Replaces a cell's recording; an empty one would erase a known-good fixture, so it throws. */
 export const writeFixtures = (
   module: string,
   cell: string,
-  fixtures: ReadonlyArray<Fixture>,
+  fixtures: ReadonlyArray<AnyFixture>,
 ): void => {
   if (fixtures.length === 0) {
     throw new Error(`${module} ${cell}: nothing was recorded; the fixture is unchanged.`);
