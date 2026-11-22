@@ -1,0 +1,112 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.in_progress\"}\n\nevent: response.output_item.added\ndata: {\"item\":{\"type\":\"function_call\",\"arguments\":\"\",\"call_id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"in_progress\"},\"output_index\":0,\"sequence_number\":2,\"type\":\"response.output_item.added\"}\n\nevent: response.function_call_arguments.delta\ndata: {\"delta\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"output_index\":0,\"item_id\":\"redacted-id-3\",\"sequence_number\":3,\"type\":\"response.function_call_arguments.delta\"}\n\nevent: response.function_call_arguments.done\ndata: {\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"item_id\":\"redacted-id-3\",\"name\":null,\"output_index\":0,\"sequence_number\":4,\"type\":\"response.function_call_arguments.done\"}\n\nevent: response.output_item.done\ndata: {\"item\":{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"},\"output_index\":0,\"sequence_number\":5,\"type\":\"response.output_item.done\"}\n\nevent: response.completed\ndata: {\"sequence_number\":6,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"completed\",\"usage\":{\"input_tokens\":117,\"output_tokens\":14,\"total_tokens\":131,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"function_call\",\"arguments\":\"{\\\"city\\\":\\\"Paris\\\"}\",\"call_id\":\"redacted-id-2\",\"name\":\"GetWeather\",\"namespace\":null,\"id\":\"redacted-id-3\",\"status\":\"completed\"}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"},\"type\":\"response.completed\"}\n\n",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gemma-4-31b",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-4\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"response\":{\"id\":\"redacted-id-4\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.in_progress\"}\n\nevent: response.output_item.added\ndata: {\"item\":{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"in_progress\",\"phase\":\"final_answer\",\"content\":[]},\"output_index\":0,\"sequence_number\":2,\"type\":\"response.output_item.added\"}\n\nevent: response.content_part.added\ndata: {\"part\":{\"text\":\"\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"},\"item_id\":\"redacted-id-5\",\"output_index\":0,\"content_index\":0,\"sequence_number\":3,\"type\":\"response.content_part.added\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"The\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":4,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" current\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":5,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" weather\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":6,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" in\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":7,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" Paris\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":8,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\",\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":9,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" which\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":10,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" hosted\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":11,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" the\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":12,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" Summer\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":13,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" Olympics\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":14,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" in\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":15,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" \",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":16,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"1\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":17,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"9\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":18,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"0\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":19,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"0\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":20,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" and\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":21,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" \",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":22,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"1\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":23,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"9\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":24,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"2\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":25,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"4\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":26,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\",\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":27,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" is\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":28,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" sunny\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":29,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" with\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":30,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" a\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":31,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" temperature\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":32,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" of\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":33,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\" \",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":34,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"2\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":35,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"1\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":36,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"°\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":37,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"C\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":38,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\".\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-5\",\"sequence_number\":39,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.done\ndata: {\"text\":\"The current weather in Paris, which hosted the Summer Olympics in 1900 and 1924, is sunny with a temperature of 21°C.\",\"item_id\":\"redacted-id-5\",\"output_index\":0,\"content_index\":0,\"sequence_number\":40,\"type\":\"response.output_text.done\"}\n\nevent: response.content_part.done\ndata: {\"part\":{\"text\":\"The current weather in Paris, which hosted the Summer Olympics in 1900 and 1924, is sunny with a temperature of 21°C.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"},\"item_id\":\"redacted-id-5\",\"output_index\":0,\"content_index\":0,\"sequence_number\":41,\"type\":\"response.content_part.done\"}\n\nevent: response.output_item.done\ndata: {\"item\":{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"The current weather in Paris, which hosted the Summer Olympics in 1900 and 1924, is sunny with a temperature of 21°C.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]},\"output_index\":0,\"sequence_number\":42,\"type\":\"response.output_item.done\"}\n\nevent: response.completed\ndata: {\"sequence_number\":43,\"response\":{\"id\":\"redacted-id-4\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314172,\"status\":\"completed\",\"usage\":{\"input_tokens\":159,\"output_tokens\":37,\"total_tokens\":196,\"output_tokens_details\":{\"reasoning_tokens\":0},\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0}},\"output\":[{\"type\":\"message\",\"id\":\"redacted-id-5\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"The current weather in Paris, which hosted the Summer Olympics in 1900 and 1924, is sunny with a temperature of 21°C.\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]}],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"default\"},\"type\":\"response.completed\"}\n\n",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gemma-4-31b",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Before calling any tool, work out which European capital hosted the Summer Olympics in 1900 and 1924. Then call the GetWeather tool for it and answer in one sentence."
+              }
+            ]
+          },
+          {
+            "type": "function_call",
+            "call_id": "redacted-id-2",
+            "name": "GetWeather",
+            "arguments": "{\"city\":\"Paris\"}",
+            "id": "redacted-id-3"
+          },
+          {
+            "type": "function_call_output",
+            "call_id": "redacted-id-2",
+            "output": "{\"temperatureC\":21,\"conditions\":\"sunny\"}"
+          }
+        ],
+        "store": false,
+        "tools": [
+          {
+            "type": "function",
+            "name": "GetWeather",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "city"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true,
+            "description": "Get the current weather in a city"
+          }
+        ],
+        "tool_choice": "auto",
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

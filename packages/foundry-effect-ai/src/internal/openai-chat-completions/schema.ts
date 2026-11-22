@@ -1,8 +1,9 @@
 // Adapted from @effect/ai-openai-compat (MIT), effect@4.1.4, 82904fe.
 /**
  * Wire shapes for `/openai/v1/chat/completions`. Requests are plain interfaces, since Foundry
- * rejects fields it does not recognize; response schemas decode only the fields the adapter
- * reads, and Foundry's stream chunks send `null` where OpenAI omits a field.
+ * rejects fields it does not recognize (including `parallel_tool_calls` for the open-weight
+ * makers); response schemas decode only the fields the adapter reads, and Foundry's stream
+ * chunks send `null` where OpenAI omits a field. Kimi's reasoning arrives in `reasoning_content`.
  */
 import * as Schema from 'effect/Schema';
 
@@ -99,6 +100,7 @@ export const Completion = Schema.Struct({
     Schema.Struct({
       message: Schema.Struct({
         content: OptionalString,
+        reasoning_content: OptionalString,
         refusal: OptionalString,
         tool_calls: Schema.optional(
           Schema.NullOr(
@@ -129,6 +131,7 @@ export const Chunk = Schema.Struct({
         Schema.NullOr(
           Schema.Struct({
             content: OptionalString,
+            reasoning_content: OptionalString,
             refusal: OptionalString,
             tool_calls: Schema.optional(
               Schema.NullOr(

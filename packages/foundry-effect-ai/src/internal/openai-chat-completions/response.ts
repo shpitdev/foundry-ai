@@ -8,13 +8,20 @@ import * as Tool from 'effect/ai/Tool';
 import * as DateTime from 'effect/DateTime';
 import * as Effect from 'effect/Effect';
 import * as Schema from 'effect/Schema';
-import { isStrict, metadataKey } from './request.ts';
+import type * as ReasoningTags from './reasoningTags.ts';
+import { type Dialect, isStrict } from './request.ts';
 import type * as Wire from './schema.ts';
 
-const module = 'OpenAiChatLanguageModel';
-
-export const invalidResponse = (method: string, description: string): AiError.AiError =>
-  AiError.make({ module, method, reason: new AiError.InvalidResponseError({ description }) });
+export const invalidResponse = (
+  dialect: Dialect,
+  method: string,
+  description: string,
+): AiError.AiError =>
+  AiError.make({
+    module: dialect.module,
+    method,
+    reason: new AiError.InvalidResponseError({ description }),
+  });
 
 const quotaCodes = new Set(['insufficient_quota', 'billing_insufficient_balance']);
 const rateLimitCodes = new Set(['rate_limit_exceeded', 'rate_limit_error', 'requests', 'tokens']);
@@ -24,6 +31,7 @@ const rateLimitCodes = new Set(['rate_limit_exceeded', 'rate_limit_error', 'requ
  * keep their own reasons; anything else is a provider failure. Code and type stay in metadata.
  */
 export const providerError = (
+  dialect: Dialect,
   method: string,
   envelope: typeof Wire.ErrorEnvelope.Type,
 ): AiError.AiError => {
@@ -31,7 +39,7 @@ export const providerError = (
     typeof envelope.error === 'string' ? { ...envelope, message: envelope.error } : envelope.error;
   const code = error.code == null ? undefined : String(error.code);
   const type = error.type == null ? undefined : String(error.type);
-  const metadata = { [metadataKey]: { code: code ?? null, type: type ?? null } };
+  const metadata = { [dialect.metadataKey]: { code: code ?? null, type: type ?? null } };
   const matches = (codes: ReadonlySet<string>) => codes.has(code ?? '') || codes.has(type ?? '');
   let reason: AiError.AiErrorReason;
   if (matches(quotaCodes)) {
@@ -45,7 +53,7 @@ export const providerError = (
       metadata,
     });
   }
-  return AiError.make({ module, method, reason });
+  return AiError.make({ module: dialect.module, method, reason });
 };
 
 export const metadataPart = (chunk: {
@@ -94,8 +102,8 @@ export const callsComplete = (raw: string | null | undefined): boolean =>
   raw !== 'length' && raw !== 'content_filter';
 
 /** A refusal's explanation, which is not output text. */
-export const finishMetadata = (refusal: string) =>
-  refusal === '' ? undefined : { metadata: { [metadataKey]: { refusal } } };
+export const finishMetadata = (dialect: Dialect, refusal: string) =>
+  refusal === '' ? undefined : { metadata: { [dialect.metadataKey]: { refusal } } };
 
 const minus = (total: number | undefined, part: number | undefined) =>
   total === undefined || part === undefined ? undefined : total - part;
@@ -124,6 +132,7 @@ export const usage = (
  * arguments are decoded with it and re-encoded for the tool's own schema; Toolkit validates.
  */
 const toolParams = Effect.fnUntraced(function* (
+  dialect: Dialect,
   method: string,
   options: LanguageModel.ProviderOptions,
   name: string,
@@ -133,7 +142,7 @@ const toolParams = Effect.fnUntraced(function* (
     try: () => Tool.unsafeSecureJsonParse(args),
     catch: (cause) =>
       AiError.make({
-        module,
+        module: dialect.module,
         method,
         reason: new AiError.ToolParameterValidationError({
           toolName: name,
@@ -147,7 +156,7 @@ const toolParams = Effect.fnUntraced(function* (
       return params;
     }
     return yield* AiError.make({
-      module,
+      module: dialect.module,
       method,
       reason: new AiError.ToolNotFoundError({
         toolName: name,
@@ -175,6 +184,7 @@ const toolParams = Effect.fnUntraced(function* (
  * parameters for Effect, and replay must send what the model produced, not that shape.
  */
 export const toolCall = Effect.fnUntraced(function* (
+  dialect: Dialect,
   method: string,
   options: LanguageModel.ProviderOptions,
   call: { readonly id: string; readonly name: string; readonly arguments: string },
@@ -183,24 +193,63 @@ export const toolCall = Effect.fnUntraced(function* (
     type: 'tool-call',
     id: call.id,
     name: call.name,
-    params: yield* toolParams(method, options, call.name, call.arguments),
-    metadata: { [metadataKey]: { arguments: call.arguments } },
+    params: yield* toolParams(dialect, method, options, call.name, call.arguments),
+    metadata: { [dialect.metadataKey]: { arguments: call.arguments } },
   };
   return part;
 });
 
+/** A message's reasoning and answer text, in order, as the dialect delivers them. */
+const contentParts = (
+  dialect: Dialect,
+  message: {
+    readonly content?: string | null | undefined;
+    readonly reasoning_content?: string | null | undefined;
+  },
+): ReadonlyArray<ReasoningTags.Segment> => {
+  const content = message.content ?? '';
+  const reasoning = message.reasoning_content ?? '';
+  if (dialect.reasoningTags !== undefined) {
+    // Neighbouring spans form one reasoning part.
+    const splitter = dialect.reasoningTags();
+    const segments: Array<ReasoningTags.Segment> = [];
+    for (const segment of [...splitter.push(content), ...splitter.flush()]) {
+      const last = segments.at(-1);
+      if (last?.type === segment.type) {
+        segments[segments.length - 1] = { type: last.type, text: last.text + segment.text };
+      } else {
+        segments.push(segment);
+      }
+    }
+    return segments;
+  }
+  return [
+    ...(dialect.reasoningContent && reasoning !== ''
+      ? [{ type: 'reasoning' as const, text: reasoning }]
+      : []),
+    ...(content === '' ? [] : [{ type: 'text' as const, text: content }]),
+  ];
+};
+
 export const decodeResponse = Effect.fnUntraced(function* (
+  dialect: Dialect,
   body: typeof Wire.Body.Type,
   options: LanguageModel.ProviderOptions,
 ) {
   if (!('choices' in body)) {
-    return yield* providerError('generateText', body);
+    return yield* providerError(dialect, 'generateText', body);
   }
   const parts: Array<Response.PartEncoded> = [metadataPart(body)];
   const [choice] = body.choices;
   const message = choice?.message;
-  if (message?.content != null && message.content !== '') {
-    parts.push({ type: 'text', text: message.content });
+  if (message != null) {
+    for (const segment of contentParts(dialect, message)) {
+      parts.push(
+        segment.type === 'text'
+          ? { type: 'text', text: segment.text }
+          : { type: 'reasoning', text: segment.text },
+      );
+    }
   }
   // Calls that may be cut off are dropped; the finish reports why.
   let hasToolCalls = false;
@@ -208,7 +257,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
     for (const call of message?.tool_calls ?? []) {
       hasToolCalls = true;
       parts.push(
-        yield* toolCall('generateText', options, {
+        yield* toolCall(dialect, 'generateText', options, {
           id: call.id,
           name: call.function.name,
           arguments: call.function.arguments,
@@ -221,7 +270,7 @@ export const decodeResponse = Effect.fnUntraced(function* (
     type: 'finish',
     reason: finishReason(choice?.finish_reason, hasToolCalls, refusal !== ''),
     usage: usage(body.usage),
-    ...finishMetadata(refusal),
+    ...finishMetadata(dialect, refusal),
   });
   return parts;
 });

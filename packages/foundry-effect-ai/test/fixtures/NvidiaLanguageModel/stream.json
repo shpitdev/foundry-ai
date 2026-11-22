@@ -1,0 +1,27 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314131,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314131,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"hello\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-1\",\"object\":\"chat.completion.chunk\",\"created\":1795314131,\"model\":\"nvidia.nemotron-super-3-120b\",\"choices\":[],\"usage\":{\"prompt_tokens\":23,\"completion_tokens\":2,\"total_tokens\":25,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.nemotron-3-super-120b",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with exactly one word: hello"
+          }
+        ],
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

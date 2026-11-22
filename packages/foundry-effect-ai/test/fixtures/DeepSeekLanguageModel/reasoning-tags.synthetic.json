@@ -1,0 +1,115 @@
+[
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-1\",\"object\":\"chat.completion\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"<reasoning></reasoning>\\n\\n<reasoning>Let the ball cost x.</reasoning><reasoning> Then 2x + 100 = 110, so x = 5.</reasoning>\\n\\nThe ball costs 5 cents, and 5 < 10.\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"prompt_tokens\":47,\"completion_tokens\":40,\"total_tokens\":87,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.deepseek-v3-2",
+        "messages": [
+          {
+            "role": "user",
+            "content": "A bat and a ball cost 110 cents in total. The bat costs 100 cents more than the ball. How many cents does the ball cost? Reason step by step, then answer with just the number."
+          }
+        ],
+        "reasoning_effort": "high"
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reasoning></reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\\n\\n\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"<reas\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"oning>Let the ball\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" cost x.</reas\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"oning><reasoning> Then 2x + 100 = 110, so x = 5.</reasoning>\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\\n\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"\\nThe ball costs 5 cents, and 5 <\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\" 10.\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-2\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[],\"usage\":{\"prompt_tokens\":47,\"completion_tokens\":40,\"total_tokens\":87,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.deepseek-v3-2",
+        "messages": [
+          {
+            "role": "user",
+            "content": "A bat and a ball cost 110 cents in total. The bat costs 100 cents more than the ball. How many cents does the ball cost? Reason step by step, then answer with just the number."
+          }
+        ],
+        "reasoning_effort": "high",
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "application/json",
+    "body": "{\"id\":\"redacted-id-3\",\"object\":\"chat.completion\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"message\":{\"role\":\"assistant\",\"content\":\"{\\\"example\\\":\\\"<reasoning>visible</reasoning>\\\"}\",\"tool_calls\":[]},\"finish_reason\":\"stop\",\"finish_details\":null}],\"usage\":{\"prompt_tokens\":47,\"completion_tokens\":40,\"total_tokens\":87,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}},\"system_fingerprint\":null}",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.deepseek-v3-2",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Show the reasoning tag as text."
+          }
+        ],
+        "response_format": {
+          "type": "json_schema",
+          "json_schema": {
+            "name": "generateObject",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "example": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "example"
+              ],
+              "additionalProperties": false
+            },
+            "strict": true
+          }
+        }
+      },
+      "headers": {
+        "accept": "application/json",
+        "content-type": "application/json"
+      }
+    }
+  },
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "data: {\"usageChunk\":false,\"id\":\"redacted-id-4\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-4\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"The tag is <reas\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-4\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":\"oning>visible</reasoning>.\",\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":null}],\"usage\":null}\n\ndata: {\"usageChunk\":false,\"id\":\"redacted-id-4\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[{\"index\":0,\"delta\":{\"role\":null,\"content\":null,\"reasoning_content\":null,\"refusal\":null,\"tool_calls\":null},\"finish_reason\":\"stop\"}],\"usage\":null}\n\ndata: {\"usageChunk\":true,\"id\":\"redacted-id-4\",\"object\":\"chat.completion.chunk\",\"created\":1795310129,\"model\":\"deepseek.v3.2\",\"choices\":[],\"usage\":{\"prompt_tokens\":47,\"completion_tokens\":40,\"total_tokens\":87,\"prompt_tokens_details\":{\"audio_tokens\":null,\"cached_tokens\":null,\"cache_write_tokens\":null},\"completion_tokens_details\":{\"accepted_prediction_tokens\":null,\"audio_tokens\":null,\"reasoning_tokens\":null,\"rejected_prediction_tokens\":null}}}\n\n",
+    "request": {
+      "path": "/openai/v1/chat/completions",
+      "body": {
+        "model": "ri.language-model-service..language-model.deepseek-v3-2",
+        "messages": [
+          {
+            "role": "user",
+            "content": "A bat and a ball cost 110 cents in total. The bat costs 100 cents more than the ball. How many cents does the ball cost? Reason step by step, then answer with just the number."
+          }
+        ],
+        "stream": true,
+        "stream_options": {
+          "include_usage": true
+        }
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

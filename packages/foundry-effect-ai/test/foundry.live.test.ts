@@ -186,7 +186,8 @@ const probes = (
 
 // Unset, each row runs its recorded cells on its default models. A sweep runs a module's
 // `cellsFor` once per selected model, or its default cells once if it has no `cellsFor`; it
-// never records, and a cell `cellsFor` leaves out for a model is not tested.
+// never records, it adds the row's `sweepOnly` cells, and a cell `cellsFor` leaves out for a
+// model is not tested.
 for (const row of rows) {
   const loaded = await loadCells(row.module);
   const models = selected(row);
@@ -202,7 +203,9 @@ for (const row of rows) {
       const cells = cellsFor(model);
       describe(`${row.module} live (${model})`, () => {
         for (const [cell, run] of Object.entries(cells).filter(
-          ([name]) => row.cells.includes(name) && !contractOnly.has(name),
+          ([name]) =>
+            (row.cells.includes(name) || row.sweepOnly?.includes(name) === true) &&
+            !contractOnly.has(name),
         )) {
           it.live(cell, () => probe(row.module, cell, run, false));
         }

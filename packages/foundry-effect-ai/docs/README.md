@@ -1,18 +1,20 @@
 # Models and live test status
 
-**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings and five realtime models.
+**Catalog as of November 22, 2026 (UTC):** 73 entries — 65 language aliases, three OpenAI embeddings and five realtime models.
 
 **Sweep of November 20, 2026 (UTC):** `effect` 4.1.4, every model then in the package's lists (52 language aliases and three embeddings) through `LIVE_MODELS=all pnpm run test:live:effect`: 600 cases, run serially, followed by isolated reruns of each failure. Anthropic was then swept again, and the Grok 4.20 reasoning cells rerun, with the final settings described below. **539 of 600 cases pass.** Of the 61 failures, 42 are routes or models Foundry refused and 19 are model behavior that failed the same way on rerun; none is an adapter bug. The sweep also found three adapter issues, fixed before these results: xAI error messages were dropped, Grok 4.20 needed `effort` left out, and Anthropic's adaptive thinking needed its `display` option.
 
 **November 22, 2026 follow-up (UTC):** Tested only GPT-6.2 Sol, GPT-6.2 Astra, and Gemini 4 Neon on `effect` 4.1.4.
 
+**November 22, 2026 open-weight sweep (UTC):** `effect` 4.1.4, the 11 DeepSeek, NVIDIA, Qwen, Moonshot and Gemma aliases through `LIVE_MODELS`, with an isolated rerun of each failure. **67 of 85 cases pass.** Of the 18 failures, six are image input Foundry rejected and 12 are model behavior that failed the same way on rerun; none is an adapter bug. Qwen3 235B A22B 2507 was then rerun without `reasoning_effort`, which Foundry never answers for it.
+
 [Install and use the package](../README.md). Results apply to the tested Foundry enrollment, not to every stack. Each cell is one probe run or its isolated rerun: a pass shows the request worked then, not that it is reliable. Live checks run manually; CI replays recorded fixtures and never calls Foundry.
 
 ## Results
 
-✓ passed; × probe failed; R rejected by the proxy or vendor (HTTP 400) for this route; A not available to this account (HTTP 404); — not tested. These are probe outcomes, not a list of model capabilities: a failure can come from the prompt, the model or the serving backend.
+✓ passed; × probe failed; R rejected by the proxy or vendor for this route or input (HTTP 400, or 404 when no backend serves it); A not available to this account (HTTP 404); — not tested. These are probe outcomes, not a list of model capabilities: a failure can come from the prompt, the model or the serving backend.
 
-Every language model runs the same cells from `test/capabilities.ts`. **Text** and **Stream** ask for one word, `hello`. **JSON** is `generateObject` for the capital of France. **Tools** and **Stream tools** take two requests: a tool call, then the answer from the tool result, replaying the first turn's reasoning. **JSON + tools** is `generateObject` with the same tool over two requests. **Image** sends an inline red PNG and requires the reply to name the color. **Reasoning** streams a short puzzle and requires visible reasoning text. Reasoning is on for Tools, Stream tools and Reasoning: OpenAI and xAI ask for `effort: 'medium'` and `summary: 'auto'`, Anthropic uses `{ type: 'adaptive', display: 'summarized' }` on Opus 4.7 and later and Claude 5 and 5.5, otherwise a 1,024-token budget, and Gemini uses `thinkingLevel: 'HIGH'` with thought summaries. Models the catalog does not mark as reasoning get no reasoning settings and are not tested for it.
+Every language model runs the same cells from `test/capabilities.ts`. **Text** and **Stream** ask for one word, `hello`. **JSON** is `generateObject` for the capital of France. **Tools** and **Stream tools** take two requests: a tool call, then the answer from the tool result, replaying the first turn's reasoning. **JSON + tools** is `generateObject` with the same tool over two requests. **Image** sends an inline red PNG and requires the reply to name the color. **Reasoning** streams a short puzzle and requires visible reasoning text. Reasoning is on for Tools, Stream tools and Reasoning: OpenAI and xAI ask for `effort: 'medium'` and `summary: 'auto'`, Anthropic uses `{ type: 'adaptive', display: 'summarized' }` on Opus 4.7 and later and Claude 5 and 5.5, otherwise a 1,024-token budget, Gemini uses `thinkingLevel: 'HIGH'` with thought summaries, Nemotron and Qwen send `reasoning_effort: 'high'` (DeepSeek only for Reasoning), Kimi reasons by default, and Gemma has no setting. Models the catalog does not mark as reasoning get no reasoning settings and are not tested for it.
 
 ### OpenAI Responses
 
@@ -144,6 +146,72 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 - Grok 4.20 reasoning rejects `reasoning.effort`; its cells ask only for `summary`. Grok 4.20 non-reasoning gets no reasoning settings.
 
+### DeepSeek
+
+`DeepSeekLanguageModel`, over Foundry's Chat Completions route.
+
+| Model           | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| --------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `deepseek-v3.2` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+
+- The tool cells run without `reasoning_effort`. With `'high'`, DeepSeek V3.2 often puts its whole answer after a tool result inside the `<reasoning>` span and returns no text: the recorded cell failed that way, and so did two of three direct requests. A structured answer under `'high'` also landed inside the span.
+- With JSON and a tool, it answers without calling the tool.
+- Image input returns 404 `LanguageModelNotAvailable` ("model backends are not available").
+
+### NVIDIA
+
+`NvidiaLanguageModel`, over Foundry's Chat Completions route.
+
+| Model                   | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ----------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `nemotron-3-super-120b` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `nemotron-3-nano-30b`   | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `nemotron-3-ultra-550b` | ✓    | ✓      | ✓    | ✓     | ×            | ×            | R     | ×         |
+
+- Nemotron 3 Ultra (RID `nemotron-3-ultra-550b-a55b-nvfp4`) returned no reasoning spans with `'high'` and, in the streamed tool cell, called `GetWeather` without `city`, both twice. Its JSON cell passed on rerun; with JSON and a tool it returned text that is not JSON.
+- Super and Nano answer without calling the tool when JSON output is requested.
+- Image input returns 404 `LanguageModelNotAvailable` for all three.
+
+### Qwen
+
+`QwenLanguageModel`, over Foundry's Chat Completions route.
+
+| Model                  | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ---------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `qwen3-32b`            | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `qwen3-235b-a22b-2507` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | —         |
+
+- Qwen3 235B A22B 2507 does not think, and Foundry never answered a request with `reasoning_effort: 'high'` (no response within 90 seconds, twice); without it, or with `'none'`, it answers in under a second. Its cells send no effort and skip Reasoning.
+- Qwen3 32B answered "Hi" to the one-word `hello` prompt once; Text and Stream passed on rerun.
+- Both answer without calling the tool when JSON output is requested, and image input returns 404 `LanguageModelNotAvailable`.
+
+### Moonshot
+
+`MoonshotLanguageModel`, over Foundry's Chat Completions route.
+
+| Model                     | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ------------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `kimi-k3.1-pro-highspeed` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `kimi-k3`                 | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `kimi-k2.5`               | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | ×         |
+
+- Kimi K3.1 and K3 reason by default into `reasoning_content`, including before tool calls; the tool cells replay those turns without it, which Foundry requires.
+- Kimi K2.5 (RID `kimi-k2-5`) returns no reasoning, and with JSON and a tool it answers without calling the tool.
+- Kimi K3.1 Pro – Highspeed skipped the tool once in JSON + tools in a later default run and passed on rerun.
+
+### Gemma
+
+`GemmaLanguageModel`, over Foundry's OpenAI Responses route.
+
+| Model             | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ----------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gemma-4-31b`     | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | —         |
+| `gemma-4-26b-a4b` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | —         |
+
+- With JSON and a tool, both answer in prose after the tool result, twice each.
+- Gemma 4 26B A4B skipped the tool once in Tools and passed on rerun.
+- No reasoning control changes Gemma, so it gets no reasoning settings and is not tested for it.
+
 ### Embeddings
 
 `OpenAiEmbeddingModel`. Both cells pass: `embed` on `text-embedding-ada-002` (1,536 dimensions) and on `text-embedding-3-small` and `text-embedding-3-large` shortened to 8, and `embed-many` on `text-embedding-3-large` at 64, where a repeated input lands next to its twin.
@@ -189,6 +257,8 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 - **Anthropic.** Requests send `anthropic-version: 2023-06-01`. Foundry does not support eager tool-input streaming, so tool input is collected and parsed when its block ends. Claude Opus and Sonnet 5.5 reject forced tool use, so structured output uses `output_config.format` instead of a forced JSON tool. Opus 4.7 and later, Claude 5 and the 5.5 models reject budget thinking (`thinking.type.enabled`); use `{ type: 'adaptive' }`.
 - **Gemini.** Foundry rejects lower-case `thinkingLevel` values (HTTP 422). Streams have no terminal event, so the finish comes from `finishReason`, and a stream cut before it fails with `InvalidResponseError`. With tools, structured output is a synthetic `json` function the model is forced to call.
 - **Chat Completions.** The route takes `max_completion_tokens`, not `max_tokens`; streams end without `[DONE]`; OpenAI models return no reasoning text, only reasoning token counts. GPT-6 Luna, GPT-6 Sol and GPT-6.1 Terra accept tools only with `reasoning_effort: 'none'`, which the adapter sends with tools unless `config` sets an effort.
+- **Open-weight Chat models.** DeepSeek, Nemotron and Qwen put reasoning in `<reasoning>…</reasoning>` spans inside `content` when `reasoning_effort` is `'high'`, usually one span per stream delta, and a tag can split across deltas; the adapter parses the spans into reasoning parts. Kimi K3.1 and K3 reason by default into `reasoning_content`; `'none'` turns it off. Foundry rejects `reasoning_content` on a replayed assistant message, `thinking`, `chat_template_kwargs` and `parallel_tool_calls` (HTTP 400), so none is sent. Image input fails for the three Bedrock makers with 404 `LanguageModelNotAvailable`. Streams end without `[DONE]` after a usage chunk with `choices: []`.
+- **Gemma.** Served only on the OpenAI Responses route, with `store: false`. No reasoning setting produced reasoning items or tokens, so the adapter sends none.
 - **Decisions.** Foundry rejects image URLs, so URL images fail with `InvalidUserInputError` before sending; base64 and data URLs work. A refusal without a decision name refuses every decision it left unanswered.
 - **Embeddings.** Foundry rejects `dimensions` for `text-embedding-ada-002`, even at its native size, so a catalog model's native size is never sent.
 - **Realtime.** Foundry speaks OpenAI's GA realtime events. It opens the WebSocket for a bad token or an unknown model, then closes it with code 1008 and a reason naming the error, so `connect` waits for `session.created` and maps that close. Unknown events and output items are skipped. `error` events leave the session open; `failOnError` turns them into failures.
@@ -203,7 +273,8 @@ These tests are manual and excluded from CI. The default live run covers `gpt-re
 - Anthropic `output_config.effort`, and PDF or plain-text documents.
 - Decision `locate` questions, which Foundry's decisions route does not offer.
 - xAI Chat Completions (the proxy rejects it), and Chat Completions for Anthropic, Google and xAI models.
-- Catalog models without an adapter here: Gemma 4, Llama Nemotron Super, Schematic 7B, and the Snowflake and Llama embeddings.
+- Catalog models without an adapter here: Llama 3.3 Nemotron Super 49B (Foundry serves it on neither OpenAI route), Z.ai GLM (streaming, structured output and tools unverified), Schematic 7B, and the Snowflake and Llama embeddings.
+- `parallel_tool_calls`: Foundry rejects it on the open-weight Chat models (HTTP 400), so it is never sent.
 
 ## Run the live suite
 
@@ -217,7 +288,7 @@ LIVE_MODELS=all pnpm run test:live:effect                   # catalog sweep
 FOUNDRY_RECORD=1 pnpm run test:live:effect                  # re-record the default fixtures
 ```
 
-The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, all three embeddings, `gpt-realtime-2.1`, and one bad-token and one unknown-model request per vendor route and for realtime. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
+The defaults are the models in each row of `test/matrix.ts`: `gpt-6-luna` for the OpenAI modules and decisions, `claude-haiku-4.5` plus `claude-sonnet-5.5` for native JSON, `gemini-3.1-flash-lite`, `grok-4-6`, `deepseek-v3.2`, `nemotron-3-super-120b`, `qwen3-32b`, `kimi-k3.1-pro-highspeed`, `gemma-4-31b`, all three embeddings, `gpt-realtime-2.1`, and one bad-token and one unknown-model request per vendor route and for realtime. `LIVE_MODELS` takes a comma list of `all`, provider names (`openai`, `anthropic`, `google`, `xai`, `deepseek`, `nvidia`, `qwen`, `moonshot`, `gemma`) or catalog model IDs; an unknown token fails the run. A sweep never records fixtures.
 
 Test names are `<Module> live (<model>) > <cell>`. To run one cell, call Vitest directly so the pattern reaches it unchanged, and match the `>` separator:
 

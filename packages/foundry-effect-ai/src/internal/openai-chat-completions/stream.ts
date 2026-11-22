@@ -4,7 +4,8 @@
  * Foundry ends the stream after the usage chunk that follows `finish_reason`, without `[DONE]`.
  * The stream finishes at `[DONE]` once a choice has finished, or at the end of the body once
  * that usage chunk has arrived; anything shorter fails with `InvalidResponseError`. Tool calls
- * complete then, and an in-band error fails the stream.
+ * complete then, and an in-band error fails the stream. Reasoning and text alternate as blocks:
+ * a new block of one kind ends the open block of the other.
  */
 import type * as AiError from 'effect/ai/AiError';
 import type * as LanguageModel from 'effect/ai/LanguageModel';
@@ -14,6 +15,8 @@ import type * as Sse from 'effect/encoding/Sse';
 import * as Predicate from 'effect/Predicate';
 import * as Schema from 'effect/Schema';
 import * as Stream from 'effect/Stream';
+import type * as ReasoningTags from './reasoningTags.ts';
+import type { Dialect } from './request.ts';
 import {
   callsComplete,
   finishMetadata,
@@ -32,12 +35,17 @@ const decodeError = Schema.decodeUnknownEffect(Wire.ErrorEnvelope);
 const decodeChunk = Schema.decodeUnknownEffect(Wire.Chunk);
 
 export const decodeStream = (
+  dialect: Dialect,
   events: Stream.Stream<Sse.Event, AiError.AiError>,
   options: LanguageModel.ProviderOptions,
 ): Stream.Stream<Response.StreamPartEncoded, AiError.AiError> => {
   let done = false;
-  let textId: string | undefined;
-  let textOpen = false;
+  // The stream's first chunk ID, the base of every block ID.
+  let streamId: string | undefined;
+  // The open text or reasoning block, and how many of each kind have opened.
+  let open: { readonly type: ReasoningTags.Segment['type']; readonly id: string } | undefined;
+  const opened = { text: 0, reasoning: 0 };
+  const tags = dialect.reasoningTags?.();
   let refusal = '';
   let reason: string | undefined;
   let latestUsage: typeof Wire.Usage.Type | undefined;
@@ -46,30 +54,55 @@ export const decodeStream = (
   // Calls by their `index`, in arrival order; arguments arrive in pieces.
   const calls = new Map<number, { id: string; name: string; arguments: string }>();
 
+  const end = (parts: Array<Response.StreamPartEncoded>) => {
+    if (open !== undefined) {
+      parts.push({ type: open.type === 'text' ? 'text-end' : 'reasoning-end', id: open.id });
+      open = undefined;
+    }
+  };
+
+  /** Appends a delta to the open block of its kind, opening one if needed. */
+  const write = (parts: Array<Response.StreamPartEncoded>, segment: ReasoningTags.Segment) => {
+    if (open?.type !== segment.type) {
+      end(parts);
+      const count = opened[segment.type]++;
+      // The first text block keeps the ID OpenAI streams have always had.
+      const id = `${streamId}:${segment.type}${count === 0 ? '' : `:${count}`}`;
+      open = { type: segment.type, id };
+      parts.push({ type: segment.type === 'text' ? 'text-start' : 'reasoning-start', id });
+    }
+    parts.push({
+      type: segment.type === 'text' ? 'text-delta' : 'reasoning-delta',
+      id: open.id,
+      delta: segment.text,
+    });
+  };
+
   const finish = Effect.fnUntraced(function* (sentinel: boolean) {
     if (reason === undefined) {
-      return yield* invalidResponse(method, 'Stream ended before a finish_reason');
+      return yield* invalidResponse(dialect, method, 'Stream ended before a finish_reason');
     }
     if (!sentinel && !complete) {
-      return yield* invalidResponse(method, 'Stream ended before its final usage chunk');
+      return yield* invalidResponse(dialect, method, 'Stream ended before its final usage chunk');
     }
     const parts: Array<Response.StreamPartEncoded> = [];
-    if (textOpen && textId !== undefined) {
-      parts.push({ type: 'text-end', id: textId });
+    for (const segment of tags?.flush() ?? []) {
+      write(parts, segment);
     }
+    end(parts);
     let hasToolCalls = false;
     for (const call of calls.values()) {
       parts.push({ type: 'tool-params-end', id: call.id });
       if (callsComplete(reason)) {
         hasToolCalls = true;
-        parts.push(yield* toolCall(method, options, call));
+        parts.push(yield* toolCall(dialect, method, options, call));
       }
     }
     parts.push({
       type: 'finish',
       reason: finishReason(reason, hasToolCalls, refusal !== ''),
       usage: usage(latestUsage),
-      ...finishMetadata(refusal),
+      ...finishMetadata(dialect, refusal),
     });
     return parts;
   });
@@ -80,30 +113,33 @@ export const decodeStream = (
       return yield* finish(true);
     }
     const data = yield* Effect.mapError(decodeData(event.data), (error) =>
-      invalidResponse(method, `Malformed event data: ${error.message}`),
+      invalidResponse(dialect, method, `Malformed event data: ${error.message}`),
     );
     if (Predicate.hasProperty(data, 'error') && data.error != null) {
       const envelope = yield* Effect.mapError(decodeError(data), (error) =>
-        invalidResponse(method, error.message),
+        invalidResponse(dialect, method, error.message),
       );
-      return yield* providerError(method, envelope);
+      return yield* providerError(dialect, method, envelope);
     }
     const chunk = yield* Effect.mapError(decodeChunk(data), (error) =>
-      invalidResponse(method, error.message),
+      invalidResponse(dialect, method, error.message),
     );
     const parts: Array<Response.StreamPartEncoded> = [];
-    if (textId === undefined) {
-      textId = `${chunk.id}:text`;
+    if (streamId === undefined) {
+      streamId = chunk.id;
       parts.push(metadataPart(chunk));
     }
     const [choice] = chunk.choices;
     const delta = choice?.delta;
-    if (delta?.content != null && delta.content !== '') {
-      if (!textOpen) {
-        textOpen = true;
-        parts.push({ type: 'text-start', id: textId });
+    const reasoning = delta?.reasoning_content ?? '';
+    if (dialect.reasoningContent && reasoning !== '') {
+      write(parts, { type: 'reasoning', text: reasoning });
+    }
+    const content = delta?.content ?? '';
+    if (content !== '') {
+      for (const segment of tags?.push(content) ?? [{ type: 'text' as const, text: content }]) {
+        write(parts, segment);
       }
-      parts.push({ type: 'text-delta', id: textId, delta: delta.content });
     }
     refusal += delta?.refusal ?? '';
     for (const piece of delta?.tool_calls ?? []) {
@@ -112,7 +148,11 @@ export const decodeStream = (
       if (call === undefined) {
         const name = piece.function?.name;
         if (name == null) {
-          return yield* invalidResponse(method, `Tool call ${piece.index} started without a name`);
+          return yield* invalidResponse(
+            dialect,
+            method,
+            `Tool call ${piece.index} started without a name`,
+          );
         }
         call = { id: piece.id ?? `${chunk.id}:tool:${piece.index}`, name, arguments: '' };
         calls.set(piece.index, call);

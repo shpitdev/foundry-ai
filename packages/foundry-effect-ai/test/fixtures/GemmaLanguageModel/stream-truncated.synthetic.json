@@ -1,0 +1,30 @@
+[
+  {
+    "status": 200,
+    "contentType": "text/event-stream",
+    "body": "event: response.created\ndata: {\"sequence_number\":0,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314169,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.created\"}\n\nevent: response.in_progress\ndata: {\"sequence_number\":1,\"response\":{\"id\":\"redacted-id-1\",\"model\":\"google.gemma-4-31b\",\"created_at\":1795314169,\"status\":\"in_progress\",\"usage\":null,\"output\":[],\"error\":null,\"incomplete_details\":null,\"service_tier\":\"auto\"},\"type\":\"response.in_progress\"}\n\nevent: response.output_item.added\ndata: {\"item\":{\"type\":\"message\",\"id\":\"redacted-id-2\",\"role\":\"assistant\",\"status\":\"in_progress\",\"phase\":\"final_answer\",\"content\":[]},\"output_index\":0,\"sequence_number\":2,\"type\":\"response.output_item.added\"}\n\nevent: response.content_part.added\ndata: {\"part\":{\"text\":\"\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"},\"item_id\":\"redacted-id-2\",\"output_index\":0,\"content_index\":0,\"sequence_number\":3,\"type\":\"response.content_part.added\"}\n\nevent: response.output_text.delta\ndata: {\"delta\":\"hello\",\"content_index\":0,\"output_index\":0,\"item_id\":\"redacted-id-2\",\"sequence_number\":4,\"type\":\"response.output_text.delta\"}\n\nevent: response.output_text.done\ndata: {\"text\":\"hello\",\"item_id\":\"redacted-id-2\",\"output_index\":0,\"content_index\":0,\"sequence_number\":5,\"type\":\"response.output_text.done\"}\n\nevent: response.content_part.done\ndata: {\"part\":{\"text\":\"hello\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"},\"item_id\":\"redacted-id-2\",\"output_index\":0,\"content_index\":0,\"sequence_number\":6,\"type\":\"response.content_part.done\"}\n\nevent: response.output_item.done\ndata: {\"item\":{\"type\":\"message\",\"id\":\"redacted-id-2\",\"role\":\"assistant\",\"status\":\"completed\",\"phase\":\"final_answer\",\"content\":[{\"text\":\"hello\",\"annotations\":[],\"logprobs\":[],\"type\":\"output_text\"}]},\"output_index\":0,\"sequence_number\":7,\"type\":\"response.output_item.done\"}\n\n",
+    "request": {
+      "path": "/openai/v1/responses",
+      "body": {
+        "model": "ri.language-model-service..language-model.gemma-4-31b",
+        "input": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "input_text",
+                "text": "Reply with exactly one word: hello"
+              }
+            ]
+          }
+        ],
+        "store": false,
+        "stream": true
+      },
+      "headers": {
+        "accept": "text/event-stream",
+        "content-type": "application/json"
+      }
+    }
+  }
+]

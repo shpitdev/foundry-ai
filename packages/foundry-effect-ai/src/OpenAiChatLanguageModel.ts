@@ -2,16 +2,12 @@
 /** OpenAI language models through Foundry's `/openai/v1/chat/completions` route. */
 import * as LanguageModel from 'effect/ai/LanguageModel';
 import * as AiModel from 'effect/ai/Model';
-import { toCodecOpenAI } from 'effect/ai/OpenAiStructuredOutput';
-import * as Effect from 'effect/Effect';
+import type * as Effect from 'effect/Effect';
 import * as Layer from 'effect/Layer';
-import * as Stream from 'effect/Stream';
-import { FoundryClient } from './FoundryClient.ts';
+import type { FoundryClient } from './FoundryClient.ts';
 import { models } from './internal/models/openai.ts';
-import { makeRequest, type Target } from './internal/openai-chat-completions/request.ts';
-import { decodeResponse } from './internal/openai-chat-completions/response.ts';
-import * as Wire from './internal/openai-chat-completions/schema.ts';
-import { decodeStream } from './internal/openai-chat-completions/stream.ts';
+import * as ChatModel from './internal/openai-chat-completions/languageModel.ts';
+import type * as Wire from './internal/openai-chat-completions/schema.ts';
 
 export const providerName = 'foundry-openai';
 
@@ -39,17 +35,8 @@ const known: Readonly<
 > = models;
 
 /** Known aliases and RIDs get their catalog flags; any other target passes through as is. */
-const resolve = (modelId: string): Target => {
-  const entry =
-    known[modelId] ?? Object.values(known).find((candidate) => candidate.rid === modelId);
-  return {
-    rid: entry?.rid ?? modelId,
-    reasoning: entry?.reasoning === true,
-    toolsNeedNoReasoning: entry?.chatToolsNeedNoReasoning === true,
-  };
-};
-
-const path = '/openai/v1/chat/completions';
+const resolve = (modelId: string) =>
+  known[modelId] ?? Object.values(known).find((candidate) => candidate.rid === modelId);
 
 export const model = (
   modelId: ModelId,
@@ -64,35 +51,23 @@ export const model = (
  * `reasoning_effort: 'none'` unless `config` sets an effort. Streams ask for a final usage
  * chunk.
  */
-export const make = Effect.fnUntraced(function* (options: {
+export const make = (options: {
   readonly model: ModelId;
   readonly config?: Config | undefined;
-}) {
-  const client = yield* FoundryClient;
-  const target = resolve(options.model);
-  const effort = options.config?.reasoning_effort;
-  return yield* LanguageModel.make({
-    codecTransformer: toCodecOpenAI,
-    generateText: Effect.fnUntraced(function* (providerOptions) {
-      const request = yield* makeRequest(providerOptions, target, effort);
-      const body = yield* client.json({ path, body: request, schema: Wire.Body });
-      return yield* decodeResponse(body, providerOptions);
-    }),
-    streamText: (providerOptions) =>
-      makeRequest(providerOptions, target, effort).pipe(
-        Effect.map((request) =>
-          decodeStream(
-            client.sse({
-              path,
-              body: { ...request, stream: true, stream_options: { include_usage: true } },
-            }),
-            providerOptions,
-          ),
-        ),
-        Stream.unwrap,
-      ),
+}): Effect.Effect<LanguageModel.LanguageModel, never, FoundryClient> => {
+  const entry = resolve(options.model);
+  return ChatModel.make({
+    module: 'OpenAiChatLanguageModel',
+    metadataKey: providerName,
+    path: '/openai/v1/chat/completions',
+    model: entry?.rid ?? options.model,
+    systemRole: entry?.reasoning === true ? 'developer' : 'system',
+    reasoningEffort: options.config?.reasoning_effort,
+    toolsNeedNoReasoning: entry?.chatToolsNeedNoReasoning === true,
+    reasoningContent: false,
+    reasoningTags: undefined,
   });
-});
+};
 
 export const layer = (options: {
   readonly model: ModelId;
