@@ -197,6 +197,7 @@ Every language model runs the same cells from `test/capabilities.ts`. **Text** a
 
 - Kimi K3.1 and K3 reason by default into `reasoning_content`, including before tool calls; the tool cells replay those turns without it, which Foundry requires.
 - Kimi K2.5 (RID `kimi-k2-5`) returns no reasoning, and with JSON and a tool it answers without calling the tool.
+- Kimi K3.1 Pro – Highspeed skipped the tool once in JSON + tools in a later default run and passed on rerun.
 
 ### Gemma
 
