@@ -7,8 +7,10 @@ import * as HttpClientResponse from 'effect/http/HttpClientResponse';
 import * as Layer from 'effect/Layer';
 import * as Option from 'effect/Option';
 import * as Redacted from 'effect/Redacted';
+import * as Socket from 'effect/socket/Socket';
 import * as FoundryClient from '../src/FoundryClient.ts';
 import { type Fixture, proxyPath, unpinnedHeaders } from './FakeFoundry.ts';
+import * as FakeSocket from './FakeSocket.ts';
 import { type Cell, loadCells, scrubber, writeFixtures } from './harness.ts';
 import { catalog, contractOnly, type Row, rows } from './matrix.ts';
 
@@ -121,18 +123,34 @@ const probe = (module: string, cell: string, run: Cell, record: boolean) =>
         ? Layer.orDie(FoundryClient.layerConfig({ transformClient }))
         : FoundryClient.layer({ foundryUrl, token, transformClient, ...overrides })
       ).pipe(Layer.provide(FetchHttpClient.layer));
-    yield* run({ live: true, client, requests: [] });
+    const socketRecorder = record ? FakeSocket.record() : undefined;
+    yield* run({
+      live: true,
+      client,
+      requests: [],
+      settings: { foundryUrl, token },
+      sockets: socketRecorder?.layer ?? Socket.layerWebSocketConstructorGlobal,
+      sessions: [],
+    });
     if (record) {
-      // One scrubber, in exchange order, so an ID keeps its placeholder across the cell.
-      const scrub = scrubber({
-        host: new URL(foundryUrl).host,
-        token: Redacted.value(token),
-      });
       const exchanges = yield* Effect.promise(() => Promise.all(recordings));
-      writeFixtures(
-        module,
-        cell,
-        exchanges.map(({ path, headers, sent, response }) => {
+      const recorded = socketRecorder?.sessions ?? [];
+      // One scrubber for the cell, which learns every ID first, so each keeps one placeholder.
+      const scrub = scrubber({ host: new URL(foundryUrl).host, token: Redacted.value(token) }, [
+        ...exchanges.flatMap(({ sent, response }) => [sent, response.body ?? '']),
+        ...recorded.flatMap((session) => session.frames.map((frame) => JSON.stringify(frame))),
+      ]);
+      const sessions = recorded.map((session): FakeSocket.SocketFixture => ({
+        url: scrub(session.url),
+        frames: session.frames.map(
+          (frame) => JSON.parse(scrub(JSON.stringify(frame))) as FakeSocket.Frame,
+        ),
+        ...(session.close === undefined
+          ? undefined
+          : { close: { ...session.close, reason: scrub(session.close.reason) } }),
+      }));
+      writeFixtures(module, cell, [
+        ...exchanges.map(({ path, headers, sent, response }) => {
           const request = scrub(sent);
           return {
             ...response,
@@ -144,7 +162,8 @@ const probe = (module: string, cell: string, run: Cell, record: boolean) =>
             body: scrub(response.body ?? ''),
           };
         }),
-      );
+        ...sessions,
+      ]);
     }
   });
 

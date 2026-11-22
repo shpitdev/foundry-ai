@@ -132,6 +132,10 @@
               {
                 "name": "effect/http",
                 "message": "Import the module (effect/http/HttpClient), not the barrel."
+              },
+              {
+                "name": "effect/socket",
+                "message": "Import the module (effect/socket/Socket), not the barrel."
               }
             ],
             "patterns": [
@@ -200,6 +204,10 @@
                 "message": "Import the module (effect/http/HttpClient), not the barrel."
               },
               {
+                "name": "effect/socket",
+                "message": "Import the module (effect/socket/Socket), not the barrel."
+              },
+              {
                 "name": "effect/http/FetchHttpClient",
                 "message": "Library code takes HttpClient from context; callers provide FetchHttpClient."
               },
@@ -247,6 +255,10 @@
                 "message": "Import the module (effect/http/HttpClient), not the barrel."
               },
               {
+                "name": "effect/socket",
+                "message": "Import the module (effect/socket/Socket), not the barrel."
+              },
+              {
                 "name": "effect/http/FetchHttpClient",
                 "message": "Library code takes HttpClient from context; callers provide FetchHttpClient."
               },
@@ -268,7 +280,12 @@
               },
               { "group": ["node:*"], "message": "Library code runs on any JavaScript runtime." },
               {
-                "group": ["**/*LanguageModel.ts", "**/*DecisionModel.ts", "**/*EmbeddingModel.ts"],
+                "group": [
+                  "**/*LanguageModel.ts",
+                  "**/*DecisionModel.ts",
+                  "**/*EmbeddingModel.ts",
+                  "**/*Realtime.ts"
+                ],
                 "message": "Internal protocol modules must not import public model modules."
               }
             ]

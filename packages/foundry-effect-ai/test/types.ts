@@ -5,13 +5,17 @@ import type * as LanguageModel from 'effect/ai/LanguageModel';
 import type * as AiModel from 'effect/ai/Model';
 import type * as Prompt from 'effect/ai/Prompt';
 import type * as Response from 'effect/ai/Response';
+import type * as Effect from 'effect/Effect';
 import type * as HttpClient from 'effect/http/HttpClient';
 import type * as Layer from 'effect/Layer';
+import type * as Scope from 'effect/Scope';
+import type * as Socket from 'effect/socket/Socket';
 import * as AnthropicLanguageModel from '../src/AnthropicLanguageModel.ts';
 import type * as FoundryClient from '../src/FoundryClient.ts';
 import * as GoogleLanguageModel from '../src/GoogleLanguageModel.ts';
 import * as OpenAiDecisionModel from '../src/OpenAiDecisionModel.ts';
 import * as OpenAiLanguageModel from '../src/OpenAiLanguageModel.ts';
+import * as OpenAiRealtime from '../src/OpenAiRealtime.ts';
 import * as XaiLanguageModel from '../src/XaiLanguageModel.ts';
 
 type Language<P extends string> = AiModel.Model<
@@ -56,3 +60,13 @@ export const metadataReads = {
   decisions: (metadata: DecisionModel.DecideResponseMetadata): number | null | undefined =>
     metadata['foundry-openai']?.usage.total_tokens,
 };
+
+// A realtime session needs only a WebSocket constructor and a scope; no FoundryClient.
+export type RealtimeConnect = (
+  options: OpenAiRealtime.Options,
+) => Effect.Effect<
+  OpenAiRealtime.Session,
+  AiError.AiError,
+  Socket.WebSocketConstructor | Scope.Scope
+>;
+export const realtimeConnect: RealtimeConnect = OpenAiRealtime.connect;

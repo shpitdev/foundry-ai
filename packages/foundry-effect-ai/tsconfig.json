@@ -20,7 +20,7 @@
     "plugins": [
       {
         "name": "@effect/language-service",
-        // effect/ai and effect/http are tagged unstable in Effect 4. List each module this
+        // effect/ai, effect/http and effect/socket are tagged unstable in Effect 4. List each module this
         // package uses so stability diagnostics still catch anything new.
         "allowedUnstableApis": [
           "@effect/vitest#it",
@@ -47,7 +47,8 @@
           "effect/http/HttpClientError",
           "effect/http/HttpClientRequest",
           "effect/http/HttpClientResponse",
-          "effect/http/UrlParams"
+          "effect/http/UrlParams",
+          "effect/socket/Socket"
         ],
         "diagnosticSeverity": {
           "anyUnknownInErrorContext": "error",
