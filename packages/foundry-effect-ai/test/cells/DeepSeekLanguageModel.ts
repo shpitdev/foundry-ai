@@ -23,7 +23,10 @@ const shared = cellsFor('deepseek-v3.2');
 export const cells = {
   ...shared,
   'stream-truncated': twoCuts(shared['stream-truncated']),
-  'reasoning-tags': reasoningTags(
-    DeepSeekLanguageModel.model('deepseek-v3.2', { reasoning_effort: 'high' }),
+  'reasoning-tags': reasoningTags((reasoning) =>
+    DeepSeekLanguageModel.model(
+      'deepseek-v3.2',
+      reasoning ? { reasoning_effort: 'high' } : undefined,
+    ),
   ),
 };
