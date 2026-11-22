@@ -8,6 +8,7 @@ Thin Palantir Foundry adapters and model catalog for the Vercel AI SDK and Effec
 - [Install and use the package](./packages/foundry-ai/README.md)
 - [Models and test status](./packages/foundry-ai/docs/README.md)
 - [Use open-weight models with the AI SDK](./packages/foundry-ai/README.md#open-weight-models)
+- [Foundry LLM proxy reference](./docs/foundry-llm-proxy.md)
 - [Runnable examples](./examples/README.md)
 - [Effect AI adapters](./packages/foundry-effect-ai/README.md) (`@shpitdev/foundry-effect-ai`) and their [models and test status](./packages/foundry-effect-ai/docs/README.md)
 - [Release process](./docs/RELEASING.md)
