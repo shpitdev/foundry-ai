@@ -54,6 +54,31 @@
       "import": "./dist/providers/xai.mjs",
       "require": "./dist/providers/xai.cjs"
     },
+    "./deepseek": {
+      "types": "./dist/providers/deepseek.d.ts",
+      "import": "./dist/providers/deepseek.mjs",
+      "require": "./dist/providers/deepseek.cjs"
+    },
+    "./nvidia": {
+      "types": "./dist/providers/nvidia.d.ts",
+      "import": "./dist/providers/nvidia.mjs",
+      "require": "./dist/providers/nvidia.cjs"
+    },
+    "./qwen": {
+      "types": "./dist/providers/qwen.d.ts",
+      "import": "./dist/providers/qwen.mjs",
+      "require": "./dist/providers/qwen.cjs"
+    },
+    "./moonshot": {
+      "types": "./dist/providers/moonshot.d.ts",
+      "import": "./dist/providers/moonshot.mjs",
+      "require": "./dist/providers/moonshot.cjs"
+    },
+    "./gemma": {
+      "types": "./dist/providers/gemma.d.ts",
+      "import": "./dist/providers/gemma.mjs",
+      "require": "./dist/providers/gemma.cjs"
+    },
     "./realtime": {
       "types": "./dist/providers/realtime.d.ts",
       "import": "./dist/providers/realtime.mjs",
@@ -74,6 +99,7 @@
     "@ai-sdk/anthropic": "4.0.106",
     "@ai-sdk/google": "4.0.122",
     "@ai-sdk/openai": "4.0.121",
+    "@ai-sdk/openai-compatible": "3.0.94",
     "ai": "7.0.177",
     "@ai-sdk/xai": "4.0.59"
   },
@@ -82,6 +108,7 @@
     "@ai-sdk/anthropic": "^3.0.64 || ^4.0.0-beta.69",
     "@ai-sdk/google": "^3.0.54 || ^4.0.0-beta.85",
     "@ai-sdk/openai": "^3.0.49 || ^4.0.0-beta.77",
+    "@ai-sdk/openai-compatible": "^2.0.37 || ^3.0.0-beta.58",
     "@ai-sdk/xai": "^3.0.132 || ^4.0.0-beta.76"
   },
   "peerDependenciesMeta": {
@@ -92,6 +119,9 @@
       "optional": true
     },
     "@ai-sdk/openai": {
+      "optional": true
+    },
+    "@ai-sdk/openai-compatible": {
       "optional": true
     },
     "@ai-sdk/xai": {

@@ -1,14 +1,14 @@
 # Models and live test status
 
-**Catalog as of November 21, 2026 (UTC):** 62 entries — 54 language aliases, three OpenAI embeddings, and five realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Standalone transcription is not exposed.
+**Catalog as of November 22, 2026 (UTC):** 73 entries — 65 language aliases, three OpenAI embeddings, and five realtime models. The listed Snowflake and Llama embeddings do not serve the OpenAI embeddings route; Schematic 7B does not serve either OpenAI language proxy route. Standalone transcription is not exposed.
 
-Both Gemma 4 variants and Llama Nemotron Super appear in Foundry’s listing but are excluded because the package does not provide a dedicated adapter for them.
+Llama 3.3 Nemotron Super 49B appears in Foundry’s listing but does not serve either OpenAI language proxy route.
 
 **November 19, 2026 sweep:** AI SDK 7.0.176 with `@ai-sdk/openai` 4.0.121, `@ai-sdk/anthropic` 4.0.106, `@ai-sdk/google` 4.0.122, and `@ai-sdk/xai` 4.0.59, run serially over the full catalog, plus isolated reruns of unexpected outcomes. Basic text passed on all 52 language aliases in that sweep. All three embeddings passed.
 
-**November 22, 2026 follow-up (UTC):** Tested only GPT-6.2 Sol, GPT-6.2 Astra, Gemini 4 Neon, and GPT Realtime 2 on AI SDK 7.0.177, with the same provider versions.
+**November 22, 2026 follow-up (UTC):** Tested GPT-6.2 Sol, GPT-6.2 Astra, Gemini 4 Neon, and GPT Realtime 2 on AI SDK 7.0.177, with the same provider versions. A separate survey tested 11 open-weight aliases on AI SDK 7.0.177 with `@ai-sdk/openai-compatible` 3.0.94 for Chat and `@ai-sdk/openai` 4.0.121 for Gemma Responses, with one isolated rerun per failed cell.
 
-[Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Each cell is one probe run, or its isolated rerun; a pass shows the request worked then, not that it is reliable. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling. Raw reports stay locally under `.memory/`.
+[Install and configure](../README.md). Results apply to the tested Foundry account/enrollment, not every stack or production deployment. Each cell is one probe run, or its isolated rerun; a pass shows the request worked then, not that it is reliable. Live checks run manually; CI does not call Foundry. The language-model survey uses an 8,192-token output ceiling, lowered where Foundry lists a smaller limit. Raw reports stay locally under `.memory/`.
 
 ## Results
 
@@ -81,7 +81,7 @@ JSON means schema-valid output was observed; it does not establish strict server
 
 ### xAI
 
-Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compatibility adapter. These columns use Responses; explicit Chat Completions text probes for the six current aliases were proxy-rejected (HTTP 400). See [xAI setup](./xai.md).
+Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 on Responses. The adapter does not expose Chat Completions because Foundry rejected valid text probes with HTTP 400. See [xAI setup](./xai.md).
 
 | Model                           | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
 | ------------------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
@@ -91,6 +91,42 @@ Uses `createFoundryXai` with native `@ai-sdk/xai` 4.0.59 and the Foundry compati
 | `grok-4-7`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-4-5`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
 | `grok-4-3`                      | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+
+### DeepSeek
+
+| Model           | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| --------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `deepseek-v3.2` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+
+### NVIDIA Nemotron
+
+| Model                   | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ----------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `nemotron-3-super-120b` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `nemotron-3-nano-30b`   | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `nemotron-3-ultra-550b` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | R     | ×         |
+
+### Qwen
+
+| Model                  | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ---------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `qwen3-32b`            | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+| `qwen3-235b-a22b-2507` | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | R     | ✓         |
+
+### Moonshot Kimi
+
+| Model                     | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ------------------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `kimi-k3.1-pro-highspeed` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `kimi-k3`                 | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ✓         |
+| `kimi-k2.5`               | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | ×         |
+
+### Gemma
+
+| Model             | Text | Stream | JSON | Tools | Stream tools | JSON + tools | Image | Reasoning |
+| ----------------- | ---- | ------ | ---- | ----- | ------------ | ------------ | ----- | --------- |
+| `gemma-4-31b`     | ✓    | ✓      | ✓    | ✓     | ✓            | ×            | ✓     | ×         |
+| `gemma-4-26b-a4b` | ✓    | ✓      | ✓    | ✓     | ✓            | ✓            | ✓     | ×         |
 
 ### Realtime
 
@@ -142,22 +178,30 @@ November 19, 2026 (UTC), on `ai` 7.0.176 and `@ai-sdk/openai` 4.0.121 through `e
 - **xAI streaming:** Foundry now sends the reasoning-start events the native parser needs. Streaming text, streamed tools, and reasoning passed on every Grok alias except Grok 420 non-reasoning, which produced no reasoning signal. Grok 4.6 also passes on `main` with `@ai-sdk/xai` 4.0.58, so the change is on the proxy side, not the SDK bump.
 - **JSON + tools:** the two Gemini failures return no output; Gemini 3.5 Flash-Lite passed on September 25 and fails the same way on `main`.
 - **Thinking:** use adaptive thinking for Opus 4.7/4.8, Claude 5, and the Claude 5.5 models; the proxy rejects budget-based thinking for Claude 5.5 with HTTP 400.
+- **Open-weight models:** Foundry rejected image input on every DeepSeek, Nemotron, and Qwen alias. Nemotron 3 Ultra streamed tools, Qwen3 32B tools, and Gemma 4 26B JSON + tools passed only on isolated rerun. Standalone JSON used default reasoning; JSON with tools is not consistently supported. The reasoning column uses high effort for DeepSeek, Nemotron, and Qwen, with defaults for Kimi and Gemma.
 - **Not proven:** missing reasoning events or token usage do not show that a model cannot reason.
 
 ## Model routing
 
-| Models                 | Factory / subpath                      | Required peer       |
-| ---------------------- | -------------------------------------- | ------------------- |
-| GPT / OpenAI reasoning | `createFoundryOpenAI` / `openai`       | `@ai-sdk/openai`    |
-| Claude                 | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic` |
-| Gemini                 | `createFoundryGoogle` / `google`       | `@ai-sdk/google`    |
-| Grok                   | `createFoundryXai` / `xai`             | `@ai-sdk/xai`       |
+| Models                 | Factory / subpath                      | Required peer               |
+| ---------------------- | -------------------------------------- | --------------------------- |
+| GPT / OpenAI reasoning | `createFoundryOpenAI` / `openai`       | `@ai-sdk/openai`            |
+| Claude                 | `createFoundryAnthropic` / `anthropic` | `@ai-sdk/anthropic`         |
+| Gemini                 | `createFoundryGoogle` / `google`       | `@ai-sdk/google`            |
+| Grok                   | `createFoundryXai` / `xai`             | `@ai-sdk/xai`               |
+| DeepSeek               | `createFoundryDeepSeek` / `deepseek`   | `@ai-sdk/openai-compatible` |
+| NVIDIA Nemotron        | `createFoundryNvidia` / `nvidia`       | `@ai-sdk/openai-compatible` |
+| Qwen                   | `createFoundryQwen` / `qwen`           | `@ai-sdk/openai-compatible` |
+| Moonshot Kimi          | `createFoundryMoonshot` / `moonshot`   | `@ai-sdk/openai-compatible` |
+| Gemma                  | `createFoundryGemma` / `gemma`         | `@ai-sdk/openai`            |
 
-OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged, allowing enrollment-specific RIDs. Grok defaults to xAI Responses, with an explicit xAI Chat Completions method. Foundry supplies upstream credentials; no endpoint failover is performed.
+DeepSeek, NVIDIA Nemotron, Qwen, and Moonshot Kimi use `/api/v2/llm/proxy/openai/v1/chat/completions`. Gemma uses `/api/v2/llm/proxy/openai/v1/responses`. These factories accept only their maker's catalog aliases or raw language-model RIDs; a known RID from another maker is rejected. OpenAI, Anthropic, Google, and xAI forward unknown model strings unchanged. Grok uses the xAI Responses route. Foundry supplies upstream credentials; there is no endpoint fallback.
 
 Use `MODEL_CATALOG` and `getModelMetadata(id)` from the installed package for IDs and metadata. Metadata such as `supportsVision` is not a live guarantee.
 
-OpenAI rejects `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`; xAI Chat Completions omits it. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5 and Sonnet 5.5, which reject forced tool use and therefore keep the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
+OpenAI rejects `providerOptions.openai.store: true`; xAI rejects `providerOptions.xai.store: true`. Responses sends `store: false`. Anthropic disables eager tool streaming and uses JSON-tool structured output, except for Claude Opus 5.5 and Sonnet 5.5, which reject forced tool use and therefore keep the provider's native structured output; Google rewrites API-key authentication into Foundry bearer authentication.
+
+For reasoning on DeepSeek, Nemotron, or Qwen, set `reasoningEffort: 'high'` under `providerOptions.deepseek`, `providerOptions.nvidia`, or `providerOptions.qwen`. Tagged thinking is returned separately from the answer. Moonshot Kimi can return separate reasoning by default; set `providerOptions.moonshot.reasoningEffort` to `'none'` to turn it off on models that support the switch. Foundry rejects replayed Kimi reasoning, so the adapter removes it from outgoing assistant messages. Chat requests never send `parallel_tool_calls`. Gemma does not send OpenAI-specific or generic reasoning options.
 
 Only OpenAI exposes `embeddingModel()`, `embedding()`, and `decisionModel()`. Embedding strings pass through without language-model RID routing; decision aliases resolve to RIDs like language models. Realtime audio uses the separate SDK 7-only `realtime` subpath. Standalone speech/transcription, image generation, video, and reranking are not exposed.
 

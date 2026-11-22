@@ -31,8 +31,11 @@ const enrollments = JSON.parse(
   displayName: string;
   lifecycle: string;
   trainingCutoffDate?: string;
+  contextWindow?: number;
+  maxOutputTokens?: number;
   performance: { cost?: string; modelClass?: string; speed?: string };
   externalUrl?: string;
+  modelCreator?: string;
 }>;
 
 // Embedding enrollments are matched by identifier; every other model by RID.
@@ -40,6 +43,10 @@ function findEnrollment(model: ModelMetadata) {
   return model.inputTypes.includes('OPEN_AI_EMBEDDINGS')
     ? enrollments.find((entry) => entry.modelIdentifier === model.modelIdentifier)
     : enrollments.find((entry) => entry.rid === model.rid);
+}
+
+function retainedCreator(enrollment: (typeof enrollments)[number] | undefined) {
+  return enrollment?.modelCreator === undefined ? {} : { modelCreator: enrollment.modelCreator };
 }
 
 describe('model catalog', () => {
@@ -67,12 +74,17 @@ describe('model catalog', () => {
       expect(model.externalUrl, `${id} externalUrl must match Foundry`).toBe(
         enrollment?.externalUrl,
       );
+      expect(model.contextWindow, `${id} contextWindow must match Foundry`).toBe(
+        enrollment?.contextWindow,
+      );
+      expect(model.maxOutputTokens, `${id} maxOutputTokens must match Foundry`).toBe(
+        enrollment?.maxOutputTokens,
+      );
+      expect(model).toMatchObject(retainedCreator(enrollment));
     }
   });
 
   it.each([
-    'gemma-4-31b',
-    'gemma-4-26b-a4b',
     'llama-3-3-nemotron-super-49b-v1-5',
     'llama-3-2-nv-embedqa-1b-v2',
     'schematic-7B',
