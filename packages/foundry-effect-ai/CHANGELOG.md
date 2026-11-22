@@ -1,3 +1,27 @@
+## 0.1.0 (2026-11-22)
+
+### 🚀 Features
+
+- add Z.ai GLM providers for AI SDK and Effect ([#109](https://github.com/shpitdev/foundry-ai/pull/109))
+- **effect-ai:** add DeepSeek, NVIDIA, Qwen, Moonshot and Gemma language modules ([#108](https://github.com/shpitdev/foundry-ai/pull/108))
+- ⚠️  add open-weight AI SDK providers ([#107](https://github.com/shpitdev/foundry-ai/pull/107))
+- **realtime:** support inline input transcription ([#105](https://github.com/shpitdev/foundry-ai/pull/105))
+- **effect-ai:** OpenAiRealtime sessions over Foundry's realtime WebSocket (phase 9) ([#104](https://github.com/shpitdev/foundry-ai/pull/104))
+- **catalog:** add GPT-6.2 and Gemini 4 Neon, retire Grok Build 0.1 ([#103](https://github.com/shpitdev/foundry-ai/pull/103))
+
+### 🩹 Fixes
+
+- **release:** drop tag backfill; tag a hand-published first version once ([#102](https://github.com/shpitdev/foundry-ai/pull/102))
+- **release:** backfill missing version tags on the commit that set the version ([#101](https://github.com/shpitdev/foundry-ai/pull/101))
+
+### ⚠️  Breaking Changes
+
+- add open-weight AI SDK providers  ([#107](https://github.com/shpitdev/foundry-ai/pull/107))
+
+### ❤️ Thank You
+
+- Anand Pant @anandpant
+
 ## 0.0.1 (2026-11-20)
 
 ### 🚀 Features
