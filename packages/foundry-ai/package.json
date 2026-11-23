@@ -106,7 +106,7 @@
     "@ai-sdk/openai": "4.0.121",
     "@ai-sdk/openai-compatible": "3.0.94",
     "ai": "7.0.177",
-    "@ai-sdk/xai": "4.0.59"
+    "@ai-sdk/xai": "5.0.47"
   },
   "peerDependencies": {
     "ai": "^6.0.141 || ^7.0.0-beta.187",
